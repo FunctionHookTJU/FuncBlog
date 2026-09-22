@@ -104,6 +104,11 @@
                         <p>使用md文件渲染的技术文档页面，亟待升级为动态页面</p>
                     </div>
 
+                    <div class="pdf-item" onclick="window.location.href='crypto-des-aes.html'">
+                        <h3>密码学讲义：DES 与 AES</h3>
+                        <p>依据《第二讲 数据加密标准(DES)》与《第三讲 高级加密标准(AES)》课件整理的完整讲义，含 Feistel 结构、差分分析、有限域 GF(2ⁿ)、AES 四层变换与加密模式，公式使用 KaTeX 排版</p>
+                    </div>
+
                 </div>
             </div>
             <div class="pdf-viewer" id="pdfViewer">
@@ -166,26 +171,30 @@
         });
         
         // 折叠栏目功能
+        // 用 data-open 记录状态：仅靠 maxHeight 真假判断会在"首次展开后再收起"时
+        // 失效（收起把 maxHeight 设为空字符串，判定为假 → 又走展开分支）。
         function toggleCollapsible(header) {
             const content = header.nextElementSibling;
             const icon = header.querySelector('.collapse-icon');
-            
-            // 切换内容的显示/隐藏
-            if (content.style.maxHeight) {
+            const open = content.getAttribute('data-open') === '1';
+
+            if (open) {
                 content.style.maxHeight = null;
+                content.setAttribute('data-open', '0');
                 icon.textContent = '▼';
             } else {
                 content.style.maxHeight = content.scrollHeight + 'px';
+                content.setAttribute('data-open', '1');
                 icon.textContent = '▲';
             }
         }
-        
-        // 页面加载完成后初始化折叠栏目
+
+        // 页面加载完成后初始化折叠栏目（默认全部收起）
         document.addEventListener('DOMContentLoaded', function() {
-            // 关闭所有折叠栏目
             const contents = document.querySelectorAll('.collapsible-content');
             contents.forEach(content => {
                 content.style.maxHeight = null;
+                content.setAttribute('data-open', '0');
             });
         });
     </script>
