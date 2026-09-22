@@ -192,9 +192,35 @@ html:not(.light) .katex .hline{ border-color:currentColor; }
 
 /* ===================== fxHook.io 站点接入补丁 ===================== */
 
-/* 站点 style.css 会把 * 的 padding/margin 清零，这里给讲义正文补回呼吸空间 */
-body{ padding-right:calc(var(--navw) + 18px); }
+/* 站点 style.css 会把 * 的 padding/margin 清零，这里给讲义正文补回呼吸空间。
+   --sidegap 就是「给右侧固定目录让出的宽度」，必须与 padding-right 保持一致
+   （窄屏媒体查询里会同步改成 0），下面的 header 规则要用它做补偿。 */
+body{ --sidegap:calc(var(--navw) + 18px); padding-right:var(--sidegap); }
 .wrap{ max-width:1000px; width:auto; padding:22px 30px 90px; }
+
+/* 【关键 0.1】站点 header 不能被右侧目录「挤偏」 -------------------------
+   body 的右内边距是给右侧固定目录让位的，可它是加在 body 上的，于是作为
+   body 直接子元素的 <header> 也一并被压窄、整体左移。
+   实测（视口 1249，侧栏 262）：header 左 16 / 右 953 —— 左边距仅 16px，
+   右边距却有 296px，肉眼就是「header 被侧栏挤到左边去了」，而站点其它页面
+   的 header 一律是「视口内左右各 16px」的对称居中。
+   这里把 header 的宽度补偿回来（body 内容宽 + 让位宽 - 32px = 视口宽 - 32px），
+   再配 margin-left:16px，于是左右各留 16px，与站点其它页面完全一致。 */
+body > header{
+  width:calc(100% + var(--sidegap) - 32px) !important;
+  margin-left:16px !important; margin-right:auto !important;
+}
+/* 【关键 0.2】讲义里有两条第 37、38 行的全局列表规则：
+     ul,ol{ margin:.7em 0 }   li{ margin:.32em 0 }
+   它们同样会命中站点 header 里的 ul.nav-links / li。实测后果：
+     · ul.nav-links 上下外边距各 11.55px，margin box 48.5 -> 71.6px
+     · 每个 li 上下各 5.28px，把 .nav-links 自身从 38px 撑到 48.5px
+   nav 内容盒因此变成 71.6px，header 高达 102.4px（站点其它页面只要约
+   74px），直接顶到右侧目录上方。这里按站点原本的 *{margin:0;padding:0}
+   reset，把 header 内部的列表边距清干净，header 回到约 74.5px。 */
+body > header ul, body > header ol, body > header li{
+  margin:0 !important; padding:0 !important;
+}
 
 /* 【关键 0】讲义里有 77 个 <pre> 结构图（有的很宽）。它们自身是 overflow-x:auto，
    但"自动宽度的块级父元素"会被这种超宽子元素的 min-content 撑开，
@@ -218,12 +244,19 @@ html, body{ width:100%; max-width:100%; overflow-x:hidden; }
 }
 
 /* 【关键 1】站点 style.css 有一条全局 nav{display:flex;justify-content:space-between}，
-   会命中讲义里的两处导航元素：
+   会命中讲义内部的目录导航：
      · 右侧目录栏（aside#side）内部的 nav
      · 正文开头的目录块（nav.nav）
    二者加载顺序在讲义样式之后，因此必须在此还原为块级，否则目录会被压成
-   "最小内容宽度"（中文逐字竖排）甚至把整页撑到视口之外。 */
-nav, #side nav, .wrap > nav.nav{
+   "最小内容宽度"（中文逐字竖排）甚至把整页撑到视口之外。
+
+   ⚠ 这里只能用 #side nav / .wrap > nav.nav 这类限定选择器，绝不能写成裸
+   nav 选择器：裸选择器会连站点 header 自己的 nav 元素一起命中，把它从
+   flex / space-between 打成 display:block，结果 header 变成「logo 一行 +
+   菜单一行」的两行结构，菜单整行左对齐挤在左边、右半截空着 —— 这正是
+   「header 偏左」的另一半原因。站点 header 的 nav 必须保持站点原本的
+   单行 flex（logo 左 / 菜单右），所以这里不碰它。 */
+#side nav, .wrap > nav.nav{
   display:block !important; flex-direction:column !important;
   justify-content:normal !important; align-items:normal !important;
 }
@@ -240,10 +273,26 @@ nav, #side nav, .wrap > nav.nav{
 .wrap .nav > ul{ padding-left:0 !important; }
 .wrap a{ overflow-wrap:anywhere; word-break:break-word; }
 
-/* 固定右侧目录：下移到站点 header 之下（header 实测高约 102px），避免被吸顶导航压住 */
+/* 固定右侧目录：下移到站点 header 之下，避免被吸顶导航压住。
+   修好单行 nav 与列表边距之后，header 高 74.5px + 上边距 12px，底边在
+   86.5px，因此目录从 96px 起（留约 9px 间隙）即可。
+   （修复前 header 高 146.1px、底边 158px，会压住目录顶部 54px。） */
 #side{
-  top:104px; height:calc(100vh - 104px);
+  top:96px; height:calc(100vh - 96px);
   border-radius:14px 0 0 0; border-left:1px solid var(--line);
+}
+
+/* 【关键 2.5】讲义把 --navw 定义在 :root 上（:root 是伪类，特异性 0,1,0），
+   而它自己的隐藏断点写的是 html{--navw:0px}（元素选择器，特异性只有 0,0,1）
+   —— 特异性更低，于是永远被 :root 那条压住，断点形同虚设。
+   后果：视口 <=1179px 时 #side 已经 display:none（id 选择器赢了），
+   但 --navw 仍是 262px，body 继续留着 262px 的让位内边距：
+   右侧一大片空白，正文与 header 都被平白挤窄
+   （实测 1024px：header 只有 16..733，白白少 262px）。
+   这里用 :root 补一条同特异性、位置在后的覆盖，让讲义原本的断点真正生效；
+   之后 --sidegap 会自动跟着变成 18px，header 也就自然铺满。 */
+@media (max-width:1179px){
+  :root{ --navw:0px; }
 }
 
 /* 站点背景图之上加遮罩，保证长文可读 --------------------------------------
@@ -280,9 +329,10 @@ body > header{ margin-bottom:6px; }
 .site-footer a:hover{ color:#fff; border-bottom-color:#fff; }
 .site-footer .copyright{ font-size:.85rem; color:rgba(236,238,242,.72); }
 
-/* 窄屏：隐藏固定目录（站点移动端菜单已占位），正文让出宽度 */
+/* 窄屏：隐藏固定目录（站点移动端菜单已占位），正文让出宽度。
+   --sidegap 同步归零，header 的宽度补偿才不会被多减一次。 */
 @media (max-width:900px){
-  body{ padding-right:0 !important; }
+  body{ --sidegap:0px; padding-right:0 !important; }
   #side{ display:none !important; }
   html{ --navw:0px !important; }
   .wrap{ padding:18px 18px 70px; }
