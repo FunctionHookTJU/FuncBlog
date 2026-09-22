@@ -193,7 +193,7 @@ html:not(.light) .katex .hline{ border-color:currentColor; }
 /* ===================== fxHook.io 站点接入补丁 ===================== */
 
 /* 站点 style.css 会把 * 的 padding/margin 清零，这里给讲义正文补回呼吸空间 */
-body{ padding-right:0; }
+body{ padding-right:calc(var(--navw) + 18px); }
 .wrap{ max-width:1000px; width:auto; padding:22px 30px 90px; }
 
 /* 【关键 0】讲义里有 77 个 <pre> 结构图（有的很宽）。它们自身是 overflow-x:auto，
@@ -203,10 +203,24 @@ body{ padding-right:0; }
 html, body{ width:100%; max-width:100%; overflow-x:hidden; }
 .wrap{ width:100%; min-width:0; }
 
+/* 【关键 0.5】正文别被右侧固定目录压住 ------------------------------------
+   实测（100% 缩放，侧栏 262px）：
+     vw 1280 → 正文右边缘超出侧栏左边缘 86px（明显遮挡）
+     vw 1440 → 超出 6px（贴边）
+     vw 1600 → 富余 74px
+   原因是正文列固定 1000px 居中，而侧栏是 position:fixed 叠在上层。
+   这里把正文列宽度改成「视口 - 滚动条估算 - 侧栏宽度 - 安全间距」，
+   并用 min() 与原来的 1000px 取小，于是窄屏自动收窄、宽屏仍为 1000px。
+   滚动条宽度浏览器无法用 CSS 精确取得，按 18px 估算（Windows 常见值）。 */
+.wrap{
+  width:min(1000px, calc(100vw - 18px - var(--navw) - 28px));
+  margin-left:auto; margin-right:auto;
+}
+
 /* 【关键 1】站点 style.css 有一条全局 nav{display:flex;justify-content:space-between}，
-   会命中讲义里的两个 <nav>：
-     · 右侧目录 <aside id="side"> 里的 <nav>
-     · 正文开头的目录块 <nav class="nav">
+   会命中讲义里的两处导航元素：
+     · 右侧目录栏（aside#side）内部的 nav
+     · 正文开头的目录块（nav.nav）
    二者加载顺序在讲义样式之后，因此必须在此还原为块级，否则目录会被压成
    "最小内容宽度"（中文逐字竖排）甚至把整页撑到视口之外。 */
 nav, #side nav, .wrap > nav.nav{
@@ -232,11 +246,18 @@ nav, #side nav, .wrap > nav.nav{
   border-radius:14px 0 0 0; border-left:1px solid var(--line);
 }
 
-/* 站点背景图之上加一层浅色遮罩，保证长文可读性（与站点 body::before 同色） */
-html.light body::before{
-  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background:rgba(245,245,245,0.90);
+/* 站点背景图之上加遮罩，保证长文可读 --------------------------------------
+   注意：站点 style.css 里有一条全局 body::before{background:rgba(245,245,245,.29)}，
+   它是「浅色」遮罩。切换到暗色主题后这条规则依然生效，于是暗色正文上盖了一层
+   浅灰白纱 —— 这正是「暗色背景图没有被黑色半透明遮罩压住」的原因。
+   这里按主题分别覆盖，并用 !important 压过站点那条全局规则（站点样式在本页
+   讲义样式之后加载，同属性不加 !important 压不住）。 */
+body::before{
+  content:"" !important; position:fixed !important; inset:0 !important;
+  z-index:-1 !important; pointer-events:none !important;
 }
+html.light body::before{ background:rgba(245,245,245,0.88) !important; }
+html:not(.light) body::before{ background:rgba(8,9,12,0.66) !important; }
 
 /* 主色对齐站点紫 #8527d2；正文/背景保持讲义自己的浅色配色 */
 html.light{
