@@ -1,0 +1,361 @@
+
+:root{
+  --bg:#14161a; --bg2:#1a1d23; --bg3:#20242c; --fg:#e6e8ec; --fg2:#b9bec8;
+  --line:#2e333d; --accent:#6ea8fe; --accent2:#f0b36b; --mark:#4a3a1d;
+  --code:#ffd479; --th:#232833; --navw:262px;
+}
+html.light{
+  --bg:#fbfbfa; --bg2:#ffffff; --bg3:#f3f4f6; --fg:#1f2328; --fg2:#4b5563;
+  --line:#e2e5e9; --accent:#1a5fd6; --accent2:#a35a00; --mark:#fff2b8;
+  --code:#9a3b00; --th:#eef1f5;
+}
+html.navhide{--navw:0px}
+html.navhide #side{display:none}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--fg); padding-right:var(--navw);
+  font-family:"Segoe UI","Microsoft YaHei","PingFang SC",system-ui,-apple-system,sans-serif;
+  font-size:16.5px; line-height:1.95; letter-spacing:.01em;
+}
+.wrap{max-width:960px; margin:0 auto; padding:48px 30px 120px}
+h1,h2,h3,h4{line-height:1.45; font-weight:700; color:var(--fg); scroll-margin-top:18px}
+h1{font-size:2.05em; margin:.4em 0 1em; padding-bottom:.5em; border-bottom:3px solid var(--accent)}
+h2{font-size:1.62em; margin:2.4em 0 .8em; padding:.35em 0 .35em .6em; border-left:6px solid var(--accent); background:var(--bg2); border-radius:0 8px 8px 0}
+h3{font-size:1.28em; margin:2em 0 .6em; color:var(--accent)}
+h4{font-size:1.1em; margin:1.5em 0 .5em; color:var(--accent2)}
+p{margin:.85em 0}
+strong{color:var(--accent2); font-weight:700}
+a{color:var(--accent)}
+ul,ol{padding-left:1.7em; margin:.7em 0}
+li{margin:.32em 0}
+li>ul,li>ol{margin:.3em 0}
+code{
+  font-family:"Cascadia Code",Consolas,"Courier New",monospace;
+  font-size:.9em; color:var(--code); background:var(--bg3);
+  padding:.14em .42em; border-radius:5px; word-break:break-word;
+}
+pre{
+  background:var(--bg2); border:1px solid var(--line); border-radius:10px;
+  padding:16px 18px; overflow-x:auto; line-height:1.62; margin:1.1em 0;
+}
+pre code{background:none; color:var(--fg); padding:0; font-size:.87em; white-space:pre}
+blockquote{
+  margin:1.15em 0; padding:.75em 1.15em; background:var(--bg2);
+  border-left:5px solid var(--accent2); border-radius:0 8px 8px 0; color:var(--fg2);
+}
+blockquote p{margin:.45em 0}
+blockquote strong{color:var(--accent2)}
+hr{border:none; border-top:1px dashed var(--line); margin:3em 0}
+table{border-collapse:collapse; width:100%; margin:1.25em 0; font-size:.93em;
+      background:var(--bg2); border-radius:8px; overflow:hidden}
+th,td{border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+th{background:var(--th); font-weight:700; color:var(--fg)}
+tr:nth-child(even) td{background:rgba(128,128,128,.05)}
+table.grid{margin:1.1em 0 1.6em; width:auto; min-width:52%}
+table.grid td{font-family:"Cascadia Code",Consolas,monospace; font-size:.92em; padding:6px 13px; text-align:center}
+.tablewrap{overflow-x:auto}
+mark.bubu{
+  background:var(--mark); color:var(--fg); border-radius:4px;
+  padding:0 .3em; font-size:.86em; font-weight:700; margin-right:.28em;
+  border:1px solid rgba(240,179,107,.45);
+}
+.nav{
+  background:var(--bg2); border:1px solid var(--line); border-radius:12px;
+  padding:16px 24px 20px; margin:0 0 2.4em;
+}
+.nav>.t{font-weight:700; margin:0 0 .6em; color:var(--accent2)}
+.nav ul{list-style:none; padding-left:1.15em; margin:.25em 0}
+.nav>ul{padding-left:0}
+.nav a{text-decoration:none; color:var(--fg2)}
+.nav a:hover{color:var(--accent); text-decoration:underline}
+.nav>ul>li>a{color:var(--fg); font-weight:600}
+
+/* ---- 右侧大章节目录条 ---- */
+#side{
+  position:fixed; top:0; right:0; width:var(--navw); height:100vh; z-index:60;
+  background:var(--bg2); border-left:1px solid var(--line);
+  overflow-y:auto; overflow-x:hidden; padding:16px 10px 70px 14px;
+  font-size:12.6px; line-height:1.6;
+}
+#side::-webkit-scrollbar{width:8px}
+#side::-webkit-scrollbar-thumb{background:var(--line); border-radius:8px}
+#side .shead{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  margin:0 2px 10px 4px; padding-bottom:8px; border-bottom:1px solid var(--line);
+}
+#side .shead b{color:var(--accent2); font-size:12.6px; letter-spacing:.1em}
+#side .shead button{
+  cursor:pointer; background:var(--bg3); color:var(--fg2); border:1px solid var(--line);
+  border-radius:6px; font-family:inherit; font-size:11.5px; padding:2px 7px;
+}
+#side .shead button:hover{border-color:var(--accent); color:var(--accent)}
+#side a{
+  display:block; text-decoration:none; color:var(--fg2); border-radius:6px;
+  padding:3px 7px; border-left:2px solid transparent; word-break:break-word;
+}
+#side a.i{padding-left:13px}
+#side a:hover{background:var(--bg3); color:var(--accent)}
+#side a.cur{color:var(--accent); background:var(--bg3); border-left-color:var(--accent); font-weight:600}
+#side .sg{
+  color:var(--fg); font-weight:700; margin:11px 0 3px; padding:4px 7px;
+  background:linear-gradient(90deg,rgba(110,168,254,.16),transparent);
+  border-left:3px solid var(--accent); border-radius:0 6px 6px 0;
+}
+#side .sg:first-of-type{margin-top:2px}
+
+#reopen{
+  display:none; position:fixed; top:16px; right:16px; z-index:70; cursor:pointer;
+  background:var(--bg2); color:var(--fg); border:1px solid var(--line);
+  border-radius:999px; padding:7px 14px; font-size:13px; font-family:inherit;
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+}
+html.navhide #reopen{display:block}
+#reopen:hover{border-color:var(--accent); color:var(--accent)}
+
+#toggle{
+  position:fixed; top:16px; left:18px; z-index:70; cursor:pointer;
+  background:var(--bg2); color:var(--fg); border:1px solid var(--line);
+  border-radius:999px; padding:7px 15px; font-size:13.5px; font-family:inherit;
+  box-shadow:0 2px 10px rgba(0,0,0,.25);
+}
+#toggle:hover{border-color:var(--accent); color:var(--accent)}
+#top{
+  position:fixed; bottom:22px; right:calc(var(--navw) + 16px); z-index:70;
+  text-decoration:none; background:var(--bg2); color:var(--fg2);
+  border:1px solid var(--line); border-radius:999px; padding:7px 15px; font-size:13.5px;
+}
+#top:hover{border-color:var(--accent); color:var(--accent)}
+
+@media (max-width:1179px){
+  html{--navw:0px}
+  #side{display:none}
+  #reopen{display:none}
+  body{padding-right:0}
+}
+
+@media print{
+  #toggle,#top,#side,#reopen{display:none}
+  body{background:#fff; color:#000; font-size:11pt; padding-right:0}
+  .wrap{max-width:none; padding:0}
+  h2{break-after:avoid} pre,table,blockquote{break-inside:avoid}
+}
+@media (max-width:640px){
+  body{font-size:15.5px} .wrap{padding:24px 14px 80px}
+  table{font-size:.85em} th,td{padding:6px 7px}
+}
+
+/* ===== 公式渲染修复补丁（tools/fix-math.js 注入） ===== */
+
+/* (1) 等宽字体栈修复 ---------------------------------------------------
+   原栈 "Cascadia Code" 优先，但它缺少 U+2295 ⊕ / U+207B ⁻ / U+1D57 ᵗ 等字形；
+   浏览器回退到比例字体后，单个字符宽度不再等于 1 格，ASCII 结构图整行错位。
+   Consolas 对这些符号覆盖最好，故置于首位。 */
+pre, pre code, code, table.grid td{
+  font-family:"Consolas","DejaVu Sans Mono","Noto Sans Mono","Liberation Mono",
+              "Courier New",ui-monospace,monospace;
+  font-variant-ligatures:none;
+  font-feature-settings:"liga" 0,"calt" 0;
+}
+/* 结构图必须保持原始空白，禁止自动换行破坏对齐 */
+pre{ white-space:pre; overflow-x:auto; }
+pre code{ white-space:pre; }
+pre, pre code{ tab-size:4; }
+
+/* (2) KaTeX 公式排版 --------------------------------------------------- */
+.jysmath{ font-size:1.02em; }
+.jysmath .katex{ font-size:1.06em; }
+.jysmath-display{
+  display:block; margin:1.1em 0; text-align:center;
+  overflow-x:auto; overflow-y:hidden; padding:.2em 0;
+}
+/* 行内公式不要撑破行高、不要被外层 line-height 裁切 */
+.katex{ line-height:1.2; color:inherit; }
+.katex .vlist-t{ line-height:normal; }
+/* 深色主题下 KaTeX 边框/分数线跟随前景色 */
+html:not(.light) .katex .frac-line,
+html:not(.light) .katex .hline{ border-color:currentColor; }
+/* KaTeX 自带字体已随页面本地提供，无需联网 */
+
+
+/* ===================== fxHook.io 站点接入补丁 ===================== */
+
+/* 站点 style.css 会把 * 的 padding/margin 清零，这里给讲义正文补回呼吸空间。
+   --sidegap 就是「给右侧固定目录让出的宽度」，必须与 padding-right 保持一致
+   （窄屏媒体查询里会同步改成 0），下面的 header 规则要用它做补偿。 */
+body{ --sidegap:calc(var(--navw) + 18px); padding-right:var(--sidegap); }
+.wrap{ max-width:1000px; width:auto; padding:22px 30px 90px; }
+
+/* 【关键 0.1】站点 header 不能被右侧目录「挤偏」 -------------------------
+   body 的右内边距是给右侧固定目录让位的，可它是加在 body 上的，于是作为
+   body 直接子元素的 <header> 也一并被压窄、整体左移。
+   实测（视口 1249，侧栏 262）：header 左 16 / 右 953 —— 左边距仅 16px，
+   右边距却有 296px，肉眼就是「header 被侧栏挤到左边去了」，而站点其它页面
+   的 header 一律是「视口内左右各 16px」的对称居中。
+   这里把 header 的宽度补偿回来（body 内容宽 + 让位宽 - 32px = 视口宽 - 32px），
+   再配 margin-left:16px，于是左右各留 16px，与站点其它页面完全一致。 */
+body > header{
+  width:calc(100% + var(--sidegap) - 32px) !important;
+  margin-left:16px !important; margin-right:auto !important;
+}
+/* 【关键 0.2】讲义里有两条第 37、38 行的全局列表规则：
+     ul,ol{ margin:.7em 0 }   li{ margin:.32em 0 }
+   它们同样会命中站点 header 里的 ul.nav-links / li。实测后果：
+     · ul.nav-links 上下外边距各 11.55px，margin box 48.5 -> 71.6px
+     · 每个 li 上下各 5.28px，把 .nav-links 自身从 38px 撑到 48.5px
+   nav 内容盒因此变成 71.6px，header 高达 102.4px（站点其它页面只要约
+   74px），直接顶到右侧目录上方。这里按站点原本的 *{margin:0;padding:0}
+   reset，把 header 内部的列表边距清干净，header 回到约 74.5px。 */
+body > header ul, body > header ol, body > header li{
+  margin:0 !important; padding:0 !important;
+}
+
+/* 【关键 0】讲义里有 77 个 <pre> 结构图（有的很宽）。它们自身是 overflow-x:auto，
+   但"自动宽度的块级父元素"会被这种超宽子元素的 min-content 撑开，
+   导致整页在窄屏被撑到视口之外。解决办法是把宽度定死为容器宽度（percentage），
+   让超宽内容在 <pre> 内部横向滚动，而不是撑开页面。 */
+html, body{ width:100%; max-width:100%; overflow-x:hidden; }
+.wrap{ width:100%; min-width:0; }
+
+/* 【关键 0.5】正文别被右侧固定目录压住 ------------------------------------
+   实测（100% 缩放，侧栏 262px）：
+     vw 1280 → 正文右边缘超出侧栏左边缘 86px（明显遮挡）
+     vw 1440 → 超出 6px（贴边）
+     vw 1600 → 富余 74px
+   原因是正文列固定 1000px 居中，而侧栏是 position:fixed 叠在上层。
+   这里把正文列宽度改成「视口 - 滚动条估算 - 侧栏宽度 - 安全间距」，
+   并用 min() 与原来的 1000px 取小，于是窄屏自动收窄、宽屏仍为 1000px。
+   滚动条宽度浏览器无法用 CSS 精确取得，按 18px 估算（Windows 常见值）。 */
+.wrap{
+  width:min(1000px, calc(100vw - 18px - var(--navw) - 28px));
+  margin-left:auto; margin-right:auto;
+}
+
+/* 【关键 1】站点 style.css 有一条全局 nav{display:flex;justify-content:space-between}，
+   会命中讲义内部的目录导航：
+     · 右侧目录栏（aside#side）内部的 nav
+     · 正文开头的目录块（nav.nav）
+   二者加载顺序在讲义样式之后，因此必须在此还原为块级，否则目录会被压成
+   "最小内容宽度"（中文逐字竖排）甚至把整页撑到视口之外。
+
+   ⚠ 这里只能用 #side nav / .wrap > nav.nav 这类限定选择器，绝不能写成裸
+   nav 选择器：裸选择器会连站点 header 自己的 nav 元素一起命中，把它从
+   flex / space-between 打成 display:block，结果 header 变成「logo 一行 +
+   菜单一行」的两行结构，菜单整行左对齐挤在左边、右半截空着 —— 这正是
+   「header 偏左」的另一半原因。站点 header 的 nav 必须保持站点原本的
+   单行 flex（logo 左 / 菜单右），所以这里不碰它。 */
+#side nav, .wrap > nav.nav{
+  display:block !important; flex-direction:column !important;
+  justify-content:normal !important; align-items:normal !important;
+}
+#side nav{ padding:0; }
+#side nav a, .wrap > nav.nav a{ display:block; width:auto; flex:none; }
+
+/* 【关键 2】站点全局 reset（* { margin:0; padding:0 }）清掉了列表符号与缩进。
+   讲义正文里的列表需要恢复；正文开头的目录块（.nav）本身也要补回内边距。 */
+.wrap *{ min-width:0; }
+.wrap ul{ list-style:disc !important; padding-left:1.7em !important; }
+.wrap ol{ list-style:decimal !important; padding-left:1.7em !important; }
+.wrap .nav{ padding:16px 24px 20px !important; }
+.wrap .nav ul{ list-style:none !important; padding-left:1.15em !important; }
+.wrap .nav > ul{ padding-left:0 !important; }
+.wrap a{ overflow-wrap:anywhere; word-break:break-word; }
+
+/* 固定右侧目录：下移到站点 header 之下，避免被吸顶导航压住。
+   修好单行 nav 与列表边距之后，header 高 74.5px + 上边距 12px，底边在
+   86.5px，因此目录从 96px 起（留约 9px 间隙）即可。
+   （修复前 header 高 146.1px、底边 158px，会压住目录顶部 54px。） */
+#side{
+  top:96px; height:calc(100vh - 96px);
+  border-radius:14px 0 0 0; border-left:1px solid var(--line);
+}
+
+/* 【关键 2.5】讲义把 --navw 定义在 :root 上（:root 是伪类，特异性 0,1,0），
+   而它自己的隐藏断点写的是 html{--navw:0px}（元素选择器，特异性只有 0,0,1）
+   —— 特异性更低，于是永远被 :root 那条压住，断点形同虚设。
+   后果：视口 <=1179px 时 #side 已经 display:none（id 选择器赢了），
+   但 --navw 仍是 262px，body 继续留着 262px 的让位内边距：
+   右侧一大片空白，正文与 header 都被平白挤窄
+   （实测 1024px：header 只有 16..733，白白少 262px）。
+   这里用 :root 补一条同特异性、位置在后的覆盖，让讲义原本的断点真正生效；
+   之后 --sidegap 会自动跟着变成 18px，header 也就自然铺满。 */
+@media (max-width:1179px){
+  :root{ --navw:0px; }
+}
+
+/* 站点背景图之上加遮罩，保证长文可读 --------------------------------------
+   注意：站点 style.css 里有一条全局 body::before{background:rgba(245,245,245,.29)}，
+   它是「浅色」遮罩。切换到暗色主题后这条规则依然生效，于是暗色正文上盖了一层
+   浅灰白纱 —— 这正是「暗色背景图没有被黑色半透明遮罩压住」的原因。
+   这里按主题分别覆盖，并用 !important 压过站点那条全局规则（站点样式在本页
+   讲义样式之后加载，同属性不加 !important 压不住）。 */
+body::before{
+  content:"" !important; position:fixed !important; inset:0 !important;
+  z-index:-1 !important; pointer-events:none !important;
+}
+html.light body::before{ background:rgba(245,245,245,0.88) !important; }
+html:not(.light) body::before{ background:rgba(8,9,12,0.66) !important; }
+
+/* 主色对齐站点紫 #8527d2；正文/背景保持讲义自己的浅色配色 */
+html.light{
+  --accent:#8527d2; --accent2:#a35a00; --th:#efe6f8; --mark:#f0e2ff;
+}
+
+/* 站点导航与页脚由本页静态注入，这里只做与讲义风格的衔接 */
+body > header{ margin-bottom:6px; }
+.site-footer{
+  background:linear-gradient(180deg, rgba(48,50,60,.85), rgba(22,23,30,.92));
+  color:#eceef2; border-radius:18px; margin:18px 16px 22px;
+  border:1px solid rgba(255,255,255,.09); position:relative; z-index:5;
+}
+.site-footer .footer-content{
+  display:flex; flex-direction:column; gap:10px; align-items:center;
+  padding:22px 16px; text-align:center;
+}
+.site-footer .footer-links{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center; }
+.site-footer a{ color:#eceef2; text-decoration:none; border-bottom:1px solid rgba(255,255,255,.25); }
+.site-footer a:hover{ color:#fff; border-bottom-color:#fff; }
+.site-footer .copyright{ font-size:.85rem; color:rgba(236,238,242,.72); }
+
+/* 窄屏：隐藏固定目录（站点移动端菜单已占位），正文让出宽度。
+   --sidegap 同步归零，header 的宽度补偿才不会被多减一次。 */
+@media (max-width:900px){
+  body{ --sidegap:0px; padding-right:0 !important; }
+  #side{ display:none !important; }
+  html{ --navw:0px !important; }
+  .wrap{ padding:18px 18px 70px; }
+  .wrap .nav{ padding:14px 14px 16px !important; }
+}
+
+
+
+/* ===== 分页导航与目录（由 tools/build-lecture.js 追加） ===== */
+.pager{
+  display:flex; gap:14px; justify-content:space-between;
+  margin:64px 0 0; padding-top:22px; border-top:1px solid var(--line);
+}
+.pager a.pg{
+  flex:1 1 0; min-width:0; display:block; text-decoration:none;
+  background:var(--bg2); border:1px solid var(--line); border-radius:10px;
+  padding:12px 16px; transition:border-color .15s ease, transform .15s ease;
+}
+.pager a.pg:hover{border-color:var(--accent); transform:translateY(-1px)}
+.pager a.pg span{display:block; font-size:12.4px; color:var(--fg2); letter-spacing:.06em}
+.pager a.pg b{display:block; margin-top:4px; font-size:14.6px; color:var(--accent); font-weight:600;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.pager a.pg.next{text-align:right}
+.wrap .nav ul.toc{list-style:none !important; padding-left:0 !important; margin:0}
+.wrap .nav ul.toc li{margin:.28em 0}
+.wrap .nav ul.toc li.lv4{padding-left:1.3em; font-size:.95em}
+.wrap .nav .grp{display:block; margin:.7em 0 .2em; font-weight:700; color:var(--fg)}
+.wrap .nav ul.toc ul{list-style:none !important; padding-left:1.1em !important; margin:.2em 0}
+#side a.i.cur{
+  color:var(--accent); background:var(--bg3);
+  border-left-color:var(--accent); font-weight:600;
+}
+/* 超大章节被切出来的子页（H3/H4 级），作为主条的缩进子项 */
+#side a.sub{padding-left:26px; font-size:12.1px}
+#side a.sub.cur{
+  color:var(--accent); background:var(--bg3);
+  border-left-color:var(--accent); font-weight:600;
+}

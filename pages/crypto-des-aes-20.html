@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3　层 · 密码学讲义：DES 与 AES</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../styles/style.css">
+<link rel="stylesheet" href="../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="diary.html">日记</a></li>
+                <li><a href="study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="communicate.html">交流</a></li>
+                <li><a href="picture.html">图片墙</a></li>
+                <li><a href="products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="crypto-des-aes.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-des-aes-01.html">0.1 密码学到底在解决什么问题</a>
+<a class="i" href="crypto-des-aes-02.html">0.2 对称密码 vs 非对称密码</a>
+<a class="i" href="crypto-des-aes-03.html">0.3 分组密码 vs 流密码</a>
+<a class="i" href="crypto-des-aes-04.html">0.4 比特、字节与位运算（重中之重）</a>
+<a class="i" href="crypto-des-aes-05.html">0.5 三种基本&quot;密码零件&quot;</a>
+<a class="i" href="crypto-des-aes-06.html">0.6 Feistel 结构：DES 的骨架</a>
+<a class="i" href="crypto-des-aes-07.html">0.7 密码分析入门：攻击者知道什么</a>
+<a class="i" href="crypto-des-aes-08.html">0.8 <mark class="bubu">补</mark>后文会用到的三个小概念</a>
+<div class="sg">第二讲　数据加密标准（DES）</div>
+<a class="i" href="crypto-des-aes-09.html">导言：DES 的由来与它的历史包袱</a>
+<a class="i" href="crypto-des-aes-10.html">1　简化 DES 型算法</a>
+<a class="i" href="crypto-des-aes-11.html">2　差分分析</a>
+<a class="i" href="crypto-des-aes-12.html">3　DES 本体</a>
+<a class="i" href="crypto-des-aes-13.html">4　DES 不是一个群</a>
+<a class="i" href="crypto-des-aes-14.html">5　破译 DES</a>
+<a class="i" href="crypto-des-aes-15.html">6　口令安全</a>
+<a class="i" href="crypto-des-aes-16.html">第二讲　小结与自测</a>
+<div class="sg">第三讲　高级加密标准（AES）</div>
+<a class="i" href="crypto-des-aes-17.html">导言：AES 是怎么选出来的</a>
+<a class="i" href="crypto-des-aes-18.html">1　有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mi>p</mi><mi>n</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(p^{n})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 的知识</a>
+<a class="i" href="crypto-des-aes-19.html">2　基本算法</a>
+<a class="i cur" data-h="s-1" href="crypto-des-aes-20.html">3　层</a>
+<a class="i" href="crypto-des-aes-21.html">4　解密</a>
+<a class="i" href="crypto-des-aes-22.html">5　设计思考</a>
+<a class="i" href="crypto-des-aes-23.html">6　执行考虑</a>
+<a class="i" href="crypto-des-aes-24.html">7　AES 的积极意义</a>
+<a class="i" href="crypto-des-aes-25.html">8　加密模式</a>
+<a class="i" href="crypto-des-aes-26.html">第三讲　小结与自测</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-des-aes-27.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-des-aes-28.html">附录 B　关键常数速查</a>
+<a class="i" href="crypto-des-aes-29.html">附录 C　常见疑问 FAQ</a>
+<a class="i" href="crypto-des-aes-30.html">附录 D　自测题参考答案</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+<nav class="nav">
+<p class="t">本页目录</p>
+<ul class="toc">
+<li class="lv3"><a href="#s-2">3.0 四种零件总览（PPT 第 14 页）</a></li>
+<li class="lv3"><a href="#s-3">3.1 一轮的完整过程和加密三步骤（PPT 第 15 页）</a></li>
+<li class="lv3"><a href="#s-4">3.2 数据的摆放：4×4 字节矩阵（PPT 第 16 页）</a></li>
+<li class="lv3"><a href="#s-5">3.3 字节转换 BS（PPT 第 17–18 页）</a></li>
+<li class="lv4"><a href="#s-6">S-盒（16×16）—— AES 的灵魂</a></li>
+<li class="lv4"><a href="#s-7">查表规则（PPT 第 18 页）</a></li>
+<li class="lv4"><a href="#s-8">输出的形式（PPT 第 18 页）</a></li>
+<li class="lv3"><a href="#s-9">3.4 移动行变换 SR（PPT 第 19 页）</a></li>
+<li class="lv3"><a href="#s-10">3.5 混合列变换 MC（PPT 第 20 页）</a></li>
+<li class="lv3"><a href="#s-11">3.6 轮密钥加密变换 ARK（PPT 第 21 页）</a></li>
+<li class="lv3"><a href="#s-12">3.7 轮密钥产生方法（PPT 第 22 页）</a></li>
+<li class="lv4"><a href="#s-13">完整走一遍（帮你建立整体感）</a></li>
+<li class="lv3"><a href="#s-14">3.8 S-盒的数学原理（PPT 第 23–24 页）—— 全讲最漂亮的公式</a></li>
+<li class="lv4"><a href="#s-15">例 3：完整走一遍（PPT 第 24 页）</a></li>
+<li class="lv3"><a href="#s-16">3.9 关于 192 比特密钥的 AES（PPT 第 25–27 页）</a></li>
+<li class="lv3"><a href="#s-17">3.10 关于 256 比特密钥的 AES（PPT 第 28–30 页）</a></li>
+<li class="lv4"><a href="#s-18">三种密钥长度总对照表（建议背下来）</a></li>
+</ul>
+</nav>
+
+<h2 id="s-1">3　层</h2>
+<blockquote>
+<p>对应 PPT 第 14–30 页。这是 AES 的核心，也是篇幅最长的一节。</p>
+</blockquote>
+<h3 id="s-2">3.0 四种零件总览（PPT 第 14 页）</h3>
+<p>PPT 原文：<strong>每一轮由四个基本步骤称为层（layers）组成</strong>：</p>
+<blockquote>
+<p><strong>（1）字节转换（The ByteSub Transformation）</strong>：这是一个<strong>非线性层</strong>，主要用于<strong>防止差分和线性分析攻击</strong>。
+<strong>（2）移动行变换（The ShiftRow Transformation）</strong>：这是一个<strong>线性层</strong>，可以导致多轮之间各个比特位间的<strong>扩散</strong>。
+<strong>（3）混合列变换（The MixColumn Transformation）</strong>：这一层的目的是<strong>与移动行变换相同</strong>（即扩散）。
+<strong>（4）轮密钥加密变换（AddRoundKey）</strong>：<strong>轮密钥与上一层的结果进行异或操作。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>把四个零件按&quot;性质&quot;和&quot;职责&quot;归类，这张表能帮你记住它们</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>缩写</th>
+<th>线性/非线性</th>
+<th>职责</th>
+<th>对应香农的哪条原则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字节转换</td>
+<td><strong>BS</strong></td>
+<td><strong>非线性</strong></td>
+<td>混淆</td>
+<td>Confusion</td>
+</tr>
+<tr>
+<td>移动行变换</td>
+<td><strong>SR</strong></td>
+<td>线性</td>
+<td>行内扩散（跨列）</td>
+<td>Diffusion</td>
+</tr>
+<tr>
+<td>混合列变换</td>
+<td><strong>MC</strong></td>
+<td>线性</td>
+<td>列内扩散（跨行）</td>
+<td>Diffusion</td>
+</tr>
+<tr>
+<td>轮密钥加密</td>
+<td><strong>ARK</strong></td>
+<td>线性（异或）</td>
+<td>掺入密钥</td>
+<td>Key mixing</td>
+</tr>
+</tbody>
+</table>
+<p><strong><mark class="bubu">补</mark>看懂这个分工，AES 就懂了一大半</strong>：</p>
+<ul>
+<li><strong>只有一个非线性层（BS）</strong>！<strong>这是 AES 和 DES 最大的结构差异</strong>——DES 每轮有 8 个 S-盒（8 个非线性部件），AES 每轮只有 1 个 BS。所以 BS 的地位极其关键：它就是全算法的安全来源。</li>
+<li><strong>SR 和 MC 都只做扩散</strong>，它们都是线性的（可以用矩阵乘法表示），单独看毫无安全性，但配合起来能在两轮内把扩散铺满整个 16 字节。</li>
+<li><strong>ARK 是唯一的&quot;掺密钥&quot;步骤</strong>，它用最廉价的异或，成本几乎为零。</li>
+</ul>
+<h3 id="s-3">3.1 一轮的完整过程和加密三步骤（PPT 第 15 页）</h3>
+<p>PPT 的流程图：</p>
+<pre><code>                ByteSub (BS)
+                     ↓
+                ShiftRow (SR)
+                     ↓
+                MixColumn (MC)
+                     ↓
+             AddRoundKey (ARK)
+</code></pre>
+<p><strong>Rijndael 加密（PPT 原文）</strong>：</p>
+<blockquote>
+<p><strong>（1）使用第 0 轮密钥执行 ARK 操作。</strong>
+<strong>（2）依次使用第 1 轮到第 9 轮密钥，按顺序执行 BS、SR、MC 和 ARK 操作。</strong>
+<strong>（3）使用第 10 轮密钥，按顺序执行 BS、SR 和 ARK 操作。</strong>
+<strong># 注意最后一轮忽略了混合列变换（MC）层。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>为什么最后一轮要&quot;少做一步&quot;？</strong> 这是一个<strong>对称性设计</strong>：</p>
+<ul>
+<li>加密的第一步只做 <code>ARK</code>（不先做 BS/SR/MC），最后一步只做到 <code>SR</code> 就停（不做 MC）。</li>
+<li>这样处理之后，<strong>解密流程的结构和加密流程&quot;长得一样&quot;</strong>（都是&quot;先 ARK，中间循环 BS/SR/MC/ARK，最后 BS/SR/ARK&quot;），只是把每个层换成它的逆层。</li>
+</ul>
+<p><strong>如果不砍掉最后的 MC 会怎样？</strong> 那么解密的第一步就会变成一个&quot;逆 MC&quot;，跟加密的第一步&quot;纯 ARK&quot;不对称，代码和硬件都得写两套分支。<strong>砍掉它换来的是&quot;加解密结构统一&quot;，非常划算</strong>（第 4 节的推导会正式说明这一点：PPT 第 34 页的注释写着&quot;为了保持结构的一致性，在最后一轮加密中忽略了 MC 操作&quot;）。</p>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>注意 MC 砍掉并不损失安全性</strong>：因为最后一轮的 MC 后面没有 BS 来&quot;非线性化&quot;它的输出，等于只是做了一个已知的线性变换，攻击者可以自己撤销。<strong>所以它提供的扩散价值在最后一轮几乎为零，砍掉不心疼。</strong></p>
+</blockquote>
+<h3 id="s-4">3.2 数据的摆放：4×4 字节矩阵（PPT 第 16 页）</h3>
+<p>所有操作都在一个 <strong>4×4 的字节矩阵</strong>上进行。怎么把 128 比特放进去？</p>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>128 比特输入分成 8 比特的 16 个字节为</strong></p>
+<pre><code>a_{0,0}, a_{1,0}, a_{2,0}, a_{3,0}, a_{0,1}, a_{1,1}, …, a_{3,3},
+</code></pre>
+<p><strong>并将它们放入 4×4 的矩阵</strong></p>
+<pre><code>┌                                ┐
+│ a_{0,0}  a_{0,1}  a_{0,2}  a_{0,3} │
+│ a_{1,0}  a_{1,1}  a_{1,2}  a_{1,3} │
+│ a_{2,0}  a_{2,1}  a_{2,2}  a_{2,3} │
+│ a_{3,0}  a_{3,1}  a_{3,2}  a_{3,3} │
+└                                ┘
+</code></pre>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>这一段是很多人第一次看会看错的地方，请特别注意&quot;顺序&quot;</strong>：</p>
+<p>注意输入字节的顺序是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mrow><mn>0</mn><mo separator="true">,</mo><mn>0</mn></mrow></msub><mo separator="true">,</mo><msub><mi>a</mi><mrow><mn>1</mn><mo separator="true">,</mo><mn>0</mn></mrow></msub><mo separator="true">,</mo><msub><mi>a</mi><mrow><mn>2</mn><mo separator="true">,</mo><mn>0</mn></mrow></msub><mo separator="true">,</mo><msub><mi>a</mi><mrow><mn>3</mn><mo separator="true">,</mo><mn>0</mn></mrow></msub><mo separator="true">,</mo><msub><mi>a</mi><mrow><mn>0</mn><mo separator="true">,</mo><mn>1</mn></mrow></msub><mo separator="true">,</mo><mo>…</mo></mrow><annotation encoding="application/x-tex">a_{0,0}, a_{1,0}, a_{2,0}, a_{3,0}, a_{0,1}, \dots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mpunct mtight">,</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mpunct mtight">,</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span><span class="mpunct mtight">,</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span><span class="mpunct mtight">,</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span></span></span></span></span>——<strong>下标里第二个数（列号）变得慢，第一个数（行号）变得快</strong>。也就是说：</p>
+<blockquote>
+<p><strong>字节是按&quot;列&quot;填充的！前 4 个字节填满第 0 列，接着 4 个字节填满第 1 列……</strong></p>
+</blockquote>
+<p>画出来就是：</p>
+<pre><code>输入字节序号（按顺序数）:
+   0   4   8  12
+   1   5   9  13
+   2   6  10  14
+   3   7  11  15
+   ↑行号变快，列号变慢
+
+放在矩阵里:
+┌                                  ┐
+│  字节0   字节4   字节8   字节12  │  ← 第 0 行
+│  字节1   字节5   字节9   字节13  │  ← 第 1 行
+│  字节2   字节6   字节10  字节14  │  ← 第 2 行
+│  字节3   字节7   字节11  字节15  │  ← 第 3 行
+└                                  ┘
+</code></pre>
+<p><strong>记忆口诀：按列填进去，按行念出来。</strong>（也叫&quot;列主序&quot;填充。）</p>
+<p><strong><mark class="bubu">补</mark>为什么这么规定？</strong> 这是为了配合 <strong>ShiftRow（移动行变换）</strong>：ShiftRow 是按行循环左移，如果按列填充，那么&quot;原来相邻的 4 个字节&quot;（行内相邻）正好处于同一行，会被 ShiftRow 打散到不同的列——<strong>这个安排让&quot;移位&quot;恰好实现了跨列扩散</strong>。如果按行填充，ShiftRow 反而打不散相邻字节。<strong>（对照第二讲：DES 的 IP 置换也是&quot;为了硬件方便&quot;的人为安排，而 AES 的这个安排是有明确密码学意图的。）</strong></p>
+<p><strong>同时，这一页还重申了 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></strong>：</p>
+<blockquote>
+<p>接下来，我们将使用有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>。<strong>建立有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 需要选择一个度为 8 的既约多项式。Rijndael 选择的是多项式 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mn>8</mn></msup><mo>+</mo><msup><mi>X</mi><mn>4</mn></msup><mo>+</mo><msup><mi>X</mi><mn>3</mn></msup><mo>+</mo><mi>X</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">X^{8} + X^{4} + X^{3} + X + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span>。</strong> 有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的元用字节表示。<strong>多项式加法可以用异或 XOR 完成。多项式乘法可以用前面介绍的方法。每一个非 0 元也存在乘法逆元。</strong></p>
+</blockquote>
+<h3 id="s-5">3.3 字节转换 BS（PPT 第 17–18 页）</h3>
+<p><strong>做法</strong>：把矩阵里<strong>每一个字节</strong>，用 S-盒<strong>独立地</strong>替换成另一个字节。<strong>16 个字节各自查一次表，互不影响。</strong></p>
+<h4 id="s-6">S-盒（16×16）—— AES 的灵魂</h4>
+<p>PPT 给出的完整 S-盒（<strong>行、列都用 0~15 编号；输入字节的高 4 位选行、低 4 位选列</strong>）：</p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td>99</td>
+<td>124</td>
+<td>119</td>
+<td>123</td>
+<td>242</td>
+<td>107</td>
+<td>111</td>
+<td>197</td>
+<td>48</td>
+<td>1</td>
+<td>103</td>
+<td>43</td>
+<td>254</td>
+<td>215</td>
+<td>171</td>
+<td>118</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td>202</td>
+<td>130</td>
+<td>201</td>
+<td>125</td>
+<td>250</td>
+<td>89</td>
+<td>71</td>
+<td>240</td>
+<td>173</td>
+<td>212</td>
+<td>162</td>
+<td>175</td>
+<td>156</td>
+<td>164</td>
+<td>114</td>
+<td>192</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>183</td>
+<td>253</td>
+<td>147</td>
+<td>38</td>
+<td>54</td>
+<td>63</td>
+<td>247</td>
+<td>204</td>
+<td>52</td>
+<td>165</td>
+<td>229</td>
+<td>241</td>
+<td>113</td>
+<td>216</td>
+<td>49</td>
+<td>21</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>4</td>
+<td>199</td>
+<td>35</td>
+<td>195</td>
+<td>24</td>
+<td>150</td>
+<td>5</td>
+<td>154</td>
+<td>7</td>
+<td>18</td>
+<td>128</td>
+<td>226</td>
+<td>235</td>
+<td>39</td>
+<td>178</td>
+<td>117</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>9</td>
+<td>131</td>
+<td>44</td>
+<td>26</td>
+<td>27</td>
+<td>110</td>
+<td>90</td>
+<td>160</td>
+<td>82</td>
+<td>59</td>
+<td>214</td>
+<td>179</td>
+<td>41</td>
+<td>227</td>
+<td>47</td>
+<td>132</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>83</td>
+<td>209</td>
+<td>0</td>
+<td>237</td>
+<td>32</td>
+<td>252</td>
+<td>177</td>
+<td>91</td>
+<td>106</td>
+<td>203</td>
+<td>190</td>
+<td>57</td>
+<td>74</td>
+<td>76</td>
+<td>88</td>
+<td>207</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>208</td>
+<td>239</td>
+<td>170</td>
+<td>251</td>
+<td>67</td>
+<td>77</td>
+<td>51</td>
+<td>133</td>
+<td>69</td>
+<td>249</td>
+<td>2</td>
+<td>127</td>
+<td>80</td>
+<td>60</td>
+<td>159</td>
+<td>168</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>81</td>
+<td>163</td>
+<td>64</td>
+<td>143</td>
+<td>146</td>
+<td>157</td>
+<td>56</td>
+<td>245</td>
+<td>188</td>
+<td>182</td>
+<td>218</td>
+<td>33</td>
+<td>16</td>
+<td>255</td>
+<td>243</td>
+<td>210</td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td>205</td>
+<td>12</td>
+<td>19</td>
+<td>236</td>
+<td>95</td>
+<td>151</td>
+<td>68</td>
+<td>23</td>
+<td>196</td>
+<td>167</td>
+<td>126</td>
+<td><strong>61</strong></td>
+<td>100</td>
+<td>93</td>
+<td>25</td>
+<td>115</td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td>96</td>
+<td>129</td>
+<td>79</td>
+<td>220</td>
+<td>34</td>
+<td>42</td>
+<td>144</td>
+<td>136</td>
+<td>70</td>
+<td>238</td>
+<td>184</td>
+<td>20</td>
+<td>222</td>
+<td>94</td>
+<td>11</td>
+<td>219</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td>224</td>
+<td>50</td>
+<td>58</td>
+<td>10</td>
+<td>73</td>
+<td>6</td>
+<td>36</td>
+<td>92</td>
+<td>194</td>
+<td>211</td>
+<td>172</td>
+<td>98</td>
+<td>145</td>
+<td>149</td>
+<td>228</td>
+<td>121</td>
+</tr>
+<tr>
+<td><strong>11</strong></td>
+<td>231</td>
+<td>200</td>
+<td>55</td>
+<td>109</td>
+<td>141</td>
+<td>213</td>
+<td>78</td>
+<td>169</td>
+<td>108</td>
+<td>86</td>
+<td>244</td>
+<td>234</td>
+<td>101</td>
+<td>122</td>
+<td>174</td>
+<td>8</td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td>186</td>
+<td>120</td>
+<td>37</td>
+<td>46</td>
+<td>28</td>
+<td>166</td>
+<td>180</td>
+<td>198</td>
+<td>232</td>
+<td>221</td>
+<td>116</td>
+<td><strong>31</strong></td>
+<td>75</td>
+<td>189</td>
+<td>139</td>
+<td>138</td>
+</tr>
+<tr>
+<td><strong>13</strong></td>
+<td>112</td>
+<td>62</td>
+<td>181</td>
+<td>102</td>
+<td>72</td>
+<td>3</td>
+<td>246</td>
+<td>14</td>
+<td>97</td>
+<td>53</td>
+<td>87</td>
+<td>185</td>
+<td>134</td>
+<td>193</td>
+<td>29</td>
+<td>158</td>
+</tr>
+<tr>
+<td><strong>14</strong></td>
+<td>225</td>
+<td>248</td>
+<td>152</td>
+<td>17</td>
+<td>105</td>
+<td>217</td>
+<td>142</td>
+<td>148</td>
+<td>155</td>
+<td>30</td>
+<td>135</td>
+<td>233</td>
+<td>206</td>
+<td>85</td>
+<td>40</td>
+<td>223</td>
+</tr>
+<tr>
+<td><strong>15</strong></td>
+<td>140</td>
+<td>161</td>
+<td>137</td>
+<td>13</td>
+<td>191</td>
+<td>230</td>
+<td>66</td>
+<td>104</td>
+<td>65</td>
+<td>153</td>
+<td>45</td>
+<td>15</td>
+<td>176</td>
+<td>84</td>
+<td>187</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>表里那两个加粗的数 61 和 31 是课件里标记的例子值</strong>，下面正好对应两个例子，注意看。</p>
+</blockquote>
+<h4 id="s-7">查表规则（PPT 第 18 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>字节中的 8 比特可以写成：<code>abcdefgh</code>。<code>abcd</code> 用来控制行，<code>efgh</code> 用来控制列。</strong> 例如，如果输入字节为 <strong><code>10001011</code></strong>，我们可以查 S-盒的<strong>第 9 行第 12 列，为 <code>61</code>，二进制表示是 <code>111101</code></strong>。</p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>验算一下，确认你理解了&quot;1 起数&quot;和&quot;0 起数&quot;</strong>：</p>
+<pre><code>输入 10001011
+拆成 abcd | efgh  →  1000 | 1011
+     abcd = 1000 = 8  →  行号 8（0 起数）= 第 9 行（1 起数）✓
+     efgh = 1011 = 11 →  列号 11（0 起数）= 第 12 列（1 起数）✓
+查表：第 8 行第 11 列 = 61 ✓
+</code></pre>
+<p><strong>再验一个（课件第 3.8 节例 3 的那个）</strong>：</p>
+<pre><code>输入 11001011
+拆成 1100 | 1011
+     1100 = 12 → 第 12 行（0 起数）
+     1011 = 11 → 第 11 列（0 起数）
+查表：第 12 行第 11 列 = 31 ✓  （表中加粗的那个）
+</code></pre>
+<blockquote>
+<p>⚠️ <strong>特别注意：课件里的表格用的是&quot;0 起数&quot;（行 0~15、列 0~15），而讲解文字里用的是&quot;1 起数&quot;（第 9 行、第 12 列）。两者指的是同一格。考试时两种说法都可能出现，一定要看清楚。</strong></p>
+</blockquote>
+<h4 id="s-8">输出的形式（PPT 第 18 页）</h4>
+<blockquote>
+<p><strong>按照以上规则，字节转换的输出仍然是 4×4 的字节矩阵，可表示为：</strong></p>
+<pre><code>┌ a00 a01 a02 a03 ┐     ┌ b00 b01 b02 b03 ┐
+│ a10 a11 a12 a13 │  →  │ b10 b11 b12 b13 │
+│ a20 a21 a22 a23 │     │ b20 b21 b22 b23 │
+└ a30 a31 a32 a33 ┘     └ b30 b31 b32 b33 ┘
+</code></pre>
+</blockquote>
+<p>即 <code>b_{i,j} = S-盒(a_{i,j})</code>，<strong>逐字节替换，位置不变</strong>。</p>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>BS 层就是 AES 唯一的非线性来源</strong>，所以它是所有攻击的焦点。而它和前两讲的 DES S-盒相比，有一个巨大优势：<strong>AES 的 S-盒有明确的数学公式</strong>（第 3.8 节），不神秘、可解释、可审计。<strong>这正是 AES 相对 DES 的最大改进。</strong></p>
+</blockquote>
+<h3 id="s-9">3.4 移动行变换 SR（PPT 第 19 页）</h3>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>矩阵的 0、1、2 和 3 行分别循环左移 0、1、2 和 3 个位置，得到</strong></p>
+<pre><code>┌ c00 c01 c02 c03 ┐   ┌ b00 b01 b02 b03 ┐
+│ c10 c11 c12 c13 │ = │ b11 b12 b13 b10 │
+│ c20 c21 c22 c23 │   │ b22 b23 b20 b21 │
+└ c30 c31 c32 c33 ┘   └ b33 b30 b31 b32 ┘
+</code></pre>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>逐行解读，并验证一下</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>行号</th>
+<th>左移位数</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 0 行</td>
+<td><strong>0 位</strong></td>
+<td>原样不动</td>
+</tr>
+<tr>
+<td>第 1 行</td>
+<td><strong>1 位</strong></td>
+<td><code>b10 b11 b12 b13</code> → <code>b11 b12 b13 b10</code> ✓</td>
+</tr>
+<tr>
+<td>第 2 行</td>
+<td><strong>2 位</strong></td>
+<td><code>b20 b21 b22 b23</code> → <code>b22 b23 b20 b21</code> ✓</td>
+</tr>
+<tr>
+<td>第 3 行</td>
+<td><strong>3 位</strong></td>
+<td><code>b30 b31 b32 b33</code> → <code>b33 b30 b31 b32</code> ✓</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意是&quot;循环&quot;左移</strong>——移出去的字节绕回来补在最右边，不会丢。（对照第二讲 DES 密钥调度里的循环左移，用的是同一个概念。）</p>
+<p><strong><mark class="bubu">补</mark>SR 的作用是&quot;把 4×4 矩阵打散&quot;</strong>：</p>
+<p>看<strong>第 0 列</strong>原来装的是 <code>b00, b10, b20, b30</code>（四个&quot;同列&quot;的字节）；经过 SR 之后，这一列变成了：</p>
+<pre><code>b00（来自原第 0 行）
+b11（来自原第 1 行）
+b22（来自原第 2 行）
+b33（来自原第 3 行）
+</code></pre>
+<p><strong>看出门道了吗？</strong> 移位之后，<strong>每一列里的 4 个字节，都来自原来不同行的不同列</strong>。这一步为接下来的 MixColumn 做好了准备——<strong>MixColumn 是&quot;按列&quot;做混合的，SR 保证了一列里的 4 个字节原本&quot;天各一方&quot;，混合才有意义。</strong></p>
+<p><strong>这就是&quot;扩散&quot;的精髓</strong>：SR 负责把字节&quot;铺开&quot;，MC 负责把铺开的字节&quot;拌匀&quot;，两步配合，<strong>AES 只需要 2 轮就能做到&quot;任意一个输入比特影响全部 128 个输出比特&quot;</strong>（第 5 节设计思考第 (2) 条会引用这个结论）。</p>
+<p><strong>PPT 第 37 页还提到 SR 的另一个作用</strong>：<strong>移动行这一层可以很好地阻止新发现的截断攻击（Truncated Attack）和平方攻击（Square Attack）。</strong></p>
+<h3 id="s-10">3.5 混合列变换 MC（PPT 第 20 页）</h3>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>移动变换输出的为 4×4 矩阵 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>c</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(c_{i,j})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>，矩阵中的每个元素表示有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的一个元。混合列变换通过乘以一个固定矩阵，得到输出 4×4 矩阵 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>d</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(d_{i,j})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>，其每个元素仍然表示有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的一个元，如下：</strong></p>
+</blockquote>
+<pre><code>┌ 02 03 01 01 ┐ ┌ c00 c01 c02 c03 ┐     ┌ d00 d01 d02 d03 ┐
+│ 01 02 03 01 │ │ c10 c11 c12 c13 │  =  │ d10 d11 d12 d13 │
+│ 01 01 02 03 │ │ c20 c21 c22 c23 │     │ d20 d21 d22 d23 │
+└ 03 01 01 02 ┘ └ c30 c31 c32 c33 ┘     └ d30 d31 d32 d33 ┘
+</code></pre>
+<p>（PPT 上的矩阵元素是二进制写法：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>02</mn><mo>=</mo><mn>00000010</mn></mrow><annotation encoding="application/x-tex">02 = 00000010</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">02</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">00000010</span></span></span></span></span>，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>03</mn><mo>=</mo><mn>00000011</mn></mrow><annotation encoding="application/x-tex">03 = 00000011</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">03</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">00000011</span></span></span></span></span>，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>01</mn><mo>=</mo><mn>00000001</mn></mrow><annotation encoding="application/x-tex">01 = 00000001</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">01</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">00000001</span></span></span></span></span>。）</p>
+<p><strong><mark class="bubu">补</mark>这段是本节最需要解释的，请慢慢看</strong>：</p>
+<p><strong>① 这里的&quot;乘法&quot;不是普通乘法，而是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的乘法。</strong></p>
+<p>回顾第 1.4 节：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 的乘法 = &quot;左移 + 条件异或 <code>0x1B</code>&quot;。所以矩阵里的 <code>02</code>、<code>03</code> 不是数字 2 和 3，而是**&quot;乘 X&quot;和&quot;乘 (X+1)&quot;**：</p>
+<ul>
+<li>乘 <strong><code>01</code></strong> = 乘 1 = <strong>不变</strong>（<code>01</code> 是乘法单位元，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>01</mn><mo>⋅</mo><mi>y</mi><mo>=</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">01\cdot y = y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">01</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span>）</li>
+<li>乘 <strong><code>02</code></strong> = 乘 X = <strong>左移一位，必要时异或 <code>0x1B</code></strong></li>
+<li>乘 <strong><code>03</code></strong> = 乘 (X+1) = <strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>02</mn><mo>⋅</mo><mi>y</mi><mo>⊕</mo><mn>01</mn><mo>⋅</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">02\cdot y \oplus 01\cdot y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">02</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">01</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span></strong>，即&quot;左移一次&quot;再&quot;异或原值&quot;</li>
+</ul>
+<p><strong>② 这个矩阵乘法是&quot;按列独立&quot;进行的。</strong></p>
+<p>展开成公式（对每一列 j 分别计算）：</p>
+<pre><code>d0j = 02·c0j ⊕ 03·c1j ⊕ 01·c2j ⊕ 01·c3j
+d1j = 01·c0j ⊕ 02·c1j ⊕ 03·c2j ⊕ 01·c3j
+d2j = 01·c0j ⊕ 01·c1j ⊕ 02·c2j ⊕ 03·c3j
+d3j = 03·c0j ⊕ 01·c1j ⊕ 01·c2j ⊕ 02·c3j
+</code></pre>
+<p><strong>每一步都是&quot;先做 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 乘法，再把 4 个结果异或起来&quot;。</strong></p>
+<p><strong>③ 效果：一个输入字节改变，会导致整列的 4 个输出字节全部改变。</strong></p>
+<p>看上面第一行：<code>d0j</code> 里出现了 <code>c0j, c1j, c2j, c3j</code> <strong>全部 4 个</strong>输入字节。同理 <code>d1j, d2j, d3j</code> 也都是 4 个全含。<strong>所以第 j 列里任何一个字节变了，这一列的 4 个输出都会变。</strong>（PPT 第 37 页原话：&quot;<strong>混合列可以达到字节扩散的目的。这步 1 个输入字节的改变导致所有 4 个输出字节改变。</strong>&quot;）</p>
+<p><strong>④ 为什么矩阵里用 01/02/03，而不用别的数？</strong></p>
+<p><mark class="bubu">补</mark>这是<strong>为了让&quot;逆运算好算&quot;</strong>。这个矩阵在 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的逆矩阵是：</p>
+<pre><code>┌ 0E 0B 0D 09 ┐
+│ 09 0E 0B 0D │
+│ 0D 09 0E 0B │
+└ 0B 0D 09 0E ┘
+</code></pre>
+<p>逆矩阵的元素也不大（<code>09, 0B, 0D, 0E</code>），<strong>都能用&quot;移位 + 异或&quot;快速算出来</strong>。如果随便挑一个矩阵，逆矩阵的元素可能很大，实现成本就上去了。<strong>这个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>02</mn><mi mathvariant="normal">/</mi><mn>03</mn><mi mathvariant="normal">/</mi><mn>01</mn><mi mathvariant="normal">/</mi><mn>01</mn></mrow><annotation encoding="application/x-tex">02/03/01/01</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">02/03/01/01</span></span></span></span></span> 的矩阵是&quot;扩散效果好&quot;和&quot;逆运算便宜&quot;之间精心权衡的结果。</strong></p>
+<p><strong><mark class="bubu">补</mark>另一个细节：为什么每行是 <code>02 03 01 01</code> 这样循环排布？</strong> 因为它是一个<strong>循环矩阵</strong>（circulant matrix）——每一行都是上一行<strong>循环右移</strong>一位。循环矩阵有两个好处：(1) 硬件实现只用一份电路循环使用；(2) 这种结构对应多项式 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>03</mn><msup><mi>X</mi><mn>3</mn></msup><mo>+</mo><mn>01</mn><msup><mi>X</mi><mn>2</mn></msup><mo>+</mo><mn>01</mn><mi>X</mi><mo>+</mo><mn>02</mn></mrow><annotation encoding="application/x-tex">03X^{3} + 01X^{2} + 01X + 02</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">03</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">01</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">01</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">02</span></span></span></span></span>，而 <strong>Rijndael 的选型论文证明了它与 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mn>4</mn></msup><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">X^{4}+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 互素（这是&quot;可逆&quot;的充要条件）</strong>。</p>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>把 MC 和 SR 排在一起看，就能看懂 AES 扩散的全貌：</strong></p>
+<pre><code>一个输入字节 a_{0,0} 改变
+       ↓ SR：把行打散
+   影响第 0 行 4 个字节所在的不同列
+       ↓ MC：把列拌匀
+   每列都变了 → 16 个字节全变
+</code></pre>
+<p><strong>一轮之内铺满 4 字节，两轮之内铺满全部 16 字节</strong>（第 5 节设计思考第 (2) 条）。</p>
+</blockquote>
+<h3 id="s-11">3.6 轮密钥加密变换 ARK（PPT 第 21 页）</h3>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>轮密钥为 128 比特，是由原始密钥产生。轮密钥也可以写成 4×4 的字节矩阵 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>k</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(k_{i,j})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>。</strong>
+<strong>轮密钥加密变换就是将混合变换的输出异或轮密钥字节矩阵，如下：</strong></p>
+</blockquote>
+<pre><code>┌ d00 d01 d02 d03 ┐   ┌ k00 k01 k02 k03 ┐     ┌ e00 e01 e02 e03 ┐
+│ d10 d11 d12 d13 │ ⊕ │ k10 k11 k12 k13 │  =  │ e10 e11 e12 e13 │
+│ d20 d21 d22 d23 │   │ k20 k21 k22 k23 │     │ e20 e21 e22 e23 │
+└ d30 d31 d32 d33 ┘   └ k30 k31 k32 k33 ┘     └ e30 e31 e32 e33 ┘
+</code></pre>
+<p>即 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>d</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub><mo>⊕</mo><msub><mi>k</mi><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">e_{i,j} = d_{i,j} \oplus k_{i,j}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span>。</p>
+<p><strong><mark class="bubu">补</mark>这是四个层里最简单的一个</strong>：<strong>16 次字节异或，完事。</strong> 没有 S-盒、没有移位、没有 GF 乘法。</p>
+<p><strong><mark class="bubu">补</mark>但它的作用绝对不可小看</strong>：</p>
+<ul>
+<li>它是<strong>唯一把密钥信息注进数据的步骤</strong>。没有它，整个 AES 就是一个与密钥无关的固定置换——任何人都能解密。</li>
+<li>它<strong>极其廉价</strong>（16 个 XOR 门），而且<strong>它自己的逆运算就是它自己</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>X</mi><mo>⊕</mo><mi>K</mi><mo stretchy="false">)</mo><mo>⊕</mo><mi>K</mi><mo>=</mo><mi>X</mi></mrow><annotation encoding="application/x-tex">(X \oplus K) \oplus K = X</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span></span></span></span></span>）。这一点在解密流程里很重要（第 4 节）。</li>
+<li>回顾第二讲：<strong>它对应 DES 里的&quot;<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mo stretchy="false">(</mo><msub><mi>R</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>⊕</mo><msub><mi>K</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">E(R_{i-1}) \oplus K_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>&quot;</strong>。DES 的这一步必须先把 32 位扩成 48 位才能异或（要先做 E 扩展），而 AES 不用扩展——<strong>16 字节对 16 字节，直接异或，省了一整层电路。这就是 AES &quot;效率高&quot;的一个具体体现。</strong></li>
+</ul>
+<h3 id="s-12">3.7 轮密钥产生方法（PPT 第 22 页）</h3>
+<p>这一节讲&quot;11 个 128 比特的轮密钥是怎么从 1 个 128 比特的原始密钥变出来的&quot;。</p>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>原始密钥为 128 比特，它可以如同输入消息一样写成 4×4 的字节矩阵。前四列可以写为 <code>W(0), W(1), W(2), W(3)</code>。</strong></p>
+<p><strong>新列按如下递推关系产生：</strong>
+<strong>1）如果 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>∤</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">4 \nmid i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9925em;vertical-align:-0.2514em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel amsrm">∤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span>，则 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-4) \oplus W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>；</strong>
+<strong>2）如果 <code>4 | i</code>，则 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>T</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-4) \oplus T(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span>，</strong>
+<strong>这里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">T(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span> 是对 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 的一个变换，如下：</strong></p>
+</blockquote>
+<pre><code>        ┌ a ┐   ┌ a ┐     ┌ b ┐            ┌ e ┐     ┌ e ⊕ (10)^((i−4)/4) ┐
+令 W(i−1) = │ b │ 。 │ b │  →  │ c │  ──S-盒──→ │ f │  →  │          f          │
+        │ c │   │ c │     │ d │            │ g │     │          g          │
+        └ d ┘   └ d ┘     └ a ┘            └ h ┘     └          h          ┘
+
+= T(W(i−1))。
+</code></pre>
+<blockquote>
+<p><strong>第 i 轮的轮密钥就是按上面递推关系产生的列 <code>W(4i)</code>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(4i+1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo>+</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(4i+2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo>+</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(4i+3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span></span>。</strong></p>
+</blockquote>
+<p>（符号说明：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>∤</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">4 \nmid i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9925em;vertical-align:-0.2514em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel amsrm">∤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> 表示&quot;4 不整除 i&quot;，<code>4 | i</code> 表示&quot;4 整除 i&quot;。）</p>
+<p><strong><mark class="bubu">补</mark>把这段翻译成人话，其实只有三步</strong>：</p>
+<p><strong>准备工作</strong>：把原始 128 比特密钥按和明文一样的&quot;列主序&quot;方式摆成 4×4 矩阵，得到 4 个<strong>列</strong>（每列 4 字节），记作 <code>W(0)</code>、<code>W(1)</code>、<code>W(2)</code>、<code>W(3)</code>。</p>
+<p><strong>然后一列一列往后算</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>4</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>6</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>43</mn></mrow><annotation encoding="application/x-tex">i = 4, 5, 6, \dots , 43</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">43</span></span></span></span></span>，一共 44 列 = 11 个轮密钥 × 4 列）：</p>
+<pre><code>如果 i 不是 4 的倍数：   W(i) = W(i−4) ⊕ W(i−1)      ← 【简单】两个已知列异或
+如果 i 是 4 的倍数：     W(i) = W(i−4) ⊕ T(W(i−1))   ← 【复杂】先做 T 变换
+</code></pre>
+<p><strong>关键在 <code>T</code> 变换，它由三个动作组成</strong>（<strong>这是全节最需要记住的地方</strong>）：</p>
+<pre><code>① 循环上移（RotWord）：  (a, b, c, d) → (b, c, d, a)
+② S-盒替换（SubWord）：  每个字节各自查 S-盒：(b,c,d,a) → (e, f, g, h)
+③ 异或轮常量（Rcon）：   第一个字节 e ← e ⊕ (10)^((i−4)/4)
+</code></pre>
+<p><strong><mark class="bubu">补</mark>逐个解释为什么要有这三个动作</strong>：</p>
+<p><strong>① 循环上移（RotWord）</strong>：把 4 个字节转一圈。<strong>作用</strong>：让列内的字节&quot;换位&quot;，保证同一列的信息不会永远待在同一个位置，<strong>制造列内的扩散</strong>。</p>
+<p><strong>② S-盒替换（SubWord）</strong>：每个字节查一次 S-盒。<strong>作用</strong>：<strong>引入非线性</strong>（PPT 第 37 页原话：&quot;轮密钥产生方法使用了密钥位的非线性组合，因为它使用了 S-盒，这种非线性组合用来对付当解密者知道了部分密钥并以此推测余下部分的攻击&quot;）。<strong>这一条极其重要——它是密钥编排里唯一的非线性来源，用来防止&quot;知道部分密钥就能线性推出其余密钥&quot;。</strong></p>
+<p><strong>③ 异或轮常量 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><msup><mo stretchy="false">)</mo><mrow><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>4</mn><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">(10)^{((i-4)/4)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">((</span><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">4</span><span class="mclose mtight">)</span><span class="mord mtight">/4</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span></strong>：</p>
+<ul>
+<li>这里的 <code>(10)</code> 按<strong>二进制</strong>读，即十进制 <code>2</code>，也就是多项式 <strong><code>X</code></strong>。所以 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><msup><mo stretchy="false">)</mo><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">(10)^{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0991em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span></span> 就是 <strong><code>X</code> 的 k 次幂</strong>（在 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上算，超过 8 位就按第 1.4 节的规则归约）。</li>
+<li>指数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">(i-4)/4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span><span class="mord">/4</span></span></span></span></span> 在 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>4</mn><mo separator="true">,</mo><mn>8</mn><mo separator="true">,</mo><mn>12</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>40</mn></mrow><annotation encoding="application/x-tex">i = 4, 8, 12, \dots , 40</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">12</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">40</span></span></span></span></span> 时依次等于 <code>0, 1, 2, …, 9</code>。</li>
+<li>所以 10 个轮常量依次是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mn>0</mn></msup><mo separator="true">,</mo><msup><mi>X</mi><mn>1</mn></msup><mo separator="true">,</mo><msup><mi>X</mi><mn>2</mn></msup><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msup><mi>X</mi><mn>9</mn></msup></mrow><annotation encoding="application/x-tex">X^{0}, X^{1}, X^{2}, \dots , X^{9}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0085em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">9</span></span></span></span></span></span></span></span></span></span></span></span></span>，写成十六进制就是：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>k = (i−4)/4</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>轮常量（十六进制）</td>
+<td><code>01</code></td>
+<td><code>02</code></td>
+<td><code>04</code></td>
+<td><code>08</code></td>
+<td><code>10</code></td>
+<td><code>20</code></td>
+<td><code>40</code></td>
+<td><code>80</code></td>
+<td><code>1B</code></td>
+<td><code>36</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>这张表就是 AES 标准里的 10 个轮常量</strong>（注意第 9 个开始&quot;跑出 8 位&quot;了，需要归约：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mn>8</mn></msup><mo>≡</mo><msup><mi>X</mi><mn>4</mn></msup><mo>+</mo><msup><mi>X</mi><mn>3</mn></msup><mo>+</mo><mi>X</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">X^{8} \equiv X^{4}+X^{3}+X+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span>，所以 <code>80</code> 再乘一个 <code>X</code> 得到 <code>1B</code>，再乘得到 <code>36</code>）。</p>
+<p><strong>PPT 第 37 页对它的解释（原文）</strong>：<strong>&quot;循环常量 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><msup><mo stretchy="false">)</mo><mrow><mo stretchy="false">(</mo><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>4</mn><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">(10)^{((i-4)/4)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">((</span><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">4</span><span class="mclose mtight">)</span><span class="mord mtight">/4</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span> 是用来消除在循环过程中生成每个循环差别的对称性。&quot;</strong></p>
+<p><strong><mark class="bubu">补</mark>这句话翻译一下</strong>：如果不加轮常量，那么&quot;每隔 4 列&quot;的生成规则就完全一模一样。这会导致一种<strong>对称性</strong>——攻击者可以据此把问题规模缩小（比如把 44 列的密钥编排拆成几个结构完全相同的子问题）。<strong>每 4 列异或一个不同的常量，就破坏了这个对称性</strong>，让 44 列&quot;各有各的个性&quot;，攻击者没法偷懒。</p>
+<blockquote>
+<p><mark class="bubu">补</mark><strong>一个特别好记的类比</strong>：轮常量就像&quot;编号&quot;。不给每轮编号，第 5 轮和第 9 轮的密钥编排会长得一样；编上号之后，<strong>每一轮密钥都是独一无二的</strong>。</p>
+</blockquote>
+<h4 id="s-13">完整走一遍（帮你建立整体感）</h4>
+<pre><code>W(0) W(1) W(2) W(3)   ← 原始密钥的 4 列
+       ↓
+W(4)  = W(0) ⊕ T(W(3))      ← 4|4，用 T
+W(5)  = W(1) ⊕ W(4)         ← 4∤5，简单异或
+W(6)  = W(2) ⊕ W(5)
+W(7)  = W(3) ⊕ W(6)
+       ↓
+W(8)  = W(4) ⊕ T(W(7))      ← 4|8，用 T（轮常量指数变成 1）
+W(9)  = W(5) ⊕ W(8)
+… 一直算到 …
+W(43) = W(39) ⊕ W(42)       ← 4∤43
+
+然后：
+第 1 轮密钥  = W(4),  W(5),  W(6),  W(7)
+第 2 轮密钥  = W(8),  W(9),  W(10), W(11)
+…
+第 10 轮密钥 = W(40), W(41), W(42), W(43)
+</code></pre>
+<p><strong>验证一下总数</strong>：44 列 × 4 字节 = 176 字节 = 1408 比特 = 11 轮密钥 × 128 比特 ✓ <strong>正好对上第 2 节说的&quot;第 0 轮到第 10 轮共 11 个轮密钥&quot;。</strong></p>
+<h3 id="s-14">3.8 S-盒的数学原理（PPT 第 23–24 页）—— 全讲最漂亮的公式</h3>
+<p>前面对 S-盒一直是&quot;查表&quot;。这一节告诉你：<strong>那张 16×16 的表其实可以用一个公式算出来。</strong> 这正是 AES 相对 DES 最本质的进步。</p>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>S-盒有一个简单的数学描述。在有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的字节 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>7</mn></msub><msub><mi>x</mi><mn>6</mn></msub><msub><mi>x</mi><mn>5</mn></msub><msub><mi>x</mi><mn>4</mn></msub><msub><mi>x</mi><mn>3</mn></msub><msub><mi>x</mi><mn>2</mn></msub><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">x_{7}x_{6}x_{5}x_{4}x_{3}x_{2}x_{1}x_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 的乘法逆可以表示为 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mn>7</mn></msub><msub><mi>y</mi><mn>6</mn></msub><msub><mi>y</mi><mn>5</mn></msub><msub><mi>y</mi><mn>4</mn></msub><msub><mi>y</mi><mn>3</mn></msub><msub><mi>y</mi><mn>2</mn></msub><msub><mi>y</mi><mn>1</mn></msub><msub><mi>y</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">y_{7}y_{6}y_{5}y_{4}y_{3}y_{2}y_{1}y_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>。假定字节 <code>00000000</code> 的逆为 <code>00000000</code>，则通过 S-盒的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>7</mn></msub><msub><mi>x</mi><mn>6</mn></msub><msub><mi>x</mi><mn>5</mn></msub><msub><mi>x</mi><mn>4</mn></msub><msub><mi>x</mi><mn>3</mn></msub><msub><mi>x</mi><mn>2</mn></msub><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">x_{7}x_{6}x_{5}x_{4}x_{3}x_{2}x_{1}x_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 的值可以通过如下公式计算：</strong></p>
+</blockquote>
+<pre><code>┌ 1 0 0 0 1 1 1 1 ┐ ┌ y0 ┐   ┌ 1 ┐   ┌ z0 ┐
+│ 1 1 0 0 0 1 1 1 │ │ y1 │   │ 1 │   │ z1 │
+│ 1 1 1 0 0 0 1 1 │ │ y2 │   │ 0 │   │ z2 │
+│ 1 1 1 1 0 0 0 1 │ │ y3 │ + │ 0 │ = │ z3 │
+│ 1 1 1 1 1 0 0 0 │ │ y4 │   │ 0 │   │ z4 │
+│ 0 1 1 1 1 1 0 0 │ │ y5 │   │ 1 │   │ z5 │
+│ 0 0 1 1 1 1 1 0 │ │ y6 │   │ 1 │   │ z6 │
+└ 0 0 0 1 1 1 1 1 ┘ └ y7 ┘   └ 0 ┘   └ z7 ┘
+</code></pre>
+<p><strong><mark class="bubu">补</mark>这个公式要拆成&quot;两步&quot;来读——这就是 AES S-盒的定义：</strong></p>
+<pre><code>S-盒(x) = 仿射变换( x 在 GF(2⁸) 上的乘法逆 )
+            ↑第二步              ↑第一步
+</code></pre>
+<p><strong>第一步：求乘法逆元 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>→</mo><mi>y</mi><mo>=</mo><msup><mi>x</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">x \to y = x^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></span></strong></p>
+<p>在 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上求逆（用第 1.5 节的扩展欧几里得算法，或者查表）。</p>
+<p><strong>特殊约定</strong>：<strong><code>00000000</code> 的逆规定为它自己</strong>（即 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>0</mn><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">0^{-1} = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></span>）。因为数学上 0 没有逆元，这里人为补一个定义，让公式对所有 256 个输入都成立。</p>
+<p><strong><mark class="bubu">补</mark>只用第一步够了吗？</strong> 不够——单用&quot;求逆&quot;会留下一个<strong>代数弱点</strong>：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">x^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></span> 的定义域和值域之间有&quot;自反性&quot;（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mi>n</mi><mi>v</mi><mo stretchy="false">(</mo><mi>i</mi><mi>n</mi><mi>v</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">inv(inv(x)) = x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">in</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mopen">(</span><span class="mord mathnormal">in</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">))</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>），理论上可被某些代数攻击利用。<strong>所以还要加第二步。</strong></p>
+<p><strong>第二步：仿射变换（Affine Transformation）</strong></p>
+<p>把逆元 <code>y</code> 乘上那个 8×8 的比特矩阵，再异或常量向量 <code>(1,1,0,0,0,1,1,0)</code>。</p>
+<p><strong><mark class="bubu">补</mark>&quot;仿射&quot;是什么意思？</strong> 就是&quot;<strong>线性变换 + 平移</strong>&quot;：先做矩阵乘法（线性），再加一个固定向量（平移）。这里矩阵乘和向量加都是在 GF(2) 上做的（乘 = 与，加 = 异或）。</p>
+<p><strong>注意矩阵的规律（很漂亮）</strong>：把它写成 8 行：</p>
+<pre><code>第 0 行： 1 0 0 0 1 1 1 1
+第 1 行： 1 1 0 0 0 1 1 1
+第 2 行： 1 1 1 0 0 0 1 1
+第 3 行： 1 1 1 1 0 0 0 1
+第 4 行： 1 1 1 1 1 0 0 0
+第 5 行： 0 1 1 1 1 1 0 0
+第 6 行： 0 0 1 1 1 1 1 0
+第 7 行： 0 0 0 1 1 1 1 1
+</code></pre>
+<p><strong>每一行都是上一行&quot;循环右移一位&quot;！</strong> 又是<strong>循环矩阵</strong>（和 MixColumn 的矩阵同一个套路）。所以这个变换在硬件上<strong>只需要一个 8 位的循环移位寄存器 + 几个异或门</strong>，极其便宜。</p>
+<p><strong>常量向量 <code>(1,1,0,0,0,1,1,0)</code></strong> 就是<strong>十六进制 <code>0x63</code></strong>。这也是为什么 <strong>S-盒的第一个值 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mi>x</mi><mn>63</mn><mo>=</mo><mn>99</mn></mrow><annotation encoding="application/x-tex">S(0) = 0x63 = 99</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span><span class="mord mathnormal">x</span><span class="mord">63</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">99</span></span></span></span></span></strong>——因为 <code>0</code> 的逆是 <code>0</code>，仿射变换作用在 <code>0</code> 上得到的就是那个常量本身：</p>
+<pre><code>0 逆 = 00000000  →  矩阵 × 0 ⊕ 常量 = 常量 = 0x63 = 99 ✓
+</code></pre>
+<p>对照第 3.3 节的 S-盒表，<strong>第 0 行第 0 列正是 99</strong> ✓ <strong>完美吻合！</strong></p>
+<h4 id="s-15">例 3：完整走一遍（PPT 第 24 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>例 3</strong>　有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的字节 <strong><code>11001011</code></strong> 的乘法逆为 <strong><code>00000100</code></strong>。我们计算：</p>
+<pre><code>┌ 1 0 0 0 1 1 1 1 ┐ ┌ 0 ┐   ┌ 1 ┐   ┌ 1 ┐
+│ 1 1 0 0 0 1 1 1 │ │ 0 │   │ 1 │   │ 1 │
+│ 1 1 1 0 0 0 1 1 │ │ 1 │   │ 0 │   │ 1 │
+│ 1 1 1 1 0 0 0 1 │ │ 0 │ + │ 0 │ = │ 1 │
+│ 1 1 1 1 1 0 0 0 │ │ 0 │   │ 0 │   │ 1 │
+│ 0 1 1 1 1 1 0 0 │ │ 0 │   │ 1 │   │ 0 │
+│ 0 0 1 1 1 1 1 0 │ │ 0 │   │ 1 │   │ 0 │
+└ 0 0 0 1 1 1 1 1 ┘ └ 0 ┘   └ 0 ┘   └ 0 ┘
+</code></pre>
+<p><strong>这产生了字节 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>00011111</mn><mo>=</mo><mn>31</mn></mrow><annotation encoding="application/x-tex">00011111 = 31</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">00011111</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">31</span></span></span></span></span>。我们也可以查前面的 S-盒表，行为 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1100</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>13</mn></mrow><annotation encoding="application/x-tex">1100+1=13</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1100</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">13</span></span></span></span></span>，列为 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1011</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>12</mn></mrow><annotation encoding="application/x-tex">1011+1=12</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1011</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">12</span></span></span></span></span>。我们得到的值也是 31。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>这个例子把整条链路串起来了，一定要看懂</strong>：</p>
+<p><strong>第 ① 步：输入 <code>11001011</code></strong></p>
+<p>这正是第 1.5 节例 2 的那个字节（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mn>7</mn></msup><mo>+</mo><msup><mi>X</mi><mn>6</mn></msup><mo>+</mo><msup><mi>X</mi><mn>3</mn></msup><mo>+</mo><mi>X</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">X^{7}+X^{6}+X^{3}+X+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span>）！<strong>所以它的逆元早在第 1.5 节就算出来了：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">X^{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></span> = <code>00000100</code>。</strong></p>
+<p><strong>第 ② 步：求逆 → <code>00000100</code></strong></p>
+<p>写成 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mn>7</mn></msub><msub><mi>y</mi><mn>6</mn></msub><msub><mi>y</mi><mn>5</mn></msub><msub><mi>y</mi><mn>4</mn></msub><msub><mi>y</mi><mn>3</mn></msub><msub><mi>y</mi><mn>2</mn></msub><msub><mi>y</mi><mn>1</mn></msub><msub><mi>y</mi><mn>0</mn></msub><mo>=</mo><mn>00000100</mn></mrow><annotation encoding="application/x-tex">y_{7}y_{6}y_{5}y_{4}y_{3}y_{2}y_{1}y_{0} = 00000100</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">00000100</span></span></span></span></span>，即 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y_{2} = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span>，其余为 0。所以参与矩阵乘法的向量是：</p>
+<pre><code>┌ y0 ┐   ┌ 0 ┐
+│ y1 │   │ 0 │
+│ y2 │   │ 1 │
+│ y3 │ = │ 0 │
+│ y4 │   │ 0 │
+│ y5 │   │ 0 │
+│ y6 │   │ 0 │
+└ y7 ┘   └ 0 ┘
+</code></pre>
+<p><strong>第 ③ 步：矩阵 × y</strong></p>
+<p>因为 <code>y</code> 里只有第 2 个分量是 1，所以&quot;矩阵乘向量&quot;的结果<strong>就是矩阵的第 2 列</strong>（从 0 数起）：</p>
+<pre><code>矩阵各列：
+第 0 列：1,1,1,1,1,0,0,0
+第 1 列：0,1,1,1,1,1,0,0
+第 2 列：0,0,1,1,1,1,1,0   ← 就是这一列
+第 3 列：0,0,0,1,1,1,1,1
+第 4 列：1,0,0,0,1,1,1,1
+第 5 列：1,1,0,0,0,1,1,1
+第 6 列：1,1,1,0,0,0,1,1
+第 7 列：1,1,1,1,0,0,0,1
+</code></pre>
+<p>所以矩阵乘的结果是 <code>(0,0,1,1,1,1,1,0)</code>。</p>
+<p><strong><mark class="bubu">补</mark>这解释了 PPT 例子里为什么中间那个结果向量是&quot;一竖排 0、0、1、1、1、1、1、0&quot;</strong>——它就是把矩阵的第 2 列原样抄下来了。</p>
+<p><strong>第 ④ 步：加上常量向量 <code>(1,1,0,0,0,1,1,0)</code></strong></p>
+<pre><code>  0 0 1 1 1 1 1 0
+⊕ 1 1 0 0 0 1 1 0
+─────────────────
+  1 1 1 1 1 0 0 0
+</code></pre>
+<p>结果 <code>(1,1,1,1,1,0,0,0)</code>，读作 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mn>7</mn></msub><msub><mi>z</mi><mn>6</mn></msub><mo>…</mo><msub><mi>z</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">z_{7}z_{6}\dots z_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.044em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">7</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.044em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.044em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，就是 <strong><code>00011111</code> = 31</strong> ✓ 与 PPT 一致。</p>
+<p><strong>第 ⑤ 步：查表验证</strong></p>
+<pre><code>行 = 高 4 位 1100 = 12（0 起数）= 第 13 行（1 起数）✓ PPT 写&quot;行为 1100+1=13&quot;
+列 = 低 4 位 1011 = 11（0 起数）= 第 12 列（1 起数）✓ PPT 写&quot;列为 1011+1=12&quot;
+查表：第 12 行第 11 列 = 31 ✓
+</code></pre>
+<p><strong>两条路得到同一个答案</strong>——这说明那张 S-盒表<strong>不是随便编的，而是照着这个公式算出来的</strong>。</p>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>这就是 AES 相对 DES 最本质的进步。请对比着记：</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>DES 的 S-盒</th>
+<th>AES 的 S-盒</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来历</td>
+<td>8 张来历不明的常数表，20 年说不清</td>
+<td><strong>有明确的数学公式</strong>：求逆 + 仿射变换</td>
+</tr>
+<tr>
+<td>可否审计</td>
+<td>只能相信 IBM 的说法</td>
+<td><strong>任何人都能自己算一遍验证</strong></td>
+</tr>
+<tr>
+<td>是否有陷门</td>
+<td>无法排除（这就是当年的核心疑虑）</td>
+<td><strong>公式透明，不存在藏后门的空间</strong></td>
+</tr>
+<tr>
+<td>抗差分/线性</td>
+<td>靠筛选（7 条准则）</td>
+<td><strong>数学上可证明的优良非线性特性</strong></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h3 id="s-16">3.9 关于 192 比特密钥的 AES（PPT 第 25–27 页）</h3>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>消息和密钥的排列如同 128 比特密钥的 AES，但密钥形成 4×6 的矩阵。</strong>
+<strong>这时算法由 12 轮组成，每一轮使用原始密钥或其产生的密钥。第 0 轮使用原始的 192 比特密钥之中的前 128 比特。每一轮都是 128 比特输入 128 比特输出。</strong></p>
+</blockquote>
+<p><strong>关于加密</strong>（PPT 原文）：</p>
+<blockquote>
+<p><strong>4 个基本层：字节转换（BS）、移动行变换（SR）、混合列变换（MC）、轮密钥加密变换（ARK）如同 128 比特密钥的 AES 完全一样。</strong></p>
+</blockquote>
+<p><strong>关于子密钥产生</strong>（PPT 原文）：</p>
+<blockquote>
+<p><strong>原始密钥为 192 比特，它可以如同输入消息一样写成 4×6 的字节矩阵。前 6 列可以写为 <code>W(0), W(1), W(2), W(3), W(4), W(5)</code>。新列（6, 7, …, 51）按如下递推关系产生：</strong>
+<strong>1）如果 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>∤</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">6 \nmid i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9925em;vertical-align:-0.2514em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel amsrm">∤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span>，则 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>6</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-6) \oplus W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">6</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>；</strong>
+<strong>2）如果 <code>6 | i</code>，则 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>6</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>T</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-6) \oplus T(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">6</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span>，</strong>
+<strong>这里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">T(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span> 是对 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 的变换如下：</strong></p>
+<pre><code>        ┌ a ┐   ┌ a ┐     ┌ b ┐            ┌ e ┐     ┌ e ⊕ (10)^((i−6)/6) ┐
+令 W(i−1) = │ b │ 。 │ b │  →  │ c │  ──S-盒──→ │ f │  →  │          f          │
+        │ c │   │ c │     │ d │            │ g │     │          g          │
+        └ d ┘   └ d ┘     └ a ┘            └ h ┘     └          h          ┘
+= T(W(i−1))。
+</code></pre>
+<p><strong>第 i 轮的轮密钥就是按上面递推关系产生的列 <code>W(6i)</code>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>6</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(6i+1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">6</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>6</mn><mi>i</mi><mo>+</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(6i+2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">6</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>6</mn><mi>i</mi><mo>+</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(6i+3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">6</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>6</mn><mi>i</mi><mo>+</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(6i+4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">6</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>6</mn><mi>i</mi><mo>+</mo><mn>5</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(6i+5)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">6</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">5</span><span class="mclose">)</span></span></span></span></span>。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>和 128 位版本对比，只有几处不同</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>128 比特密钥</th>
+<th>192 比特密钥</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>密钥矩阵形状</td>
+<td>4 × <strong>4</strong></td>
+<td>4 × <strong>6</strong></td>
+</tr>
+<tr>
+<td>轮数</td>
+<td><strong>10</strong> 轮</td>
+<td><strong>12</strong> 轮</td>
+</tr>
+<tr>
+<td>递推里的步长</td>
+<td>减 <strong>4</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i-4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span>）</td>
+<td>减 <strong>6</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>6</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i-6)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">6</span><span class="mclose">)</span></span></span></span></span>）</td>
+</tr>
+<tr>
+<td>判断条件</td>
+<td><code>4 | i</code></td>
+<td><code>6 | i</code></td>
+</tr>
+<tr>
+<td><code>T</code> 里的轮常量指数</td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">(i-4)/4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span><span class="mord">/4</span></span></span></span></span></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>6</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>6</mn></mrow><annotation encoding="application/x-tex">(i-6)/6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">6</span><span class="mclose">)</span><span class="mord">/6</span></span></span></span></span></td>
+</tr>
+<tr>
+<td>新列的个数</td>
+<td><code>W(4) … W(43)</code></td>
+<td><code>W(6) … W(51)</code></td>
+</tr>
+<tr>
+<td>轮密钥的取法</td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo stretchy="false">)</mo><mo>…</mo><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo>+</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(4i) \dots W(4i+3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span></span>（<strong>4 列</strong>）</td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>6</mn><mi>i</mi><mo stretchy="false">)</mo><mo>…</mo><mi>W</mi><mo stretchy="false">(</mo><mn>6</mn><mi>i</mi><mo>+</mo><mn>5</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(6i) \dots W(6i+5)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">6</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">6</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">5</span><span class="mclose">)</span></span></span></span></span>（<strong>6 列</strong>）</td>
+</tr>
+<tr>
+<td><strong>第 0 轮密钥</strong></td>
+<td>原始密钥<strong>全部 128 比特</strong></td>
+<td>原始密钥的<strong>前 128 比特</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>⚠️ 最容易考也最容易错的一条</strong>：<strong>&quot;第 0 轮使用原始的 192 比特密钥之中的前 128 比特&quot;</strong>——因为轮密钥必须是 128 比特，而原始密钥是 192 比特，<strong>所以只取前 128 位</strong>。</p>
+<p><strong><mark class="bubu">补</mark>顺便验证&quot;需要多少列&quot;</strong>：12 轮 + 第 0 轮 = <strong>13 个</strong>轮密钥，每个 128 比特 = 4 列 → 共 <strong>52 列</strong>（编号 0~51）。而新列算了 <code>W(6)…W(51)</code>，加上前 6 列 <code>W(0)…W(5)</code>，总共 52 列 ✓ <strong>数字完全吻合。</strong></p>
+<h3 id="s-17">3.10 关于 256 比特密钥的 AES（PPT 第 28–30 页）</h3>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>消息和密钥的排列如同 128 比特密钥的 AES，但密钥形成 4×8 的矩阵。</strong>
+<strong>这时算法由 14 轮组成，每一轮使用原始密钥或其产生的密钥。第 0 轮使用原始的 256 比特密钥之中的前 128 比特。每一轮都是 128 比特输入 128 比特输出。</strong></p>
+</blockquote>
+<p><strong>关于加密</strong>：4 个基本层（BS、SR、MC、ARK）<strong>如同 128 比特密钥的 AES 完全一样</strong>。</p>
+<p><strong>关于子密钥产生</strong>（PPT 原文，<strong>注意这里有三条规则</strong>）：</p>
+<blockquote>
+<p><strong>原始密钥为 256 比特，它可以如同输入消息一样写成 4×8 的字节矩阵。前 8 列可以写为 <code>W(0), W(1), W(2), W(3), W(4), W(5), W(6), W(7)</code>。新列（8, …, 59）按如下递推关系产生：</strong></p>
+<p><strong>1）如果 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>∤</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">8 \nmid i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9925em;vertical-align:-0.2514em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel amsrm">∤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> 且 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>∤</mo><mi>i</mi><mo>−</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">8 \nmid i-4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9925em;vertical-align:-0.2514em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel amsrm">∤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7429em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>，则 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>8</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-8) \oplus W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>；</strong>
+<strong>2）如果 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>∤</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">8 \nmid i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9925em;vertical-align:-0.2514em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel amsrm">∤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> 但 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mi mathvariant="normal">∣</mi><mi>i</mi><mo>−</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">8 | i-4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8∣</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>，则 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>8</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>U</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-8) \oplus U(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span>，这里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">U(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span> 是对 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 的变换如下：</strong></p>
+<pre><code>        ┌ a ┐   ┌ a ┐     ┌ e ┐
+令 W(i−1) = │ b │ 。 │ b │  ──S-盒──→ │ f │ = U(W(i−1))。
+        │ c │   │ c │     │ g │
+        └ d ┘   └ d ┘     └ h ┘
+</code></pre>
+<p><strong>3）如果 <code>8 | i</code>，则 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>8</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>T</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-8) \oplus T(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span>，这里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">T(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span> 是对 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 的变换如下：</strong></p>
+<pre><code>        ┌ a ┐   ┌ a ┐     ┌ b ┐            ┌ e ┐     ┌ e ⊕ (10)^((i−8)/8) ┐
+令 W(i−1) = │ b │ 。 │ b │  →  │ c │  ──S-盒──→ │ f │  →  │          f          │
+        │ c │   │ c │     │ d │            │ g │     │          g          │
+        └ d ┘   └ d ┘     └ a ┘            └ h ┘     └          h          ┘
+= T(W(i−1))。
+</code></pre>
+<p><strong>第 i &gt; 1 轮的密钥就是按上面递推关系产生的列 <code>W(4i)</code>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(4i+1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo>+</mo><mn>2</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(4i+2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span>, <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mn>4</mn><mi>i</mi><mo>+</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(4i+3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord">4</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span></span>。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>三条规则怎么记？</strong></p>
+<ul>
+<li><strong>普通情况</strong>（规则 1）：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>8</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i) = W(i-8) \oplus W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>，<strong>两个已知列异或</strong>，最省事。</li>
+<li><strong>每逢&quot;第 8 列&quot;</strong>（规则 3，<code>8 | i</code>）：用带轮常量的 <strong><code>T</code></strong> 变换。</li>
+<li><strong>每逢&quot;第 4 列&quot;</strong>（规则 2，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mi mathvariant="normal">∣</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">8 | (i-4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8∣</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span> 但 8 不整除 i）：用不带轮常量的 <strong><code>U</code></strong> 变换。</li>
+</ul>
+<p><strong><mark class="bubu">补</mark><code>U</code> 变换是什么？它比 <code>T</code> 少了两样东西：</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>T</code> 变换</th>
+<th><code>U</code> 变换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>循环上移（RotWord）</td>
+<td><strong>有</strong></td>
+<td><strong>没有</strong></td>
+</tr>
+<tr>
+<td>S-盒替换（SubWord）</td>
+<td>有</td>
+<td>有</td>
+</tr>
+<tr>
+<td>异或轮常量</td>
+<td><strong>有</strong></td>
+<td><strong>没有</strong></td>
+</tr>
+</tbody>
+</table>
+<p>PPT 的矩阵图很直观地说明了这一点：<strong><code>U</code> 的图里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span> 直接连到 S-盒，中间没有那个&quot;<code>(a,b,c,d) → (b,c,d,a)</code>&quot;的箭头</strong>；而 <code>T</code> 的图里有。</p>
+<p><strong><mark class="bubu">补</mark>为什么要对 256 位密钥多加这一道 <code>U</code>？</strong></p>
+<p>因为 256 位密钥生成 60 列（<code>W(0)…W(59)</code>），<strong>如果只用 <code>T</code> 一种变换（每 8 列才一次），密钥编排的&quot;扰动密度&quot;就显得稀疏</strong>。加一道每 4 列一次的 <code>U</code>，相当于把扰动加得更频繁，<strong>提高了密钥编排的非线性程度</strong>。</p>
+<blockquote>
+<p><mark class="bubu">补</mark>顺便说一个背景：后来有研究者指出，<strong>256 位密钥下的密钥编排是最微妙的一种情形</strong>——不加 <code>U</code> 的话，密钥编排的对称性会偏强。<strong>这也是 AES 三个密钥长度中，256 位版本密钥编排最复杂的原因。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>验证列数</strong>：14 轮 + 第 0 轮 = 15 个轮密钥 × 4 列 = <strong>60 列</strong>（编号 0~59）。新列算了 <code>W(8)…W(59)</code>，加前 8 列 = 60 列 ✓</p>
+<h4 id="s-18">三种密钥长度总对照表（建议背下来）</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>AES-128</strong></th>
+<th><strong>AES-192</strong></th>
+<th><strong>AES-256</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>密钥长度</td>
+<td>128 比特</td>
+<td>192 比特</td>
+<td>256 比特</td>
+</tr>
+<tr>
+<td>分组长度</td>
+<td>128 比特</td>
+<td>128 比特</td>
+<td>128 比特</td>
+</tr>
+<tr>
+<td>密钥矩阵</td>
+<td>4 × 4</td>
+<td>4 × 6</td>
+<td>4 × 8</td>
+</tr>
+<tr>
+<td>轮数</td>
+<td><strong>10</strong></td>
+<td><strong>12</strong></td>
+<td><strong>14</strong></td>
+</tr>
+<tr>
+<td>轮密钥个数（含第 0 轮）</td>
+<td>11</td>
+<td>13</td>
+<td>15</td>
+</tr>
+<tr>
+<td>需要生成的列数</td>
+<td>44</td>
+<td>52</td>
+<td>60</td>
+</tr>
+<tr>
+<td>第 0 轮密钥</td>
+<td>全部原始密钥</td>
+<td>前 128 比特</td>
+<td>前 128 比特</td>
+</tr>
+<tr>
+<td>递推步长</td>
+<td>4</td>
+<td>6</td>
+<td>8</td>
+</tr>
+<tr>
+<td>递推条件</td>
+<td><code>4 | i</code></td>
+<td><code>6 | i</code></td>
+<td>见三条规则</td>
+</tr>
+<tr>
+<td>轮常量指数</td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">(i-4)/4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span><span class="mord">/4</span></span></span></span></span></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>6</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>6</mn></mrow><annotation encoding="application/x-tex">(i-6)/6</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">6</span><span class="mclose">)</span><span class="mord">/6</span></span></span></span></span></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>8</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">(i-8)/8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8</span><span class="mclose">)</span><span class="mord">/8</span></span></span></span></span></td>
+</tr>
+</tbody>
+</table>
+<hr>
+
+<div class="pager"><a class="pg prev" href="crypto-des-aes-19.html"><span>← 上一节</span><b>2　基本算法</b></a><a class="pg next" href="crypto-des-aes-21.html"><span>下一节 →</span><b>4　解密</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../index.html#about">关于我</a>
+            <a href="../index.html#bilibili">B站空间</a>
+            <a href="study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

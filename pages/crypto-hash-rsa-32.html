@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>密码学讲义：密码 Hash 函数与 RSA / Rabin 算法 - 宇佐见函钩</title>
+<title>MD5 的循环左移位数表（PPT 第 43 页） · 密码学讲义：密码 Hash 函数与 RSA / Rabin 算法</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
@@ -55,7 +55,7 @@
   <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
   <nav><a class="g" href="#">↑ 回到顶部</a>
 <div class="sg">导读</div>
-<a class="i cur" data-h="s-1" href="crypto-hash-rsa.html">如何使用这份讲义</a>
+<a class="i" href="crypto-hash-rsa.html">如何使用这份讲义</a>
 <div class="sg">第 0 章　前置知识补课</div>
 <a class="i" href="crypto-hash-rsa-01.html">0.1 承接：第一册已经铺好的地基</a>
 <a class="i" href="crypto-hash-rsa-02.html">0.2 <mark class="bubu">补</mark>模运算：余数、同余、模逆</a>
@@ -89,7 +89,7 @@
 <a class="sub" href="crypto-hash-rsa-29.html">MD5 的四个逻辑函数（PPT 第 41 页）</a>
 <a class="sub" href="crypto-hash-rsa-30.html">MD5 的常量 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">T[i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mclose">]</span></span></span></span></span>（PPT 第 41 页）</a>
 <a class="sub" href="crypto-hash-rsa-31.html">MD5 的消息字使用次序（PPT 第 42 页）</a>
-<a class="sub" href="crypto-hash-rsa-32.html">MD5 的循环左移位数表（PPT 第 43 页）</a>
+<a class="sub cur" data-h="s-1" href="crypto-hash-rsa-32.html">MD5 的循环左移位数表（PPT 第 43 页）</a>
 <a class="sub" href="crypto-hash-rsa-33.html"><mark class="bubu">补</mark>MD5 的现状与历史教训</a>
 <a class="i" href="crypto-hash-rsa-34.html">4　带密钥密码 Hash 函数：MAC</a>
 <a class="sub" href="crypto-hash-rsa-35.html">4.2 由 MDC 构造的 MAC（PPT 第 48–49 页）</a>
@@ -142,71 +142,143 @@
 </aside>
 
 <div class="wrap">
-<nav class="nav">
-<p class="t">目录</p>
-<ul class="toc">
-<li><span class="grp">第 0 章　前置知识补课</span><ul><li><a href="crypto-hash-rsa-01.html">0.1 承接：第一册已经铺好的地基</a></li><li><a href="crypto-hash-rsa-02.html">0.2 <mark class="bubu">补</mark>模运算：余数、同余、模逆</a></li><li><a href="crypto-hash-rsa-03.html">0.3 <mark class="bubu">补</mark>最大公约数与扩展 Euclidean 算法</a></li><li><a href="crypto-hash-rsa-04.html">0.4 <mark class="bubu">补</mark>素数、欧拉函数 φ(n)</a></li><li><a href="crypto-hash-rsa-05.html">0.5 <mark class="bubu">补</mark>欧拉定理与费马小定理</a></li><li><a href="crypto-hash-rsa-06.html">0.6 <mark class="bubu">补</mark>中国剩余定理（CRT）</a></li><li><a href="crypto-hash-rsa-07.html">0.7 <mark class="bubu">补</mark>两类&quot;困难问题&quot;：大整数分解与模平方根</a></li><li><a href="crypto-hash-rsa-08.html">0.8 <mark class="bubu">补</mark>生日悖论：为什么抗碰撞的成本只有&quot;一半&quot;</a></li><li><a href="crypto-hash-rsa-09.html">0.9 <mark class="bubu">补</mark>Hash 函数的三个直觉</a></li></ul></li>
-<li><span class="grp">第四讲　密码 Hash 函数</span><ul><li><a href="crypto-hash-rsa-10.html">导言：Hash 函数是干什么的</a></li><li><a href="crypto-hash-rsa-11.html">1　分类与架构</a></li><li><a href="crypto-hash-rsa-12.html">2　基本构造</a></li><li><a href="crypto-hash-rsa-13.html">3　无密钥密码 Hash 函数：MDC</a><ul><li><a href="crypto-hash-rsa-14.html">3.2 定制的 Hash 函数：SHA-1（PPT 第 25–33 页）</a></li><li><a href="crypto-hash-rsa-15.html">SHA-1 的整体结构（PPT 第 26 页）</a></li><li><a href="crypto-hash-rsa-16.html">（1）消息填充（PPT 第 27 页）</a></li><li><a href="crypto-hash-rsa-17.html">（2）初始化（PPT 第 28 页）</a></li><li><a href="crypto-hash-rsa-18.html">（3）处理（PPT 第 29 页）</a></li><li><a href="crypto-hash-rsa-19.html">SHA-1 的压缩函数：每一步怎么算（PPT 第 30–31 页）</a></li><li><a href="crypto-hash-rsa-20.html">SHA-1 的四个基本逻辑函数（PPT 第 32 页）</a></li><li><a href="crypto-hash-rsa-21.html">SHA-1 的加法常量与字扩展（PPT 第 33 页）</a></li><li><a href="crypto-hash-rsa-22.html"><mark class="bubu">补</mark>SHA-1 的现状与&quot;长度扩展攻击&quot;</a></li><li><a href="crypto-hash-rsa-23.html">3.3 定制的 Hash 函数：MD5（PPT 第 34–43 页）</a></li><li><a href="crypto-hash-rsa-24.html">MD5 的整体结构（PPT 第 35 页）</a></li><li><a href="crypto-hash-rsa-25.html">（1）消息填充（PPT 第 36 页）</a></li><li><a href="crypto-hash-rsa-26.html">（2）初始化（PPT 第 37 页）</a></li><li><a href="crypto-hash-rsa-27.html">（3）处理（PPT 第 38 页）</a></li><li><a href="crypto-hash-rsa-28.html">MD5 的压缩函数：一步迭代怎么算（PPT 第 39–40 页）</a></li><li><a href="crypto-hash-rsa-29.html">MD5 的四个逻辑函数（PPT 第 41 页）</a></li><li><a href="crypto-hash-rsa-30.html">MD5 的常量 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">T[i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mclose">]</span></span></span></span></span>（PPT 第 41 页）</a></li><li><a href="crypto-hash-rsa-31.html">MD5 的消息字使用次序（PPT 第 42 页）</a></li><li><a href="crypto-hash-rsa-32.html">MD5 的循环左移位数表（PPT 第 43 页）</a></li><li><a href="crypto-hash-rsa-33.html"><mark class="bubu">补</mark>MD5 的现状与历史教训</a></li></ul></li><li><a href="crypto-hash-rsa-34.html">4　带密钥密码 Hash 函数：MAC</a><ul><li><a href="crypto-hash-rsa-35.html">4.2 由 MDC 构造的 MAC（PPT 第 48–49 页）</a></li><li><a href="crypto-hash-rsa-36.html">4.3 定制的 MAC：MD5-MAC（PPT 第 50–52 页）</a></li></ul></li><li><a href="crypto-hash-rsa-37.html">第四讲　小结与自测</a></li></ul></li>
-<li><span class="grp">第五讲　RSA 和 Rabin 算法</span><ul><li><a href="crypto-hash-rsa-38.html">导言：公钥密码从哪来</a></li><li><a href="crypto-hash-rsa-39.html">1　RSA 加密算法</a><ul><li><a href="crypto-hash-rsa-40.html">算法 2　RSA 公钥加密（PPT 第 9 页）</a></li><li><a href="crypto-hash-rsa-41.html">证明解密过程正确（PPT 第 10–11 页）</a></li><li><a href="crypto-hash-rsa-42.html">评论：用 λ 代替 φ（PPT 第 12 页）</a></li><li><a href="crypto-hash-rsa-43.html">1.2 例子 1：完整走一遍（PPT 第 13 页）</a></li></ul></li><li><a href="crypto-hash-rsa-44.html">2　RSA 加密的执行</a></li><li><a href="crypto-hash-rsa-45.html">3　RSA 加密的安全</a><ul><li><a href="crypto-hash-rsa-46.html">3.2 关于整数分解（PPT 第 19–30 页）</a></li><li><a href="crypto-hash-rsa-47.html">3.2.1 指数分解方法（PPT 第 20–23 页）</a></li><li><a href="crypto-hash-rsa-48.html">3.2.2 Pollard 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 算法（PPT 第 24–27 页）</a></li><li><a href="crypto-hash-rsa-49.html">3.2.2 Pollard 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 算法（PPT 第 24–27 页）（续 1）</a></li><li><a href="crypto-hash-rsa-50.html">3.2.3 二次域筛法（PPT 第 28–29 页）</a></li><li><a href="crypto-hash-rsa-51.html">3.2.4 整数分解的进展（PPT 第 30 页）</a></li><li><a href="crypto-hash-rsa-52.html">3.3 小加密指数 e（PPT 第 31–32 页）</a></li><li><a href="crypto-hash-rsa-53.html">3.4 小解密指数 d（PPT 第 33 页）</a></li><li><a href="crypto-hash-rsa-54.html">3.5 乘法特性（PPT 第 34–36 页）</a></li><li><a href="crypto-hash-rsa-55.html">3.6 共模攻击（PPT 第 37 页）</a></li><li><a href="crypto-hash-rsa-56.html">3.7 部分密钥泄露攻击（PPT 第 38–39 页）</a></li><li><a href="crypto-hash-rsa-57.html">3.8 循环攻击（PPT 第 40–42 页）</a></li><li><a href="crypto-hash-rsa-58.html">3.9 消息隐藏问题（PPT 第 43–44 页）</a></li><li><a href="crypto-hash-rsa-59.html">3.10 前项搜索攻击（PPT 第 45 页）</a></li><li><a href="crypto-hash-rsa-60.html">3.11 RSA-OAEP（PPT 第 46–48 页）</a></li><li><a href="crypto-hash-rsa-61.html">3.12 定时攻击（PPT 第 49–55 页）</a></li></ul></li><li><a href="crypto-hash-rsa-62.html">4　RSA 加密实践</a><ul><li><a href="crypto-hash-rsa-63.html">4.2 素数的选择（PPT 第 57–60 页）</a></li><li><a href="crypto-hash-rsa-64.html">4.3 指数（PPT 第 61–63 页）</a></li></ul></li><li><a href="crypto-hash-rsa-65.html">5　Rabin 加密算法</a></li><li><a href="crypto-hash-rsa-66.html">6　Rabin 加密的执行</a></li><li><a href="crypto-hash-rsa-67.html">7　Rabin 加密的安全</a></li><li><a href="crypto-hash-rsa-68.html">8　公钥加密的总结</a></li><li><a href="crypto-hash-rsa-69.html">第五讲　小结与自测</a></li></ul></li>
-<li><span class="grp">附录</span><ul><li><a href="crypto-hash-rsa-70.html">附录 A　术语中英对照表</a></li><li><a href="crypto-hash-rsa-71.html">附录 B　关键常数速查</a></li><li><a href="crypto-hash-rsa-72.html">附录 C　常见疑问 FAQ</a></li><li><a href="crypto-hash-rsa-73.html">附录 D　自测题参考答案</a><ul><li><a href="crypto-hash-rsa-74.html">D.2 第五讲（RSA 与 Rabin）</a></li><li><a href="crypto-hash-rsa-75.html">D.2 第五讲（RSA 与 Rabin）（续 1）</a></li><li><a href="crypto-hash-rsa-76.html">D.2 第五讲（RSA 与 Rabin）（续 2）</a></li><li><a href="crypto-hash-rsa-77.html">D.2 第五讲（RSA 与 Rabin）（续 3）</a></li><li><a href="crypto-hash-rsa-78.html">D.2 第五讲（RSA 与 Rabin）（续 4）</a></li></ul></li></ul></li>
-</ul>
-</nav>
 
-<h1 id="s-1">密码学讲义：密码 Hash 函数与 RSA / Rabin 算法</h1>
+<h4 id="s-1">MD5 的循环左移位数表（PPT 第 43 页）</h4>
+<p><strong>PPT 原文</strong>：</p>
 <blockquote>
-<p>依据《第四讲 密码 Hash 函数》与《第五讲 RSA 和 Rabin 算法》两份课件整理
-面向基础薄弱的初学者：先补地基，再逐节重述，由浅入深
-承接《密码学讲义：数据加密标准（DES）与高级加密标准（AES）》</p>
+<p>4 轮中每一步的循环左移位数见下表。</p>
 </blockquote>
-<hr>
-<h2 id="s-2">如何使用这份讲义</h2>
-<p><strong>这份讲义和 PPT 的关系</strong>：和上一册一样，讲义严格跟着这一册两份 PPT 的目录走（同样的&quot;1、2、3…&quot;小节编号），PPT 里出现的每一个知识点都在讲义里有对应段落，不会漏。区别在于：</p>
-<ul>
-<li>PPT 上只写结论的地方，讲义补上&quot;为什么&quot;；</li>
-<li>PPT 上直接甩出来的公式，讲义拆成一步步的推导；</li>
-<li>PPT 默认你已经会、但其实你可能是第一次见的名词（同余、欧拉函数、中国剩余定理、生日悖论、陷门单向函数……），讲义在第 0 章和正文各处预先解释。</li>
-</ul>
-<p><strong>这份讲义和上一册的关系</strong>：</p>
-<p>上一册（DES 与 AES）讲的是<strong>对称密码</strong>：加解密用同一把密钥，算法是&quot;代换 + 置换&quot;的复杂组合。这一册换了一个世界：</p>
-<ul>
-<li><strong>第四讲</strong>离开&quot;加密&quot;这件事，去讲 Hash 函数——一种<strong>没有密钥</strong>（或者密钥只用来认证）的函数，它的任务不是保密，而是<strong>给消息做指纹</strong>。</li>
-<li><strong>第五讲</strong>进入<strong>公钥密码</strong>：加密和解密用两把不同的钥匙，安全性不再靠&quot;算法的复杂性&quot;，而是靠<strong>某个数学问题很难算</strong>（大整数分解、模合数平方根）。</li>
-</ul>
-<p>所以这一册对<strong>数论</strong>的依赖比上一册对有限域的依赖更重。第 0 章会把这部分地基补齐。</p>
-<p><strong>阅读建议</strong>：</p>
-<ol>
-<li><strong>第 0 章必须看</strong>。这一册最卡人的地方（模运算、扩展 Euclidean 算法、欧拉定理与费马小定理、中国剩余定理、生日悖论为什么是&quot;一半&quot;）都在这里讲清楚。跳过它，第五章会一直磕磕绊绊。</li>
-<li>上一册已经讲过、这一册还要用的东西（异或、比特与字节、位运算、分组密码、ECB/CBC/CFB 模式、密码分析入门、穷尽搜索），第 0.1 节列了一张&quot;回查表&quot;，告诉你上一册哪里讲过，不重复占篇幅。手边有上一册的话，翻回去看一眼就行。</li>
-<li>正文里凡是标 <strong><mark class="bubu">补</mark></strong> 的段落，都是 PPT 没有、但你需要知道才能读懂的内容。</li>
-<li>文末有<strong>术语中英对照表</strong>、<strong>关键常数速查表</strong>和<strong>自测题</strong>，复习时直接翻附录。</li>
-<li>遇到看不懂的公式，先别慌——密码学里绝大多数公式只是&quot;把一句话写成了符号&quot;。讲义里每个公式后面都会跟一句大白话翻译。</li>
-</ol>
-<p><strong>这一册四讲的地图</strong>：</p>
-<pre><code>第 0 章  前置知识（数论地基）
-   ↓
-第四讲  密码 Hash 函数
-   1 分类与架构   ── 先把&quot;Hash 函数到底要满足什么&quot;定义清楚
-   2 基本构造     ── 所有 Hash 函数共用的那个&quot;迭代压缩&quot;骨架
-   3 无密钥 Hash（MDC） ── MDC-2 / SHA-1 / MD5
-   4 带密钥 Hash（MAC） ── CBC-MAC / 由 MDC 构造 MAC / MD5-MAC
-   ↓
-第五讲  RSA 和 Rabin 算法
-   1 RSA 加密算法    ── 三个算法 + 解密为什么正确 + 第一个完整例子
-   2 RSA 加密的执行  ── 素性测试、模幂（怎么真的算出来）
-   3 RSA 加密的安全  ── 本讲真正的重点：一大堆攻击方法
-   4 RSA 加密实践    ── 模多长、素数怎么挑、指数怎么选
-   5 Rabin 加密算法  ── 安全性&quot;可证明&quot;的那个方案
-   6 Rabin 加密的执行 ── 怎么开平方根
-   7 Rabin 加密的安全 ── 为什么它安全等价于分解 n
-   8 公钥加密的总结   ── 把整个公钥体系收一个口
+<p><strong>PPT 的表（已核对）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>步数 →</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>第 1 轮</strong></td>
+<td>7</td>
+<td>12</td>
+<td>17</td>
+<td>22</td>
+<td>7</td>
+<td>12</td>
+<td>17</td>
+<td>22</td>
+<td>7</td>
+<td>12</td>
+<td>17</td>
+<td>22</td>
+<td>7</td>
+<td>12</td>
+<td>17</td>
+<td>22</td>
+</tr>
+<tr>
+<td><strong>第 2 轮</strong></td>
+<td>5</td>
+<td>9</td>
+<td>14</td>
+<td>20</td>
+<td>5</td>
+<td>9</td>
+<td>14</td>
+<td>20</td>
+<td>5</td>
+<td>9</td>
+<td>14</td>
+<td>20</td>
+<td>5</td>
+<td>9</td>
+<td>14</td>
+<td>20</td>
+</tr>
+<tr>
+<td><strong>第 3 轮</strong></td>
+<td>4</td>
+<td>11</td>
+<td>16</td>
+<td>23</td>
+<td>4</td>
+<td>11</td>
+<td>16</td>
+<td>23</td>
+<td>4</td>
+<td>11</td>
+<td>16</td>
+<td>23</td>
+<td>4</td>
+<td>11</td>
+<td>16</td>
+<td>23</td>
+</tr>
+<tr>
+<td><strong>第 4 轮</strong></td>
+<td>6</td>
+<td>10</td>
+<td>15</td>
+<td>21</td>
+<td>6</td>
+<td>10</td>
+<td>15</td>
+<td>21</td>
+<td>6</td>
+<td>10</td>
+<td>15</td>
+<td>21</td>
+<td>6</td>
+<td>10</td>
+<td>15</td>
+<td>21</td>
+</tr>
+</tbody>
+</table>
+<p><strong>读法</strong>：每一轮内部的移位位数是<strong>每 4 步循环一次</strong>的。</p>
+<pre><code>第 1 轮:  7 → 12 → 17 → 22 ┐
+                            │ 重复 4 遍 = 16 步
+          ↑─────────────┘
+第 2 轮:  5 →  9 → 14 → 20 ┐
+                            │ 重复 4 遍 = 16 步
+          ↑─────────────┘
+第 3 轮:  4 → 11 → 16 → 23 ┐
+                            │ 重复 4 遍 = 16 步
+          ↑─────────────┘
+第 4 轮:  6 → 10 → 15 → 21 ┐
+                            │ 重复 4 遍 = 16 步
+          ↑─────────────┘
 </code></pre>
-<p><strong>一句话概括这一册两讲的关系</strong>：</p>
-<p>第四讲的 Hash 函数是<strong>公钥密码的零件</strong>。第五讲里你马上会看到：RSA-OAEP 需要 Hash 函数（G 和 H）、数字签名需要 Hash 函数、口令表需要 Hash 函数。所以先讲&quot;指纹怎么做&quot;，再讲&quot;公钥怎么用&quot;。</p>
-<p>而第五讲内部两条线的关系是：<strong>RSA 的安全性只是&quot;被认为&quot;困难，Rabin 的安全性可以&quot;证明&quot;等价于分解大整数</strong>。RSA 早、用得多、工程上成熟；Rabin 理论漂亮、速度更快，但解密有&quot;四选一&quot;的麻烦。两讲合起来，你能看清&quot;公钥密码的安全性到底建立在什么假设上&quot;。</p>
-<p><strong>一句话概括这一册两讲的核心</strong>：<strong>Hash 函数要抗碰撞，公钥密码要靠难题。</strong> 前者怕的是&quot;找到两个输入撞在一起&quot;，后者怕的是&quot;有人把那个难题解开了&quot;。</p>
-<hr>
+<p><strong>每一组四个数都满足一个规律</strong>：后一个是前一个加 5、再加 0（其实差是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mo>−</mo><mn>15</mn></mrow><annotation encoding="application/x-tex">5, 5, 5, -15</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">−</span><span class="mord">15</span></span></span></span></span>，也就是模 32 意义上每次加 5）。<strong>每组都取自&quot;以某个起点、模 32 步长 5&quot;的等差数列</strong>：</p>
+<pre><code>第 1 轮：7, 12, 17, 22   （模 32 每次 +5）
+第 2 轮：5,  9, 14, 20   （模 32 每次 +4…4…，实际是 5,9,14,20 差 4/5/6）
+第 3 轮：4, 11, 16, 23
+第 4 轮：6, 10, 15, 21
+</code></pre>
+<p><strong><mark class="bubu">补</mark>不管具体数值的&quot;来历&quot;，你要记住的是&quot;为什么每轮要选 4 个不同的移位量、而不是一个固定的量&quot;</strong>：</p>
+<ol>
+<li><strong>固定移位会给攻击者一个稳定的&quot;把手&quot;</strong>。如果每步都移 5 位，那么攻击者可以对齐&quot;位平面&quot;来做分析——<strong>某些比特永远在同一&quot;相对位置&quot;上互相作用</strong>，规律性太强。SHA-1 就是固定移 5 位和 30 位的（这是 SHA-1 后来被攻破时被利用的一个因素）。</li>
+<li><strong>不同移位量让&quot;比特的传播路径&quot;每步都变</strong>。某个比特这一步被推到第 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> 位，下一步被推到第 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi></mrow><annotation encoding="application/x-tex">j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span></span></span></span></span> 位——攻击者追踪它需要维护一个不断变化的映射。</li>
+<li><strong>每 4 步换一遍</strong>是&quot;差异&quot;与&quot;实现简单&quot;的折中：不用存 64 个移位量（只要 16 个），但比&quot;一轮一个&quot;的变化频率高得多。</li>
+</ol>
+<p><strong><mark class="bubu">补</mark>注意移位量都在 4 到 23 之间</strong>：没有 0（不移位就没有扩散）、也没有接近 32 的值（移 30 位和移 2 位效果相近，容易造成&quot;反向的可预测性&quot;）。<strong>范围选在中间，是让每一步的&quot;混合程度&quot;都足够。</strong></p>
 
-<div class="pager"><a class="pg prev" href="crypto-hash-rsa.html"><span>← 返回</span><b>目录</b></a><a class="pg next" href="crypto-hash-rsa-01.html"><span>下一节 →</span><b>0.1 承接：第一册已经铺好的地基</b></a></div>
+<div class="pager"><a class="pg prev" href="crypto-hash-rsa-31.html"><span>← 上一节</span><b>MD5 的消息字使用次序（PPT 第 42 页）</b></a><a class="pg next" href="crypto-hash-rsa-33.html"><span>下一节 →</span><b><mark class="bubu">补</mark>MD5 的现状与历史教训</b></a></div>
 </div>
 
 <script>

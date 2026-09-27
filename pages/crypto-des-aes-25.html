@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8　加密模式 · 密码学讲义：DES 与 AES</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../styles/style.css">
+<link rel="stylesheet" href="../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="diary.html">日记</a></li>
+                <li><a href="study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="communicate.html">交流</a></li>
+                <li><a href="picture.html">图片墙</a></li>
+                <li><a href="products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="crypto-des-aes.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-des-aes-01.html">0.1 密码学到底在解决什么问题</a>
+<a class="i" href="crypto-des-aes-02.html">0.2 对称密码 vs 非对称密码</a>
+<a class="i" href="crypto-des-aes-03.html">0.3 分组密码 vs 流密码</a>
+<a class="i" href="crypto-des-aes-04.html">0.4 比特、字节与位运算（重中之重）</a>
+<a class="i" href="crypto-des-aes-05.html">0.5 三种基本&quot;密码零件&quot;</a>
+<a class="i" href="crypto-des-aes-06.html">0.6 Feistel 结构：DES 的骨架</a>
+<a class="i" href="crypto-des-aes-07.html">0.7 密码分析入门：攻击者知道什么</a>
+<a class="i" href="crypto-des-aes-08.html">0.8 <mark class="bubu">补</mark>后文会用到的三个小概念</a>
+<div class="sg">第二讲　数据加密标准（DES）</div>
+<a class="i" href="crypto-des-aes-09.html">导言：DES 的由来与它的历史包袱</a>
+<a class="i" href="crypto-des-aes-10.html">1　简化 DES 型算法</a>
+<a class="i" href="crypto-des-aes-11.html">2　差分分析</a>
+<a class="i" href="crypto-des-aes-12.html">3　DES 本体</a>
+<a class="i" href="crypto-des-aes-13.html">4　DES 不是一个群</a>
+<a class="i" href="crypto-des-aes-14.html">5　破译 DES</a>
+<a class="i" href="crypto-des-aes-15.html">6　口令安全</a>
+<a class="i" href="crypto-des-aes-16.html">第二讲　小结与自测</a>
+<div class="sg">第三讲　高级加密标准（AES）</div>
+<a class="i" href="crypto-des-aes-17.html">导言：AES 是怎么选出来的</a>
+<a class="i" href="crypto-des-aes-18.html">1　有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mi>p</mi><mi>n</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(p^{n})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 的知识</a>
+<a class="i" href="crypto-des-aes-19.html">2　基本算法</a>
+<a class="i" href="crypto-des-aes-20.html">3　层</a>
+<a class="i" href="crypto-des-aes-21.html">4　解密</a>
+<a class="i" href="crypto-des-aes-22.html">5　设计思考</a>
+<a class="i" href="crypto-des-aes-23.html">6　执行考虑</a>
+<a class="i" href="crypto-des-aes-24.html">7　AES 的积极意义</a>
+<a class="i cur" data-h="s-1" href="crypto-des-aes-25.html">8　加密模式</a>
+<a class="i" href="crypto-des-aes-26.html">第三讲　小结与自测</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-des-aes-27.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-des-aes-28.html">附录 B　关键常数速查</a>
+<a class="i" href="crypto-des-aes-29.html">附录 C　常见疑问 FAQ</a>
+<a class="i" href="crypto-des-aes-30.html">附录 D　自测题参考答案</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+<nav class="nav">
+<p class="t">本页目录</p>
+<ul class="toc">
+<li class="lv3"><a href="#s-2">8.0 为什么需要&quot;加密模式&quot;（PPT 第 46 页）</a></li>
+<li class="lv3"><a href="#s-3">8.1 电码本模式（ECB）（PPT 第 47–48 页）</a></li>
+<li class="lv4"><a href="#s-4">定义</a></li>
+<li class="lv4"><a href="#s-5">ECB 模式的性质（PPT 原文）</a></li>
+<li class="lv4"><a href="#s-6">对 ECB 的评论（PPT 第 48 页）</a></li>
+<li class="lv3"><a href="#s-7">8.2 密码分组链接模式（CBC）（PPT 第 49–50 页）</a></li>
+<li class="lv4"><a href="#s-8">定义</a></li>
+<li class="lv4"><a href="#s-9">CBC 模式的性质（PPT 第 50 页）</a></li>
+<li class="lv3"><a href="#s-10">8.3 密码反馈模式（CFB）（PPT 第 51–53 页）</a></li>
+<li class="lv4"><a href="#s-11">定义（PPT 第 51 页）</a></li>
+<li class="lv4"><a href="#s-12">CFB 模式的性质（PPT 第 52–53 页）</a></li>
+<li class="lv4"><a href="#s-13">三种模式总对照表（建议背下来）</a></li>
+<li class="lv3"><a href="#s-14">8.4 <mark class="bubu">补</mark>本节的&quot;要点总结&quot;</a></li>
+</ul>
+</nav>
+
+<h2 id="s-1">8　加密模式</h2>
+<blockquote>
+<p>对应 PPT 第 46–53 页。<strong>这一节非常重要，而且它有一个&quot;警示意义&quot;</strong>——它告诉你：<strong>一个算法本身设计得再好，如果使用方式（模式）选错了，安全性照样会崩。</strong> 这是密码学里最容易被忽视、也最容易在工程中踩坑的地方。</p>
+</blockquote>
+<h3 id="s-2">8.0 为什么需要&quot;加密模式&quot;（PPT 第 46 页）</h3>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>通常大多数消息的长度大于分组密码的消息分组长度</strong>，长的消息被分成一系列连续排列的消息分组，<strong>密码一次处理一个分组</strong>。</p>
+<p><strong>在分组密码的上层不同的加密模式被开发出来，这些加密模式可以为整体消息加密提供一些希望得到的性质</strong>，如：</p>
+<ul>
+<li><strong>分组密码的不确定性（随机性）</strong></li>
+<li><strong>将明文消息添加到任意长度</strong>（使得密文长度不必与相应的明文长度相关）</li>
+<li><strong>错误传播控制</strong></li>
+<li><strong>流密码的密钥流生成</strong>，等等。</li>
+</ul>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>把这段话读懂，就懂&quot;模式&quot;存在的意义了</strong>：</p>
+<p>第 0 章说过两条分组密码的基本性质——&quot;同样密钥 + 同样分组 = 同样密文&quot;、&quot;分组之间相互独立&quot;。<strong>这两条在加密长消息时会带来严重的现实问题</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>相同明文分组 → 相同密文分组</td>
+<td>攻击者能<strong>看出数据里的重复模式</strong>（例如一张图片里大片的相同区域）</td>
+</tr>
+<tr>
+<td>分组之间相互独立</td>
+<td>攻击者可以<strong>打乱、重排、替换、删除</strong>某些分组，而解密方浑然不觉</td>
+</tr>
+</tbody>
+</table>
+<p><strong>&quot;加密模式&quot;就是在分组密码这个&quot;内核&quot;外面套的一层&quot;外壳&quot;，用来解决这些问题。</strong> 第 (1) 条说的&quot;不确定性（随机性）&quot;就是破解&quot;相同分组→相同密文&quot;的问题。</p>
+<blockquote>
+<p><strong>⚠️ 学这一节的核心心法</strong>：<strong>不要只记公式，要记每条&quot;性质&quot;。</strong> PPT 对三种模式都是按同样的四个维度给性质的：<strong>(1) 随机性 (2) 链接依赖性 (3) 错误传播 (4) 错误恢复 / 吞吐量</strong>。把这四个维度背下来，三种模式的对应关系就一清二楚了。</p>
+</blockquote>
+<h3 id="s-3">8.1 电码本模式（ECB）（PPT 第 47–48 页）</h3>
+<h4 id="s-4">定义</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>明文消息 <code>P</code> 分成适合于分组密码的小段 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mo stretchy="false">[</mo><msub><mi>P</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>P</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>P</mi><mi>L</mi></msub><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">P = [P_{1}, P_{2}, \dots , P_L]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">]</span></span></span></span></span> 并进一步得到密文</strong></p>
+<pre><code>C = [C₁, C₂, …, C_L]，
+</code></pre>
+<p><strong>这里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>j</mi></msub><mo>=</mo><msub><mi>E</mi><mi>K</mi></msub><mo stretchy="false">(</mo><msub><mi>P</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">C_j = E_K(P_j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 是明文消息段 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">P_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 使用密钥 <code>K</code> 加密的输出。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>一句话概括</strong>：<strong>每个分组各自独立地加密，谁也不理谁。</strong></p>
+<pre><code>     P1          P2          P3
+      ↓           ↓           ↓
+    [ E_K ]     [ E_K ]     [ E_K ]
+      ↓           ↓           ↓
+     C1          C2          C3
+</code></pre>
+<h4 id="s-5">ECB 模式的性质（PPT 原文）</h4>
+<blockquote>
+<p><strong>（1）在使用同一个密钥加密明文消息时得到的密文必定相同。</strong>
+<strong>（2）链独立性：明文消息段在加密的过程中相互独立，也就是说重新编排密文段的顺序，相应的明文消息段也随之改变。</strong>
+<strong>（3）错误传播：在一个密文段中的一位或多位比特错误仅仅影响其对应的明文消息段。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>逐条解读</strong>：</p>
+<p><strong>(1) 密钥相同 → 密文必定相同</strong></p>
+<p>这是&quot;确定性的&quot;最直接表现。<strong>后果</strong>：如果明文里有两段完全相同的内容（比如一张图片中颜色相同的区域、一段结构化数据里重复的字段），<strong>密文里会出现两段完全相同的密文</strong>。攻击者虽然不知道内容是什么，但<strong>他一眼就能看出&quot;这里有两块内容一样&quot;</strong>。<strong>这叫&quot;泄露了数据的模式（pattern）&quot;。</strong></p>
+<p><strong>(2) 链独立性</strong></p>
+<p>因为分组之间毫无关联，<strong>攻击者可以任意重排密文段的顺序</strong>——比如把银行转账信息里的&quot;金额段&quot;和&quot;账户段&quot;调换，或者把若干笔交易的密文段重新拼装。<strong>解密方只会老老实实地把每一段解出来，完全意识不到顺序被改过。</strong> 这叫**&quot;重放 / 拼接攻击&quot;**。</p>
+<p><strong>(3) 错误传播：只影响对应的那一段</strong></p>
+<p>一个密文段的比特错误，<strong>解码之后只影响它自己那一段</strong>，别的段不受影响。<strong>这算是个优点</strong>（错误不扩散），但也说明&quot;任何一段被破坏了都不会被发现&quot;。</p>
+<h4 id="s-6">对 ECB 的评论（PPT 第 48 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>由于密文消息段是互相独立的，因此，存在对电码本模式的恶意替代。</strong> 例如，插入频繁出现的分组，这样做实际并不影响解密的分组连接。<strong>进一步，密文消息段并不能隐藏数据的模式，也就是确定的密文消息对应确定的明文消息。</strong></p>
+<p><strong>由于以上原因，电码本模式不推荐用于加密长消息，而仅限于加密只有一个明文消息段的情况。</strong> 安全性可以通过在每一个消息段中引入适当的随机比特加以改善。</p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>这段给出了 ECB 的&quot;死刑判决&quot;，逐条说明</strong>：</p>
+<ul>
+<li><strong>&quot;恶意替代&quot;</strong>：攻击者可以<strong>把自己截获到的某个密文段，插入到另一条消息里</strong>（或者覆盖掉某一个段）。因为 ECB 里每个段独立解密，<strong>这段被插入的数据会&quot;毫无违和&quot;地被解密出来</strong>。这是很现实的攻击——比如在网络协议里，攻击者把&quot;攻击者自己的账号&quot;那段密文，替换到&quot;转账目标&quot;的位置上。</li>
+<li><strong>&quot;不能隐藏数据的模式&quot;</strong>：重复的明文 → 重复的密文。这就是著名的&quot;<strong>ECB 企鹅图</strong>&quot;（用 ECB 加密一张企鹅照片，企鹅的轮廓仍然清晰可辨）。</li>
+<li><strong>&quot;不推荐用于加密长消息&quot;</strong>：这是最终结论。<strong>ECB 只适合加密&quot;只有一个分组&quot;的短数据</strong>——比如加密一把密钥、加密一个口令。</li>
+<li><strong>&quot;通过引入随机比特加以改善&quot;</strong>：这一句其实是在<strong>引出下面的 CBC 模式</strong>——在每一段里掺一点随机性（用初始向量），就能让&quot;相同明文得到不同密文&quot;。</li>
+</ul>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>一句话记住 ECB</strong>：<strong>ECB = 各干各的，确定性强、无链接、错误不扩散，但会泄露模式、可被拼接替换。除了加密单个分组，别用。</strong></p>
+</blockquote>
+<h3 id="s-7">8.2 密码分组链接模式（CBC）（PPT 第 49–50 页）</h3>
+<h4 id="s-8">定义</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>密码分组链接（CBC）模式的运行可以定义为</strong></p>
+<pre><code>C_j = E_K(P_j ⊕ C_{j-1}),      P_j = D_K(C_j) ⊕ C_{j-1},
+</code></pre>
+<p><strong>这里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 是某个选定的初始值，而 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">D_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 是解密函数。</strong></p>
+</blockquote>
+<pre><code>        P1            P2            P3
+         ↓             ↓             ↓
+C0 →→ ( ⊕ ) ←┐   →→ ( ⊕ ) ←┐   →→ ( ⊕ )
+         ↓    │       ↓     │       ↓
+      [ E_K ] │    [ E_K ]  │    [ E_K ]
+         ↓    │       ↓      │       ↓
+        C1 ───┘      C2 ─────┘      C3
+</code></pre>
+<p><strong><mark class="bubu">补</mark>核心思路一句话</strong>：<strong>加密前，先把这一段明文和&quot;上一段的密文&quot;异或一下。</strong></p>
+<p><strong>这样就做到了两件事</strong>：</p>
+<ol>
+<li><strong>同样的明文分组，因为前面一段密文不同，加密结果就不同了</strong> → <strong>解决了 ECB 的&quot;泄露模式&quot;问题</strong>（实现了随机性）。</li>
+<li><strong>每一段的加密都&quot;链&quot;在前一段上</strong> → <strong>攻击者不能随意重排或替换单个段了</strong>（因为一改，后面全乱）。</li>
+</ol>
+<p><strong>解密公式的理解</strong>：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>j</mi></msub><mo>=</mo><msub><mi>D</mi><mi>K</mi></msub><mo stretchy="false">(</mo><msub><mi>C</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo>⊕</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">P_j = D_K(C_j) \oplus C_{j-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span>——先用密钥解密，再把上一段密文异或回去（异或的自反性，回顾第 0 章）。<strong>注意解密时也需要 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">C_{j-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></strong>，所以密文段之间在解密上也是&quot;链&quot;着的。</p>
+<p><strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 是初始值（通常叫初始向量 IV）</strong>——它是<strong>选定的</strong>，不需要保密（但通常要求不可预测，见 PPT 第 52 页 CFB 的性质 (1) 的类比）。</p>
+<h4 id="s-9">CBC 模式的性质（PPT 第 50 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>CBC 模式的性质：</strong></p>
+<p><strong>（1）改变第一个明文消息段 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">P_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，得到相同的密文消息。</strong> ——<mark class="bubu">补</mark>⚠️ <strong>这里课件表述有笔误。</strong> 原文其实是这样的两句：</p>
+<ul>
+<li>同一明文消息加密后将得到相同的密文消息。</li>
+<li>例如，使用计数器或随机数<strong>改变第一个明文消息段</strong>，将导致<strong>不同的密文消息</strong>。</li>
+</ul>
+<p><strong>（2）链接依赖性</strong>：链接机制<strong>导致密文消息段依赖于明文消息段和全部之前的明文消息段</strong>。<strong>改变顺序将影响解密。正确的处理接下来的密文消息段需要正确的加密前一个明文消息段。</strong></p>
+<p><strong>（3）错误传播</strong>：如果在密文消息段 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">C_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 发生了比特的错误，将影响解密消息段 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">P_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 和 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">P_{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>。</p>
+<p><strong>（4）错误恢复</strong>：CBC 模式具有<strong>自同步或解密自动恢复功能</strong>，也就是说<strong>一个发生在密文消息段 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">C_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 的错误可以是发生比特或整个密文消息段丢失，但密文消息段 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">C_{3}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 并没有出现错误，那么将解密出正确的明文消息段。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>逐条解读——这里有几处需要特别小心</strong>：</p>
+<p><strong>(1) 关于&quot;随机性&quot;</strong></p>
+<p>关键点是：<strong>CBC 的随机性完全来自 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>（初始向量）</strong>。</p>
+<ul>
+<li><strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 相同</strong> → 同一明文得到同一密文（所以 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 必须是&quot;每次不一样&quot;的，比如用一个计数器或随机数）；</li>
+<li><strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 不同</strong> → 同一段明文 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">P_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 会得到完全不同的密文。</li>
+</ul>
+<p>PPT 的意思是：<strong>要获得随机性，就必须让第一个明文段（或者说 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>）每次不同。</strong> 用计数器或随机数都可以。</p>
+<p><strong>(2) 链接依赖性</strong></p>
+<p>每一段的密文都依赖&quot;这一段明文 + 它前面所有的历史&quot;。所以：</p>
+<ul>
+<li><strong>重排密文段 → 解密结果全乱</strong>（对比 ECB 可以随意重排）；</li>
+<li><strong>想正确解密第 j 段，它前面的 j−1 段密文必须完好无损</strong>。</li>
+</ul>
+<p><strong>(3) 错误传播：影响两段</strong></p>
+<p>这是 CBC 最需要记的细节：</p>
+<pre><code>密文 C1 的某一比特错了
+   ↓
+P1 = D_K(C1) ⊕ C0     ← 因为 C1 变了，D_K(C1) 整个变（雪崩），P1 几乎全乱
+P2 = D_K(C2) ⊕ C1     ← C2 没错，但 C1 变了，异或的&quot;链&quot;断了，P2 会错&quot;对应位置的那一位&quot;
+P3 = D_K(C3) ⊕ C2     ← C2 完好，P3 完全正确 ✓
+</code></pre>
+<p><strong>所以：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">C_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 里的一个比特错误 → <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">P_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 全部乱掉，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">P_{j+1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 只错对应的那一位，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>j</mi><mo>+</mo><mn>2</mn></mrow></msub></mrow><annotation encoding="application/x-tex">P_{j+2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">+</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 之后完全正确。</strong></p>
+<p><strong>(4) 错误恢复：自同步</strong></p>
+<p>从上一条直接推出：<strong>错误最多影响两段，从第三段开始自动恢复正常</strong>。这叫**&quot;自同步&quot;**——不需要额外的重传机制，错误自己就&quot;滑过去了&quot;。</p>
+<blockquote>
+<p>⚠️ <strong><mark class="bubu">补</mark>注意&quot;自动恢复&quot;的另一面是&quot;失去同步检测&quot;</strong>：自同步是优点（能自动恢复），但<strong>同时也意味着错误被&quot;静默吞掉&quot;了</strong>——接收方不会发现曾经出过错。所以在真实系统里，CBC 通常还要配合 MAC（消息认证码）来检测篡改，<strong>不能只靠加密来保证完整性</strong>。这是密码工程里的一条重要经验。</p>
+</blockquote>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>一句话记住 CBC</strong>：<strong>CBC = 链式异或，靠初始向量提供随机性；错误影响两段、此后自同步；可以重排防护，但需要额外的完整性校验。</strong></p>
+</blockquote>
+<h3 id="s-10">8.3 密码反馈模式（CFB）（PPT 第 51–53 页）</h3>
+<h4 id="s-11">定义（PPT 第 51 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>典型情况是，明文消息被分成 8 比特的段：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>P</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>P</mi><mn>8</mn></msub></mrow><annotation encoding="application/x-tex">P_{1}, P_{2}, \dots , P_8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，这里每个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">P_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 都是 8 比特。</strong></p>
+<p><strong>选择一个初始 64 比特参数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">X_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，接着在 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">j = 1, 2, 3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">3</span></span></span></span></span> 下，做如下操作：</strong></p>
+<p><strong>加密过程</strong></p>
+<pre><code>C_j = P_j ⊕ R_8(E_K(X_j))
+X_{j+1} = L_{56}(X_j) ‖ C_j
+</code></pre>
+<p><strong>解密过程</strong></p>
+<pre><code>P_j = C_j ⊕ R_8(E_K(X_j))
+X_{j+1} = L_{56}(X_j) ‖ C_j
+</code></pre>
+<p><strong>这里 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mn>56</mn></msub><mo stretchy="false">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">L_{56}(X_j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">56</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 表示 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">X_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 的最左边的 56 比特，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>8</mn></msub><mo stretchy="false">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R_8(X_j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 表示 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">X_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 的最右边 8 比特，<code>‖</code> 表示两者的联接操作。</strong></p>
+<p><strong>在第 8 轮结束时，初始的参数彻底从 56 位寄存器中消失，也就是 64/8 = 8。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>CFB 的机制讲清楚——它是三种模式里最&quot;反直觉&quot;的一种</strong>：</p>
+<p><strong>核心想法</strong>：<strong>不直接加密明文，而是&quot;加密一个寄存器&quot;，把加密结果当成&quot;密钥流&quot;，再和明文异或。</strong> 这就把<strong>分组密码变成了&quot;流密码&quot;</strong>（对应 PPT 第 46 页说的&quot;流密码的密钥流生成&quot;这条性质）。</p>
+<p><strong>流程走一遍</strong>：</p>
+<pre><code>1. 寄存器 X_j 有 64 比特（初始值 X_1 是选定的初始参数）
+
+2. 把 X_j 送进加密函数 E_K，得到 64 比特输出
+   ↓
+3. 只取最右边 8 比特 R_8(E_K(X_j)) —— 这就是&quot;密钥流&quot;
+   ↓
+4. 与 8 比特明文段 P_j 异或 → 得到 8 比特密文段 C_j
+   ↓
+5. 更新寄存器：X_j 左移 8 位（丢掉最左边 8 位），把 C_j 接到最右边
+   X_{j+1} = L_{56}(X_j) ‖ C_j
+   ↓
+6. 回到第 2 步，处理下一段
+</code></pre>
+<p><strong>关键点 ①：加密和解密的公式&quot;长得一样&quot;</strong></p>
+<p>对比一下：</p>
+<pre><code>加密：C_j = P_j ⊕ R_8(E_K(X_j))
+解密：P_j = C_j ⊕ R_8(E_K(X_j))
+</code></pre>
+<p><strong>只有第一个符号不同！</strong> 也就是说，<strong>解密时也是&quot;跑一次加密函数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">E_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>&quot;，而不是&quot;跑解密函数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">D_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>&quot;</strong>。这就是为什么 PPT 第 53 页的&quot;评论&quot;里说：</p>
+<blockquote>
+<p><strong>由于加密函数 <code>E</code> 既用于 CFB 模式的加密也用于其的解密，模式在加密函数 <code>E</code> 为公钥密码算法时将不能使用，这时必须使用 CBC 加密模式。</strong></p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>这句话怎么理解？</strong> 因为<strong>公钥密码里，公钥可以加密、私钥才能解密</strong>。而 CFB 要求&quot;加密和解密都用同一个 <code>E</code>&quot;。如果用公钥加密，那么解密方也需要 <code>E</code>（公钥）——可公钥是公开的，<strong>任何人都能做&quot;解密&quot;这一步</strong>，等于不设防。所以<strong>公钥密码只能用 CBC 这类&quot;加解密用不同函数&quot;的模式</strong>（加密用公钥 <code>E</code>、解密用私钥 <code>D</code>）。</p>
+<p><strong>关键点 ②：为什么是&quot;8 比特&quot;，为什么&quot;8 轮之后初始参数消失&quot;</strong></p>
+<ul>
+<li>明文的切分粒度是 <strong>8 比特</strong>（一个字节）——所以这个模式通常写作 <strong>CFB-8</strong>。也可以按 64 比特切（CFB-64），但 PPT 讲的是 8 比特的情形。</li>
+<li>寄存器一共 64 比特，每次移出 8 比特 —— 所以<strong>移 8 次（8 轮）之后，最初的 64 比特就全部被挤出去了</strong> ✓ 这就是 PPT 那句&quot;64/8 = 8&quot;的意思。</li>
+</ul>
+<p><strong><mark class="bubu">补</mark>为什么要把密文 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">C_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 反馈回寄存器（而不是明文）？</strong> 因为这个模式的名字就叫&quot;<strong>密码</strong>反馈&quot;（Cipher FeedBack）——<strong>反馈回来的是密文</strong>。好处是：解密方只需拿到密文就能同步更新寄存器（不需要先知道明文），<strong>收发双方才能保持同步</strong>。</p>
+<h4 id="s-12">CFB 模式的性质（PPT 第 52–53 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>CFB 模式的性质：</strong></p>
+<p><strong>（1）改变初始参数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">X_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，即使明文消息相同也将加密出不同的输出。参数并不需要保密。</strong></p>
+<p><strong>（2）链接依赖性：与 CBC 模式加密类似，链接机制导致消息密文段依赖消息明文段和之前的明文消息段。所以重新安排消息密文段将影响解密。正确的解密消息密文段需要之前的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">j-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 个消息密文段是正确的。</strong></p>
+<p><strong>（3）错误传播：任何 <code>1</code> 个消息密文段的 <code>8</code> 位或多位比特错误，将影响其后的连续 <code>8</code> 个消息密文段解密。</strong></p>
+<p><strong>（4）错误恢复：CFB 模式具有类似 CBC 模式的自同步性质，但是需要 <code>8</code> 个密文消息段（<code>64</code> 比特）才能恢复。</strong></p>
+<p><strong>（5）吞吐量：吞吐量减少为 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">1/8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/8</span></span></span></span></span>。每一次加密操作仅输出 <code>8</code> 位密文消息段，假定加密输出为 <code>64</code> 比特，则吞吐量因数为 <code>8</code>（相对于 CBC 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mi mathvariant="normal">/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">64/8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">64/8</span></span></span></span></span>）。</strong></p>
+<p><strong>评论</strong>：由于加密函数 <code>E</code> 既用于 CFB 模式的加密也用于其的解密，<strong>模式在加密函数 <code>E</code> 为公钥密码算法时将不能使用</strong>，这时必须使用 CBC 加密模式。</p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>逐条解读</strong>：</p>
+<p><strong>(1) 随机性</strong>：和 CBC 一样，<strong>随机性来自初始参数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">X_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></strong>。<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">X_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 不同 → 同一明文得到不同密文。而且 PPT 特别强调&quot;<strong>参数并不需要保密</strong>&quot;（它和密钥不一样）。</p>
+<p><strong>(2) 链接依赖性</strong>：和 CBC 类似——每一段依赖前面所有段。<strong>重排密文段 → 解密结果全乱；要正确解密第 j 段，前面 j−1 段必须正确。</strong></p>
+<p><strong>(3) 错误传播：影响后续 8 段</strong>——<strong>这是 CFB 最需要记住的数字</strong>：</p>
+<pre><code>密文段 C_j 出错（8 位或多位比特错）
+   ↓
+P_j 错了（对应的那些比特）
+   ↓
+C_j 被反馈进寄存器 → 寄存器的内容被污染
+   ↓
+接下来的 8 个段，因为寄存器里还残留着错误，密钥流也是错的
+   ↓
+直到 C_j 彻底被&quot;挤出&quot;寄存器（需要 8 段 × 8 比特 = 64 比特），才恢复
+</code></pre>
+<p><strong>所以：1 个密文段出错 → 影响它自己 + 后续 8 段</strong> ✓</p>
+<p><strong>(4) 错误恢复：需要 8 段（64 比特）才能恢复</strong>——这是上一条的直接推论：<strong>寄存器要&quot;洗干净&quot;需要把污染的 64 比特全部移出去，正好 8 段 × 8 比特。</strong></p>
+<blockquote>
+<p><mark class="bubu">补</mark><strong>对照记忆</strong>：<strong>CBC 的错误&quot;影响 2 段、2 段后恢复&quot;；CFB 的错误&quot;影响 1+8 段、8 段后恢复&quot;。</strong> 为什么 CFB 更严重？因为 CBC 的错误<strong>不会进入&quot;密钥流生成器&quot;</strong>（它只是和 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">C_{j-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 做一个异或），而 CFB 的错误<strong>被反馈进了密钥流生成器的输入</strong>，污染会持续输出。</p>
+</blockquote>
+<p><strong>(5) 吞吐量：降到 1/8</strong></p>
+<p><strong><mark class="bubu">补</mark>这是 CFB-8 的致命缺点</strong>：</p>
+<pre><code>CBC：一个 64 比特分组 → 一次 E_K 调用 → 输出 64 比特密文
+CFB-8：一个 64 比特分组 → 一次 E_K 调用 → 只输出 8 比特密文
+
+也就是说：为了得到 64 比特密文，CFB-8 要调用 8 次 E_K
+→ 速度只有 CBC 的 1/8
+</code></pre>
+<p><strong>所以 PPT 说&quot;吞吐量减少为 1/8&quot;、&quot;吞吐量因数为 8&quot;</strong> ✓</p>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>这就是 CFB 用&quot;灵活性&quot;换&quot;速度&quot;的代价</strong>：它把分组密码变成了流密码（可以逐字节处理、不需要等满一个分组、适合实时流式数据），但代价是速度降到 1/8。<strong>工程上是一个明确的权衡。</strong></p>
+</blockquote>
+<h4 id="s-13">三种模式总对照表（建议背下来）</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>ECB</strong></th>
+<th><strong>CBC</strong></th>
+<th><strong>CFB-8</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>公式（加密）</strong></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>j</mi></msub><mo>=</mo><msub><mi>E</mi><mi>K</mi></msub><mo stretchy="false">(</mo><msub><mi>P</mi><mi>j</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">C_j = E_K(P_j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>j</mi></msub><mo>=</mo><msub><mi>E</mi><mi>K</mi></msub><mo stretchy="false">(</mo><msub><mi>P</mi><mi>j</mi></msub><mo>⊕</mo><msub><mi>C</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">C_j = E_K(P_j \oplus C_{j-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>j</mi></msub><mo>=</mo><msub><mi>P</mi><mi>j</mi></msub><mo>⊕</mo><msub><mi>R</mi><mn>8</mn></msub><mo stretchy="false">(</mo><msub><mi>E</mi><mi>K</mi></msub><mo stretchy="false">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">C_j = P_j \oplus R_8(E_K(X_j))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">8</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">))</span></span></span></span></span><br><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>L</mi><mn>56</mn></msub><mo stretchy="false">(</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mi mathvariant="normal">∥</mi><msub><mi>C</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">X_{j+1} = L_{56}(X_j) \| C_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">56</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord">∥</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></td>
+</tr>
+<tr>
+<td><strong>随机性</strong></td>
+<td>❌ <strong>无</strong>（同密钥同明文 → 同密文）</td>
+<td>✅ 靠<strong>初始值 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">C_{0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></strong></td>
+<td>✅ 靠<strong>初始参数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">X_{1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></strong></td>
+</tr>
+<tr>
+<td><strong>链接依赖性</strong></td>
+<td>❌ <strong>链独立</strong>（可重排密文段）</td>
+<td>✅ 依赖本段明文 + 全部之前段</td>
+<td>✅ 同 CBC</td>
+</tr>
+<tr>
+<td><strong>错误传播</strong></td>
+<td>只影响<strong>对应的 1 段</strong></td>
+<td>影响 <strong>2 段</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">P_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 全乱，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">P_{j+1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span> 错对应位）</td>
+<td>影响<strong>本段 + 后续 8 段</strong></td>
+</tr>
+<tr>
+<td><strong>错误恢复</strong></td>
+<td>无需恢复（不扩散）</td>
+<td>✅ <strong>自同步，2 段后恢复</strong></td>
+<td>✅ 自同步，但需 <strong>8 段（64 比特）</strong></td>
+</tr>
+<tr>
+<td><strong>吞吐量</strong></td>
+<td>1（最快）</td>
+<td>1</td>
+<td><strong>1/8</strong>（最慢）</td>
+</tr>
+<tr>
+<td><strong>解密用什么函数</strong></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">D_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">D_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></td>
+<td><strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">E_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></strong>（同一函数！）</td>
+</tr>
+<tr>
+<td><strong>能否用于公钥密码</strong></td>
+<td>—</td>
+<td>✅ 可以</td>
+<td>❌ <strong>不可以</strong></td>
+</tr>
+<tr>
+<td><strong>推荐用途</strong></td>
+<td>只加密单个分组（如密钥）</td>
+<td>通用的长消息加密</td>
+<td>流式 / 实时数据；逐字节处理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-14">8.4 <mark class="bubu">补</mark>本节的&quot;要点总结&quot;</h3>
+<p><strong>这一节真正要带走的三句话</strong>：</p>
+<ol>
+<li><strong>算法安全 ≠ 系统安全。</strong> ECB 的问题是&quot;算法没错，用法错了&quot;。<strong>选错模式，再好的算法也白搭。</strong></li>
+<li><strong>&quot;随机性&quot;必须靠外部注入。</strong> 分组密码本身是确定性的，要让相同明文产生不同密文，<strong>必须引入初始向量 / 初始参数</strong>——这也是第 46 页把&quot;不确定性（随机性）&quot;列为模式第一项性质的原因。</li>
+<li><strong>加密不保证完整性。</strong> CBC/CFB 的错误会&quot;自同步恢复&quot;，听起来是优点，但<strong>意味着篡改可能被静默吞掉</strong>。真实系统必须&quot;加密 + 认证&quot;一起用（这就是后来的 GCM、CCM 等<strong>认证加密模式</strong>出现的原因）。</li>
+</ol>
+<hr>
+
+<div class="pager"><a class="pg prev" href="crypto-des-aes-24.html"><span>← 上一节</span><b>7　AES 的积极意义</b></a><a class="pg next" href="crypto-des-aes-26.html"><span>下一节 →</span><b>第三讲　小结与自测</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../index.html#about">关于我</a>
+            <a href="../index.html#bilibili">B站空间</a>
+            <a href="study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6　口令安全 · 密码学讲义：DES 与 AES</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../styles/style.css">
+<link rel="stylesheet" href="../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="diary.html">日记</a></li>
+                <li><a href="study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="communicate.html">交流</a></li>
+                <li><a href="picture.html">图片墙</a></li>
+                <li><a href="products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="crypto-des-aes.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-des-aes-01.html">0.1 密码学到底在解决什么问题</a>
+<a class="i" href="crypto-des-aes-02.html">0.2 对称密码 vs 非对称密码</a>
+<a class="i" href="crypto-des-aes-03.html">0.3 分组密码 vs 流密码</a>
+<a class="i" href="crypto-des-aes-04.html">0.4 比特、字节与位运算（重中之重）</a>
+<a class="i" href="crypto-des-aes-05.html">0.5 三种基本&quot;密码零件&quot;</a>
+<a class="i" href="crypto-des-aes-06.html">0.6 Feistel 结构：DES 的骨架</a>
+<a class="i" href="crypto-des-aes-07.html">0.7 密码分析入门：攻击者知道什么</a>
+<a class="i" href="crypto-des-aes-08.html">0.8 <mark class="bubu">补</mark>后文会用到的三个小概念</a>
+<div class="sg">第二讲　数据加密标准（DES）</div>
+<a class="i" href="crypto-des-aes-09.html">导言：DES 的由来与它的历史包袱</a>
+<a class="i" href="crypto-des-aes-10.html">1　简化 DES 型算法</a>
+<a class="i" href="crypto-des-aes-11.html">2　差分分析</a>
+<a class="i" href="crypto-des-aes-12.html">3　DES 本体</a>
+<a class="i" href="crypto-des-aes-13.html">4　DES 不是一个群</a>
+<a class="i" href="crypto-des-aes-14.html">5　破译 DES</a>
+<a class="i cur" data-h="s-1" href="crypto-des-aes-15.html">6　口令安全</a>
+<a class="i" href="crypto-des-aes-16.html">第二讲　小结与自测</a>
+<div class="sg">第三讲　高级加密标准（AES）</div>
+<a class="i" href="crypto-des-aes-17.html">导言：AES 是怎么选出来的</a>
+<a class="i" href="crypto-des-aes-18.html">1　有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mi>p</mi><mi>n</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(p^{n})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 的知识</a>
+<a class="i" href="crypto-des-aes-19.html">2　基本算法</a>
+<a class="i" href="crypto-des-aes-20.html">3　层</a>
+<a class="i" href="crypto-des-aes-21.html">4　解密</a>
+<a class="i" href="crypto-des-aes-22.html">5　设计思考</a>
+<a class="i" href="crypto-des-aes-23.html">6　执行考虑</a>
+<a class="i" href="crypto-des-aes-24.html">7　AES 的积极意义</a>
+<a class="i" href="crypto-des-aes-25.html">8　加密模式</a>
+<a class="i" href="crypto-des-aes-26.html">第三讲　小结与自测</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-des-aes-27.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-des-aes-28.html">附录 B　关键常数速查</a>
+<a class="i" href="crypto-des-aes-29.html">附录 C　常见疑问 FAQ</a>
+<a class="i" href="crypto-des-aes-30.html">附录 D　自测题参考答案</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+<nav class="nav">
+<p class="t">本页目录</p>
+<ul class="toc">
+<li class="lv3"><a href="#s-2">6.1 问题背景（PPT 第 46 页）</a></li>
+<li class="lv3"><a href="#s-3">6.2 口令方案（PPT 第 47–48 页）</a></li>
+<li class="lv4"><a href="#s-4">(1) 存储口令文件</a></li>
+<li class="lv4"><a href="#s-5">(2) 加密口令文件（PPT 第 47 页）</a></li>
+<li class="lv4"><a href="#s-6">(3) 降低口令映射速度</a></li>
+<li class="lv4"><a href="#s-7">(4) 口令加盐（Salt）—— 最重要的一条</a></li>
+<li class="lv4"><a href="#s-8">(5) 口令短语（Passphrase）</a></li>
+<li class="lv3"><a href="#s-9">6.3 常见攻击（PPT 第 49 页）</a></li>
+<li class="lv3"><a href="#s-10">6.4 实例：UNIX 口令系统（PPT 第 50–52 页）</a></li>
+<li class="lv4"><a href="#s-11">6.4.1 系统结构（PPT 第 50 页）</a></li>
+<li class="lv4"><a href="#s-12">6.4.2 口令盐的作用（PPT 第 51 页）</a></li>
+<li class="lv4"><a href="#s-13">6.4.3 附带的好处：防止用现成 DES 芯片攻击（PPT 第 52 页）</a></li>
+</ul>
+</nav>
+
+<h2 id="s-1">6　口令安全</h2>
+<blockquote>
+<p>对应 PPT 第 46–52 页。这一节换了个场景：<strong>DES 不只是用来加密消息的，更常见的是用来保护口令</strong>。这是 DES 最持久的一个应用场景。</p>
+</blockquote>
+<h3 id="s-2">6.1 问题背景（PPT 第 46 页）</h3>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>问题</strong>：口令一般与每一个实体相关联，是一个 <strong>6 到 10 或更多</strong>的方便记忆的字符串。口令由实体和系统共享。为了获得访问系统资源的权限（例如计算账户、打印机或软件应用），实体输入<strong>身份-口令对</strong>。系统则核实对于相应的身份和口令输入是否正确。如果正确，系统就按照身份分配实体相应的访问授权。<strong>系统通过实体展示其掌握口令秘密来将其与声称身份挂钩。</strong></p>
+</blockquote>
+<p><strong>逐句拆解</strong>：</p>
+<ul>
+<li>口令是<strong>人</strong>和<strong>系统</strong>之间的共享秘密。</li>
+<li>认证的流程是：你给 <code>(身份 ID_A, 口令 pwd_A)</code> → 系统验证 → 通过就给你相应的权限。</li>
+<li>核心机制：<strong>&quot;你能说出这个秘密&quot;就等价于&quot;你是这个人&quot;</strong>。</li>
+</ul>
+<p><strong><mark class="bubu">补</mark>口令系统的核心难点（后面所有方案的动机都在这里）</strong>：</p>
+<blockquote>
+<p><strong>系统不能直接存明文口令。</strong> 因为一旦口令文件泄露（比如 <code>/etc/passwd</code> 被读取），所有用户的口令就直接暴露了——而且用户常常在多个系统里复用同一个口令，后果是灾难性的。</p>
+</blockquote>
+<p>所以必须&quot;存一个能验证、但不能反推出原口令的东西&quot;。<strong>这就要用到单向函数 <code>f</code></strong>——一个容易正着算、但极难反着算的函数（DES 在这里被当作&quot;人造单向函数&quot;使用）。</p>
+<h3 id="s-3">6.2 口令方案（PPT 第 47–48 页）</h3>
+<p>PPT 列了 5 种方案，<strong>难度和安全性是层层递进的</strong>。</p>
+<h4 id="s-4">(1) 存储口令文件</h4>
+<p>最朴素的做法：把口令明文存下来。</p>
+<p><strong>❌ 致命缺陷</strong>：口令文件一旦泄露，全部口令原形毕露。而且很多用户在不同系统用同一个口令，一处泄露、处处沦陷。</p>
+<h4 id="s-5">(2) 加密口令文件（PPT 第 47 页）</h4>
+<p>这是最经典的方案，PPT 给了完整的流程图：</p>
+<pre><code>实体A                                          系统
+                                          ┌──────────────┐
+                                          │   口令表      │
+  (ID_A, pwd_A) ──────────────────────→   │  ID_A │f(pwd_A)│
+                                          └──────────────┘
+       │                                         │
+       │  pwd_A                                  │ f(pwd_A)
+       ↓                                         ↓
+   ┌───────┐                              ┌──────────┐
+   │  f()  │ ────── f(pwd_A) ───────────→ │    ( = ) │── 是 ──→ 接受
+   └───────┘                              └──────────┘
+                                               │
+                                                否
+                                               ↓
+                                              拒绝
+</code></pre>
+<p><strong>流程解读</strong>：</p>
+<ol>
+<li>系统里<strong>存的是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(pwd_{A})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>，不是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub></mrow><annotation encoding="application/x-tex">pwd_{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></strong>（图中口令表那一行：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><msub><mi>D</mi><mi>A</mi></msub><mi mathvariant="normal">∣</mi><mi>f</mi><mo stretchy="false">(</mo><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">ID_{A} | f(pwd_{A})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>）。</li>
+<li>用户登录时输入 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub></mrow><annotation encoding="application/x-tex">pwd_{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，系统现场计算 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(pwd_{A})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>（图中那个 <code>f()</code> 方框）。</li>
+<li>把计算结果和口令表里存的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(pwd_{A})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 做<strong>相等比较</strong>（图中 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mo>=</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">( = )</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mrel">=</span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mclose">)</span></span></span></span></span> 那个圆圈）。</li>
+<li>相等 → <strong>接受</strong>；不等 → <strong>拒绝</strong>。</li>
+</ol>
+<p><strong>关键洞察</strong>：<strong>系统从头到尾都不知道用户的口令是什么，它只比较两个 <code>f</code> 的结果。</strong> 这就是为什么 <code>f</code> 必须是单向函数——即使口令文件被偷，攻击者拿到的也只是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(pwd_{A})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>，无法直接还原出 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub></mrow><annotation encoding="application/x-tex">pwd_{A}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>。</p>
+<blockquote>
+<p><strong><mark class="bubu">补</mark><code>f</code> 在真实系统里就是&quot;用口令当密钥跑一次 DES&quot;</strong>（见 6.3 节的 UNIX 实现）。所以这一节其实是在讲&quot;DES 的另一种用法&quot;：不是用来保密消息，而是用来<strong>造一个单向函数</strong>。</p>
+</blockquote>
+<h4 id="s-6">(3) 降低口令映射速度</h4>
+<p><strong>思路</strong>：既然攻击者可以用&quot;字典 + 快速计算 <code>f</code>&quot;来猜口令（拿词典里每个词算一遍 <code>f</code>，看哪个和口令表里的值相等），那我就<strong>故意让 <code>f</code> 算得慢一点</strong>——把 <code>f</code> 设计成需要跑几千次运算的函数。</p>
+<p><strong>效果测算</strong>：如果一次 <code>f</code> 的计算时间从 1 微秒变成 1 毫秒（慢 1000 倍），那么攻击者每秒能试的口令数就减少 1000 倍，<strong>穷举字典的时间直接放大 1000 倍</strong>。而用户登录时多等几毫秒完全无感。</p>
+<blockquote>
+<p><mark class="bubu">补</mark>现代口令哈希函数（bcrypt、scrypt、Argon2）用的就是这个思想，只不过&quot;降低速度&quot;的手段更精细（可调迭代次数、内存硬化）。</p>
+</blockquote>
+<h4 id="s-7">(4) 口令加盐（Salt）—— 最重要的一条</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p>为了使<strong>口令猜测攻击无效</strong>，每一个口令条目都增加 <strong>t 比特的随机串叫做盐（salt）</strong>，将<strong>盐和口令一同作为单向函数的输入</strong>。<strong>口令 Hash 值和盐一同记入口令文件</strong>，以供验证使用。</p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>&quot;盐&quot;解决了什么问题？</strong> 假设不加盐，两个用户 <code>A</code> 和 <code>B</code> 的口令恰好相同，那么 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>A</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>p</mi><mi>w</mi><msub><mi>d</mi><mi>B</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(pwd_{A}) = f(pwd_{B})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02691em;">pw</span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>——攻击者一眼就能看出&quot;这两个人用同一个口令&quot;，只要破解出一个就同时得到两个。更糟的是，攻击者可以对<strong>整个口令文件</strong>做一次字典攻击（每个候选口令只算一次 <code>f</code>，然后和文件里所有条目比对），<strong>一次攻击打穿整个系统</strong>。</p>
+<p>加盐之后：</p>
+<ul>
+<li><strong>同一个口令，加不同的盐，得到完全不同的 <code>f</code> 结果</strong>；</li>
+<li>攻击者必须<strong>对每一个用户、每一种盐</strong>单独做一遍字典计算；</li>
+<li><strong>针对单个用户</strong>，安全性没变（攻击者本来也只需要攻破一个人）；</li>
+<li><strong>针对整个口令文件</strong>，攻击成本被放大到原来的 <strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>t</mi></msup></mrow><annotation encoding="application/x-tex">2^{t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7936em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7936em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span></span></span></span></span></span></span></span></span></span></span></span></span> 倍</strong>（因为每种可能的盐都要单独算一遍）。</li>
+</ul>
+<p><strong>这是&quot;用少量随机性换巨大攻击成本&quot;的经典范例。</strong></p>
+<h4 id="s-8">(5) 口令短语（Passphrase）</h4>
+<p><strong>思路</strong>：与其用一个 6~8 字符的短口令，不如用一个<strong>长句子</strong>，例如 <code>blue sky over the mountain</code>。</p>
+<ul>
+<li>长度上来之后，<strong>字符空间的组合数呈指数上升</strong>，&quot;穷尽搜索口令&quot;变得不可行；</li>
+<li>人脑反而更容易记住一句话，而不是一串随机字符；</li>
+<li>代价：输入麻烦、很多老系统限制长度（如 UNIX 只取前 8 个字符，见 6.3）。</li>
+</ul>
+<h3 id="s-9">6.3 常见攻击（PPT 第 49 页）</h3>
+<table>
+<thead>
+<tr>
+<th>攻击</th>
+<th>做法</th>
+<th>防御</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>(1) 重放固定口令</strong></td>
+<td>窃听通信，把口令原封不动再发一次</td>
+<td>用一次性口令（OTP）、挑战-应答协议</td>
+</tr>
+<tr>
+<td><strong>(2) 穷尽搜索口令</strong></td>
+<td>把口令空间里的所有串都试一遍</td>
+<td>加长口令；降低 <code>f</code> 的映射速度</td>
+</tr>
+<tr>
+<td><strong>(3) 口令猜测 / 字典攻击</strong></td>
+<td>用常见词、人名、生日等常见口令列表去试</td>
+<td>加盐；口令复杂度策略</td>
+</tr>
+</tbody>
+</table>
+<p><strong>PPT 特别指出（关于第 2 条）</strong>：</p>
+<blockquote>
+<p>攻击的成功依赖于：<strong>在成功发现口令之前需要验证的口令数量</strong>，以及<strong>每次验证测试所需要的时间</strong>。</p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>这就是口令安全的两条防线</strong>：</p>
+<pre><code>攻击总时间 = (需要验证的口令数量) × (每次验证的时间)
+             ↑                        ↑
+        靠&quot;口令要长得足够随机&quot;     靠&quot;f 要算得足够慢&quot;
+</code></pre>
+<p><strong>两条防线缺一不可</strong>：如果口令太简单（数量少），再慢的 <code>f</code> 也扛不住；如果 <code>f</code> 太快，再复杂的口令也可能被暴力枚举。</p>
+<p><strong>PPT 还提到</strong>：<strong>在线 / 离线口令猜测攻击</strong>。</p>
+<p><strong><mark class="bubu">补</mark>这两者差别巨大，是常考点</strong>：</p>
+<ul>
+<li><strong>在线攻击</strong>：直接对着真实系统反复尝试登录。每次尝试都要和系统交互，<strong>受网络延迟和系统限流（如&quot;输错 5 次锁定账户&quot;）限制</strong>，速度极慢（每秒几次）。防御主要靠&quot;限流、锁定、验证码&quot;。</li>
+<li><strong>离线攻击</strong>：先偷到口令文件 / 哈希值，然后在<strong>自己的机器上</strong>无限次地试——<strong>没有次数限制、没有限流、可以用 GPU/专用硬件并行</strong>，每秒可以试几十亿次。<strong>离线攻击才是真正致命的</strong>，而防它的主要手段正是&quot;加盐&quot;和&quot;降低 <code>f</code> 的速度&quot;。</li>
+</ul>
+<blockquote>
+<p>一句话记住：<strong>在线攻击靠&quot;策略&quot;防，离线攻击靠&quot;盐 + 慢哈希&quot;防。</strong></p>
+</blockquote>
+<h3 id="s-10">6.4 实例：UNIX 口令系统（PPT 第 50–52 页）</h3>
+<p>这是&quot;DES 用作单向函数&quot;的一个<strong>真实工业实现</strong>，也是本节所有理论落地的地方。</p>
+<h4 id="s-11">6.4.1 系统结构（PPT 第 50 页）</h4>
+<pre><code>用户口令
+   ↓
+┌────────────────────────────┐
+│ 截成 8 个 ASCII 字符；      │
+│ 如需要添加 0                │
+└────────────────────────────┘
+   │ 密钥 K（56 比特）
+   ↓
+                数据 I_i (64 比特)
+                      ↓
+              ┌───────────────┐
+              │    *DES#      │
+              └───────────────┘
+                      │ 输出 O_i (64 比特)
+                      ↓
+         O_25  ──┬── 重新打包 76 比特 ──→ 11 个 7 比特字符
+                 │       为                    │
+         [下一次输入 I_i, 2 ≤ i ≤ 25]          ↓
+    （初始值 I_1 = 00…0）              /etc/passwd 中的加密口令
+                      用户盐 (12 比特)
+</code></pre>
+<p><strong>流程解读</strong>（这是全图最容易看乱的地方，跟着数字走）：</p>
+<ol>
+<li><strong>用户口令 → 密钥</strong>：把口令<strong>截取成 8 个 ASCII 字符</strong>（不足的补 <code>0</code>）→ 8 字节 = <strong>64 位 → 去掉校验位得到 56 位密钥 K</strong>。</li>
+<li><strong>数据段</strong>：加密的&quot;数据&quot;是 <strong>64 比特的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">I_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></strong>。</li>
+<li><strong>迭代 25 轮</strong>：
+<ul>
+<li>第一轮输入 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mn>1</mn></msub><mo>=</mo><mn>00</mn><mo>…</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">I_1 = 00\dots 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">00</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0</span></span></span></span></span>（64 个 0）；</li>
+<li>输出 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>O</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">O_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> <strong>又当作下一轮的输入 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">I_{i+1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8917em;vertical-align:-0.2083em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span></span></strong>（图中那条&quot;下一次输入&quot;的回环箭头）；</li>
+<li>一共跑 <strong>25 轮</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mn>25</mn></mrow><annotation encoding="application/x-tex">2 \le i \le 25</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7804em;vertical-align:-0.136em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7955em;vertical-align:-0.136em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">25</span></span></span></span></span>，即从 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">I_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 到 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mn>2</mn></msub><mn>5</mn></mrow><annotation encoding="application/x-tex">I_25</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">5</span></span></span></span></span>）。</li>
+</ul>
+</li>
+<li><strong>盐（12 比特）参与每一次加密</strong>（图中从&quot;用户盐&quot;接入 DES 模块的那条 12 位线）。</li>
+<li><strong>打包存盘</strong>：最后的输出 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>O</mi><mn>2</mn></msub><mn>5</mn></mrow><annotation encoding="application/x-tex">O_25</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">5</span></span></span></span></span>（64 比特）<strong>加上 12 比特的盐</strong> = <strong>76 比特</strong>，重新打包成 <strong>11 个 7 比特字符</strong>（11 × 7 = 77，取 76 位），写进 <strong><code>/etc/passwd</code></strong>。</li>
+</ol>
+<p><strong>为什么是这些奇怪的数字？</strong></p>
+<table>
+<thead>
+<tr>
+<th>数字</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>口令截成 <strong>8 个 ASCII 字符</strong></td>
+<td>正好凑出 64 位，去掉校验位得 56 位，正好是 DES 的密钥长度</td>
+</tr>
+<tr>
+<td>迭代 <strong>25 轮</strong></td>
+<td>就是 6.2 节&quot;降低口令映射速度&quot;的落实——<strong>故意让 <code>f</code> 慢 25 倍</strong></td>
+</tr>
+<tr>
+<td>盐 <strong>12 比特</strong></td>
+<td>提供 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>12</mn></msup></mrow><annotation encoding="application/x-tex">2^{12}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">12</span></span></span></span></span></span></span></span></span></span></span></span></span> = <strong>4096</strong> 种变化</td>
+</tr>
+<tr>
+<td>打包成 <strong>11 个 7 比特字符</strong></td>
+<td>这是为了兼容当时只能存 7 比特（可打印 ASCII）的存储/终端</td>
+</tr>
+</tbody>
+</table>
+<p><strong><mark class="bubu">补</mark>特别注意：这里的 DES 调用方式和标准 DES 不一样</strong>——图中那个模块写作 <code>*DES#</code>，星号和井号是 UNIX 手册里标注&quot;这是修改过的版本&quot;的惯例写法。修改点就在&quot;盐&quot;参与的方式上，见下。</p>
+<h4 id="s-12">6.4.2 口令盐的作用（PPT 第 51 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>（1）口令盐</strong>。UNIX 口令盐是将 <strong>12 位的随机串</strong>与用户选择口令关联。这 12 位的随机串<strong>作为 DES 的标准扩展函数 E 的一个变量</strong>，提供 <strong>4096 种不同的变化情形</strong>，也就是：</p>
+<p><strong>盐的第 1 比特对应输入的第 1 比特和第 25 比特，第 2 比特对应输入的第 2 比特和第 26 比特，如此下去。如果盐比特值为 1，则输入的相对应位做交换，如果盐比特值为 0，则保持不变。</strong></p>
+<p><strong>Hash 口令值和盐都保存在系统口令文件的一条目录之中。</strong> 对于<strong>单个用户</strong>而言，口令的安全并没有增加，但对于<strong>字典攻击整体口令文件</strong>而言，<strong>对于每一个可能口令却增加了 4096 种不同的口令测试计算</strong>。</p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>把这段翻译成操作</strong>：</p>
+<ul>
+<li>盐的 12 个比特，分别去&quot;控制&quot;输入数据 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">I_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 的 12 组比特位（第 1 位配第 1 和第 25 位，第 2 位配第 2 和第 26 位，…，第 12 位配第 12 和第 36 位）。</li>
+<li><strong>如果盐的这一位是 1 → 把这两个对应位置的比特交换一下；是 0 → 保持原样。</strong></li>
+<li>这相当于在 DES 的<strong>扩展函数 E 上做了 12 处条件性的&quot;接反&quot;</strong>，把标准的 E 表改造成了 4096 种不同的变体。</li>
+</ul>
+<p><strong><mark class="bubu">补</mark>效果对比（这一句是本节的精髓）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>不加盐</th>
+<th>加盐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单个用户被攻击</td>
+<td>攻击者直接跑字典</td>
+<td><strong>安全强度不变</strong>（攻击者本来只盯这一个人）</td>
+</tr>
+<tr>
+<td>整个口令文件被攻击</td>
+<td>跑一遍字典，<strong>一次打穿所有用户</strong></td>
+<td>每个条目 4096 种可能，<strong>总共 4096 倍的计算量</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>&quot;对个体不变、对群体放大 4096 倍&quot;——这就是盐的全部价值。</strong></p>
+<h4 id="s-13">6.4.3 附带的好处：防止用现成 DES 芯片攻击（PPT 第 52 页）</h4>
+<p>PPT 原文：</p>
+<blockquote>
+<p><strong>（2）防止使用现成的 DES 芯片攻击系统</strong>。由于 DES 的<strong>扩展计算需要使用盐</strong>，因此，<strong>标准的 DES 算法不再能执行 UNIX 口令算法</strong>。如果攻击者希望采用硬件加速攻击，他就<strong>不能直接选择一般商用 DES 芯片，而要自己设计 DES 芯片</strong>。这毫无疑问<strong>增加了攻击成本</strong>。</p>
+</blockquote>
+<p><strong><mark class="bubu">补</mark>这是一个非常聪明的&quot;顺手防御&quot;</strong>：</p>
+<ul>
+<li>如果 UNIX 用的是<strong>标准 DES</strong>，那攻击者可以直接买市面上的高速 DES 芯片（便宜、量产、速度极快），一秒钟能试几亿个口令。</li>
+<li>但 UNIX 的 DES <strong>修改了扩展函数 E 的行为</strong>（盐会让 E 的某些线接反），标准芯片<strong>算不出正确结果</strong>。</li>
+<li>于是攻击者只能<strong>自己流片定制芯片</strong>——从&quot;买现成的&quot;变成&quot;自己造&quot;，<strong>成本和周期一下子提高了几个数量级</strong>。</li>
+</ul>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>这一条和第三讲第 6 节&quot;执行考虑&quot;有关联</strong>：PPT 在 AES 部分讲&quot;用查表法实现可以阻止定时分析攻击&quot;，这里讲&quot;修改算法可以阻止现成硬件加速&quot;——<strong>两者都属于&quot;利用实现细节来抬高攻击成本&quot;的思路</strong>，是密码工程中很重要的一类设计技巧。</p>
+</blockquote>
+<hr>
+
+<div class="pager"><a class="pg prev" href="crypto-des-aes-14.html"><span>← 上一节</span><b>5　破译 DES</b></a><a class="pg next" href="crypto-des-aes-16.html"><span>下一节 →</span><b>第二讲　小结与自测</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../index.html#about">关于我</a>
+            <a href="../index.html#bilibili">B站空间</a>
+            <a href="study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

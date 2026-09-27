@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第三讲　小结与自测 · 密码学讲义：DES 与 AES</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../styles/style.css">
+<link rel="stylesheet" href="../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="diary.html">日记</a></li>
+                <li><a href="study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="communicate.html">交流</a></li>
+                <li><a href="picture.html">图片墙</a></li>
+                <li><a href="products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="crypto-des-aes.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-des-aes-01.html">0.1 密码学到底在解决什么问题</a>
+<a class="i" href="crypto-des-aes-02.html">0.2 对称密码 vs 非对称密码</a>
+<a class="i" href="crypto-des-aes-03.html">0.3 分组密码 vs 流密码</a>
+<a class="i" href="crypto-des-aes-04.html">0.4 比特、字节与位运算（重中之重）</a>
+<a class="i" href="crypto-des-aes-05.html">0.5 三种基本&quot;密码零件&quot;</a>
+<a class="i" href="crypto-des-aes-06.html">0.6 Feistel 结构：DES 的骨架</a>
+<a class="i" href="crypto-des-aes-07.html">0.7 密码分析入门：攻击者知道什么</a>
+<a class="i" href="crypto-des-aes-08.html">0.8 <mark class="bubu">补</mark>后文会用到的三个小概念</a>
+<div class="sg">第二讲　数据加密标准（DES）</div>
+<a class="i" href="crypto-des-aes-09.html">导言：DES 的由来与它的历史包袱</a>
+<a class="i" href="crypto-des-aes-10.html">1　简化 DES 型算法</a>
+<a class="i" href="crypto-des-aes-11.html">2　差分分析</a>
+<a class="i" href="crypto-des-aes-12.html">3　DES 本体</a>
+<a class="i" href="crypto-des-aes-13.html">4　DES 不是一个群</a>
+<a class="i" href="crypto-des-aes-14.html">5　破译 DES</a>
+<a class="i" href="crypto-des-aes-15.html">6　口令安全</a>
+<a class="i" href="crypto-des-aes-16.html">第二讲　小结与自测</a>
+<div class="sg">第三讲　高级加密标准（AES）</div>
+<a class="i" href="crypto-des-aes-17.html">导言：AES 是怎么选出来的</a>
+<a class="i" href="crypto-des-aes-18.html">1　有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mi>p</mi><mi>n</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(p^{n})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 的知识</a>
+<a class="i" href="crypto-des-aes-19.html">2　基本算法</a>
+<a class="i" href="crypto-des-aes-20.html">3　层</a>
+<a class="i" href="crypto-des-aes-21.html">4　解密</a>
+<a class="i" href="crypto-des-aes-22.html">5　设计思考</a>
+<a class="i" href="crypto-des-aes-23.html">6　执行考虑</a>
+<a class="i" href="crypto-des-aes-24.html">7　AES 的积极意义</a>
+<a class="i" href="crypto-des-aes-25.html">8　加密模式</a>
+<a class="i cur" data-h="s-1" href="crypto-des-aes-26.html">第三讲　小结与自测</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-des-aes-27.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-des-aes-28.html">附录 B　关键常数速查</a>
+<a class="i" href="crypto-des-aes-29.html">附录 C　常见疑问 FAQ</a>
+<a class="i" href="crypto-des-aes-30.html">附录 D　自测题参考答案</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+<nav class="nav">
+<p class="t">本页目录</p>
+<ul class="toc">
+<li class="lv3"><a href="#s-2">一句话串起整讲</a></li>
+<li class="lv3"><a href="#s-3">核心结论清单（考前必背）</a></li>
+<li class="lv3"><a href="#s-4">自测题（答案见附录 D）</a></li>
+</ul>
+</nav>
+
+<h2 id="s-1">第三讲　小结与自测</h2>
+<h3 id="s-2">一句话串起整讲</h3>
+<pre><code>有限域 GF(2⁸)（第1节）
+    │  加法 = 异或；乘法 = 移位 + 条件异或 0x1B
+    │  这是 AES 全部运算的地基
+    ↓
+基本算法（第2节）
+    │  128 比特分组，10/12/14 轮，每轮 128→128
+    ↓
+四种零件（第3节）
+    │  BS（非线性·查表）→ SR（行内扩散）→ MC（列内扩散）→ ARK（掺密钥）
+    │  轮密钥编排：W(i) 递推 + T 变换（旋转 + S盒 + 轮常量）
+    │  S-盒 = GF(2⁸) 求逆 + 仿射变换（有公式、可审计）
+    ↓
+解密（第4节）
+    │  用 IBS/ISR/IMC/IARK；通过&quot;改写&quot;让结构与加密完全对称
+    ↓
+设计思考（第5节）
+    │  无弱密钥、两轮全扩散、S盒透明、SR 防结构攻击、MC 全列扩散、
+    │  密钥编排非线性化、10 轮 = 7 轮底线 + 4 轮余量
+    ↓
+执行考虑（第6节）
+    │  查表法（快 + 防定时攻击）；MC 只需 512 项表；IMC 慢 30%
+    ↓
+积极意义（第7节）
+    │  不必多重加密；带动 256/384/512 位 Hash；催生新分析技术
+    ↓
+加密模式（第8节）
+       ECB（不用）/ CBC（通用）/ CFB（流式，慢 8 倍）
+</code></pre>
+<h3 id="s-3">核心结论清单（考前必背）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>AES 分组长度 <strong>128 比特</strong>，密钥 <strong>128/192/256 比特</strong>，轮数 <strong>10/12/14</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>AES 是 <strong>SP 网络</strong>（每轮处理全部比特）；DES 是 <strong>Feistel 网络</strong>（每轮处理一半）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 的模多项式：<strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mn>8</mn></msup><mo>+</mo><msup><mi>X</mi><mn>4</mn></msup><mo>+</mo><msup><mi>X</mi><mn>3</mn></msup><mo>+</mo><mi>X</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">X^{8}+X^{4}+X^{3}+X+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></strong>（十六进制 <code>0x11B</code>）</td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> <strong>加法 = 异或</strong>；<strong>乘法 = 左移 + 跑出 8 位就异或 <code>0x1B</code></strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td>数据按 <strong>列主序</strong>填入 4×4 矩阵；<strong>按列填、按行念</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>一轮四层：<strong>BS → SR → MC → ARK</strong>；<strong>最后一轮省掉 MC</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>SR：第 0/1/2/3 行分别循环左移 0/1/2/3 位</strong>（解密时右移）</td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>MC 的固定矩阵：<code>02 03 01 01</code> 循环矩阵</strong>；逆矩阵用 <code>0E 0B 0D 09</code></td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>ARK = 异或</strong>，自己就是自己的逆；但轮密钥要<strong>倒序</strong>使用（IARK）</td>
+</tr>
+<tr>
+<td>10</td>
+<td>密钥编排：<strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i)=W(i-4)\oplus W(i-1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>（4∤i）；<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mo>⊕</mo><mi>T</mi><mo stretchy="false">(</mo><mi>W</mi><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">W(i)=W(i-4)\oplus T(W(i-1))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">))</span></span></span></span></span>（4|i）</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td><strong><code>T</code> = 循环上移 + S-盒替换 + 首字节异或轮常量</strong></td>
+</tr>
+<tr>
+<td>12</td>
+<td>轮常量 = <strong><code>X</code> 的幂</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><msubsup><mo stretchy="false">)</mo><mn>2</mn><mi>k</mi></msubsup></mrow><annotation encoding="application/x-tex">(10)_{2}^{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0991em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-2.4519em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2481em;"><span></span></span></span></span></span></span></span></span></span></span>）：<code>01 02 04 08 10 20 40 80 1B 36</code></td>
+</tr>
+<tr>
+<td>13</td>
+<td>192 位密钥：<strong>4×6 矩阵、12 轮</strong>；256 位：<strong>4×8 矩阵、14 轮</strong>（多一条 <code>U</code> 规则）</td>
+</tr>
+<tr>
+<td>14</td>
+<td><strong>第 0 轮密钥：128 位用全部；192/256 位只用前 128 比特</strong></td>
+</tr>
+<tr>
+<td>15</td>
+<td>S-盒 = <strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 求逆 + 仿射变换</strong>；<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mi>x</mi><mn>63</mn><mo>=</mo><mn>99</mn></mrow><annotation encoding="application/x-tex">S(0) = 0x63 = 99</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span><span class="mord mathnormal">x</span><span class="mord">63</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">99</span></span></span></span></span>（因为常量就是 <code>0x63</code>）</td>
+</tr>
+<tr>
+<td>16</td>
+<td>AES <strong>无弱密钥/半弱密钥</strong>（因为密钥编排含 S-盒，是<strong>非线性</strong>的）</td>
+</tr>
+<tr>
+<td>17</td>
+<td>选 10 轮的理由：<strong>7 轮是安全底线，多 4 轮作为安全余量</strong></td>
+</tr>
+<tr>
+<td>18</td>
+<td><strong>查表法</strong>（256 字节）既快又能<strong>防定时分析攻击</strong>；MC 的乘法表只需 <strong>512 项</strong></td>
+</tr>
+<tr>
+<td>19</td>
+<td>模式：<strong>ECB 不用</strong>；<strong>CBC 通用</strong>；<strong>CFB-8 吞吐量只有 1/8，且解密也用 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">E_K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4">自测题（答案见附录 D）</h3>
+<ol>
+<li>为什么&quot;整数模 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>p</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">p^{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8588em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span></span>&quot;不能构成有限域？要构造元素个数为 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>p</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">p^{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8588em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span></span> 的有限域，正确做法是什么？</li>
+<li><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上的加法是什么运算？计算 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>11001011</mn><mo>⊕</mo><mn>00011001</mn></mrow><annotation encoding="application/x-tex">11001011 \oplus 00011001</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">11001011</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">00011001</span></span></span></span></span>。</li>
+<li>在 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mn>8</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(2^{8})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 上计算 <code>11001011 × 02</code>（写出步骤）。</li>
+<li>AES-128 一共用几个轮密钥？密钥编排需要生成多少列？验证一下数字是否吻合。</li>
+<li><code>ShiftRow</code> 各行分别移位多少？为什么移位量要设计成 0/1/2/3 而不是各行一样？</li>
+<li><code>MixColumn</code> 为什么能做到&quot;1 个输入字节改变 → 全部 4 个输出字节改变&quot;？</li>
+<li>AES 的 S-盒由哪两步构成？请解释为什么 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>99</mn></mrow><annotation encoding="application/x-tex">S(0) = 99</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">99</span></span></span></span></span>。</li>
+<li>AES 加密的最后一轮为什么要省掉 <code>MixColumn</code>？这样做损失安全性吗？</li>
+<li>三种密钥长度的 AES，在&quot;密钥矩阵形状 / 轮数 / 递推步长 / 第 0 轮密钥&quot;上分别有什么不同？</li>
+<li>查表法为什么能防定时分析攻击？为什么 MC 只需要 512 项的乘法表（而不是 768 项）？</li>
+<li>分别写出 ECB、CBC、CFB-8 的<strong>错误传播</strong>性质。为什么 CFB 的错误比 CBC 更严重？</li>
+</ol>
+<hr>
+
+<div class="pager"><a class="pg prev" href="crypto-des-aes-25.html"><span>← 上一节</span><b>8　加密模式</b></a><a class="pg next" href="crypto-des-aes-27.html"><span>下一节 →</span><b>附录 A　术语中英对照表</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../index.html#about">关于我</a>
+            <a href="../index.html#bilibili">B站空间</a>
+            <a href="study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

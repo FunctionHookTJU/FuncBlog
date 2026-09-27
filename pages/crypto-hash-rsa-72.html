@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>附录 C　常见疑问 FAQ · 密码学讲义：密码 Hash 函数与 RSA / Rabin 算法</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../styles/style.css">
+<link rel="stylesheet" href="../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="diary.html">日记</a></li>
+                <li><a href="study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="communicate.html">交流</a></li>
+                <li><a href="picture.html">图片墙</a></li>
+                <li><a href="products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="crypto-hash-rsa.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-hash-rsa-01.html">0.1 承接：第一册已经铺好的地基</a>
+<a class="i" href="crypto-hash-rsa-02.html">0.2 <mark class="bubu">补</mark>模运算：余数、同余、模逆</a>
+<a class="i" href="crypto-hash-rsa-03.html">0.3 <mark class="bubu">补</mark>最大公约数与扩展 Euclidean 算法</a>
+<a class="i" href="crypto-hash-rsa-04.html">0.4 <mark class="bubu">补</mark>素数、欧拉函数 φ(n)</a>
+<a class="i" href="crypto-hash-rsa-05.html">0.5 <mark class="bubu">补</mark>欧拉定理与费马小定理</a>
+<a class="i" href="crypto-hash-rsa-06.html">0.6 <mark class="bubu">补</mark>中国剩余定理（CRT）</a>
+<a class="i" href="crypto-hash-rsa-07.html">0.7 <mark class="bubu">补</mark>两类&quot;困难问题&quot;：大整数分解与模平方根</a>
+<a class="i" href="crypto-hash-rsa-08.html">0.8 <mark class="bubu">补</mark>生日悖论：为什么抗碰撞的成本只有&quot;一半&quot;</a>
+<a class="i" href="crypto-hash-rsa-09.html">0.9 <mark class="bubu">补</mark>Hash 函数的三个直觉</a>
+<div class="sg">第四讲　密码 Hash 函数</div>
+<a class="i" href="crypto-hash-rsa-10.html">导言：Hash 函数是干什么的</a>
+<a class="i" href="crypto-hash-rsa-11.html">1　分类与架构</a>
+<a class="i" href="crypto-hash-rsa-12.html">2　基本构造</a>
+<a class="i" href="crypto-hash-rsa-13.html">3　无密钥密码 Hash 函数：MDC</a>
+<a class="sub" href="crypto-hash-rsa-14.html">3.2 定制的 Hash 函数：SHA-1（PPT 第 25–33 页）</a>
+<a class="sub" href="crypto-hash-rsa-15.html">SHA-1 的整体结构（PPT 第 26 页）</a>
+<a class="sub" href="crypto-hash-rsa-16.html">（1）消息填充（PPT 第 27 页）</a>
+<a class="sub" href="crypto-hash-rsa-17.html">（2）初始化（PPT 第 28 页）</a>
+<a class="sub" href="crypto-hash-rsa-18.html">（3）处理（PPT 第 29 页）</a>
+<a class="sub" href="crypto-hash-rsa-19.html">SHA-1 的压缩函数：每一步怎么算（PPT 第 30–31 页）</a>
+<a class="sub" href="crypto-hash-rsa-20.html">SHA-1 的四个基本逻辑函数（PPT 第 32 页）</a>
+<a class="sub" href="crypto-hash-rsa-21.html">SHA-1 的加法常量与字扩展（PPT 第 33 页）</a>
+<a class="sub" href="crypto-hash-rsa-22.html"><mark class="bubu">补</mark>SHA-1 的现状与&quot;长度扩展攻击&quot;</a>
+<a class="sub" href="crypto-hash-rsa-23.html">3.3 定制的 Hash 函数：MD5（PPT 第 34–43 页）</a>
+<a class="sub" href="crypto-hash-rsa-24.html">MD5 的整体结构（PPT 第 35 页）</a>
+<a class="sub" href="crypto-hash-rsa-25.html">（1）消息填充（PPT 第 36 页）</a>
+<a class="sub" href="crypto-hash-rsa-26.html">（2）初始化（PPT 第 37 页）</a>
+<a class="sub" href="crypto-hash-rsa-27.html">（3）处理（PPT 第 38 页）</a>
+<a class="sub" href="crypto-hash-rsa-28.html">MD5 的压缩函数：一步迭代怎么算（PPT 第 39–40 页）</a>
+<a class="sub" href="crypto-hash-rsa-29.html">MD5 的四个逻辑函数（PPT 第 41 页）</a>
+<a class="sub" href="crypto-hash-rsa-30.html">MD5 的常量 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">T[i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mclose">]</span></span></span></span></span>（PPT 第 41 页）</a>
+<a class="sub" href="crypto-hash-rsa-31.html">MD5 的消息字使用次序（PPT 第 42 页）</a>
+<a class="sub" href="crypto-hash-rsa-32.html">MD5 的循环左移位数表（PPT 第 43 页）</a>
+<a class="sub" href="crypto-hash-rsa-33.html"><mark class="bubu">补</mark>MD5 的现状与历史教训</a>
+<a class="i" href="crypto-hash-rsa-34.html">4　带密钥密码 Hash 函数：MAC</a>
+<a class="sub" href="crypto-hash-rsa-35.html">4.2 由 MDC 构造的 MAC（PPT 第 48–49 页）</a>
+<a class="sub" href="crypto-hash-rsa-36.html">4.3 定制的 MAC：MD5-MAC（PPT 第 50–52 页）</a>
+<a class="i" href="crypto-hash-rsa-37.html">第四讲　小结与自测</a>
+<div class="sg">第五讲　RSA 和 Rabin 算法</div>
+<a class="i" href="crypto-hash-rsa-38.html">导言：公钥密码从哪来</a>
+<a class="i" href="crypto-hash-rsa-39.html">1　RSA 加密算法</a>
+<a class="sub" href="crypto-hash-rsa-40.html">算法 2　RSA 公钥加密（PPT 第 9 页）</a>
+<a class="sub" href="crypto-hash-rsa-41.html">证明解密过程正确（PPT 第 10–11 页）</a>
+<a class="sub" href="crypto-hash-rsa-42.html">评论：用 λ 代替 φ（PPT 第 12 页）</a>
+<a class="sub" href="crypto-hash-rsa-43.html">1.2 例子 1：完整走一遍（PPT 第 13 页）</a>
+<a class="i" href="crypto-hash-rsa-44.html">2　RSA 加密的执行</a>
+<a class="i" href="crypto-hash-rsa-45.html">3　RSA 加密的安全</a>
+<a class="sub" href="crypto-hash-rsa-46.html">3.2 关于整数分解（PPT 第 19–30 页）</a>
+<a class="sub" href="crypto-hash-rsa-47.html">3.2.1 指数分解方法（PPT 第 20–23 页）</a>
+<a class="sub" href="crypto-hash-rsa-48.html">3.2.2 Pollard 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 算法（PPT 第 24–27 页）</a>
+<a class="sub" href="crypto-hash-rsa-49.html">3.2.2 Pollard 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 算法（PPT 第 24–27 页）（续 1）</a>
+<a class="sub" href="crypto-hash-rsa-50.html">3.2.3 二次域筛法（PPT 第 28–29 页）</a>
+<a class="sub" href="crypto-hash-rsa-51.html">3.2.4 整数分解的进展（PPT 第 30 页）</a>
+<a class="sub" href="crypto-hash-rsa-52.html">3.3 小加密指数 e（PPT 第 31–32 页）</a>
+<a class="sub" href="crypto-hash-rsa-53.html">3.4 小解密指数 d（PPT 第 33 页）</a>
+<a class="sub" href="crypto-hash-rsa-54.html">3.5 乘法特性（PPT 第 34–36 页）</a>
+<a class="sub" href="crypto-hash-rsa-55.html">3.6 共模攻击（PPT 第 37 页）</a>
+<a class="sub" href="crypto-hash-rsa-56.html">3.7 部分密钥泄露攻击（PPT 第 38–39 页）</a>
+<a class="sub" href="crypto-hash-rsa-57.html">3.8 循环攻击（PPT 第 40–42 页）</a>
+<a class="sub" href="crypto-hash-rsa-58.html">3.9 消息隐藏问题（PPT 第 43–44 页）</a>
+<a class="sub" href="crypto-hash-rsa-59.html">3.10 前项搜索攻击（PPT 第 45 页）</a>
+<a class="sub" href="crypto-hash-rsa-60.html">3.11 RSA-OAEP（PPT 第 46–48 页）</a>
+<a class="sub" href="crypto-hash-rsa-61.html">3.12 定时攻击（PPT 第 49–55 页）</a>
+<a class="i" href="crypto-hash-rsa-62.html">4　RSA 加密实践</a>
+<a class="sub" href="crypto-hash-rsa-63.html">4.2 素数的选择（PPT 第 57–60 页）</a>
+<a class="sub" href="crypto-hash-rsa-64.html">4.3 指数（PPT 第 61–63 页）</a>
+<a class="i" href="crypto-hash-rsa-65.html">5　Rabin 加密算法</a>
+<a class="i" href="crypto-hash-rsa-66.html">6　Rabin 加密的执行</a>
+<a class="i" href="crypto-hash-rsa-67.html">7　Rabin 加密的安全</a>
+<a class="i" href="crypto-hash-rsa-68.html">8　公钥加密的总结</a>
+<a class="i" href="crypto-hash-rsa-69.html">第五讲　小结与自测</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-hash-rsa-70.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-hash-rsa-71.html">附录 B　关键常数速查</a>
+<a class="i cur" data-h="s-1" href="crypto-hash-rsa-72.html">附录 C　常见疑问 FAQ</a>
+<a class="i" href="crypto-hash-rsa-73.html">附录 D　自测题参考答案</a>
+<a class="sub" href="crypto-hash-rsa-74.html">D.2 第五讲（RSA 与 Rabin）</a>
+<a class="sub" href="crypto-hash-rsa-75.html">D.2 第五讲（RSA 与 Rabin）（续 1）</a>
+<a class="sub" href="crypto-hash-rsa-76.html">D.2 第五讲（RSA 与 Rabin）（续 2）</a>
+<a class="sub" href="crypto-hash-rsa-77.html">D.2 第五讲（RSA 与 Rabin）（续 3）</a>
+<a class="sub" href="crypto-hash-rsa-78.html">D.2 第五讲（RSA 与 Rabin）（续 4）</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+
+<h2 id="s-1">附录 C　常见疑问 FAQ</h2>
+<p><strong>Q1：Hash 函数又不加密，为什么值得单独讲一讲？</strong></p>
+<p>因为它出现在现代密码系统的每个角落，而且<strong>它是公钥密码的零件</strong>：数字签名要先对摘要签名（否则签名一份大文件要跑几秒的模幂）、RSA-OAEP 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi></mrow><annotation encoding="application/x-tex">G</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span></span></span></span></span> 和 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span></span> 就是 Hash 函数、口令表存的是 Hash 值、消息认证码是&quot;带密钥的 Hash&quot;。<strong>第五讲里到处都在用第四讲的成果</strong>——先讲指纹、再讲公钥，顺序不是巧合。</p>
+<p><strong>Q2：&quot;抗原像&quot;和&quot;抗第二原像&quot;看起来差不多，为什么要分两条？</strong></p>
+<p>差别在<strong>攻击者手里&quot;已经固定了什么&quot;</strong>：</p>
+<ul>
+<li><strong>抗原像</strong>：输出是<strong>指定</strong>的（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi></mrow><annotation encoding="application/x-tex">y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span> 由别人给），攻击者要找<strong>任意</strong>一个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">x&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>。这不是&quot;还原原输入&quot;，而是&quot;找到一个能产生同样输出就行&quot;（所以叫&quot;原像不可逆&quot;而不是&quot;输入不可逆&quot;）。</li>
+<li><strong>抗第二原像</strong>：<strong>第一个</strong>输入是别人指定的（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>），攻击者只能改<strong>第二个</strong>。</li>
+</ul>
+<p><strong>自由度不同，难度也不同。</strong> 这两条在逻辑上<strong>互不蕴含</strong>（事实 3）——所以必须分开列。</p>
+<p><strong>Q3：为什么说&quot;抗碰撞&quot;比&quot;抗第二原像&quot;强？</strong></p>
+<p>严格的证明是一个<strong>归约</strong>：假设存在算法 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></span> 能攻破抗第二原像（给定 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span> 找到 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">x&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>），那么攻击抗碰撞就变成&quot;先随便挑一个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>，调用 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></span> 拿 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">x&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>&quot;。<strong>所以&quot;抗碰撞&quot;能推出&quot;抗第二原像&quot;。</strong> 反过来推不出来——因为抗碰撞的场景里攻击者连&quot;第一个输入&quot;都能自己挑，自由度更大，所以更难满足。</p>
+<p><strong>Q4：为什么找碰撞只要 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2^{n/2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.888em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mtight">/2</span></span></span></span></span></span></span></span></span></span></span></span></span> 次，找原像却要 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^{n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span></span> 次？</strong></p>
+<p><strong>生日悖论。</strong> 找原像是&quot;拿一个目标去撞&quot;，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span> 个可能值里平均要试一半。找碰撞不是&quot;撞一个指定目标&quot;，而是&quot;找<strong>任意一对</strong>互相撞上的&quot;——而 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 个元素的<strong>配对数</strong>是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo stretchy="false">(</mo><mi>k</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">k(k-1)/2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord">/2</span></span></span></span></span>，<strong>按平方增长</strong>。当 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><msup><mn>2</mn><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">k = 2^{n/2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.888em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mtight">/2</span></span></span></span></span></span></span></span></span></span></span></span></span> 时，配对数 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">2^{n-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></span> 就已经和 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span> 同量级了。</p>
+<p><strong>关键：人数是线性增长，配对数按平方增长——这就是&quot;开方&quot;的由来。</strong></p>
+<p><strong>Q5：MD5 和 SHA-1 结构几乎一样，为什么被攻破的方式不同？</strong></p>
+<p>因为它们有<strong>三处关键差别</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>MD5</th>
+<th>SHA-1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>逻辑函数</td>
+<td>4 个<strong>各不相同</strong></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mn>2</mn></msub><mo>=</mo><msub><mi>f</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">f_2 = f_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>（重复）</td>
+</tr>
+<tr>
+<td>循环移位</td>
+<td><strong>每步都变</strong></td>
+<td>固定 5 和 30</td>
+</tr>
+<tr>
+<td>常量</td>
+<td><strong>64 个</strong>（每步不同）</td>
+<td>4 个（每轮一个）</td>
+</tr>
+</tbody>
+</table>
+<p>MD5 的&quot;每步都变&quot;（函数、常量、移位、消息字全都变）<strong>抵抗&quot;对称性攻击&quot;的能力更强</strong>，所以它被攻破靠的是&quot;输出只有 128 比特（强度 64 比特）+ 大整数差分分析&quot;；而 SHA-1 的&quot;静态结构&quot;给了攻击者更稳定的把手（尤其是 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mn>2</mn></msub><mo>=</mo><msub><mi>f</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">f_2 = f_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 和固定移位），所以它被攻破时用的是另一条路线。<strong>结构相似不等于安全性相似。</strong></p>
+<p><strong>Q6：为什么 PPT 说&quot;MD5 发现了弱点&quot;，但后面又有很多系统继续用它？</strong></p>
+<p>因为**&quot;有理论弱点&quot;和&quot;能被实际攻击&quot;之间有一个时间差**：</p>
+<ul>
+<li>1993 年就发现了&quot;伪碰撞&quot;；1996 年找到压缩函数的碰撞；</li>
+<li><strong>2004 年</strong>王小云等才给出<strong>完整的 MD5 碰撞</strong>（约 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>40</mn></msup></mrow><annotation encoding="application/x-tex">2^{40}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">40</span></span></span></span></span></span></span></span></span></span></span></span></span>）；</li>
+<li><strong>2007 年</strong>才有&quot;预测前缀碰撞&quot;（能造出一个正常文件 + 一个恶意文件共享 MD5）；</li>
+<li><strong>2008 年</strong>才出现&quot;Rogue CA&quot;（实际伪造证书）。</li>
+</ul>
+<p><strong>从&quot;警告&quot;到&quot;实际危害&quot;隔了 11 年，很多系统在明知有风险的情况下继续用了很多年。</strong> 教训是：<strong>&quot;发现弱点&quot;要立刻处理，不要等&quot;实际攻击出现&quot;。</strong></p>
+<p><strong>Q7：CBC-MAC 为什么要把 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>V</mi></mrow><annotation encoding="application/x-tex">IV</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span></span> 固定成全零？这样不就没有随机性、不安全了吗？</strong></p>
+<p><strong>因为 CBC-MAC 和 CBC 加密的安全目标完全不同</strong>：</p>
+<ul>
+<li>CBC <strong>加密</strong>要的是&quot;同一条明文两次加密结果不同&quot;（所以才需要随机 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>V</mi></mrow><annotation encoding="application/x-tex">IV</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span></span>）；</li>
+<li>CBC-<strong>MAC</strong> 要的是&quot;<strong>同一条消息永远给出同一个 MAC</strong>&quot;（否则接收方没法验证！）。</li>
+</ul>
+<p><strong>所以去掉 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>V</mi></mrow><annotation encoding="application/x-tex">IV</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span></span> 不是&quot;疏忽&quot;，而是&quot;目标变了&quot;。</strong> 这也解释了为什么 CBC-MAC 只输出<strong>最后一块</strong>（加密要输出全部密文块）——<strong>&quot;只留最后一块&quot;提供了不可逆的压缩，这是单向性的来源。</strong></p>
+<p><strong>Q8：为什么 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mi>h</mi><mo stretchy="false">(</mo><mi>k</mi><mi mathvariant="normal">∥</mi><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">M = h(k\|x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span> 不行，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mi>h</mi><mo stretchy="false">(</mo><mi>x</mi><mi mathvariant="normal">∥</mi><mi>k</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">M = h(x\|k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mord">∥</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span></span> 也不行，非要 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false">(</mo><mi>k</mi><mi mathvariant="normal">∥</mi><mi>p</mi><mi mathvariant="normal">∥</mi><mi>x</mi><mi mathvariant="normal">∥</mi><mi>k</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">h(k\|p\|x\|k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord">∥</span><span class="mord mathnormal">p</span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mord">∥</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span></span>？</strong></p>
+<p>因为两个朴素的构造各中一个坑：</p>
+<table>
+<thead>
+<tr>
+<th>构造</th>
+<th>漏洞</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false">(</mo><mi>k</mi><mi mathvariant="normal">∥</mi><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">h(k\|x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span></td>
+<td><strong>长度扩展</strong></td>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>=</mo><mi>h</mi><mo stretchy="false">(</mo><mi>k</mi><mi mathvariant="normal">∥</mi><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">M = h(k\|x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span> <strong>就是内部链变量状态</strong>，攻击者拿它当新起点继续往前跑，就得到 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false">(</mo><mi>k</mi><mi mathvariant="normal">∥</mi><mi>x</mi><mi mathvariant="normal">∥</mi><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">h(k\|x\|y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord">∥</span><span class="mord mathnormal">x</span><span class="mord">∥</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span></td>
+</tr>
+<tr>
+<td><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo stretchy="false">(</mo><mi>x</mi><mi mathvariant="normal">∥</mi><mi>k</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">h(x\|k)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mord">∥</span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span></span></td>
+<td><strong>碰撞</strong></td>
+<td>攻击者花 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mn>2</mn><mrow><mi>n</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(2^{n/2})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mtight">/2</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 找到一对&quot;内部状态相同&quot;的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo separator="true">,</mo><msup><mi>x</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">x, x&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>，<strong>加上同一个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 后缀之后仍然相同</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>所以密钥必须&quot;两头都放&quot;</strong>——开头的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 挡住碰撞（攻击者算不出 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mi mathvariant="normal">∥</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">k\|p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mord">∥</span><span class="mord mathnormal">p</span></span></span></span></span> 之后的内部状态），末尾的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 挡住扩展。<strong>那个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></span> 也有用：把 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span> 填满一个完整分组，避免&quot;密钥位移攻击&quot;。</strong> 这正是 HMAC 采用的思路。</p>
+<p><strong>Q9：RSA 的&quot;安全性没被证明&quot;到底是什么意思？</strong></p>
+<p>意思是<strong>只知道一个方向的蕴含</strong>：</p>
+<p><div class="jysmath jysmath-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>分解 </mtext><mi>n</mi><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mtext>攻破 RSA</mtext><mspace width="1em"/><mtext>（成立）</mtext></mrow><annotation encoding="application/x-tex">\text{分解 } n \;\Longrightarrow\; \text{攻破 RSA} \quad \text{（成立）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7073em;vertical-align:-0.024em;"></span><span class="mord text"><span class="mord cjk_fallback">分解</span><span class="mord"> </span></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">攻破</span><span class="mord"> RSA</span></span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord cjk_fallback">（成立）</span></span></span></span></span></span></div>
+<div class="jysmath jysmath-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>攻破 RSA</mtext><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mtext>分解 </mtext><mi>n</mi><mspace width="1em"/><mtext>（未证明）</mtext></mrow><annotation encoding="application/x-tex">\text{攻破 RSA} \;\Longrightarrow\; \text{分解 } n \quad \text{（未证明）}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7073em;vertical-align:-0.024em;"></span><span class="mord text"><span class="mord cjk_fallback">攻破</span><span class="mord"> RSA</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">分解</span><span class="mord"> </span></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord cjk_fallback">（未证明）</span></span></span></span></span></span></div></p>
+<p><strong>换个说法</strong>：我们只证明了&quot;分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 是一条能攻破 RSA 的路&quot;，<strong>没有排除&quot;还有别的路（不分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 也能攻破）&quot;</strong>。</p>
+<p><strong>Rabin 就不一样</strong>：它证明了两个方向都成立——<strong>任何攻破 Rabin 的方法都能被转换成&quot;分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span>&quot;的方法</strong>。<strong>所以 Rabin 的安全性是完全&quot;可证明&quot;的。</strong></p>
+<p><strong>Q10：既然&quot;知道 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 就能分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span>&quot;，那&quot;分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 困难&quot;这个假设还有什么用？</strong></p>
+<p><strong>很有用，而且正是它保证了 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 不可求。</strong> 逻辑链是这样的：</p>
+<div class="jysmath jysmath-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>想求 </mtext><mi>d</mi><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mtext>需要 </mtext><mi>φ</mi><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mtext>等价于分解 </mtext><mi>n</mi><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mtext>假设做不到</mtext></mrow><annotation encoding="application/x-tex">\text{想求 } d \;\Longrightarrow\; \text{需要 } \varphi \;\Longrightarrow\; \text{等价于分解 } n \;\Longrightarrow\; \text{假设做不到}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7184em;vertical-align:-0.024em;"></span><span class="mord text"><span class="mord cjk_fallback">想求</span><span class="mord"> </span></span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord cjk_fallback">需要</span><span class="mord"> </span></span><span class="mord mathnormal">φ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7073em;vertical-align:-0.024em;"></span><span class="mord text"><span class="mord cjk_fallback">等价于分解</span><span class="mord"> </span></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">假设做不到</span></span></span></span></span></span></div>
+<p><strong>&quot;知道 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 就能分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span>&quot;这条事实的作用是&quot;把 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 和分解绑在一起&quot;</strong>——它说明 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 的保密性和分解的困难性是<strong>同一个问题的两面</strong>。所以这条事实不是削弱了 RSA，而是<strong>加强了&quot;必须保守 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span>&quot;这个要求</strong>。</p>
+<p><strong>Q11：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span> 可以取 3，为什么 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 不能取小？</strong></p>
+<p>因为**<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span> 是公开的，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 是秘密的**，这个差别决定了它们承受攻击的能力：</p>
+<ul>
+<li><strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span> 小的问题</strong>（小消息、群发）靠的是&quot;<strong>取模失效</strong>&quot;——攻击者看到的是&quot;没被取模的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>m</mi><mi>e</mi></msup></mrow><annotation encoding="application/x-tex">m^e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord mathnormal">m</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">e</span></span></span></span></span></span></span></span></span></span></span></span>&quot;。<strong>加随机填充就能破坏这个条件</strong>（让 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></span> 变大、每次不同）。</li>
+<li><strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 小的问题</strong>靠的是&quot;<strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mi>d</mi><mo>≡</mo><mn>1</mn><mspace></mspace><mspace width="0.4444em"/><mo stretchy="false">(</mo><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mspace width="0.3333em"/><mi>φ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">ed \equiv 1 \pmod \varphi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace allowbreak"></span><span class="mspace" style="margin-right:0.4444em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord mathrm">mod</span></span></span><span class="mspace" style="margin-right:0.3333em;"></span><span class="mord mathnormal">φ</span><span class="mclose">)</span></span></span></span></span> 这个方程可以被解</strong>&quot;——Wiener 用连分数、Boneh–Durfee 用格基约化，<strong>从 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>e</mi><mi>n</mi></mfrac><mo>≈</mo><mfrac><mi>k</mi><mi>d</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{e}{n} \approx \frac{k}{d}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0404em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.6954em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">e</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2251em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span> 里把 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 挖出来</strong>。<strong>这个问题没有&quot;填充&quot;能帮上忙</strong>，因为它是密钥本身的性质。</li>
+</ul>
+<p><strong>所以工程上：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span> 可以小（推荐 65537），<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 必须 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>&gt;</mo><msup><mi>n</mi><mn>0.292</mn></msup></mrow><annotation encoding="application/x-tex">&gt; n^{0.292}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0.292</span></span></span></span></span></span></span></span></span></span></span></span></span>。</strong></p>
+<p><strong>Q12：为什么&quot;共模&quot;设计（一个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 配多个密钥对）绝对不能用？</strong></p>
+<p>因为<strong>每个合法用户本身就是一台&quot;分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 的机器&quot;</strong>：</p>
+<ol>
+<li>他手里有自己的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>e</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>d</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(e_i, d_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>；</li>
+<li>由事实 2，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>i</mi></msub><msub><mi>d</mi><mi>i</mi></msub><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">e_i d_i - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 是一个<strong>通用指数</strong>；</li>
+<li>套用&quot;通用指数分解方法&quot;，他<strong>以约 1/2 的概率</strong>就能分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span>；</li>
+<li>拿到 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo separator="true">,</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">p, q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span></span></span></span></span> 就有 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi></mrow><annotation encoding="application/x-tex">\varphi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">φ</span></span></span></span></span>，<strong>于是能算出所有人的私钥 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">d_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></strong>。</li>
+</ol>
+<p><strong>——每个用户都能解密所有人的消息、伪造所有人的签名，整个信任体系崩溃。</strong> 顺便注意：<strong>真正的&quot;共模攻击&quot;（同一个 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 配不同的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span>、同一条消息）是另一个攻击</strong>，用扩展 Euclidean 算法线性组合两个指数即可恢复明文，连分解都不需要。</p>
+<p><strong>Q13：定时攻击听起来像是&quot;物理攻击&quot;，为什么要在密码课上学？</strong></p>
+<p>因为它<strong>门槛最低、场景最普遍</strong>：</p>
+<ul>
+<li><strong>不需要物理接触</strong>——测一次次网络响应的时间就够了；</li>
+<li><strong>不需要特殊仪器</strong>——一个高精度计时器即可；</li>
+<li><strong>攻击的是&quot;实现&quot;，而不是&quot;数学&quot;</strong>——所以它<strong>不会因为&quot;算法被证明安全&quot;而消失</strong>。</li>
+</ul>
+<p><strong>它的教学价值在于&quot;提醒你&quot;</strong>：<strong>&quot;算法安全&quot;和&quot;系统安全&quot;之间隔着&quot;实现&quot;这道鸿沟。</strong> 这就是为什么&quot;用标准实现（OpenSSL 等）&quot;这么重要——<strong>它们已经把这些坑填过了。</strong></p>
+<p><strong>Q14：Rabin 明明&quot;可证明安全&quot;，为什么实际用得少？</strong></p>
+<p>三个工程原因：</p>
+<ol>
+<li><strong>解密有 4 个候选</strong>——必须靠冗余规则&quot;猜&quot;出唯一明文，多一道工序（RSA 的解密是唯一的）；</li>
+<li><strong>没有性能优势</strong>——加密只需 1 次模平方（比 RSA 的 17 次快），但 <strong>RSA 在混合加密里只加密几十字节的对称密钥，这点差别对整体速度没影响</strong>；而<strong>解密代价两者在同一量级</strong>；</li>
+<li><strong>签名同样麻烦</strong>——签名要做&quot;开方&quot;，也要处理&quot;选哪个根&quot;的问题。</li>
+</ol>
+<p><strong>所以&quot;理论漂亮、工程麻烦&quot;是准确的评价。</strong> 但它的价值不在实用，而在<strong>它是唯一一个&quot;安全性可以严格证明&quot;的公钥方案</strong>——<strong>给整个公钥密码指出了理论上的边界。</strong></p>
+<p><strong>Q15：为什么这一讲的攻击几乎都不攻击&quot;分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 困难&quot;这个假设？</strong></p>
+<p>因为<strong>攻&quot;设计&quot;和&quot;用法&quot;比攻&quot;数学&quot;容易得多</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>攻击</th>
+<th>攻的是什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.3 小 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span></td>
+<td><strong>参数选择</strong>（小 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span> + 群发同一消息）</td>
+</tr>
+<tr>
+<td>3.4 小 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span></td>
+<td><strong>参数选择</strong></td>
+</tr>
+<tr>
+<td>3.5 乘法特性</td>
+<td><strong>使用方式</strong>（有解密预言机 + 无格式校验）</td>
+</tr>
+<tr>
+<td>3.6 共模</td>
+<td><strong>系统设计</strong>（共用模 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span>）</td>
+</tr>
+<tr>
+<td>3.7 部分泄露</td>
+<td><strong>密钥管理</strong>（生成方式可预测）</td>
+</tr>
+<tr>
+<td>3.10 前项搜索</td>
+<td><strong>使用方式</strong>（消息空间小 + 确定性加密）</td>
+</tr>
+<tr>
+<td>3.12 定时攻击</td>
+<td><strong>实现细节</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>一个都没碰&quot;分解 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></span> 有多难&quot;。</strong> 这就是为什么第 4 节（RSA 加密实践）和 3.11 节（OAEP）如此重要——<strong>RSA 的安全性有一大半取决于&quot;怎么用&quot;，而不是&quot;算法本身&quot;。</strong></p>
+<p><strong>Q16：学完这两讲，最该记住的一句话是什么？</strong></p>
+<p><strong>Hash 函数要抗碰撞，公钥密码要靠难题。</strong></p>
+<ul>
+<li>第四讲的核心是&quot;<strong>抗碰撞</strong>&quot;——它决定了 Hash 值要多长（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">2n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mord mathnormal">n</span></span></span></span></span> 的关系）、决定了数字签名能不能用、也决定了 MD5/SHA-1 为什么被淘汰；</li>
+<li>第五讲的核心是&quot;<strong>靠难题</strong>&quot;——RSA 靠&quot;大整数分解被相信是困难的&quot;（只是&quot;相信&quot;），Rabin 靠&quot;模合数开平方<strong>被证明</strong>等价于分解&quot;。<strong>而这两个讲的交点就是：所有实际密码学的安全性，都建立在&quot;某个未被证明的假设&quot;上。</strong></li>
+</ul>
+<hr>
+
+<div class="pager"><a class="pg prev" href="crypto-hash-rsa-71.html"><span>← 上一节</span><b>附录 B　关键常数速查</b></a><a class="pg next" href="crypto-hash-rsa-73.html"><span>下一节 →</span><b>附录 D　自测题参考答案</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../index.html#about">关于我</a>
+            <a href="../index.html#bilibili">B站空间</a>
+            <a href="study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
