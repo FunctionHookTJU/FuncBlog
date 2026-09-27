@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>（1）消息填充（PPT 第 27 页） · 密码学讲义：密码 Hash 函数与 RSA / Rabin 算法</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../styles/style.css">
+<link rel="stylesheet" href="../../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../../index.html">
+            <img class="logo-avatar" src="../../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../diary.html">日记</a></li>
+                <li><a href="../study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="../communicate.html">交流</a></li>
+                <li><a href="../picture.html">图片墙</a></li>
+                <li><a href="../products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="index.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-hash-rsa-01.html">0.1 承接：第一册已经铺好的地基</a>
+<a class="i" href="crypto-hash-rsa-02.html">0.2 <mark class="bubu">补</mark>模运算：余数、同余、模逆</a>
+<a class="i" href="crypto-hash-rsa-03.html">0.3 <mark class="bubu">补</mark>最大公约数与扩展 Euclidean 算法</a>
+<a class="i" href="crypto-hash-rsa-04.html">0.4 <mark class="bubu">补</mark>素数、欧拉函数 φ(n)</a>
+<a class="i" href="crypto-hash-rsa-05.html">0.5 <mark class="bubu">补</mark>欧拉定理与费马小定理</a>
+<a class="i" href="crypto-hash-rsa-06.html">0.6 <mark class="bubu">补</mark>中国剩余定理（CRT）</a>
+<a class="i" href="crypto-hash-rsa-07.html">0.7 <mark class="bubu">补</mark>两类&quot;困难问题&quot;：大整数分解与模平方根</a>
+<a class="i" href="crypto-hash-rsa-08.html">0.8 <mark class="bubu">补</mark>生日悖论：为什么抗碰撞的成本只有&quot;一半&quot;</a>
+<a class="i" href="crypto-hash-rsa-09.html">0.9 <mark class="bubu">补</mark>Hash 函数的三个直觉</a>
+<div class="sg">第四讲　密码 Hash 函数</div>
+<a class="i" href="crypto-hash-rsa-10.html">导言：Hash 函数是干什么的</a>
+<a class="i" href="crypto-hash-rsa-11.html">1　分类与架构</a>
+<a class="i" href="crypto-hash-rsa-12.html">2　基本构造</a>
+<a class="i" href="crypto-hash-rsa-13.html">3　无密钥密码 Hash 函数：MDC</a>
+<a class="sub" href="crypto-hash-rsa-14.html">3.2 定制的 Hash 函数：SHA-1（PPT 第 25–33 页）</a>
+<a class="sub" href="crypto-hash-rsa-15.html">SHA-1 的整体结构（PPT 第 26 页）</a>
+<a class="sub cur" data-h="s-1" href="crypto-hash-rsa-16.html">（1）消息填充（PPT 第 27 页）</a>
+<a class="sub" href="crypto-hash-rsa-17.html">（2）初始化（PPT 第 28 页）</a>
+<a class="sub" href="crypto-hash-rsa-18.html">（3）处理（PPT 第 29 页）</a>
+<a class="sub" href="crypto-hash-rsa-19.html">SHA-1 的压缩函数：每一步怎么算（PPT 第 30–31 页）</a>
+<a class="sub" href="crypto-hash-rsa-20.html">SHA-1 的四个基本逻辑函数（PPT 第 32 页）</a>
+<a class="sub" href="crypto-hash-rsa-21.html">SHA-1 的加法常量与字扩展（PPT 第 33 页）</a>
+<a class="sub" href="crypto-hash-rsa-22.html"><mark class="bubu">补</mark>SHA-1 的现状与&quot;长度扩展攻击&quot;</a>
+<a class="sub" href="crypto-hash-rsa-23.html">3.3 定制的 Hash 函数：MD5（PPT 第 34–43 页）</a>
+<a class="sub" href="crypto-hash-rsa-24.html">MD5 的整体结构（PPT 第 35 页）</a>
+<a class="sub" href="crypto-hash-rsa-25.html">（1）消息填充（PPT 第 36 页）</a>
+<a class="sub" href="crypto-hash-rsa-26.html">（2）初始化（PPT 第 37 页）</a>
+<a class="sub" href="crypto-hash-rsa-27.html">（3）处理（PPT 第 38 页）</a>
+<a class="sub" href="crypto-hash-rsa-28.html">MD5 的压缩函数：一步迭代怎么算（PPT 第 39–40 页）</a>
+<a class="sub" href="crypto-hash-rsa-29.html">MD5 的四个逻辑函数（PPT 第 41 页）</a>
+<a class="sub" href="crypto-hash-rsa-30.html">MD5 的常量 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo stretchy="false">[</mo><mi>i</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">T[i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mclose">]</span></span></span></span></span>（PPT 第 41 页）</a>
+<a class="sub" href="crypto-hash-rsa-31.html">MD5 的消息字使用次序（PPT 第 42 页）</a>
+<a class="sub" href="crypto-hash-rsa-32.html">MD5 的循环左移位数表（PPT 第 43 页）</a>
+<a class="sub" href="crypto-hash-rsa-33.html"><mark class="bubu">补</mark>MD5 的现状与历史教训</a>
+<a class="i" href="crypto-hash-rsa-34.html">4　带密钥密码 Hash 函数：MAC</a>
+<a class="sub" href="crypto-hash-rsa-35.html">4.2 由 MDC 构造的 MAC（PPT 第 48–49 页）</a>
+<a class="sub" href="crypto-hash-rsa-36.html">4.3 定制的 MAC：MD5-MAC（PPT 第 50–52 页）</a>
+<a class="i" href="crypto-hash-rsa-37.html">第四讲　小结与自测</a>
+<div class="sg">第五讲　RSA 和 Rabin 算法</div>
+<a class="i" href="crypto-hash-rsa-38.html">导言：公钥密码从哪来</a>
+<a class="i" href="crypto-hash-rsa-39.html">1　RSA 加密算法</a>
+<a class="sub" href="crypto-hash-rsa-40.html">算法 2　RSA 公钥加密（PPT 第 9 页）</a>
+<a class="sub" href="crypto-hash-rsa-41.html">证明解密过程正确（PPT 第 10–11 页）</a>
+<a class="sub" href="crypto-hash-rsa-42.html">评论：用 λ 代替 φ（PPT 第 12 页）</a>
+<a class="sub" href="crypto-hash-rsa-43.html">1.2 例子 1：完整走一遍（PPT 第 13 页）</a>
+<a class="i" href="crypto-hash-rsa-44.html">2　RSA 加密的执行</a>
+<a class="i" href="crypto-hash-rsa-45.html">3　RSA 加密的安全</a>
+<a class="sub" href="crypto-hash-rsa-46.html">3.2 关于整数分解（PPT 第 19–30 页）</a>
+<a class="sub" href="crypto-hash-rsa-47.html">3.2.1 指数分解方法（PPT 第 20–23 页）</a>
+<a class="sub" href="crypto-hash-rsa-48.html">3.2.2 Pollard 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 算法（PPT 第 24–27 页）</a>
+<a class="sub" href="crypto-hash-rsa-49.html">3.2.2 Pollard 的 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span> 算法（PPT 第 24–27 页）（续 1）</a>
+<a class="sub" href="crypto-hash-rsa-50.html">3.2.3 二次域筛法（PPT 第 28–29 页）</a>
+<a class="sub" href="crypto-hash-rsa-51.html">3.2.4 整数分解的进展（PPT 第 30 页）</a>
+<a class="sub" href="crypto-hash-rsa-52.html">3.3 小加密指数 e（PPT 第 31–32 页）</a>
+<a class="sub" href="crypto-hash-rsa-53.html">3.4 小解密指数 d（PPT 第 33 页）</a>
+<a class="sub" href="crypto-hash-rsa-54.html">3.5 乘法特性（PPT 第 34–36 页）</a>
+<a class="sub" href="crypto-hash-rsa-55.html">3.6 共模攻击（PPT 第 37 页）</a>
+<a class="sub" href="crypto-hash-rsa-56.html">3.7 部分密钥泄露攻击（PPT 第 38–39 页）</a>
+<a class="sub" href="crypto-hash-rsa-57.html">3.8 循环攻击（PPT 第 40–42 页）</a>
+<a class="sub" href="crypto-hash-rsa-58.html">3.9 消息隐藏问题（PPT 第 43–44 页）</a>
+<a class="sub" href="crypto-hash-rsa-59.html">3.10 前项搜索攻击（PPT 第 45 页）</a>
+<a class="sub" href="crypto-hash-rsa-60.html">3.11 RSA-OAEP（PPT 第 46–48 页）</a>
+<a class="sub" href="crypto-hash-rsa-61.html">3.12 定时攻击（PPT 第 49–55 页）</a>
+<a class="i" href="crypto-hash-rsa-62.html">4　RSA 加密实践</a>
+<a class="sub" href="crypto-hash-rsa-63.html">4.2 素数的选择（PPT 第 57–60 页）</a>
+<a class="sub" href="crypto-hash-rsa-64.html">4.3 指数（PPT 第 61–63 页）</a>
+<a class="i" href="crypto-hash-rsa-65.html">5　Rabin 加密算法</a>
+<a class="i" href="crypto-hash-rsa-66.html">6　Rabin 加密的执行</a>
+<a class="i" href="crypto-hash-rsa-67.html">7　Rabin 加密的安全</a>
+<a class="i" href="crypto-hash-rsa-68.html">8　公钥加密的总结</a>
+<a class="i" href="crypto-hash-rsa-69.html">第五讲　小结与自测</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-hash-rsa-70.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-hash-rsa-71.html">附录 B　关键常数速查</a>
+<a class="i" href="crypto-hash-rsa-72.html">附录 C　常见疑问 FAQ</a>
+<a class="i" href="crypto-hash-rsa-73.html">附录 D　自测题参考答案</a>
+<a class="sub" href="crypto-hash-rsa-74.html">D.2 第五讲（RSA 与 Rabin）</a>
+<a class="sub" href="crypto-hash-rsa-75.html">D.2 第五讲（RSA 与 Rabin）（续 1）</a>
+<a class="sub" href="crypto-hash-rsa-76.html">D.2 第五讲（RSA 与 Rabin）（续 2）</a>
+<a class="sub" href="crypto-hash-rsa-77.html">D.2 第五讲（RSA 与 Rabin）（续 3）</a>
+<a class="sub" href="crypto-hash-rsa-78.html">D.2 第五讲（RSA 与 Rabin）（续 4）</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+
+<h4 id="s-1">（1）消息填充（PPT 第 27 页）</h4>
+<p><strong>PPT 原文</strong>：</p>
+<blockquote>
+<p>消息填充。填充使得消息的比特长度为 <strong>512 比特的某个倍数减 64</strong>，即使原始消息已满足要求，仍要填充。这样填充的比特数在 <strong>1 到 512</strong>。填充方式是<strong>第一位为 1 其他位是 0</strong>。最后 <strong>64 比特位</strong>用来填充消息被填充前的长度。这形成了长度为 512 比特的一系列分组 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Y</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>Y</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>Y</mi><mrow><mi>L</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">Y_0, Y_1, \dots, Y_{L-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8917em;vertical-align:-0.2083em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.2222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span></span></span></span></span>。</p>
+</blockquote>
+<p><strong>PPT 的示意</strong>：</p>
+<pre><code>┌──────────────────────┬──────────┬──────────────────┐
+│  需要产生 Hash 值的消息  │  100…0   │   消息长度 K       │
+│      K 比特            │ 填充1-512比特│   64 比特         │
+└──────────────────────┴──────────┴──────────────────┘
+└────────────────── L × 512 比特 ──────────────────┘
+</code></pre>
+<p><strong><mark class="bubu">补</mark>&quot;填充到 512 的倍数减 64&quot;，这句话要这么读</strong>：</p>
+<p>设原始消息长 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 比特。我们要让总长度成为 512 的整数倍。<strong>先把 64 比特的长度字段预留出来</strong>，所以填充的目标是：</p>
+<div class="jysmath jysmath-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>总长度</mtext><mo>=</mo><mi>L</mi><mo>×</mo><mn>512</mn><mo separator="true">,</mo><mspace width="2em"/><mtext>而填充部分（含长度字段）的目标长度是 </mtext><mi>L</mi><mo>×</mo><mn>512</mn><mo>−</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">\text{总长度} = L \times 512, \qquad \text{而填充部分（含长度字段）的目标长度是 } L \times 512 - K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord cjk_fallback">总长度</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord">512</span><span class="mpunct">,</span><span class="mspace" style="margin-right:2em;"></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord cjk_fallback">而填充部分（含长度字段）的目标长度是</span><span class="mord"> </span></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">512</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span></div>
+<p><strong>用具体数字走一遍</strong>（这一步千万别跳过，很多人就在这儿卡住）：</p>
+<p><strong>情形 A：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">K = 100</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">100</span></span></span></span></span> 比特</strong></p>
+<pre><code>目标：让 100 + 填充 = L × 512
+
+先预留 64 比特给长度字段，那么消息+填充比特要凑到 L×512 − 64
+试 L = 1：512 − 64 = 448 比特
+  需要填 448 − 100 = 348 比特的&quot;填充比特&quot;
+  这 348 比特里：第 1 位是 1，后面 347 位是 0
+
+总结构：
+┌──────────┬────────────────────────┬──────────────┐
+│ 100 比特  │ 1 后面跟 347 个 0       │ 长度 100      │
+│  消息     │ (=348 比特填充)         │ (64 比特)     │
+└──────────┴────────────────────────┴──────────────┘
+   100    +        348           +      64        = 512 ✓
+</code></pre>
+<p><strong>情形 B：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>448</mn></mrow><annotation encoding="application/x-tex">K = 448</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">448</span></span></span></span></span> 比特</strong></p>
+<pre><code>先预留 64 比特：512 − 64 = 448 比特
+消息已经是 448 比特了！—— 那还要填吗？
+</code></pre>
+<p><strong>要填！</strong> 这正是 PPT 说的&quot;<strong>即使原始消息已满足要求，仍要填充</strong>&quot;。因为如果这时候不填，那么&quot;消息是 448 比特&quot;和&quot;消息是 448 比特 + 后面还有内容&quot;就分不清了。所以：</p>
+<pre><code>试 L = 1：448 − 448 = 0 比特填充空间 → 但至少要填 1 位（那个必须的&quot;1&quot;）
+                                       → 放不下，L 加到 2
+试 L = 2：2×512 − 64 = 960 比特
+  需要填 960 − 448 = 512 比特
+  这 512 比特：第 1 位是 1，后面 511 位是 0
+	
+总结构：
+┌──────────┬────────────────────────┬──────────────┐
+│ 448 比特  │ 1 后面跟 511 个 0       │ 长度 448      │
+│  消息     │ (=512 比特填充)         │ (64 比特)     │
+└──────────┴────────────────────────┴──────────────┘
+   448    +        512           +      64        = 1024 = 2×512 ✓
+</code></pre>
+<p><strong>&quot;填充的比特数在 1 到 512&quot;这句话就是这么来的</strong>：</p>
+<ul>
+<li>最少填 <strong>1</strong> 比特（至少要有那个&quot;1&quot;，哪怕消息本身刚好填满）；</li>
+<li>最多填 <strong>512</strong> 比特（就是情形 B：本来差 0 比特，硬是加满一整块）。</li>
+</ul>
+<p><strong><mark class="bubu">补</mark>为什么填充必须先补&quot;1&quot;再补&quot;0&quot;，而不是直接补一堆&quot;0&quot;？</strong></p>
+<p>如果只补&quot;0&quot;，那么&quot;消息 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span>&quot;和&quot;消息 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 后面跟几个 0&quot;就会得到<strong>完全相同的填充结果</strong>——<strong>这不就是一个免费的碰撞吗？</strong>（两条不同的消息，Hash 值相同。）</p>
+<p>补一个&quot;1&quot;的作用是<strong>标记&quot;这里开始是填充了&quot;</strong>。由于任何真实消息后面都可能跟着 0，唯独&quot;消息本身以一个 1 结尾、而且后面接着填充的 1&quot;这种情况可以被唯一地区分出来。<strong>这就是&quot;可逆填充&quot;（unambiguous padding）的概念</strong>：接收方必须能从填充结果唯一地还原出原始消息边界。</p>
+<p><strong><mark class="bubu">补</mark>为什么长度字段要放最后，而且必须放？</strong> 两个作用：</p>
+<ol>
+<li><strong>消除剩余歧义</strong>：光有&quot;1 + 0…0&quot;，如果消息很长，&quot;从哪儿开始是填充&quot;仍然可能不唯一。长度字段给了<strong>精确的</strong>原始长度。</li>
+<li><strong>让两条长度不同的消息不可能填成同一个结构</strong>：如果 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 长 100 比特、<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">M_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.109em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> 长 200 比特，它们的长度字段不同（分别是 100 和 200 的二进制），所以整个 512 比特分组必然不同。<strong>这就从结构上堵死了&quot;用长度差异制造碰撞&quot;的一整类攻击。</strong></li>
+</ol>
+
+<div class="pager"><a class="pg prev" href="crypto-hash-rsa-15.html"><span>← 上一节</span><b>SHA-1 的整体结构（PPT 第 26 页）</b></a><a class="pg next" href="crypto-hash-rsa-17.html"><span>下一节 →</span><b>（2）初始化（PPT 第 28 页）</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../../index.html#about">关于我</a>
+            <a href="../../index.html#bilibili">B站空间</a>
+            <a href="../study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

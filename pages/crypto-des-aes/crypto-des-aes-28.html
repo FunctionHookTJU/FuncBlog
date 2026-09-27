@@ -1,0 +1,2394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>附录 B　关键常数速查 · 密码学讲义：DES 与 AES</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../styles/style.css">
+<link rel="stylesheet" href="../../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../../index.html">
+            <img class="logo-avatar" src="../../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../diary.html">日记</a></li>
+                <li><a href="../study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="../communicate.html">交流</a></li>
+                <li><a href="../picture.html">图片墙</a></li>
+                <li><a href="../products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="index.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-des-aes-01.html">0.1 密码学到底在解决什么问题</a>
+<a class="i" href="crypto-des-aes-02.html">0.2 对称密码 vs 非对称密码</a>
+<a class="i" href="crypto-des-aes-03.html">0.3 分组密码 vs 流密码</a>
+<a class="i" href="crypto-des-aes-04.html">0.4 比特、字节与位运算（重中之重）</a>
+<a class="i" href="crypto-des-aes-05.html">0.5 三种基本&quot;密码零件&quot;</a>
+<a class="i" href="crypto-des-aes-06.html">0.6 Feistel 结构：DES 的骨架</a>
+<a class="i" href="crypto-des-aes-07.html">0.7 密码分析入门：攻击者知道什么</a>
+<a class="i" href="crypto-des-aes-08.html">0.8 <mark class="bubu">补</mark>后文会用到的三个小概念</a>
+<div class="sg">第二讲　数据加密标准（DES）</div>
+<a class="i" href="crypto-des-aes-09.html">导言：DES 的由来与它的历史包袱</a>
+<a class="i" href="crypto-des-aes-10.html">1　简化 DES 型算法</a>
+<a class="i" href="crypto-des-aes-11.html">2　差分分析</a>
+<a class="i" href="crypto-des-aes-12.html">3　DES 本体</a>
+<a class="i" href="crypto-des-aes-13.html">4　DES 不是一个群</a>
+<a class="i" href="crypto-des-aes-14.html">5　破译 DES</a>
+<a class="i" href="crypto-des-aes-15.html">6　口令安全</a>
+<a class="i" href="crypto-des-aes-16.html">第二讲　小结与自测</a>
+<div class="sg">第三讲　高级加密标准（AES）</div>
+<a class="i" href="crypto-des-aes-17.html">导言：AES 是怎么选出来的</a>
+<a class="i" href="crypto-des-aes-18.html">1　有限域 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mi>F</mi><mo stretchy="false">(</mo><msup><mi>p</mi><mi>n</mi></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">GF(p^{n})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">GF</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span> 的知识</a>
+<a class="i" href="crypto-des-aes-19.html">2　基本算法</a>
+<a class="i" href="crypto-des-aes-20.html">3　层</a>
+<a class="i" href="crypto-des-aes-21.html">4　解密</a>
+<a class="i" href="crypto-des-aes-22.html">5　设计思考</a>
+<a class="i" href="crypto-des-aes-23.html">6　执行考虑</a>
+<a class="i" href="crypto-des-aes-24.html">7　AES 的积极意义</a>
+<a class="i" href="crypto-des-aes-25.html">8　加密模式</a>
+<a class="i" href="crypto-des-aes-26.html">第三讲　小结与自测</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-des-aes-27.html">附录 A　术语中英对照表</a>
+<a class="i cur" data-h="s-1" href="crypto-des-aes-28.html">附录 B　关键常数速查</a>
+<a class="i" href="crypto-des-aes-29.html">附录 C　常见疑问 FAQ</a>
+<a class="i" href="crypto-des-aes-30.html">附录 D　自测题参考答案</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+<nav class="nav">
+<p class="t">本页目录</p>
+<ul class="toc">
+<li class="lv3"><a href="#s-2">B.1 DES 参数</a></li>
+<li class="lv3"><a href="#s-3">B.2 DES 初始置换 IP（左）与逆初始置换 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><msup><mi>P</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">IP^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></span>（右）</a></li>
+<li class="lv3"><a href="#s-4">B.3 DES 扩张函数 E 与置换函数 P</a></li>
+<li class="lv3"><a href="#s-5">B.4 DES 密钥置换 PC-1、PC-2 与循环移位表</a></li>
+<li class="lv3"><a href="#s-6">B.5 DES 的 8 个 S-盒（十进制，每盒 4 行 × 16 列）</a></li>
+<li class="lv3"><a href="#s-7">B.6 AES 的逆 S-盒（IBS 用，十进制）</a></li>
+<li class="lv3"><a href="#s-8">B.7 AES 的轮常量与固定矩阵</a></li>
+<li class="lv3"><a href="#s-9">B.8 三种密钥长度对照</a></li>
+<li class="lv3"><a href="#s-10">B.9 DES vs AES 总对比（强烈建议背下这张表）</a></li>
+</ul>
+</nav>
+
+<h2 id="s-1">附录 B　关键常数速查</h2>
+<h3 id="s-2">B.1 DES 参数</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分组长度</td>
+<td>64 比特</td>
+</tr>
+<tr>
+<td>名义密钥长度</td>
+<td>64 比特</td>
+</tr>
+<tr>
+<td><strong>有效密钥长度</strong></td>
+<td><strong>56 比特</strong>（8 位奇偶校验位，第 8/16/24/32/40/48/56/64 位）</td>
+</tr>
+<tr>
+<td>奇偶校验位个数</td>
+<td>8</td>
+</tr>
+<tr>
+<td>轮数</td>
+<td>16</td>
+</tr>
+<tr>
+<td>轮密钥长度 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">K_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></td>
+<td>48 比特</td>
+</tr>
+<tr>
+<td>f 函数：E 扩张</td>
+<td>32 → 48 比特</td>
+</tr>
+<tr>
+<td>f 函数：S-盒</td>
+<td>8 个，每个 6 → 4 比特</td>
+</tr>
+<tr>
+<td>f 函数：P 置换</td>
+<td>32 → 32 比特</td>
+</tr>
+<tr>
+<td>差分分析攻破简化 DES 所需明文对</td>
+<td>约 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>47</mn></msup></mrow><annotation encoding="application/x-tex">2^{47}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">47</span></span></span></span></span></span></span></span></span></span></span></span></span>（15 轮）</td>
+</tr>
+<tr>
+<td>线性分析理论所需明密文对</td>
+<td>约 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>43</mn></msup></mrow><annotation encoding="application/x-tex">2^{43}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">43</span></span></span></span></span></span></span></span></span></span></span></span></span></td>
+</tr>
+<tr>
+<td>弱密钥</td>
+<td><strong>4 个</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>K</mi></msub><msub><mi>E</mi><mi>K</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">E_K E_K(x) = x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>）</td>
+</tr>
+<tr>
+<td>半弱密钥</td>
+<td><strong>6 对</strong>（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>E</mi><mi>K</mi></msub><mn>1</mn><msub><mi>E</mi><mi>K</mi></msub><mn>2</mn><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">E_K1 E_K2(x) = x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">1</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">2</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>）</td>
+</tr>
+<tr>
+<td>定理 1 的实验数据</td>
+<td>33 个明文循环长度的最小公倍数 ≈ <strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>277</mn></msup></mrow><annotation encoding="application/x-tex">10^{277}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">277</span></span></span></span></span></span></span></span></span></span></span></span></span></strong></td>
+</tr>
+<tr>
+<td>2DES 有效强度</td>
+<td>≈ <strong>57 比特</strong></td>
+</tr>
+<tr>
+<td>3DES 有效强度</td>
+<td>≈ <strong>112 比特</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-3">B.2 DES 初始置换 IP（左）与逆初始置换 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><msup><mi>P</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">IP^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></span>（右）</h3>
+<p><strong>IP</strong>（输出第 1 位取自输入第 58 位 …）：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>58</td>
+<td>50</td>
+<td>42</td>
+<td>34</td>
+<td>26</td>
+<td>18</td>
+<td>10</td>
+<td>2</td>
+</tr>
+<tr>
+<td>60</td>
+<td>52</td>
+<td>44</td>
+<td>36</td>
+<td>28</td>
+<td>20</td>
+<td>12</td>
+<td>4</td>
+</tr>
+<tr>
+<td>62</td>
+<td>54</td>
+<td>46</td>
+<td>38</td>
+<td>30</td>
+<td>22</td>
+<td>14</td>
+<td>6</td>
+</tr>
+<tr>
+<td>64</td>
+<td>56</td>
+<td>48</td>
+<td>40</td>
+<td>32</td>
+<td>24</td>
+<td>16</td>
+<td>8</td>
+</tr>
+<tr>
+<td>57</td>
+<td>49</td>
+<td>41</td>
+<td>33</td>
+<td>25</td>
+<td>17</td>
+<td>9</td>
+<td>1</td>
+</tr>
+<tr>
+<td>59</td>
+<td>51</td>
+<td>43</td>
+<td>35</td>
+<td>27</td>
+<td>19</td>
+<td>11</td>
+<td>3</td>
+</tr>
+<tr>
+<td>61</td>
+<td>53</td>
+<td>45</td>
+<td>37</td>
+<td>29</td>
+<td>21</td>
+<td>13</td>
+<td>5</td>
+</tr>
+<tr>
+<td>63</td>
+<td>55</td>
+<td>47</td>
+<td>39</td>
+<td>31</td>
+<td>23</td>
+<td>15</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<p><strong><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><msup><mi>P</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">IP^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></span></strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>40</td>
+<td>8</td>
+<td>48</td>
+<td>16</td>
+<td>56</td>
+<td>24</td>
+<td>64</td>
+<td>32</td>
+</tr>
+<tr>
+<td>39</td>
+<td>7</td>
+<td>47</td>
+<td>15</td>
+<td>55</td>
+<td>23</td>
+<td>63</td>
+<td>31</td>
+</tr>
+<tr>
+<td>38</td>
+<td>6</td>
+<td>46</td>
+<td>14</td>
+<td>54</td>
+<td>22</td>
+<td>62</td>
+<td>30</td>
+</tr>
+<tr>
+<td>37</td>
+<td>5</td>
+<td>45</td>
+<td>13</td>
+<td>53</td>
+<td>21</td>
+<td>61</td>
+<td>29</td>
+</tr>
+<tr>
+<td>36</td>
+<td>4</td>
+<td>44</td>
+<td>12</td>
+<td>52</td>
+<td>20</td>
+<td>60</td>
+<td>28</td>
+</tr>
+<tr>
+<td>35</td>
+<td>3</td>
+<td>43</td>
+<td>11</td>
+<td>51</td>
+<td>19</td>
+<td>59</td>
+<td>27</td>
+</tr>
+<tr>
+<td>34</td>
+<td>2</td>
+<td>42</td>
+<td>10</td>
+<td>50</td>
+<td>18</td>
+<td>58</td>
+<td>26</td>
+</tr>
+<tr>
+<td>33</td>
+<td>1</td>
+<td>41</td>
+<td>9</td>
+<td>49</td>
+<td>17</td>
+<td>57</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-4">B.3 DES 扩张函数 E 与置换函数 P</h3>
+<p><strong>E（32 → 48，每行 6 个，共 8 行）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>32</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+</tr>
+<tr>
+<td>8</td>
+<td>9</td>
+<td>10</td>
+<td>11</td>
+<td>12</td>
+<td>13</td>
+</tr>
+<tr>
+<td>12</td>
+<td>13</td>
+<td>14</td>
+<td>15</td>
+<td>16</td>
+<td>17</td>
+</tr>
+<tr>
+<td>16</td>
+<td>17</td>
+<td>18</td>
+<td>19</td>
+<td>20</td>
+<td>21</td>
+</tr>
+<tr>
+<td>20</td>
+<td>21</td>
+<td>22</td>
+<td>23</td>
+<td>24</td>
+<td>25</td>
+</tr>
+<tr>
+<td>24</td>
+<td>25</td>
+<td>26</td>
+<td>27</td>
+<td>28</td>
+<td>29</td>
+</tr>
+<tr>
+<td>28</td>
+<td>29</td>
+<td>30</td>
+<td>31</td>
+<td>32</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>P（32 → 32，每行 8 个，共 4 行）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16</td>
+<td>7</td>
+<td>20</td>
+<td>21</td>
+<td>29</td>
+<td>12</td>
+<td>28</td>
+<td>17</td>
+</tr>
+<tr>
+<td>1</td>
+<td>15</td>
+<td>23</td>
+<td>26</td>
+<td>5</td>
+<td>18</td>
+<td>31</td>
+<td>10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>8</td>
+<td>24</td>
+<td>14</td>
+<td>32</td>
+<td>27</td>
+<td>3</td>
+<td>9</td>
+</tr>
+<tr>
+<td>19</td>
+<td>13</td>
+<td>30</td>
+<td>6</td>
+<td>22</td>
+<td>11</td>
+<td>4</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-5">B.4 DES 密钥置换 PC-1、PC-2 与循环移位表</h3>
+<p><strong>PC-1（64 → 56，丢弃 8 个奇偶校验位；每行 7 个，共 8 行）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>57</td>
+<td>49</td>
+<td>41</td>
+<td>33</td>
+<td>25</td>
+<td>17</td>
+<td>9</td>
+</tr>
+<tr>
+<td>1</td>
+<td>58</td>
+<td>50</td>
+<td>42</td>
+<td>34</td>
+<td>26</td>
+<td>18</td>
+</tr>
+<tr>
+<td>10</td>
+<td>2</td>
+<td>59</td>
+<td>51</td>
+<td>43</td>
+<td>35</td>
+<td>27</td>
+</tr>
+<tr>
+<td>19</td>
+<td>11</td>
+<td>3</td>
+<td>60</td>
+<td>52</td>
+<td>44</td>
+<td>36</td>
+</tr>
+<tr>
+<td>63</td>
+<td>55</td>
+<td>47</td>
+<td>39</td>
+<td>31</td>
+<td>23</td>
+<td>15</td>
+</tr>
+<tr>
+<td>7</td>
+<td>62</td>
+<td>54</td>
+<td>46</td>
+<td>38</td>
+<td>30</td>
+<td>22</td>
+</tr>
+<tr>
+<td>14</td>
+<td>6</td>
+<td>61</td>
+<td>53</td>
+<td>45</td>
+<td>37</td>
+<td>29</td>
+</tr>
+<tr>
+<td>21</td>
+<td>13</td>
+<td>5</td>
+<td>28</td>
+<td>20</td>
+<td>12</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>每轮循环左移位数</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>轮</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+<th>16</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>移位</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>只有第 <strong>1、2、9、16</strong> 轮移 1 位，其余 12 轮移 2 位；总计 28 位（正好一圈）。</p>
+</blockquote>
+<p><strong>PC-2（56 → 48，每行 6 个，共 8 行）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>14</td>
+<td>17</td>
+<td>11</td>
+<td>24</td>
+<td>1</td>
+<td>5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>28</td>
+<td>15</td>
+<td>6</td>
+<td>21</td>
+<td>10</td>
+</tr>
+<tr>
+<td>23</td>
+<td>19</td>
+<td>12</td>
+<td>4</td>
+<td>26</td>
+<td>8</td>
+</tr>
+<tr>
+<td>16</td>
+<td>7</td>
+<td>27</td>
+<td>20</td>
+<td>13</td>
+<td>2</td>
+</tr>
+<tr>
+<td>41</td>
+<td>52</td>
+<td>31</td>
+<td>37</td>
+<td>47</td>
+<td>55</td>
+</tr>
+<tr>
+<td>30</td>
+<td>40</td>
+<td>51</td>
+<td>45</td>
+<td>33</td>
+<td>48</td>
+</tr>
+<tr>
+<td>44</td>
+<td>49</td>
+<td>39</td>
+<td>56</td>
+<td>34</td>
+<td>53</td>
+</tr>
+<tr>
+<td>46</td>
+<td>42</td>
+<td>50</td>
+<td>36</td>
+<td>29</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-6">B.5 DES 的 8 个 S-盒（十进制，每盒 4 行 × 16 列）</h3>
+<p><strong>取用规则：6 比特输入 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>1</mn></msub><msub><mi>b</mi><mn>2</mn></msub><msub><mi>b</mi><mn>3</mn></msub><msub><mi>b</mi><mn>4</mn></msub><msub><mi>b</mi><mn>5</mn></msub><msub><mi>b</mi><mn>6</mn></msub></mrow><annotation encoding="application/x-tex">b_{1}b_{2}b_{3}b_{4}b_{5}b_{6}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>，行 = <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>1</mn></msub><msub><mi>b</mi><mn>6</mn></msub></mrow><annotation encoding="application/x-tex">b_{1}b_{6}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>（0~3），列 = <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>2</mn></msub><msub><mi>b</mi><mn>3</mn></msub><msub><mi>b</mi><mn>4</mn></msub><msub><mi>b</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">b_{2}b_{3}b_{4}b_{5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">4</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">5</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>（0~15）。输出 4 比特。</strong></p>
+<p><strong>S1</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>14</td>
+<td>4</td>
+<td>13</td>
+<td>1</td>
+<td>2</td>
+<td>15</td>
+<td>11</td>
+<td>8</td>
+<td>3</td>
+<td>10</td>
+<td>6</td>
+<td>12</td>
+<td>5</td>
+<td>9</td>
+<td>0</td>
+<td>7</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>15</td>
+<td>7</td>
+<td>4</td>
+<td>14</td>
+<td>2</td>
+<td>13</td>
+<td>1</td>
+<td>10</td>
+<td>6</td>
+<td>12</td>
+<td>11</td>
+<td>9</td>
+<td>5</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>1</td>
+<td>14</td>
+<td>8</td>
+<td>13</td>
+<td>6</td>
+<td>2</td>
+<td>11</td>
+<td>15</td>
+<td>12</td>
+<td>9</td>
+<td>7</td>
+<td>3</td>
+<td>10</td>
+<td>5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>15</td>
+<td>12</td>
+<td>8</td>
+<td>2</td>
+<td>4</td>
+<td>9</td>
+<td>1</td>
+<td>7</td>
+<td>5</td>
+<td>11</td>
+<td>3</td>
+<td>14</td>
+<td>10</td>
+<td>0</td>
+<td>6</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+<p><strong>S2</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>15</td>
+<td>1</td>
+<td>8</td>
+<td>14</td>
+<td>6</td>
+<td>11</td>
+<td>3</td>
+<td>4</td>
+<td>9</td>
+<td>7</td>
+<td>2</td>
+<td>13</td>
+<td>12</td>
+<td>0</td>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>13</td>
+<td>4</td>
+<td>7</td>
+<td>15</td>
+<td>2</td>
+<td>8</td>
+<td>14</td>
+<td>12</td>
+<td>0</td>
+<td>1</td>
+<td>10</td>
+<td>6</td>
+<td>9</td>
+<td>11</td>
+<td>5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>14</td>
+<td>7</td>
+<td>11</td>
+<td>10</td>
+<td>4</td>
+<td>13</td>
+<td>1</td>
+<td>5</td>
+<td>8</td>
+<td>12</td>
+<td>6</td>
+<td>9</td>
+<td>3</td>
+<td>2</td>
+<td>15</td>
+</tr>
+<tr>
+<td>3</td>
+<td>13</td>
+<td>8</td>
+<td>10</td>
+<td>1</td>
+<td>3</td>
+<td>15</td>
+<td>4</td>
+<td>2</td>
+<td>11</td>
+<td>6</td>
+<td>7</td>
+<td>12</td>
+<td>0</td>
+<td>5</td>
+<td>14</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+<p><strong>S3</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>10</td>
+<td>0</td>
+<td>9</td>
+<td>14</td>
+<td>6</td>
+<td>3</td>
+<td>15</td>
+<td>5</td>
+<td>1</td>
+<td>13</td>
+<td>12</td>
+<td>7</td>
+<td>11</td>
+<td>4</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>1</td>
+<td>13</td>
+<td>7</td>
+<td>0</td>
+<td>9</td>
+<td>3</td>
+<td>4</td>
+<td>6</td>
+<td>10</td>
+<td>2</td>
+<td>8</td>
+<td>5</td>
+<td>14</td>
+<td>12</td>
+<td>11</td>
+<td>15</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>13</td>
+<td>6</td>
+<td>4</td>
+<td>9</td>
+<td>8</td>
+<td>15</td>
+<td>3</td>
+<td>0</td>
+<td>11</td>
+<td>1</td>
+<td>2</td>
+<td>12</td>
+<td>5</td>
+<td>10</td>
+<td>14</td>
+<td>7</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>10</td>
+<td>13</td>
+<td>0</td>
+<td>6</td>
+<td>9</td>
+<td>8</td>
+<td>7</td>
+<td>4</td>
+<td>15</td>
+<td>14</td>
+<td>3</td>
+<td>11</td>
+<td>5</td>
+<td>2</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p><strong>S4</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>7</td>
+<td>13</td>
+<td>14</td>
+<td>3</td>
+<td>0</td>
+<td>6</td>
+<td>9</td>
+<td>10</td>
+<td>1</td>
+<td>2</td>
+<td>8</td>
+<td>5</td>
+<td>11</td>
+<td>12</td>
+<td>4</td>
+<td>15</td>
+</tr>
+<tr>
+<td>1</td>
+<td>13</td>
+<td>8</td>
+<td>11</td>
+<td>5</td>
+<td>6</td>
+<td>15</td>
+<td>0</td>
+<td>3</td>
+<td>4</td>
+<td>7</td>
+<td>2</td>
+<td>12</td>
+<td>1</td>
+<td>10</td>
+<td>14</td>
+<td>9</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10</td>
+<td>6</td>
+<td>9</td>
+<td>0</td>
+<td>12</td>
+<td>11</td>
+<td>7</td>
+<td>13</td>
+<td>15</td>
+<td>1</td>
+<td>3</td>
+<td>14</td>
+<td>5</td>
+<td>2</td>
+<td>8</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>15</td>
+<td>0</td>
+<td>6</td>
+<td>10</td>
+<td>1</td>
+<td>13</td>
+<td>8</td>
+<td>9</td>
+<td>4</td>
+<td>5</td>
+<td>11</td>
+<td>12</td>
+<td>7</td>
+<td>2</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
+<p><strong>S5</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>2</td>
+<td>12</td>
+<td>4</td>
+<td>1</td>
+<td>7</td>
+<td>10</td>
+<td>11</td>
+<td>6</td>
+<td>8</td>
+<td>5</td>
+<td>3</td>
+<td>15</td>
+<td>13</td>
+<td>0</td>
+<td>14</td>
+<td>9</td>
+</tr>
+<tr>
+<td>1</td>
+<td>14</td>
+<td>11</td>
+<td>2</td>
+<td>12</td>
+<td>4</td>
+<td>7</td>
+<td>13</td>
+<td>1</td>
+<td>5</td>
+<td>0</td>
+<td>15</td>
+<td>10</td>
+<td>3</td>
+<td>9</td>
+<td>8</td>
+<td>6</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>2</td>
+<td>1</td>
+<td>11</td>
+<td>10</td>
+<td>13</td>
+<td>7</td>
+<td>8</td>
+<td>15</td>
+<td>9</td>
+<td>12</td>
+<td>5</td>
+<td>6</td>
+<td>3</td>
+<td>0</td>
+<td>14</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11</td>
+<td>8</td>
+<td>12</td>
+<td>7</td>
+<td>1</td>
+<td>14</td>
+<td>2</td>
+<td>13</td>
+<td>6</td>
+<td>15</td>
+<td>0</td>
+<td>9</td>
+<td>10</td>
+<td>4</td>
+<td>5</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>S6</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>12</td>
+<td>1</td>
+<td>10</td>
+<td>15</td>
+<td>9</td>
+<td>2</td>
+<td>6</td>
+<td>8</td>
+<td>0</td>
+<td>13</td>
+<td>3</td>
+<td>4</td>
+<td>14</td>
+<td>7</td>
+<td>5</td>
+<td>11</td>
+</tr>
+<tr>
+<td>1</td>
+<td>10</td>
+<td>15</td>
+<td>4</td>
+<td>2</td>
+<td>7</td>
+<td>12</td>
+<td>9</td>
+<td>5</td>
+<td>6</td>
+<td>1</td>
+<td>13</td>
+<td>14</td>
+<td>0</td>
+<td>11</td>
+<td>3</td>
+<td>8</td>
+</tr>
+<tr>
+<td>2</td>
+<td>9</td>
+<td>14</td>
+<td>15</td>
+<td>5</td>
+<td>2</td>
+<td>8</td>
+<td>12</td>
+<td>3</td>
+<td>7</td>
+<td>0</td>
+<td>4</td>
+<td>10</td>
+<td>1</td>
+<td>13</td>
+<td>11</td>
+<td>6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>12</td>
+<td>9</td>
+<td>5</td>
+<td>15</td>
+<td>10</td>
+<td>11</td>
+<td>14</td>
+<td>1</td>
+<td>7</td>
+<td>6</td>
+<td>0</td>
+<td>8</td>
+<td>13</td>
+</tr>
+</tbody>
+</table>
+<p><strong>S7</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>11</td>
+<td>2</td>
+<td>14</td>
+<td>15</td>
+<td>0</td>
+<td>8</td>
+<td>13</td>
+<td>3</td>
+<td>12</td>
+<td>9</td>
+<td>7</td>
+<td>5</td>
+<td>10</td>
+<td>6</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>13</td>
+<td>0</td>
+<td>11</td>
+<td>7</td>
+<td>4</td>
+<td>9</td>
+<td>1</td>
+<td>10</td>
+<td>14</td>
+<td>3</td>
+<td>5</td>
+<td>12</td>
+<td>2</td>
+<td>15</td>
+<td>8</td>
+<td>6</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>4</td>
+<td>11</td>
+<td>13</td>
+<td>12</td>
+<td>3</td>
+<td>7</td>
+<td>14</td>
+<td>10</td>
+<td>15</td>
+<td>6</td>
+<td>8</td>
+<td>0</td>
+<td>5</td>
+<td>9</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>6</td>
+<td>11</td>
+<td>13</td>
+<td>8</td>
+<td>1</td>
+<td>4</td>
+<td>10</td>
+<td>7</td>
+<td>9</td>
+<td>5</td>
+<td>0</td>
+<td>15</td>
+<td>14</td>
+<td>2</td>
+<td>3</td>
+<td>12</td>
+</tr>
+</tbody>
+</table>
+<p><strong>S8</strong></p>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>13</td>
+<td>2</td>
+<td>8</td>
+<td>4</td>
+<td>6</td>
+<td>15</td>
+<td>11</td>
+<td>1</td>
+<td>10</td>
+<td>9</td>
+<td>3</td>
+<td>14</td>
+<td>5</td>
+<td>0</td>
+<td>12</td>
+<td>7</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>15</td>
+<td>13</td>
+<td>8</td>
+<td>10</td>
+<td>3</td>
+<td>7</td>
+<td>4</td>
+<td>12</td>
+<td>5</td>
+<td>6</td>
+<td>11</td>
+<td>0</td>
+<td>14</td>
+<td>9</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>7</td>
+<td>11</td>
+<td>4</td>
+<td>1</td>
+<td>9</td>
+<td>12</td>
+<td>14</td>
+<td>2</td>
+<td>0</td>
+<td>6</td>
+<td>10</td>
+<td>13</td>
+<td>15</td>
+<td>3</td>
+<td>5</td>
+<td>8</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>14</td>
+<td>7</td>
+<td>4</td>
+<td>10</td>
+<td>8</td>
+<td>13</td>
+<td>15</td>
+<td>12</td>
+<td>9</td>
+<td>0</td>
+<td>3</td>
+<td>5</td>
+<td>6</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-7">B.6 AES 的逆 S-盒（IBS 用，十进制）</h3>
+<table>
+<thead>
+<tr>
+<th>行\列</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+<th>13</th>
+<th>14</th>
+<th>15</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td>82</td>
+<td>9</td>
+<td>106</td>
+<td>213</td>
+<td>48</td>
+<td>54</td>
+<td>165</td>
+<td>56</td>
+<td>191</td>
+<td>64</td>
+<td>163</td>
+<td>158</td>
+<td>129</td>
+<td>243</td>
+<td>215</td>
+<td>251</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td>124</td>
+<td>227</td>
+<td>57</td>
+<td>130</td>
+<td>155</td>
+<td>47</td>
+<td>255</td>
+<td>135</td>
+<td>52</td>
+<td>142</td>
+<td>67</td>
+<td>68</td>
+<td>196</td>
+<td>222</td>
+<td>233</td>
+<td>203</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>84</td>
+<td>123</td>
+<td>148</td>
+<td>50</td>
+<td>166</td>
+<td>194</td>
+<td>35</td>
+<td>61</td>
+<td>238</td>
+<td>76</td>
+<td>149</td>
+<td>11</td>
+<td>66</td>
+<td>250</td>
+<td>195</td>
+<td>78</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>8</td>
+<td>46</td>
+<td>161</td>
+<td>102</td>
+<td>40</td>
+<td>217</td>
+<td>36</td>
+<td>178</td>
+<td>118</td>
+<td>91</td>
+<td>162</td>
+<td>73</td>
+<td>109</td>
+<td>139</td>
+<td>209</td>
+<td>37</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>114</td>
+<td>248</td>
+<td>246</td>
+<td>100</td>
+<td>134</td>
+<td>104</td>
+<td>152</td>
+<td>22</td>
+<td>212</td>
+<td>164</td>
+<td>92</td>
+<td>204</td>
+<td>93</td>
+<td>101</td>
+<td>182</td>
+<td>146</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>108</td>
+<td>112</td>
+<td>72</td>
+<td>80</td>
+<td>253</td>
+<td>237</td>
+<td>185</td>
+<td>218</td>
+<td>94</td>
+<td>21</td>
+<td>70</td>
+<td>87</td>
+<td>167</td>
+<td>141</td>
+<td>157</td>
+<td>132</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>144</td>
+<td>216</td>
+<td>171</td>
+<td>0</td>
+<td>140</td>
+<td>188</td>
+<td>211</td>
+<td>10</td>
+<td>247</td>
+<td>228</td>
+<td>88</td>
+<td>5</td>
+<td>184</td>
+<td>179</td>
+<td>69</td>
+<td>6</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>208</td>
+<td>44</td>
+<td>30</td>
+<td>143</td>
+<td>202</td>
+<td>63</td>
+<td>15</td>
+<td>2</td>
+<td>193</td>
+<td>175</td>
+<td>189</td>
+<td>3</td>
+<td>1</td>
+<td>19</td>
+<td>138</td>
+<td>107</td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td>58</td>
+<td>145</td>
+<td>17</td>
+<td>65</td>
+<td>79</td>
+<td>103</td>
+<td>220</td>
+<td>234</td>
+<td>151</td>
+<td>242</td>
+<td>207</td>
+<td>206</td>
+<td>240</td>
+<td>180</td>
+<td>230</td>
+<td>115</td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td>150</td>
+<td>172</td>
+<td>116</td>
+<td>34</td>
+<td>231</td>
+<td>173</td>
+<td>53</td>
+<td>133</td>
+<td>226</td>
+<td>249</td>
+<td>55</td>
+<td>232</td>
+<td>28</td>
+<td>117</td>
+<td>223</td>
+<td>110</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td>71</td>
+<td>241</td>
+<td>26</td>
+<td>113</td>
+<td>29</td>
+<td>41</td>
+<td>197</td>
+<td>137</td>
+<td>111</td>
+<td>183</td>
+<td>98</td>
+<td>14</td>
+<td>170</td>
+<td>24</td>
+<td>190</td>
+<td>27</td>
+</tr>
+<tr>
+<td><strong>11</strong></td>
+<td>252</td>
+<td>86</td>
+<td>62</td>
+<td>75</td>
+<td>198</td>
+<td>210</td>
+<td>121</td>
+<td>32</td>
+<td>154</td>
+<td>219</td>
+<td>192</td>
+<td>254</td>
+<td>120</td>
+<td>205</td>
+<td>90</td>
+<td>244</td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td>31</td>
+<td>221</td>
+<td>168</td>
+<td>51</td>
+<td>136</td>
+<td>7</td>
+<td>199</td>
+<td>49</td>
+<td>177</td>
+<td>18</td>
+<td>16</td>
+<td>89</td>
+<td>39</td>
+<td>128</td>
+<td>236</td>
+<td>95</td>
+</tr>
+<tr>
+<td><strong>13</strong></td>
+<td>96</td>
+<td>81</td>
+<td>127</td>
+<td>169</td>
+<td>25</td>
+<td>181</td>
+<td>74</td>
+<td>13</td>
+<td>45</td>
+<td>229</td>
+<td>122</td>
+<td>159</td>
+<td>147</td>
+<td>201</td>
+<td>156</td>
+<td>239</td>
+</tr>
+<tr>
+<td><strong>14</strong></td>
+<td>160</td>
+<td>224</td>
+<td>59</td>
+<td>77</td>
+<td>174</td>
+<td>42</td>
+<td>245</td>
+<td>176</td>
+<td>200</td>
+<td>235</td>
+<td>187</td>
+<td>60</td>
+<td>131</td>
+<td>83</td>
+<td>153</td>
+<td>97</td>
+</tr>
+<tr>
+<td><strong>15</strong></td>
+<td>23</td>
+<td>43</td>
+<td>4</td>
+<td>126</td>
+<td>186</td>
+<td>119</td>
+<td>214</td>
+<td>38</td>
+<td>225</td>
+<td>105</td>
+<td>20</td>
+<td>99</td>
+<td>85</td>
+<td>33</td>
+<td>12</td>
+<td>125</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>用法</strong>：<code>IBS(S-盒(x)) = x</code>。例如 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false">(</mo><mn>11001011</mn><mo stretchy="false">)</mo><mo>=</mo><mn>31</mn></mrow><annotation encoding="application/x-tex">S(11001011) = 31</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="mopen">(</span><span class="mord">11001011</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">31</span></span></span></span></span>，那么 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mi>B</mi><mi>S</mi><mo stretchy="false">(</mo><mn>31</mn><mo stretchy="false">)</mo><mo>=</mo><mn>11001011</mn><mo>=</mo><mn>203</mn></mrow><annotation encoding="application/x-tex">IBS(31) = 11001011 = 203</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.05764em;">BS</span><span class="mopen">(</span><span class="mord">31</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">11001011</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">203</span></span></span></span></span>。查表验证：第 1 行第 15 列 = 203 ✓</p>
+</blockquote>
+<h3 id="s-8">B.7 AES 的轮常量与固定矩阵</h3>
+<p><strong>轮常量（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>10</mn><msubsup><mo stretchy="false">)</mo><mn>2</mn><mi>k</mi></msubsup></mrow><annotation encoding="application/x-tex">(10)_{2}^{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0991em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-2.4519em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2481em;"><span></span></span></span></span></span></span></span></span></span></span>，即 <code>X</code> 的幂）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>k = (i−4)/4</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>十六进制</td>
+<td><code>01</code></td>
+<td><code>02</code></td>
+<td><code>04</code></td>
+<td><code>08</code></td>
+<td><code>10</code></td>
+<td><code>20</code></td>
+<td><code>40</code></td>
+<td><code>80</code></td>
+<td><code>1B</code></td>
+<td><code>36</code></td>
+</tr>
+<tr>
+<td>二进制</td>
+<td>00000001</td>
+<td>00000010</td>
+<td>00000100</td>
+<td>00001000</td>
+<td>00010000</td>
+<td>00100000</td>
+<td>01000000</td>
+<td>10000000</td>
+<td>00011011</td>
+<td>00110110</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MixColumn 的矩阵（加密）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>02</code></td>
+<td><code>03</code></td>
+<td><code>01</code></td>
+<td><code>01</code></td>
+</tr>
+<tr>
+<td><code>01</code></td>
+<td><code>02</code></td>
+<td><code>03</code></td>
+<td><code>01</code></td>
+</tr>
+<tr>
+<td><code>01</code></td>
+<td><code>01</code></td>
+<td><code>02</code></td>
+<td><code>03</code></td>
+</tr>
+<tr>
+<td><code>03</code></td>
+<td><code>01</code></td>
+<td><code>01</code></td>
+<td><code>02</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>逆 MixColumn 的矩阵（解密）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0E</code></td>
+<td><code>0B</code></td>
+<td><code>0D</code></td>
+<td><code>09</code></td>
+</tr>
+<tr>
+<td><code>09</code></td>
+<td><code>0E</code></td>
+<td><code>0B</code></td>
+<td><code>0D</code></td>
+</tr>
+<tr>
+<td><code>0D</code></td>
+<td><code>09</code></td>
+<td><code>0E</code></td>
+<td><code>0B</code></td>
+</tr>
+<tr>
+<td><code>0B</code></td>
+<td><code>0D</code></td>
+<td><code>09</code></td>
+<td><code>0E</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>S-盒仿射变换矩阵（循环矩阵）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>常量向量 = <code>(1,1,0,0,0,1,1,0)</code> = <code>0x63</code></p>
+<h3 id="s-9">B.8 三种密钥长度对照</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>AES-128</strong></th>
+<th><strong>AES-192</strong></th>
+<th><strong>AES-256</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>密钥长度</td>
+<td>128</td>
+<td>192</td>
+<td>256</td>
+</tr>
+<tr>
+<td>分组长度</td>
+<td>128</td>
+<td>128</td>
+<td>128</td>
+</tr>
+<tr>
+<td>密钥矩阵</td>
+<td>4×4</td>
+<td>4×6</td>
+<td>4×8</td>
+</tr>
+<tr>
+<td>轮数</td>
+<td>10</td>
+<td>12</td>
+<td>14</td>
+</tr>
+<tr>
+<td>轮密钥个数</td>
+<td>11</td>
+<td>13</td>
+<td>15</td>
+</tr>
+<tr>
+<td>生成列数</td>
+<td>44</td>
+<td>52</td>
+<td>60</td>
+</tr>
+<tr>
+<td>第 0 轮密钥</td>
+<td>全部</td>
+<td>前 128 比特</td>
+<td>前 128 比特</td>
+</tr>
+<tr>
+<td>递推步长</td>
+<td>4</td>
+<td>6</td>
+<td>8</td>
+</tr>
+<tr>
+<td>新列范围</td>
+<td>W(4)–W(43)</td>
+<td>W(6)–W(51)</td>
+<td>W(8)–W(59)</td>
+</tr>
+<tr>
+<td>轮常量指数</td>
+<td>(i−4)/4</td>
+<td>(i−6)/6</td>
+<td>(i−8)/8</td>
+</tr>
+<tr>
+<td>额外规则</td>
+<td>无</td>
+<td>无</td>
+<td><code>U</code> 变换（<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>∣</mo><mo stretchy="false">(</mo><mi>i</mi><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">8\mid (i-4)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mclose">)</span></span></span></span></span> 时）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="s-10">B.9 DES vs AES 总对比（<strong>强烈建议背下这张表</strong>）</h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><strong>DES</strong></th>
+<th><strong>AES（Rijndael）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分组长度</td>
+<td>64 比特</td>
+<td><strong>128 比特</strong></td>
+</tr>
+<tr>
+<td>密钥长度</td>
+<td>56 比特（名义 64）</td>
+<td><strong>128 / 192 / 256 比特</strong></td>
+</tr>
+<tr>
+<td>轮数</td>
+<td>16</td>
+<td><strong>10 / 12 / 14</strong></td>
+</tr>
+<tr>
+<td>结构类型</td>
+<td><strong>Feistel 网络</strong></td>
+<td><strong>SP 网络</strong></td>
+</tr>
+<tr>
+<td>每轮处理</td>
+<td><strong>只处理一半</strong></td>
+<td><strong>全部比特</strong></td>
+</tr>
+<tr>
+<td>完全扩散所需轮数</td>
+<td>多轮</td>
+<td><strong>2 轮</strong></td>
+</tr>
+<tr>
+<td>非线性部件</td>
+<td><strong>8 个 S-盒（6→4）</strong></td>
+<td><strong>1 个 BS（8→8）</strong></td>
+</tr>
+<tr>
+<td>S-盒来历</td>
+<td>8 张常数表，20 年说不清</td>
+<td><strong>有公开公式：求逆 + 仿射</strong></td>
+</tr>
+<tr>
+<td>密钥编排</td>
+<td><strong>纯线性</strong>（置换 + 循环移位）</td>
+<td><strong>非线性</strong>（含 S-盒）</td>
+</tr>
+<tr>
+<td>弱密钥</td>
+<td><strong>4 个 + 6 对半弱</strong></td>
+<td><strong>无</strong></td>
+</tr>
+<tr>
+<td>加解密能否共用流程</td>
+<td>✅ 可以（用同一套）</td>
+<td>❌ 需各写一套（但结构对称）</td>
+</tr>
+<tr>
+<td>设计过程</td>
+<td>暗箱（NSA 介入，争议 20 年）</td>
+<td><strong>公开征集、三轮评审</strong></td>
+</tr>
+<tr>
+<td>安全性现状</td>
+<td><strong>已被实际攻破</strong>（56 位太短）</td>
+<td><strong>至今未被攻破</strong></td>
+</tr>
+<tr>
+<td>替代/补强方案</td>
+<td>2DES ❌ / 3DES ✅ / DESX ✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td>典型应用</td>
+<td>UNIX 口令（作单向函数）</td>
+<td>通用加密</td>
+</tr>
+</tbody>
+</table>
+<hr>
+
+<div class="pager"><a class="pg prev" href="crypto-des-aes-27.html"><span>← 上一节</span><b>附录 A　术语中英对照表</b></a><a class="pg next" href="crypto-des-aes-29.html"><span>下一节 →</span><b>附录 C　常见疑问 FAQ</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../../index.html#about">关于我</a>
+            <a href="../../index.html#bilibili">B站空间</a>
+            <a href="../study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
