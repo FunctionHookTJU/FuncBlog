@@ -10,14 +10,45 @@
     // 版本号 - 修改此值可强制刷新缓存
     const VERSION = '1.0.0';
     
-    // 按当前路径的目录深度计算相对前缀，保证在任意层级的子页面里导航链接都能对上站点根目录。
-    // /            -> ''
-    // /pages/x.html -> '../'
-    // /docs/a/x.html -> '../../'
+    // 相对前缀 = “当前页所在目录 -> 站点根目录”。
+    // 站点根目录不能靠数 pathname 的层数来推：GitHub Pages 会把整站放在仓库名子路径下
+    // （/fxHook.io/、/FuncBlog/），那段路径会被误当成一层目录，多算一个 '../'，
+    // 链接就会跳出仓库根（例如 /FuncBlog/pages/x.html 生成 ../../index.html -> /index.html 404）。
+    // 这里改为从脚本自身的 URL 反推站点根（本文件固定位于 <站点根>/scripts/header.js），再与当前页目录比对。
+    // 自定义域名根目录 /            -> ''
+    // /pages/x.html                 -> '../'
+    // /FuncBlog/pages/x.html        -> '../'   （旧实现算成 '../../'）
+    // /FuncBlog/                    -> ''
     const prefix = (function () {
-        const segs = window.location.pathname.split('/').filter(Boolean);
-        segs.pop(); // 去掉文件名，只保留目录层级
-        return segs.map(() => '../').join('');
+        const SELF_RE = /\/scripts\/header\.js(?:[?#]|$)/;
+
+        // 优先取当前正在执行的脚本元素；取不到时（defer/动态插入等）退化为扫描 <script>
+        let self = document.currentScript;
+        if (!self || !self.src || !SELF_RE.test(self.src)) {
+            self = Array.prototype.slice
+                .call(document.getElementsByTagName('script'))
+                .filter(function (s) { return s.src && SELF_RE.test(s.src); })
+                .pop();
+        }
+        if (!self || !self.src) return '';
+
+        // 站点根 = 脚本 URL 的上一级目录
+        let siteRootPath = '/';
+        try {
+            siteRootPath = new URL('..', self.src).pathname;
+        } catch (e) {
+            return '';
+        }
+
+        // 与站点根做公共前缀比较，剩余层级数即为需要回退的 '../' 个数
+        const split = function (p) { return p.split('/').filter(Boolean); };
+        const rootSegs = split(siteRootPath);
+        const pageSegs = split(window.location.pathname);
+        pageSegs.pop(); // 去掉文件名，只保留目录层级
+
+        let i = 0;
+        while (i < rootSegs.length && i < pageSegs.length && rootSegs[i] === pageSegs[i]) i++;
+        return pageSegs.slice(i).map(() => '../').join('');
     })();
     
     // 导航链接配置（便于维护）

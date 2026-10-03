@@ -127,6 +127,17 @@ const response = await fetch(`${pathPrefix}components/header.html`);
 - Git历史记录保留，可通过 `git log --follow` 查看文件移动历史
 - 建议在部署前本地测试所有页面和链接
 
+### 相对路径约定（重要）
+
+上面的示例中 `href="/assets/icons/favicon-32x32.png"` 这类**以 `/` 开头的站根绝对路径是错误的**，仓库里实际使用的是相对路径（`assets/...` / `../assets/...`）。
+
+原因：GitHub Pages 的仓库站点部署在仓库名子路径下（如 `https://<user>.github.io/FuncBlog/`），
+以 `/` 开头的路径会指向 `https://<user>.github.io/`，从而 404；自建站因为部署在域名根目录才“看起来正常”。
+
+- HTML 内静态引用：按页面所在层级使用相对路径（`assets/...`、`../assets/...`、`../../assets/...`）。
+- JS 里动态拼接路径：不要数 `location.pathname` 的层数来推站点根，应像 `scripts/header.js` 那样从脚本自身 URL 反推站点根。
+- 新增页面时，所有链接都要同时验证“域名根目录部署”和“GitHub Pages 仓库子路径部署”两种情形。
+
 ## 后续建议
 
 1. 考虑添加 `.gitignore` 文件
