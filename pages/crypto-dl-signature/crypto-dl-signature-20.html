@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>7.0 引入：数字签名要解决什么问题 · 密码学讲义：离散对数与数字签名</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../styles/style.css">
+<link rel="stylesheet" href="../../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../../index.html">
+            <img class="logo-avatar" src="../../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../diary.html">日记</a></li>
+                <li><a href="../study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="../communicate.html">交流</a></li>
+                <li><a href="../picture.html">图片墙</a></li>
+                <li><a href="../products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i" href="index.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-dl-signature-01.html">0.1 承接：前两册已经铺好的地基</a>
+<a class="i" href="crypto-dl-signature-02.html">0.2 群、循环群与生成元<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-03.html">0.3 复杂度记号<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-04.html">0.4 中国剩余定理（CRT）<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-05.html">0.5 &quot;为什么开平方就能省一半力气&quot;<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-06.html">0.6 &quot;平滑&quot;整数与 Pohlig-Hellman 的威胁<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-07.html">0.7 数字签名和加密到底差在哪<mark class="bubu">补</mark></a>
+<div class="sg">第六讲　离散对数</div>
+<a class="i" href="crypto-dl-signature-08.html">6.0 本讲地图</a>
+<a class="i" href="crypto-dl-signature-09.html">6.1 离散对数</a>
+<a class="i" href="crypto-dl-signature-10.html">6.2 计算离散对数</a>
+<a class="sub" href="crypto-dl-signature-11.html">6.2.2 小步大步算法（BSGS，Baby-Step Giant-Step）</a>
+<a class="sub" href="crypto-dl-signature-12.html">6.2.3 Pollard 的 rho 算法</a>
+<a class="sub" href="crypto-dl-signature-13.html">6.2.4 Pohlig-Hellman 算法</a>
+<a class="sub" href="crypto-dl-signature-14.html">6.2.5 指数积分算法</a>
+<a class="i" href="crypto-dl-signature-15.html">6.3 ElGamal 公钥加密算法</a>
+<a class="i" href="crypto-dl-signature-16.html">6.4 比特承诺</a>
+<a class="i" href="crypto-dl-signature-17.html">6.5 第六讲小结</a>
+<a class="i" href="crypto-dl-signature-18.html">6.6 核心结论清单（考前必背）</a>
+<a class="i" href="crypto-dl-signature-19.html">6.7 自测题</a>
+<div class="sg">第七讲　数字签名（上）</div>
+<a class="i cur" data-h="s-1" href="crypto-dl-signature-20.html">7.0 引入：数字签名要解决什么问题</a>
+<a class="i" href="crypto-dl-signature-21.html">7.1 RSA 数字签名方案</a>
+<a class="sub" href="crypto-dl-signature-22.html">7.1.2 例子 1</a>
+<a class="sub" href="crypto-dl-signature-23.html">7.1.3 RSA 签名的可能攻击</a>
+<a class="sub" href="crypto-dl-signature-24.html">7.1.4 RSA 签名的执行</a>
+<a class="sub" href="crypto-dl-signature-25.html">7.1.5 RSA 数字签名的随机化</a>
+<a class="i" href="crypto-dl-signature-26.html">7.2 Rabin 数字签名方案</a>
+<a class="i" href="crypto-dl-signature-27.html">7.3 第七讲小结</a>
+<a class="i" href="crypto-dl-signature-28.html">7.4 核心结论清单（考前必背）</a>
+<a class="i" href="crypto-dl-signature-29.html">7.5 自测题</a>
+<div class="sg">第八讲　数字签名（下）</div>
+<a class="i" href="crypto-dl-signature-30.html">8.0 本讲地图</a>
+<a class="i" href="crypto-dl-signature-31.html">8.1 ElGamal 族签名方案</a>
+<a class="sub" href="crypto-dl-signature-32.html">8.1.2 ElGamal 签名算法</a>
+<a class="sub" href="crypto-dl-signature-33.html">8.1.3 Schnorr 签名方案</a>
+<a class="sub" href="crypto-dl-signature-34.html">8.1.4 消息恢复与消息添加</a>
+<a class="i" href="crypto-dl-signature-35.html">8.2 生日攻击</a>
+<a class="i" href="crypto-dl-signature-36.html">8.3 第八讲小结</a>
+<a class="i" href="crypto-dl-signature-37.html">8.4 核心结论清单（考前必背）</a>
+<a class="i" href="crypto-dl-signature-38.html">8.5 自测题</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-dl-signature-39.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-dl-signature-40.html">附录 B　关键数值速查表</a>
+<a class="i" href="crypto-dl-signature-41.html">附录 C　FAQ（你可能卡住的几个点）</a>
+<a class="i" href="crypto-dl-signature-42.html">附录 D　自测题答案</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+
+<h2 id="s-1">7.0 引入：数字签名要解决什么问题</h2>
+<p><strong>（PPT 第 2–4 页）</strong></p>
+<blockquote>
+<p>这一讲和下一讲考虑设计用于模拟手写签名的数字签名技术。一条消息的数字签名是一个<strong>依赖于仅签名者知晓的秘密</strong>而产生的数字，并需附加被签名的消息。数字签名必须可以被验证：如果任何一方对文件的签名的真实性产生争议（导致的原因可能是不诚实的签名者想否认自己产生的签名，或者是认证者提出欺诈的权利要求），一个公正的第三方就可以公平的解决这一问题，而<strong>不需要获得签名者的秘密</strong>（秘密密钥）。</p>
+</blockquote>
+<p><img src="../../assets/img/L7_p02.png" alt="L7-P2 数字签名的目标"></p>
+<p><strong>翻译成人话</strong>：把这句话拆成四个要求：</p>
+<table>
+<thead>
+<tr>
+<th>要求</th>
+<th>含义</th>
+<th>谁受益</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>依赖签名者的秘密</td>
+<td>别人伪造不出</td>
+<td>防冒名</td>
+</tr>
+<tr>
+<td>必须附加在消息上</td>
+<td>签名和消息绑在一起，不能搬到别的消息上</td>
+<td>防调包</td>
+</tr>
+<tr>
+<td>必须可以被验证</td>
+<td>任何人都能用公开信息验证</td>
+<td>可用性</td>
+</tr>
+<tr>
+<td>第三方可仲裁，且<strong>不需要知道私钥</strong></td>
+<td>打官司时法官能判，但法官拿不到（也不会泄露）私钥</td>
+<td>防赖账</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这就是&quot;数字签名&quot;和&quot;消息认证码（MAC）&quot;的关键区别</strong>：MAC（第四讲）用<strong>共享密钥</strong>，所以任何持有密钥的双方都能生成它，<strong>打官司时无法判断是谁做的</strong>；而数字签名用<strong>私钥</strong>（唯一），所以能实现<strong>不可否认</strong>。</p>
+<blockquote>
+<p><strong>应用场景（PPT 第 3 页）</strong>：数字签名有很多应用，包括：<strong>认证、数据真实性、和不可否认</strong>。数字签名的一个非常重要应用是在大规模网络上的<strong>公钥数字证书</strong>。数字证书是可信第三方将用户身份与其公开密钥绑定的方法，在此之后，其它实体认证公开密钥的时候都不需要可信第三方的协助。</p>
+</blockquote>
+<p><strong>翻译成人话</strong>：证书就是&quot;<strong>由权威机构签名的公钥</strong>&quot;。CA 用自己的私钥签一份&quot;这个公钥属于这个人&quot;的声明；之后谁要验证，只要拿 CA 的公钥验签就行——<strong>不必每次都去问 CA</strong>。这是全互联网 TLS 的基石。</p>
+<p><strong>（PPT 第 4 页）历史</strong>：数字签名的概念和用途在实用数字签名技术产生之前就为人们所认识。<strong>第一个数字签名方法是 RSA 数字签名方案，它至今仍然是最为实用数字签名技术</strong>。后续的研究也给出非常丰富的各种数字签名方法。这些技术常常在功能性和执行性方面提供了相当大的改进。</p>
+<blockquote>
+<p><strong><mark class="bubu">补</mark>一个必须知道的实践禁令</strong>：RSA 加密和 RSA 签名虽然共用同一套 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>n</mi><mo separator="true">,</mo><mi>e</mi><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(n,e,d)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">e</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mclose">)</span></span></span></span></span>，但<strong>绝对不能用同一对密钥同时做加密和签名</strong>。原因在 7.1.3.2 节会看到：攻击者可以让你对某个&quot;看起来无害&quot;的数签名，而这个签名正好能当作某个密文来解密。工程上的做法是<strong>一对密钥只干一件事</strong>。</p>
+</blockquote>
+<p><strong>本讲提要（PPT 第 5 页）</strong>：</p>
+<pre><code>❑ RSA签名方案
+❑ Rabin签名方案
+</code></pre>
+<hr>
+
+<div class="pager"><a class="pg prev" href="crypto-dl-signature-19.html"><span>← 上一节</span><b>6.7 自测题</b></a><a class="pg next" href="crypto-dl-signature-21.html"><span>下一节 →</span><b>7.1 RSA 数字签名方案</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../../index.html#about">关于我</a>
+            <a href="../../index.html#bilibili">B站空间</a>
+            <a href="../study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

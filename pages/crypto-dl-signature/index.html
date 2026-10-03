@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>密码学讲义：离散对数与数字签名 - 宇佐见函钩</title>
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../../site.webmanifest">
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../../styles/style.css">
+<link rel="stylesheet" href="../../styles/lecture.css">
+
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../../index.html">
+            <img class="logo-avatar" src="../../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../diary.html">日记</a></li>
+                <li><a href="../study.html" class="active">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="../communicate.html">交流</a></li>
+                <li><a href="../picture.html">图片墙</a></li>
+                <li><a href="../products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+<button id="toggle">切换主题</button>
+<button id="reopen">☰ 目录</button>
+<a id="top" href="#">回到顶部</a>
+<aside id="side">
+  <div class="shead"><b>大章节</b><button id="shide" title="收起目录条">收起 ›</button></div>
+  <nav><a class="g" href="#">↑ 回到顶部</a>
+<div class="sg">导读</div>
+<a class="i cur" data-h="s-1" href="index.html">如何使用这份讲义</a>
+<div class="sg">第 0 章　前置知识补课</div>
+<a class="i" href="crypto-dl-signature-01.html">0.1 承接：前两册已经铺好的地基</a>
+<a class="i" href="crypto-dl-signature-02.html">0.2 群、循环群与生成元<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-03.html">0.3 复杂度记号<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-04.html">0.4 中国剩余定理（CRT）<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-05.html">0.5 &quot;为什么开平方就能省一半力气&quot;<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-06.html">0.6 &quot;平滑&quot;整数与 Pohlig-Hellman 的威胁<mark class="bubu">补</mark></a>
+<a class="i" href="crypto-dl-signature-07.html">0.7 数字签名和加密到底差在哪<mark class="bubu">补</mark></a>
+<div class="sg">第六讲　离散对数</div>
+<a class="i" href="crypto-dl-signature-08.html">6.0 本讲地图</a>
+<a class="i" href="crypto-dl-signature-09.html">6.1 离散对数</a>
+<a class="i" href="crypto-dl-signature-10.html">6.2 计算离散对数</a>
+<a class="sub" href="crypto-dl-signature-11.html">6.2.2 小步大步算法（BSGS，Baby-Step Giant-Step）</a>
+<a class="sub" href="crypto-dl-signature-12.html">6.2.3 Pollard 的 rho 算法</a>
+<a class="sub" href="crypto-dl-signature-13.html">6.2.4 Pohlig-Hellman 算法</a>
+<a class="sub" href="crypto-dl-signature-14.html">6.2.5 指数积分算法</a>
+<a class="i" href="crypto-dl-signature-15.html">6.3 ElGamal 公钥加密算法</a>
+<a class="i" href="crypto-dl-signature-16.html">6.4 比特承诺</a>
+<a class="i" href="crypto-dl-signature-17.html">6.5 第六讲小结</a>
+<a class="i" href="crypto-dl-signature-18.html">6.6 核心结论清单（考前必背）</a>
+<a class="i" href="crypto-dl-signature-19.html">6.7 自测题</a>
+<div class="sg">第七讲　数字签名（上）</div>
+<a class="i" href="crypto-dl-signature-20.html">7.0 引入：数字签名要解决什么问题</a>
+<a class="i" href="crypto-dl-signature-21.html">7.1 RSA 数字签名方案</a>
+<a class="sub" href="crypto-dl-signature-22.html">7.1.2 例子 1</a>
+<a class="sub" href="crypto-dl-signature-23.html">7.1.3 RSA 签名的可能攻击</a>
+<a class="sub" href="crypto-dl-signature-24.html">7.1.4 RSA 签名的执行</a>
+<a class="sub" href="crypto-dl-signature-25.html">7.1.5 RSA 数字签名的随机化</a>
+<a class="i" href="crypto-dl-signature-26.html">7.2 Rabin 数字签名方案</a>
+<a class="i" href="crypto-dl-signature-27.html">7.3 第七讲小结</a>
+<a class="i" href="crypto-dl-signature-28.html">7.4 核心结论清单（考前必背）</a>
+<a class="i" href="crypto-dl-signature-29.html">7.5 自测题</a>
+<div class="sg">第八讲　数字签名（下）</div>
+<a class="i" href="crypto-dl-signature-30.html">8.0 本讲地图</a>
+<a class="i" href="crypto-dl-signature-31.html">8.1 ElGamal 族签名方案</a>
+<a class="sub" href="crypto-dl-signature-32.html">8.1.2 ElGamal 签名算法</a>
+<a class="sub" href="crypto-dl-signature-33.html">8.1.3 Schnorr 签名方案</a>
+<a class="sub" href="crypto-dl-signature-34.html">8.1.4 消息恢复与消息添加</a>
+<a class="i" href="crypto-dl-signature-35.html">8.2 生日攻击</a>
+<a class="i" href="crypto-dl-signature-36.html">8.3 第八讲小结</a>
+<a class="i" href="crypto-dl-signature-37.html">8.4 核心结论清单（考前必背）</a>
+<a class="i" href="crypto-dl-signature-38.html">8.5 自测题</a>
+<div class="sg">附录</div>
+<a class="i" href="crypto-dl-signature-39.html">附录 A　术语中英对照表</a>
+<a class="i" href="crypto-dl-signature-40.html">附录 B　关键数值速查表</a>
+<a class="i" href="crypto-dl-signature-41.html">附录 C　FAQ（你可能卡住的几个点）</a>
+<a class="i" href="crypto-dl-signature-42.html">附录 D　自测题答案</a>
+  </nav>
+</aside>
+
+<div class="wrap">
+<nav class="nav">
+<p class="t">目录</p>
+<ul class="toc">
+<li><span class="grp">第 0 章　前置知识补课</span><ul><li><a href="crypto-dl-signature-01.html">0.1 承接：前两册已经铺好的地基</a></li><li><a href="crypto-dl-signature-02.html">0.2 群、循环群与生成元<mark class="bubu">补</mark></a></li><li><a href="crypto-dl-signature-03.html">0.3 复杂度记号<mark class="bubu">补</mark></a></li><li><a href="crypto-dl-signature-04.html">0.4 中国剩余定理（CRT）<mark class="bubu">补</mark></a></li><li><a href="crypto-dl-signature-05.html">0.5 &quot;为什么开平方就能省一半力气&quot;<mark class="bubu">补</mark></a></li><li><a href="crypto-dl-signature-06.html">0.6 &quot;平滑&quot;整数与 Pohlig-Hellman 的威胁<mark class="bubu">补</mark></a></li><li><a href="crypto-dl-signature-07.html">0.7 数字签名和加密到底差在哪<mark class="bubu">补</mark></a></li></ul></li>
+<li><span class="grp">第六讲　离散对数</span><ul><li><a href="crypto-dl-signature-08.html">6.0 本讲地图</a></li><li><a href="crypto-dl-signature-09.html">6.1 离散对数</a></li><li><a href="crypto-dl-signature-10.html">6.2 计算离散对数</a><ul><li><a href="crypto-dl-signature-11.html">6.2.2 小步大步算法（BSGS，Baby-Step Giant-Step）</a></li><li><a href="crypto-dl-signature-12.html">6.2.3 Pollard 的 rho 算法</a></li><li><a href="crypto-dl-signature-13.html">6.2.4 Pohlig-Hellman 算法</a></li><li><a href="crypto-dl-signature-14.html">6.2.5 指数积分算法</a></li></ul></li><li><a href="crypto-dl-signature-15.html">6.3 ElGamal 公钥加密算法</a></li><li><a href="crypto-dl-signature-16.html">6.4 比特承诺</a></li><li><a href="crypto-dl-signature-17.html">6.5 第六讲小结</a></li><li><a href="crypto-dl-signature-18.html">6.6 核心结论清单（考前必背）</a></li><li><a href="crypto-dl-signature-19.html">6.7 自测题</a></li></ul></li>
+<li><span class="grp">第七讲　数字签名（上）</span><ul><li><a href="crypto-dl-signature-20.html">7.0 引入：数字签名要解决什么问题</a></li><li><a href="crypto-dl-signature-21.html">7.1 RSA 数字签名方案</a><ul><li><a href="crypto-dl-signature-22.html">7.1.2 例子 1</a></li><li><a href="crypto-dl-signature-23.html">7.1.3 RSA 签名的可能攻击</a></li><li><a href="crypto-dl-signature-24.html">7.1.4 RSA 签名的执行</a></li><li><a href="crypto-dl-signature-25.html">7.1.5 RSA 数字签名的随机化</a></li></ul></li><li><a href="crypto-dl-signature-26.html">7.2 Rabin 数字签名方案</a></li><li><a href="crypto-dl-signature-27.html">7.3 第七讲小结</a></li><li><a href="crypto-dl-signature-28.html">7.4 核心结论清单（考前必背）</a></li><li><a href="crypto-dl-signature-29.html">7.5 自测题</a></li></ul></li>
+<li><span class="grp">第八讲　数字签名（下）</span><ul><li><a href="crypto-dl-signature-30.html">8.0 本讲地图</a></li><li><a href="crypto-dl-signature-31.html">8.1 ElGamal 族签名方案</a><ul><li><a href="crypto-dl-signature-32.html">8.1.2 ElGamal 签名算法</a></li><li><a href="crypto-dl-signature-33.html">8.1.3 Schnorr 签名方案</a></li><li><a href="crypto-dl-signature-34.html">8.1.4 消息恢复与消息添加</a></li></ul></li><li><a href="crypto-dl-signature-35.html">8.2 生日攻击</a></li><li><a href="crypto-dl-signature-36.html">8.3 第八讲小结</a></li><li><a href="crypto-dl-signature-37.html">8.4 核心结论清单（考前必背）</a></li><li><a href="crypto-dl-signature-38.html">8.5 自测题</a></li></ul></li>
+<li><span class="grp">附录</span><ul><li><a href="crypto-dl-signature-39.html">附录 A　术语中英对照表</a></li><li><a href="crypto-dl-signature-40.html">附录 B　关键数值速查表</a></li><li><a href="crypto-dl-signature-41.html">附录 C　FAQ（你可能卡住的几个点）</a></li><li><a href="crypto-dl-signature-42.html">附录 D　自测题答案</a></li></ul></li>
+</ul>
+</nav>
+
+<h1 id="s-1">密码学讲义：离散对数与数字签名</h1>
+<blockquote>
+<p>依据《第六讲 离散对数》《第七讲 数字签名(上)》《第八讲 数字签名(下)》三份课件整理
+面向基础薄弱的初学者：先补地基，再逐节重述，由浅入深
+承接《密码学讲义：密码 Hash 函数与 RSA / Rabin 算法》</p>
+</blockquote>
+<hr>
+<h2 id="s-2">如何使用这份讲义</h2>
+<p><strong>这份讲义和 PPT 的关系</strong>：和前两册一样，讲义严格跟着三份 PPT 的目录走（同样的&quot;1、2、3…&quot;小节编号），PPT 里出现的每一个知识点在讲义里都有对应段落，不会漏。</p>
+<p><strong>和上一册的关系</strong>：上一册（第四、五讲）讲的是&quot;公钥密码靠什么难题&quot;——大整数分解、模合数平方根。这一册换了一个难题：</p>
+<ul>
+<li><strong>第六讲</strong>讲<strong>离散对数问题（DLP）</strong>：对数的反问题搬到&quot;模 p 乘法&quot;这个世界里，就变得极难算。然后立刻拿它造一个公钥加密方案（ElGamal），最后用它的&quot;模 4 的离散对数&quot;做了一个小玩具——比特承诺。</li>
+<li><strong>第七讲</strong>开始讲<strong>数字签名</strong>：这是公钥密码的第二个大用途。先讲最实用的 RSA 签名，以及它的一大堆工程麻烦（分块、乘法特性、消息太长），再讲&quot;安全性可证明&quot;的 Rabin 签名。</li>
+<li><strong>第八讲</strong>是三个&quot;ElGamal 家族&quot;的签名（DSA、ElGamal 签名、Schnorr 签名），加一个横跨全场的攻击武器——<strong>生日攻击</strong>。</li>
+</ul>
+<p><strong>阅读建议</strong>：</p>
+<ol>
+<li><strong>第 0 章必须看</strong>。这一册最卡人的前置知识（生成元与阶、费马小定理、中国剩余定理、复杂度记号、&quot;为什么开平方能省一半力气&quot;）都在这里。</li>
+<li>前两册讲过的（模运算、扩展 Euclidean 算法、模幂、Hash 函数、RSA、二次剩余）第 0.1 节给了一张回查表，不重复占篇幅。</li>
+<li>正文里凡标 <strong><mark class="bubu">补</mark></strong> 的段落，都是 PPT 没有、但你需要知道才能读懂的内容。</li>
+<li>讲义里<strong>插入了原 PPT 的页面截图</strong>（算法框、表格、图示、公式推导），图注里写了对应的 PPT 页码，对照原课件时直接翻。</li>
+<li>文末有<strong>术语中英对照表</strong>、<strong>关键数值速查表</strong>、<strong>FAQ</strong> 和<strong>自测题答案</strong>。</li>
+</ol>
+<p><strong>这一册三讲的骨架</strong>：</p>
+<pre><code>第六讲  离散对数
+   1 离散对数        ── DLP 定义、对数运算法则、换底公式
+   2 计算离散对数    ── 五种算法：穷举 → 小步大步 → rho → Pohlig-Hellman → 指数积分
+   3 ElGamal 公钥加密 ── 用 DLP 造的第一个加密方案
+   4 比特承诺        ── 球赛预测的故事 + 模 4 的离散对数
+   ↓
+第七讲  数字签名(上)
+   1 RSA 数字签名    ── 算法、例子、四类攻击、四个执行问题、随机化(PSS/PSS-R)
+   2 Rabin 数字签名  ── 安全性可证明的方案
+   ↓
+第八讲  数字签名(下)
+   1 ElGamal 族签名  ── DSA / ElGamal 签名 / Schnorr 签名
+   2 生日攻击        ── 一个能同时打掉 Hash 函数和加密方案的工具
+</code></pre>
+<p><strong>一句话概括核心</strong>：<strong>离散对数是这一册所有方案脚下的那块石头。</strong> 第六讲的加密、第八讲的三个签名方案，安全性全都建立在&quot;模 p 下算不出离散对数&quot;这一条上。而数字签名与加密的分工是：<strong>加密防的是&quot;别人偷看&quot;，签名防的是&quot;别人冒名&quot;。</strong></p>
+<hr>
+
+<div class="pager"><a class="pg prev" href="index.html"><span>← 返回</span><b>目录</b></a><a class="pg next" href="crypto-dl-signature-01.html"><span>下一节 →</span><b>0.1 承接：前两册已经铺好的地基</b></a></div>
+</div>
+
+<script>
+(function(){
+  var h=document.documentElement, saved=null, hide=null;
+  try{ saved=localStorage.getItem('jys-theme'); hide=localStorage.getItem('jys-navhide'); }catch(e){}
+  if(saved!=='dark') h.classList.add('light');   /* 默认浅色，贴合站点 */
+  if(hide==='1') h.classList.add('navhide');
+
+  document.getElementById('toggle').onclick=function(){
+    h.classList.toggle('light');
+    try{localStorage.setItem('jys-theme', h.classList.contains('light')?'light':'dark')}catch(e){}
+  };
+  function setHide(v){
+    h.classList.toggle('navhide', v);
+    try{localStorage.setItem('jys-navhide', v?'1':'0')}catch(e){}
+  }
+  document.getElementById('shide').onclick=function(){ setHide(true); };
+  document.getElementById('reopen').onclick=function(){ setHide(false); };
+
+  /* --- 当前章节高亮 --- */
+  var side=document.getElementById('side');
+  var links=[].slice.call(side.querySelectorAll('a[data-h]'));
+  var heads=links.map(function(a){return document.getElementById(a.getAttribute('data-h'));});
+  var userScrolled=false, timer=null;
+  side.addEventListener('wheel', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+  side.addEventListener('touchmove', function(){ userScrolled=true; clearTimeout(timer);
+    timer=setTimeout(function(){ userScrolled=false; }, 4000); }, {passive:true});
+
+  function update(){
+    var y=window.scrollY+150, idx=-1;
+    for(var i=0;i<heads.length;i++){
+      if(heads[i] && heads[i].offsetTop<=y) idx=i;
+    }
+    if(idx<0 && links.length) idx=0;      /* 还没滚到第一个章节时，高亮第一条 */
+    for(var k=0;k<links.length;k++) links[k].classList.toggle('cur', k===idx);
+    var cur=links[idx];
+    if(cur && !userScrolled){
+      var rt=cur.offsetTop, rb=rt+cur.offsetHeight;
+      if(rt<side.scrollTop+36 || rb>side.scrollTop+side.clientHeight-36){
+        side.scrollTop=Math.max(0, rt-side.clientHeight/2);
+      }
+    }
+  }
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+<script>
+/* 字形自检：本机若缺少覆盖 ⊕ ─ │ ┌ └ 的等宽字体，浏览器会回退到比例字体，
+   使 ASCII 结构图列宽不等（表现为错位）。这里检测并给出安装建议。 */
+(function(){
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;'+
+      'font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    /* 实测：Chrome/Windows + Consolas 在 40px 下约 25px/格；
+       若回退到比例字体（如 Segoe UI / 宋体）则约 36px/格。
+       以 29px 为界，既可放过 Consolas，又能识别回退。 */
+    if (per > 29 || per < 10) {
+      var tip = document.createElement('div');
+      tip.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:80;max-width:430px;'+
+        'background:var(--bg2);border:1px solid var(--accent2);border-radius:10px;'+
+        'padding:10px 13px;font-size:12.5px;line-height:1.7;color:var(--fg);'+
+        'box-shadow:0 4px 18px rgba(0,0,0,.3)';
+      tip.innerHTML = '<b style="color:var(--accent2)">字体提示</b><br>'+
+        '本机缺少 Consolas，ASCII 结构图可能错位。建议安装 '+
+        '<b>Consolas</b> 或 <b>DejaVu Sans Mono</b>（等宽且覆盖 ⊕ ─ │ ┌ └ 等符号）。'+
+        '<span style="float:right;cursor:pointer;color:var(--accent);margin-left:8px" '+
+        'onclick="this.parentNode.remove()">✕</span>';
+      document.body.appendChild(tip);
+    }
+  }catch(e){}
+})();
+</script>
+<footer class="site-footer">
+    <div class="footer-content">
+        <div class="footer-links">
+            <a href="../../index.html#about">关于我</a>
+            <a href="../../index.html#bilibili">B站空间</a>
+            <a href="../study.html">返回学习笔记</a>
+        </div>
+        <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+    </div>
+</footer>
+<script>
+/* 站点背景图片加载器（与 pages/study.html 用法一致） */
+document.addEventListener('DOMContentLoaded', function(){
+  if (window.initBackgroundLoader) {
+    window.initBackgroundLoader({
+      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      blurAmount: 0,
+      transitionDuration: 400
+    });
+  }
+});
+</script>
+<script>
+/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+(function(){
+  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
+  ready(function(){
+    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
+    if(!btn||!links) return;
+    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
+    links.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
