@@ -261,6 +261,30 @@ html, body{ width:100%; max-width:100%; overflow-x:hidden; }
 .wrap .nav > ul{ padding-left:0 !important; }
 .wrap a{ overflow-wrap:anywhere; word-break:break-word; }
 
+/* 【关键 3】正文插图（PPT 截图）居中并缩放到正文栏宽度 ------------------
+   第三册（第六/七/八讲）是唯一正文内嵌截图的讲义，共 72 张，原图一律
+   1700×1275（4:3）。而模板从未给正文 <img> 写过任何规则，站点 style.css
+   里也只有 .image-card / .gallery-item 这类组件规则、并不命中正文裸 <img>，
+   于是 max-width 保持默认的 none：1700px 的原图在 910px 左右的正文栏里
+   直接横向溢出；又因为【关键 0】为了防 <pre> 撑破页面在 html,body 上设了
+   overflow-x:hidden，溢出的右半截被静默裁掉、连横向滚动条都没有 ——
+   表现就是「图片不居中，而且右边被切掉一大块」。
+   这里统一：块级 + 不超过容器宽 + 高度自动 + 上下留白 + 水平居中。
+   范围限定在 .wrap 内，站点 header 的 .logo-avatar 不受影响。
+   注：用 max-width 而不是 width，小图不会被拉伸放大。 */
+.wrap img{
+  display:block;
+  max-width:100%;
+  height:auto;
+  margin:1.6em auto;
+  border-radius:8px;
+  box-shadow:0 2px 14px rgba(0,0,0,.22);
+}
+/* 窄屏图片贴满可用宽度即可，去掉过大的上下留白 */
+@media (max-width:900px){
+  .wrap img{ margin:1.1em auto; border-radius:6px; }
+}
+
 /* 固定右侧目录：下移到站点 header 之下，避免被吸顶导航压住。
    修好单行 nav 与列表边距之后，header 高 74.5px + 上边距 12px，底边在
    86.5px，因此目录从 96px 起（留约 9px 间隙）即可。
