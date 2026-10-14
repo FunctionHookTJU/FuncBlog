@@ -383,3 +383,29 @@ body > header{ margin-bottom:6px; }
   color:var(--accent); background:var(--bg3);
   border-left-color:var(--accent); font-weight:600;
 }
+
+/* ===== 量子讲义（tools/build_lecture.py）：勘误徽章与未撰写占位 ===== */
+mark.kanwu{
+  background:rgba(255,152,0,.18); color:var(--accent2);
+  border:1px solid rgba(255,152,0,.45); border-radius:5px;
+  padding:0 6px; margin-right:6px; font-size:.86em; font-weight:700;
+}
+.pending{
+  margin:28px 0; padding:16px 20px; border:1px dashed var(--accent2);
+  border-radius:10px; background:var(--bg2); color:var(--fg2); line-height:1.9;
+}
+/* 长公式在窄屏横向滚动，避免顶破容器 */
+.wrap .jysmath-display{ max-width:100%; }
+/* 自测题答案折叠块（讲义用原生 <details>） */
+.wrap details{
+  margin:1.15em 0; padding:.6em .9em; background:var(--bg2);
+  border:1px solid var(--line); border-radius:10px;
+}
+.wrap details summary{
+  cursor:pointer; color:var(--accent); font-weight:600; list-style:none;
+}
+.wrap details summary::-webkit-details-marker{ display:none }
+.wrap details summary::before{ content:"▸ "; color:var(--accent2) }
+.wrap details[open] summary{ margin-bottom:.5em }
+.wrap details[open] summary::before{ content:"▾ " }
+.wrap details>p:first-of-type{ margin-top:.2em }
