@@ -91,7 +91,8 @@ def main():
             continue
 
         prefix = shell.rel_prefix(rel)
-        want_shell = shell.render_shell(prefix, site["nav"])
+        active = shell.active_for(rel, site["nav"])
+        want_shell = shell.render_shell(prefix, site["nav"], active_href=active)
         want_footer = shell.render_footer(prefix)
 
         new = SHELL_RE.sub(lambda m: want_shell, text, count=1)

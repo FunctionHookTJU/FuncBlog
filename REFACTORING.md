@@ -205,6 +205,44 @@ python tools/unify_shell.py        # 应输出"外壳一致"
 
 ## 尚未完成
 
-- 那 15 个走 `scripts/header.js` 的手写页还没换成静态外壳，`header.js` 与 `components/header.html`、`loadHeader.js` 仍未删除
 - head 里的图标 / 样式表引用仍是各页硬编码的 `../../`，未纳入 site_shell
-- 遗留测试页与 `assets/files/bridge_server.exe`、重复的 `assets/img` 未清理
+- 页脚仍是两套：15 个手写页用的是自带 `<footer>`（带 `.container` 包裹、链接只有「关于我 / Github」），
+  223 个讲义页用 `<footer class="site-footer">`。未统一。
+- 讲义页的内联「移动端菜单」脚本与 `scripts/site-shell.js` 是同一逻辑的两份拷贝
+  （为了少一个请求），改逻辑时要同时改两处
+- 遗留测试页 `pages/bg-test.html`、`pages/background-demo.html`、`pages/index_dev.html` 仍在
+  （均无入链，留作调试用）
+- `assets/files/bridge_server.exe`（Windows 可执行文件）仍入库；`assets/img` 与 `assets/images` 仍并存
+
+---
+
+# 第三轮：手写页也换成静态外壳（2026-10-25）
+
+`scripts/header.js` 的职责被拆成两半：**生成 HTML** 归构建期，**绑定交互**留给一个薄脚本。
+
+- 新增 `scripts/site-shell.js`：只做移动端菜单 + 派发 `headerLoaded` 事件（音频播放器靠它重绑按钮）
+- 15 个手写页：删掉 `<script src="scripts/header.js" defer>`，改为
+  - `<script src="[前缀]scripts/audioPlayer.js" defer></script>`
+  - `<script src="[前缀]scripts/site-shell.js" defer></script>`
+  - 在 `<body>` 开头写入 `site_shell.render_shell(prefix, nav, active_href=...)` 的静态结果
+- 删除 `scripts/header.js`、`scripts/loadHeader.js`、`components/header.html`（`components/` 目录已空并移除）
+- 新增 `site_shell.active_for(页面路径)`：按「完全匹配导航 href → 讲义子页 → 不高亮」判定当前页，
+  与改造前 header.js 按文件名匹配的行为一致
+- 顺手修掉 `pages/index_dev.html` 里唯一一条死链；删除 0 字节的 `docs/domainname.html`
+
+### 收益与代价
+
+- 首屏就有 header，不再有「先空白后弹出」的闪烁；也不再依赖 JS 才能看到导航
+- 代价：`active` 高亮从运行时算变成构建期算，新增页面时要显式传 `active_href`
+  （或事后跑一次 `python tools/unify_shell.py --write` 让它按 `active_for()` 规则补上）
+- CSS 里 `.nav-links a.active` 是 `font-weight: 600`；旧的 header.js 还会额外塞一个行内
+  `font-weight: bold`（700）。删除后与 223 个讲义页一致了，视为修正而非回归
+
+### 验证
+
+- `check_links.py`：250 页 / 16606 条站内链接，**0 问题**
+- `unify_shell.py`：238 个含内联 header 的页面全部「外壳一致」，且不再有跳过项
+- 结构断言：15 个手写页各恰好 1 个 `<header>`、1 个 `liquid-tab`、7 条导航、`active` ≤ 1，
+  且 `audioPlayer.js` 在 `site-shell.js` 之前
+- 截图验收：`index.html`、`pages/study.html`、`pages/crypto-hash-rsa/crypto-hash-rsa-01.html`
+  三页导航高亮、音频播放器控件、页脚均正常

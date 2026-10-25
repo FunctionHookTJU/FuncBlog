@@ -73,12 +73,47 @@ def nav_items(site=None):
     return site["nav"]
 
 
-def render_header(prefix, nav=None):
-    """prefix: 回到站点根的 '../' 串；nav: lectures.json 的 site.nav（根相对 href）。"""
+def active_for(rel_path, nav=None):
+    """页面相对仓库根的路径 → 该高亮的导航 href（'' 表示不高亮）。
+
+    规则：
+      1. 路径与某条导航 href 完全相等 -> 高亮它（index.html / pages/study.html …）
+      2. 位于 pages/<slug>/ 下的讲义子页（三段路径）-> 高亮配置里标了 active 的那条
+         （目前是「学习笔记」）
+      3. 其余（docs/*.html 等）-> 不高亮
+
+    这与改造前 scripts/header.js 的行为一致：它按文件名匹配，docs 下的页面本来就不高亮；
+    讲义页则由生成器硬编码「学习笔记」为 active。
+    """
+    nav = nav if nav is not None else nav_items()
+    rel = rel_path.replace("\\", "/").lstrip("/")
+    for it in nav:
+        if not it.get("external") and it["href"] == rel:
+            return rel
+    parts = rel.split("/")
+    if len(parts) == 3 and parts[0] == "pages":
+        for it in nav:
+            if it.get("active") and not it.get("external"):
+                return it["href"]
+    return ""
+
+
+def render_header(prefix, nav=None, active_href=None):
+    """prefix: 回到站点根的 '../' 串；nav: lectures.json 的 site.nav（根相对 href）。
+
+    active_href:
+      None —— 沿用配置里的 active 标记（讲义页共用，学习笔记高亮）
+      ''  —— 一律不高亮
+      其他 —— 仅当导航 href 与之相等时高亮（手写页按自身路径传入）
+    """
     items = []
     for it in (nav if nav is not None else nav_items()):
+        if active_href is None:
+            is_active = bool(it.get("active"))
+        else:
+            is_active = bool(active_href) and it["href"] == active_href
         attrs = ""
-        if it.get("active"):
+        if is_active:
             attrs += ' class="active"'
         if it.get("external"):
             attrs += ' target="_blank" rel="noopener noreferrer"'
@@ -128,10 +163,10 @@ def render_footer(prefix):
 </footer>""" % (links, COPYRIGHT)
 
 
-def render_shell(prefix, nav=None, with_svg_defs=True):
+def render_shell(prefix, nav=None, with_svg_defs=True, active_href=None):
     """一次拿到整套外壳（SVG 定义 + header）。"""
     head = (SVG_DEFS + "\n") if with_svg_defs else ""
-    return head + render_header(prefix, nav)
+    return head + render_header(prefix, nav, active_href)
 
 
 if __name__ == "__main__":  # 自检：同一份配置在不同深度都指向同一批文件

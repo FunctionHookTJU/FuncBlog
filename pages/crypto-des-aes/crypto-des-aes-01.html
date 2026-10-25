@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 <script>
-/* 站点移动端菜单交互（等价于 scripts/header.js 的 setupMobileMenu） */
+/* 站点移动端菜单交互（与 scripts/site-shell.js 同逻辑；讲义页内联一份以减少请求） */
 (function(){
   function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
   ready(function(){
