@@ -114,6 +114,141 @@
             margin-bottom: 1.5rem;
             color: var(--primary-color);
         }
+
+        /* ---- 留言板（云数据库版）---- */
+        .gb-form {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .gb-form input,
+        .gb-form textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #e3e3e8;
+            border-radius: 8px;
+            padding: 0.65rem 0.8rem;
+            font: inherit;
+            font-size: 0.95rem;
+            color: #24292f;
+            background: #fbfbfd;
+            resize: vertical;
+        }
+
+        .gb-form textarea {
+            min-height: 88px;
+        }
+
+        .gb-form input:focus,
+        .gb-form textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: #fff;
+        }
+
+        .gb-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .gb-actions button {
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.4rem;
+            font: inherit;
+            font-weight: 600;
+            color: #fff;
+            background: var(--primary-color);
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .gb-actions button:hover:not(:disabled) {
+            opacity: 0.88;
+        }
+
+        .gb-actions button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .gb-count {
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .gb-status {
+            min-height: 1.4em;
+            font-size: 0.9rem;
+            margin: 0.75rem 0 0;
+            color: #6b7280;
+        }
+
+        .gb-status.error {
+            color: #c0392b;
+        }
+
+        .gb-status.ok {
+            color: #1a7f37;
+        }
+
+        .gb-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.25rem 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .gb-item {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 0.9rem 1.1rem;
+        }
+
+        .gb-item-head {
+            display: flex;
+            align-items: baseline;
+            gap: 0.6rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .gb-item-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .gb-item-time {
+            font-size: 0.78rem;
+            color: #9aa0a6;
+        }
+
+        .gb-item-text {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #24292f;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .gb-item.is-new {
+            animation: gbFadeIn 0.5s ease;
+        }
+
+        @keyframes gbFadeIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: none; }
+        }
     </style>
 </head>
 <body>
@@ -255,17 +390,190 @@
         
     </main>
     
-    <!-- Utterances 评论系统 -->
-    <section class="comments-section">
+    <!-- 留言板：云数据库存储，访客免登录 -->
+    <section class="comments-section" id="guestbook">
         <h2>留言板</h2>
-        <script src="https://utteranc.es/client.js"
-                repo="FunctionHookTJU/fxHook.io"
-                issue-term="pathname"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-        </script>
+        <form class="gb-form" id="gb-form" novalidate>
+            <input id="gb-name" type="text" maxlength="30" placeholder="昵称（可以不填）" autocomplete="nickname">
+            <textarea id="gb-message" maxlength="500" placeholder="想说的话…" required></textarea>
+            <div class="gb-actions">
+                <button type="submit" id="gb-submit">发布留言</button>
+                <span class="gb-count" id="gb-count"></span>
+            </div>
+        </form>
+        <p class="gb-status" id="gb-status" role="status" aria-live="polite">正在加载留言…</p>
+        <ul class="gb-list" id="gb-list"></ul>
     </section>
+
+    <!-- WorkBuddy 云服务 SDK（本项目为无构建的纯 HTML，故用 CDN 形式） -->
+    <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        /* 云服务公共配置：仅这四个字段可进前端，均来自开通时返回的 publicConfig */
+        var PUBLIC_CONFIG = {
+            endpoint: 'https://fxhook-site.app.workbuddy.host',
+            oauthRelayBaseUrl: 'https://www.workbuddy.cn/v2/as/genie-baas/oauth',
+            publishableKey: 'wbpk_8BvBV5X9GIf3XHlxJd1hmU_ldb7SRvlx2Gl62I0L8A7D6P6xQUMN2fv'
+        };
+        var TABLE = 'guestbook_messages';
+        var PAGE_SIZE = 50;
+
+        var form = document.getElementById('gb-form');
+        var nameInput = document.getElementById('gb-name');
+        var msgInput = document.getElementById('gb-message');
+        var submitBtn = document.getElementById('gb-submit');
+        var statusEl = document.getElementById('gb-status');
+        var listEl = document.getElementById('gb-list');
+        var countEl = document.getElementById('gb-count');
+
+        var cloud = null;
+
+        function setStatus(text, kind) {
+            statusEl.textContent = text || '';
+            statusEl.className = 'gb-status' + (kind ? ' ' + kind : '');
+        }
+
+        function formatTime(iso) {
+            var d = new Date(iso);
+            if (isNaN(d.getTime())) return '';
+            var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+            return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+                + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+        }
+
+        function renderItem(row, isNew) {
+            var li = document.createElement('li');
+            li.className = 'gb-item' + (isNew ? ' is-new' : '');
+
+            var head = document.createElement('div');
+            head.className = 'gb-item-head';
+
+            var name = document.createElement('span');
+            name.className = 'gb-item-name';
+            name.textContent = (row.name && String(row.name).trim()) || '匿名访客';
+
+            var time = document.createElement('span');
+            time.className = 'gb-item-time';
+            time.textContent = formatTime(row.created_at);
+
+            head.appendChild(name);
+            head.appendChild(time);
+
+            var text = document.createElement('p');
+            text.className = 'gb-item-text';
+            text.textContent = row.message;
+
+            li.appendChild(head);
+            li.appendChild(text);
+            return li;
+        }
+
+        function renderList(rows) {
+            listEl.textContent = '';
+            rows.forEach(function (row) { listEl.appendChild(renderItem(row, false)); });
+            countEl.textContent = rows.length ? '共 ' + rows.length + ' 条' : '';
+        }
+
+        function explainError(err) {
+            var code = err && err.code;
+            if (code === '42P01') return '留言表还没建好，请联系站主。';
+            if (code === '42501') return '没有权限写入留言，请联系站主检查权限配置。';
+            if (code === '23514') return '内容长度不符合要求。';
+            return '操作失败：' + ((err && err.message) || '网络异常，请稍后再试');
+        }
+
+        function loadMessages() {
+            return cloud.database
+                .from(TABLE)
+                .select('id, name, message, created_at')
+                .order('created_at', { ascending: false })
+                .limit(PAGE_SIZE)
+                .then(function (res) {
+                    if (res.error) {
+                        setStatus(explainError(res.error), 'error');
+                        return;
+                    }
+                    var rows = res.data || [];
+                    renderList(rows);
+                    setStatus(rows.length ? '' : '还没有人留言，来做第一个吧。');
+                });
+        }
+
+        function onSubmit(e) {
+            e.preventDefault();
+            var message = msgInput.value.trim();
+            var name = nameInput.value.trim();
+
+            if (!message) {
+                setStatus('留言内容不能为空。', 'error');
+                msgInput.focus();
+                return;
+            }
+            if (message.length > 500) {
+                setStatus('留言最多 500 字。', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            setStatus('正在发布…');
+
+            cloud.database
+                .from(TABLE)
+                .insert({ name: name || null, message: message })
+                .select()
+                .then(function (res) {
+                    if (res.error) {
+                        setStatus(explainError(res.error), 'error');
+                        return;
+                    }
+                    var created = (res.data && res.data[0]) || null;
+                    msgInput.value = '';
+                    setStatus('留言已发布，谢谢！', 'ok');
+                    if (created) {
+                        listEl.insertBefore(renderItem(created, true), listEl.firstChild);
+                        countEl.textContent = '共 ' + listEl.children.length + ' 条';
+                    } else {
+                        return loadMessages();
+                    }
+                })
+                .then(function () {
+                    submitBtn.disabled = false;
+                })
+                .catch(function (err) {
+                    setStatus(explainError(err), 'error');
+                    submitBtn.disabled = false;
+                });
+        }
+
+        function boot() {
+            if (!window.WorkBuddyCloud || !window.WorkBuddyCloud.createWorkBuddyCloud) {
+                setStatus('留言板加载失败：云服务 SDK 未能载入，请检查网络后刷新。', 'error');
+                submitBtn.disabled = true;
+                return;
+            }
+            try {
+                cloud = window.WorkBuddyCloud.createWorkBuddyCloud({
+                    endpoint: PUBLIC_CONFIG.endpoint,
+                    oauthRelayBaseUrl: PUBLIC_CONFIG.oauthRelayBaseUrl,
+                    publishableKey: PUBLIC_CONFIG.publishableKey
+                });
+            } catch (err) {
+                setStatus('留言板初始化失败：' + ((err && err.message) || '未知错误'), 'error');
+                submitBtn.disabled = true;
+                return;
+            }
+
+            form.addEventListener('submit', onSubmit);
+            loadMessages().catch(function (err) {
+                setStatus(explainError(err), 'error');
+            });
+        }
+
+        boot();
+    })();
+    </script>
     
     <!-- 页脚 -->
     <footer>
