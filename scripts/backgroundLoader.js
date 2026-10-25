@@ -3,6 +3,18 @@
  * 优先加载最小尺寸图片，逐步加载大尺寸图片
  * 实现虚化过渡效果
  */
+/* 站点根：从本脚本自身的 URL 反推（页面深度不同也能算对，且不写死域名） */
+var SITE_ROOT = (function () {
+    var RE = /\/scripts\/backgroundLoader\.js(?:[?#]|$)/;
+    var s = document.currentScript;
+    if (!s || !s.src || !RE.test(s.src)) {
+        s = Array.prototype.slice.call(document.getElementsByTagName('script'))
+            .filter(function (x) { return x.src && RE.test(x.src); }).pop();
+    }
+    if (!s || !s.src) return '';
+    try { return new URL('..', s.src).href; } catch (e) { return ''; }
+})();
+
 class BackgroundLoader {
     constructor(options = {}) {
         this.images = [
@@ -14,7 +26,7 @@ class BackgroundLoader {
             { name: 'background4k.webp', size: '4k' }
         ];
         
-        this.path = options.path || 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/';
+        this.path = options.path || SITE_ROOT + 'assets/images/bg/';
         this.container = options.container || document.body;
         this.blurAmount = options.blurAmount || 0;
         this.transitionDuration = options.transitionDuration || 300;

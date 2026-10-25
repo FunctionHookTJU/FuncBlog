@@ -1,3 +1,17 @@
+/* 站点根（形如 https://host/fxHook.io/）：从本脚本自身的 URL 反推。
+   不用相对路径是因为音频 URL 在 new Audio() 里按文档解析，页面深度不同会算错；
+   也不用写死域名，因为仓库站点部署在 /FuncBlog/ 这类子路径下。 */
+var SITE_ROOT = (function () {
+    var RE = /\/scripts\/audioPlayer\.js(?:[?#]|$)/;
+    var s = document.currentScript;
+    if (!s || !s.src || !RE.test(s.src)) {
+        s = Array.prototype.slice.call(document.getElementsByTagName('script'))
+            .filter(function (x) { return x.src && RE.test(x.src); }).pop();
+    }
+    if (!s || !s.src) return '';
+    try { return new URL('..', s.src).href; } catch (e) { return ''; }
+})();
+
 class AudioPlayer {
     constructor() {
         this.audio = null;
@@ -6,18 +20,18 @@ class AudioPlayer {
         this.previousVolume = 0.06;
         this.isFirstLoad = true;
         
-        // 音乐列表 - 使用CDN加速的本地音频文件
+        // 音乐列表 - 直接引用仓库内的音频文件（不再走 jsDelivr）
         this.audioSources = [
             {
-                url: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/audio/BATTLEPLAN_ARCLIGHT_opus_36k.opus',
+                url: SITE_ROOT + 'assets/audio/BATTLEPLAN_ARCLIGHT_opus_36k.opus',
                 name: 'BATTLEPLAN_ARCLIGHT'
             },
             {
-                url: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/audio/Chen-U-Libertus_opus_36k.opus',
+                url: SITE_ROOT + 'assets/audio/Chen-U-Libertus_opus_36k.opus',
                 name: 'Chen-U-Libertus'
             },
             {
-                url: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/audio/in_your_blue_eyes_opus_36k.opus',
+                url: SITE_ROOT + 'assets/audio/in_your_blue_eyes_opus_36k.opus',
                 name: 'in_your_blue_eyes'
             }
         ];

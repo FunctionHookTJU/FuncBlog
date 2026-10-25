@@ -12,8 +12,18 @@
 (function () {
     'use strict';
 
-    // 图片 CDN 根路径（与仓库 assets/images 结构一致，推送后 jsdelivr 即可访问）
-    var CDN = 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/';
+    // 图片根路径：从本脚本自身的 URL 反推站点根，不依赖页面深度，也不走 jsDelivr
+    var SITE_ROOT = (function () {
+        var RE = /\/scripts\/pictureGallery\.js(?:[?#]|$)/;
+        var s = document.currentScript;
+        if (!s || !s.src || !RE.test(s.src)) {
+            s = Array.prototype.slice.call(document.getElementsByTagName('script'))
+                .filter(function (x) { return x.src && RE.test(x.src); }).pop();
+        }
+        if (!s || !s.src) return '';
+        try { return new URL('..', s.src).href; } catch (e) { return ''; }
+    })();
+    var CDN = SITE_ROOT + 'assets/images/';
 
     // 每套图的配置
     //  - containerId: 页面里挂载点的 id

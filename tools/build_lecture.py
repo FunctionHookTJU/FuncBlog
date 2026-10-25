@@ -273,7 +273,7 @@ SCRIPTS_TAIL = """
 document.addEventListener('DOMContentLoaded', function(){
   if (window.initBackgroundLoader) {
     window.initBackgroundLoader({
-      path: 'https://cdn.jsdelivr.net/gh/FunctionHookTJU/fxHook.io@master/assets/images/bg/',
+      path: '@@PREFIX@@assets/images/bg/',
       blurAmount: 0,
       transitionDuration: 400
     });
@@ -284,7 +284,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
 def scripts(prefix):
     """主体内联脚本 + 页脚 + 追加脚本 + 外壳行为脚本（都由 site_shell 按 prefix 渲染）。"""
-    return (SCRIPTS_HEAD + shell.render_footer(prefix) + SCRIPTS_TAIL
+    return (SCRIPTS_HEAD + shell.render_footer(prefix)
+            + SCRIPTS_TAIL.replace("@@PREFIX@@", prefix)
             + "\n" + shell.render_script(prefix))
 
 
