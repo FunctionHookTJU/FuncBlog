@@ -1,14 +1,15 @@
 {
   "_comment": "讲义构建的唯一事实来源。每节 = 一个页面。src 相对仓库根；md 只写正文（不写页面标题）。",
   "site": {
+    "_navNote": "nav 的 href 一律写相对站点根（如 pages/diary.html）。不要写 ../ 前缀，也不要写以 / 开头的站根绝对路径；渲染时由 tools/site_shell.py 按页面层级自动补前缀。",
     "nav": [
-      { "href": "../../index.html", "text": "首页" },
-      { "href": "../diary.html", "text": "日记" },
-      { "href": "../study.html", "text": "学习笔记", "active": true },
+      { "href": "index.html", "text": "首页" },
+      { "href": "pages/diary.html", "text": "日记" },
+      { "href": "pages/study.html", "text": "学习笔记", "active": true },
       { "href": "https://github.com/FunctionHookTJU", "text": "Github", "external": true },
-      { "href": "../communicate.html", "text": "交流" },
-      { "href": "../picture.html", "text": "图片墙" },
-      { "href": "../products.html", "text": "新产品" }
+      { "href": "pages/communicate.html", "text": "交流" },
+      { "href": "pages/picture.html", "text": "图片墙" },
+      { "href": "pages/products.html", "text": "新产品" }
     ]
   },
   "lectures": [
