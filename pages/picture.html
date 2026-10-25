@@ -300,6 +300,22 @@
     </script>
     
     <main class="container">
+        <section class="content-section" id="cloud-gallery">
+            <h2>最新上传</h2>
+            <p class="cg-hint">所有人可看；上传和删除需要管理密码。</p>
+            <div class="cg-admin">
+                <input id="cg-pw" type="password" placeholder="管理密码" autocomplete="current-password" aria-label="管理密码">
+                <label class="cg-file">
+                    <input id="cg-file" type="file" accept="image/*" hidden>
+                    <span id="cg-file-label">选择图片</span>
+                </label>
+                <input id="cg-title" type="text" maxlength="80" placeholder="图片说明（可选）" aria-label="图片说明">
+                <button type="button" id="cg-upload" disabled>上传</button>
+            </div>
+            <p class="cg-status" id="cg-status" role="status" aria-live="polite">正在加载…</p>
+            <div class="cg-grid" id="cg-grid"></div>
+        </section>
+
         <section class="content-section" id="qiyi">
             <h2>奇异搞笑</h2>
             <!-- 由 scripts/pictureGallery.js 数据驱动渲染 -->
@@ -317,22 +333,6 @@
             <h2>魔法少女的魔女审判</h2>
             <!-- 由 scripts/pictureGallery.js 数据驱动渲染 -->
             <div id="mocai-gallery"></div>
-        </section>
-
-        <section class="content-section" id="cloud-gallery">
-            <h2>最新上传</h2>
-            <p class="cg-hint">所有人可看；上传和删除需要管理密码。</p>
-            <div class="cg-admin">
-                <input id="cg-pw" type="password" placeholder="管理密码" autocomplete="current-password" aria-label="管理密码">
-                <label class="cg-file">
-                    <input id="cg-file" type="file" accept="image/*" hidden>
-                    <span id="cg-file-label">选择图片</span>
-                </label>
-                <input id="cg-title" type="text" maxlength="80" placeholder="图片说明（可选）" aria-label="图片说明">
-                <button type="button" id="cg-upload" disabled>上传</button>
-            </div>
-            <p class="cg-status" id="cg-status" role="status" aria-live="polite">正在加载…</p>
-            <div class="cg-grid" id="cg-grid"></div>
         </section>
     </main>
 
