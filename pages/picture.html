@@ -96,6 +96,159 @@
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* ---- 最新上传（云数据库）---- */
+        .cg-hint {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin: -0.5rem 0 1rem;
+        }
+
+        .cg-admin {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 0.85rem;
+        }
+
+        .cg-admin input[type="password"],
+        .cg-admin input[type="text"] {
+            flex: 1 1 180px;
+            min-width: 120px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 8px;
+            padding: 0.55rem 0.7rem;
+            font: inherit;
+            font-size: 0.92rem;
+            color: #e8e8ea;
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .cg-file {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.55rem 0.9rem;
+            border-radius: 8px;
+            border: 1px dashed rgba(255, 255, 255, 0.28);
+            font-size: 0.9rem;
+            color: #cfcfd4;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .cg-file:hover {
+            border-color: #7f77dd;
+            color: #fff;
+        }
+
+        #cg-upload {
+            border: none;
+            border-radius: 8px;
+            padding: 0.55rem 1.3rem;
+            font: inherit;
+            font-weight: 600;
+            color: #fff;
+            background: #534ab7;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        #cg-upload:hover:not(:disabled) { opacity: 0.86; }
+        #cg-upload:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        .cg-status {
+            min-height: 1.4em;
+            font-size: 0.88rem;
+            margin: 0.8rem 0 0;
+            color: #9aa0a6;
+        }
+
+        .cg-status.error { color: #f09595; }
+        .cg-status.ok { color: #9fe1cb; }
+
+        .cg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .cg-tile {
+            position: relative;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cg-tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            cursor: zoom-in;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+
+        .cg-tile img.loaded { opacity: 1; }
+
+        .cg-tile .cg-del {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 26px;
+            height: 26px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .cg-tile:hover .cg-del { opacity: 1; }
+
+        .cg-tile .cg-cap {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 0.35rem 0.5rem;
+            font-size: 0.72rem;
+            color: #e8e8ea;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.72));
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cg-viewer {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            cursor: zoom-out;
+        }
+
+        .cg-viewer img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -165,6 +318,22 @@
             <!-- 由 scripts/pictureGallery.js 数据驱动渲染 -->
             <div id="mocai-gallery"></div>
         </section>
+
+        <section class="content-section" id="cloud-gallery">
+            <h2>最新上传</h2>
+            <p class="cg-hint">所有人可看；上传和删除需要管理密码。</p>
+            <div class="cg-admin">
+                <input id="cg-pw" type="password" placeholder="管理密码" autocomplete="current-password" aria-label="管理密码">
+                <label class="cg-file">
+                    <input id="cg-file" type="file" accept="image/*" hidden>
+                    <span id="cg-file-label">选择图片</span>
+                </label>
+                <input id="cg-title" type="text" maxlength="80" placeholder="图片说明（可选）" aria-label="图片说明">
+                <button type="button" id="cg-upload" disabled>上传</button>
+            </div>
+            <p class="cg-status" id="cg-status" role="status" aria-live="polite">正在加载…</p>
+            <div class="cg-grid" id="cg-grid"></div>
+        </section>
     </main>
 
     <footer>
@@ -224,5 +393,251 @@
         });
     </script>
     -->
+
+    <!-- WorkBuddy 云服务 SDK（纯静态无构建 → CDN 形式） -->
+    <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+    <script>
+    /**
+     * 「最新上传」：云数据库存储
+     *
+     * 权限模型（服务端强制，前端只是界面）：
+     *   - 匿名/访客：对 gallery_photos 只有 SELECT，能看不能写
+     *   - 上传/删除：只能通过 gallery_add_photo / gallery_del_photo 两个
+     *     SECURITY DEFINER 函数，函数内部用 sha256 比对管理密码
+     *   - 密码不在前端存储、不参与比对，只作为参数传给函数
+     */
+    (function () {
+        'use strict';
+
+        var PUBLIC_CONFIG = {
+            endpoint: 'https://fxhook-site.app.workbuddy.host',
+            oauthRelayBaseUrl: 'https://www.workbuddy.cn/v2/as/genie-baas/oauth',
+            publishableKey: 'wbpk_8BvBV5X9GIf3XHlxJd1hmU_ldb7SRvlx2Gl62I0L8A7D6P6xQUMN2fv'
+        };
+        var MAX_SIDE = 1600;        // 长边上限，超过则等比缩小
+        var JPEG_QUALITY = 0.85;
+        var MAX_B64 = 3800000;      // 数据库约束是 4,000,000 字符，留点余量
+
+        var grid = document.getElementById('cg-grid');
+        var statusEl = document.getElementById('cg-status');
+        var pwInput = document.getElementById('cg-pw');
+        var fileInput = document.getElementById('cg-file');
+        var fileLabel = document.getElementById('cg-file-label');
+        var titleInput = document.getElementById('cg-title');
+        var uploadBtn = document.getElementById('cg-upload');
+
+        var cloud = null;
+        var pendingFile = null;
+
+        function setStatus(text, kind) {
+            statusEl.textContent = text || '';
+            statusEl.className = 'cg-status' + (kind ? ' ' + kind : '');
+        }
+
+        function explain(err) {
+            var code = err && err.code;
+            var msg = (err && err.message) || '';
+            if (code === '42501' || /bad_password/.test(msg)) return '密码不对，上传/删除被拒绝。';
+            if (code === '22023') return '图片不合适：可能是空的，或体积超过上限（单张约 2MB 内）。';
+            if (code === '42P01') return '照片表还没建好，请联系站主。';
+            if (/PERMISSION|not allowed/i.test(msg)) return '没有权限执行该操作。';
+            return '操作失败：' + (msg || '网络异常，请稍后再试');
+        }
+
+        function loadList() {
+            return cloud.database
+                .from('gallery_photos')
+                .select('id, title, mime, created_at')
+                .order('created_at', { ascending: false })
+                .limit(60)
+                .then(function (res) {
+                    if (res.error) { setStatus(explain(res.error), 'error'); return; }
+                    var rows = res.data || [];
+                    grid.textContent = '';
+                    rows.forEach(function (row) { grid.appendChild(makeTile(row)); });
+                    setStatus(rows.length ? '' : '还没有上传的图片。');
+                });
+        }
+
+        function makeTile(row) {
+            var tile = document.createElement('div');
+            tile.className = 'cg-tile';
+            tile.setAttribute('data-id', row.id);
+
+            var img = document.createElement('img');
+            img.alt = row.title || '上传的图片';
+            img.loading = 'lazy';
+
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'cg-del';
+            del.title = '删除这张';
+            del.textContent = '×';
+            del.addEventListener('click', function (e) {
+                e.stopPropagation();
+                removePhoto(row.id);
+            });
+
+            tile.appendChild(img);
+            tile.appendChild(del);
+
+            if (row.title) {
+                var cap = document.createElement('span');
+                cap.className = 'cg-cap';
+                cap.textContent = row.title;
+                tile.appendChild(cap);
+            }
+
+            lazyLoad(tile, img, row.id);
+            return tile;
+        }
+
+        /* 图片本体按需拉取：列表只取元数据，滚动到可视区才下载 base64 */
+        function lazyLoad(tile, img, id) {
+            var load = function () {
+                cloud.database
+                    .from('gallery_photos')
+                    .select('data, mime')
+                    .eq('id', id)
+                    .single()
+                    .then(function (res) {
+                        if (res.error || !res.data) return;
+                        img.src = 'data:' + (res.data.mime || 'image/jpeg') + ';base64,' + res.data.data;
+                        img.addEventListener('load', function () { img.classList.add('loaded'); });
+                        img.addEventListener('click', function () { openViewer(img.src); });
+                    });
+            };
+
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (en) {
+                        if (en.isIntersecting) { io.disconnect(); load(); }
+                    });
+                }, { rootMargin: '200px' });
+                io.observe(tile);
+            } else {
+                load();
+            }
+        }
+
+        function openViewer(src) {
+            var box = document.createElement('div');
+            box.className = 'cg-viewer';
+            var big = document.createElement('img');
+            big.src = src;
+            box.appendChild(big);
+            box.addEventListener('click', function () { box.remove(); });
+            document.body.appendChild(box);
+        }
+
+        function shrink(file) {
+            return new Promise(function (resolve, reject) {
+                var url = URL.createObjectURL(file);
+                var img = new Image();
+                img.onload = function () {
+                    var scale = Math.min(1, MAX_SIDE / Math.max(img.width, img.height));
+                    var w = Math.max(1, Math.round(img.width * scale));
+                    var h = Math.max(1, Math.round(img.height * scale));
+                    var canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    URL.revokeObjectURL(url);
+                    var dataUrl = canvas.toDataURL('image/jpeg', JPEG_QUALITY);
+                    resolve({ mime: 'image/jpeg', base64: dataUrl.split(',')[1] });
+                };
+                img.onerror = function () {
+                    URL.revokeObjectURL(url);
+                    reject(new Error('图片读取失败，换一张试试'));
+                };
+                img.src = url;
+            });
+        }
+
+        function doUpload() {
+            var pw = pwInput.value;
+            if (!pw) { setStatus('先填管理密码。', 'error'); pwInput.focus(); return; }
+            if (!pendingFile) { setStatus('先选一张图片。', 'error'); return; }
+
+            uploadBtn.disabled = true;
+            setStatus('正在压缩并上传…');
+
+            shrink(pendingFile)
+                .then(function (img) {
+                    if (img.base64.length > MAX_B64) {
+                        throw new Error('压缩后仍然太大，请换一张小一点的图');
+                    }
+                    return cloud.database.rpc('gallery_add_photo', {
+                        pw: pw,
+                        p_title: titleInput.value.trim(),
+                        p_mime: img.mime,
+                        p_data: img.base64
+                    });
+                })
+                .then(function (res) {
+                    if (res.error) { setStatus(explain(res.error), 'error'); return; }
+                    setStatus('上传成功。', 'ok');
+                    pendingFile = null;
+                    fileInput.value = '';
+                    fileLabel.textContent = '选择图片';
+                    titleInput.value = '';
+                    return loadList();
+                })
+                .catch(function (err) { setStatus(explain(err), 'error'); })
+                .then(function () { uploadBtn.disabled = !pendingFile; });
+        }
+
+        function removePhoto(id) {
+            var pw = pwInput.value;
+            if (!pw) {
+                pw = window.prompt('删除需要管理密码：');
+                if (!pw) return;
+            }
+            if (!window.confirm('确定删除这张图片？删除后不能恢复。')) return;
+
+            setStatus('正在删除…');
+            cloud.database.rpc('gallery_del_photo', { pw: pw, p_id: id })
+                .then(function (res) {
+                    if (res.error) { setStatus(explain(res.error), 'error'); return; }
+                    if (res.data === false) { setStatus('这张图可能已经被删掉了。', 'error'); return; }
+                    setStatus('已删除。', 'ok');
+                    var tile = grid.querySelector('[data-id="' + id + '"]');
+                    if (tile) tile.remove();
+                })
+                .catch(function (err) { setStatus(explain(err), 'error'); });
+        }
+
+        function boot() {
+            if (!window.WorkBuddyCloud || !window.WorkBuddyCloud.createWorkBuddyCloud) {
+                setStatus('云服务 SDK 没加载出来，请检查网络后刷新。', 'error');
+                uploadBtn.disabled = true;
+                return;
+            }
+            try {
+                cloud = window.WorkBuddyCloud.createWorkBuddyCloud({
+                    endpoint: PUBLIC_CONFIG.endpoint,
+                    oauthRelayBaseUrl: PUBLIC_CONFIG.oauthRelayBaseUrl,
+                    publishableKey: PUBLIC_CONFIG.publishableKey
+                });
+            } catch (err) {
+                setStatus('初始化失败：' + ((err && err.message) || '未知错误'), 'error');
+                uploadBtn.disabled = true;
+                return;
+            }
+
+            fileInput.addEventListener('change', function () {
+                pendingFile = fileInput.files && fileInput.files[0] || null;
+                fileLabel.textContent = pendingFile ? pendingFile.name.slice(0, 18) : '选择图片';
+                uploadBtn.disabled = !pendingFile;
+                if (pendingFile) setStatus('');
+            });
+            uploadBtn.addEventListener('click', doUpload);
+
+            loadList().catch(function (err) { setStatus(explain(err), 'error'); });
+        }
+
+        boot();
+    })();
+    </script>
 </body>
 </html>
