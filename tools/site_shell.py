@@ -163,6 +163,14 @@ def render_footer(prefix):
 </footer>""" % (links, COPYRIGHT)
 
 
+def render_script(prefix):
+    """外壳行为脚本的标签（移动端菜单 + 派发 headerLoaded）。
+
+    讲义页放在 body 末尾（DOM 已就绪，不加 defer）；手写页放在 head 里并加 defer。
+    """
+    return '<script src="%sscripts/site-shell.js"></script>' % prefix
+
+
 def render_shell(prefix, nav=None, with_svg_defs=True, active_href=None):
     """一次拿到整套外壳（SVG 定义 + header）。"""
     head = (SVG_DEFS + "\n") if with_svg_defs else ""

@@ -279,26 +279,13 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 });
-</script>
-<script>
-/* 站点移动端菜单交互（与 scripts/site-shell.js 同逻辑；讲义页内联一份以减少请求） */
-(function(){
-  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
-  ready(function(){
-    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
-    if(!btn||!links) return;
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
-    links.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
-    });
-  });
-})();
 </script>"""
 
 
 def scripts(prefix):
-    """主体内联脚本 + 页脚 + 追加脚本。页脚由 site_shell 按 prefix 渲染。"""
-    return SCRIPTS_HEAD + shell.render_footer(prefix) + SCRIPTS_TAIL
+    """主体内联脚本 + 页脚 + 追加脚本 + 外壳行为脚本（都由 site_shell 按 prefix 渲染）。"""
+    return (SCRIPTS_HEAD + shell.render_footer(prefix) + SCRIPTS_TAIL
+            + "\n" + shell.render_script(prefix))
 
 
 def page_shell(lecture, page_title, body, sidebar, pager, prefix):

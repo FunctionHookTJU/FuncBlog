@@ -250,19 +250,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
-<script>
-/* 站点移动端菜单交互（与 scripts/site-shell.js 同逻辑；讲义页内联一份以减少请求） */
-(function(){
-  function ready(fn){ document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',fn) : fn(); }
-  ready(function(){
-    var btn=document.getElementById('mobile-menu-btn'), links=document.querySelector('.nav-links');
-    if(!btn||!links) return;
-    btn.addEventListener('click', function(){ btn.classList.toggle('active'); links.classList.toggle('mobile-open'); });
-    links.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){ btn.classList.remove('active'); links.classList.remove('mobile-open'); });
-    });
-  });
-})();
-</script>
+<script src="../../scripts/site-shell.js"></script>
 </body>
 </html>

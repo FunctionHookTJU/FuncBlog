@@ -203,17 +203,6 @@ python tools/unify_shell.py        # 应输出"外壳一致"
 - 223 个内联 header 在归一化 `../` 后原本就完全相同，因此统一后每页只变 6 行（5 条导航 + 1 条页脚），结构零改动
 - 改完 `check_links.py`：250 页 / 16471 条站内链接，0 死链（唯一 1 条在待删的测试页 `pages/index_dev.html`）
 
-## 尚未完成
-
-- head 里的图标 / 样式表引用仍是各页硬编码的 `../../`，未纳入 site_shell
-- 页脚仍是两套：15 个手写页用的是自带 `<footer>`（带 `.container` 包裹、链接只有「关于我 / Github」），
-  223 个讲义页用 `<footer class="site-footer">`。未统一。
-- 讲义页的内联「移动端菜单」脚本与 `scripts/site-shell.js` 是同一逻辑的两份拷贝
-  （为了少一个请求），改逻辑时要同时改两处
-- 遗留测试页 `pages/bg-test.html`、`pages/background-demo.html`、`pages/index_dev.html` 仍在
-  （均无入链，留作调试用）
-- `assets/files/bridge_server.exe`（Windows 可执行文件）仍入库；`assets/img` 与 `assets/images` 仍并存
-
 ---
 
 # 第三轮：手写页也换成静态外壳（2026-10-25）
@@ -246,3 +235,44 @@ python tools/unify_shell.py        # 应输出"外壳一致"
   且 `audioPlayer.js` 在 `site-shell.js` 之前
 - 截图验收：`index.html`、`pages/study.html`、`pages/crypto-hash-rsa/crypto-hash-rsa-01.html`
   三页导航高亮、音频播放器控件、页脚均正常
+
+---
+
+# 第四轮：内联脚本去重 + 清理（2026-10-25）
+
+- 讲义页（crypto 153 + quantum 70）末尾那段内联「移动端菜单」脚本删掉，统一改为
+  `<script src="[前缀]scripts/site-shell.js"></script>`。现在全站移动端菜单只有一份实现。
+  - 生成器侧：`build_lecture.scripts(prefix)` 末尾追加 `site_shell.render_script(prefix)`
+  - 静态页侧：一次性脚本按同一正则替换，两侧输出一致（`build_lecture` 重建后 0 差异）
+- 删除 `assets/files/bridge_server.exe`（7.4MB，全站零引用）。注意：文件从工作树删掉了，
+  但 Git 历史里仍在，仓库体积不会因此变小；要真正瘦身需 `git filter-repo` 重写历史。
+- 确认 `assets/img` 有实际引用（crypto-dl-signature 插图），不删
+
+### 验证
+
+- `check_links.py`：0 问题（`site-shell.js` 的 238 处引用全部解析成功）
+- `unify_shell.py`：外壳一致
+- `build_lecture.py` 连续两次重建，`git diff` 的 md5 完全相同（确定性）
+- 238 个含 header 的页面各恰好引用一次 `site-shell.js`，无重复、无遗漏
+- 截图：`pages/quantum-foundations/quantum-foundations-01.html` 与 `pages/study.html`
+  首尾正常，无空白缝隙
+
+### 本次改动规模
+
+225 个文件，+234 / −3138 行——删掉的基本都是那 224 份重复的内联脚本。
+
+---
+
+## 尚未完成
+
+- head 里的图标 / 样式表引用仍是各页硬编码的 `../../`，未纳入 site_shell
+- 页脚仍是两套：15 个手写页用的是自带 `<footer>`（带 `.container` 包裹、链接只有「关于我 / Github」），
+  223 个讲义页用 `<footer class="site-footer">`。未统一。
+- **讲义页（223 个）不加载 `scripts/audioPlayer.js`，但 header 里一直有 🔊 和 🎵1 两个按钮，
+  点击无反应**（改造前就存在）。要修有两条路：给讲义页加载 audioPlayer.js（但那样每节讲义都会放背景音乐），
+  或给 `render_header` 加一个「是否输出音频控件」的开关。属产品决定，未擅自改动。
+- 讲义页的内联「背景图加载器」脚本调用了 `window.initBackgroundLoader`，但那些页面并没有加载
+  `scripts/backgroundLoader.js`，`if` 守卫使其静默失效（同样是改造前就存在）
+- 遗留测试页 `pages/bg-test.html`、`pages/background-demo.html`、`pages/index_dev.html` 仍在
+  （均无入链，留作调试用）
+- `assets/img` 不是冗余目录：crypto-dl-signature 的插图引用的就是它，保留
