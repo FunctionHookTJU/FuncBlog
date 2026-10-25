@@ -165,6 +165,7 @@ const response = await fetch(`${pathPrefix}components/header.html`);
 | `tools/site_shell.py` | header / footer 的**唯一渲染入口**；`rel_prefix(页面路径)` 按层级算 `../` |
 | `tools/unify_shell.py` | 批量把既有静态页的外壳刷成统一样式；`--write` 才落盘 |
 | `tools/check_links.py` | 全站链接检查：死链 / 大小写不匹配 / 跳出根 / `/` 开头的站根绝对路径 |
+| `tools/check_shell_runtime.mjs` | 外壳交互冒烟测试（CDP）：真实点击移动端菜单、确认 `headerLoaded` 派发、捕获页面 JS 异常 |
 
 ## 新的路径约定（在旧约定之上收紧）
 
@@ -195,6 +196,7 @@ python tools/unify_shell.py --write  # 刷新 crypto 那 153 页（它们没有 
 # 改完必跑
 python tools/check_links.py --all
 python tools/unify_shell.py        # 应输出"外壳一致"
+node tools/check_shell_runtime.mjs index.html pages/study.html   # 外壳交互冒烟测试
 ```
 
 ## 已验证的性质
