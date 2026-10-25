@@ -41,3 +41,6 @@ build/
 
 # WorkBuddy 工作区数据（项目记忆）
 .workbuddy/
+
+# 发布记录（本机状态）
+*.genie
