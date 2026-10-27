@@ -9,14 +9,14 @@
  *   <script src="[前缀]scripts/site-shell.js" defer></script>
  *
  * 做两件事：
- *   1. 移动端菜单展开/收起
+ *   1. 移动端菜单展开/收起（点击按钮、点链接、点外部、按 Esc、转到桌面宽度都会收）
  *   2. 派发 headerLoaded 事件（scripts/audioPlayer.js 靠它重绑静音/切源按钮；
  *      setupEventListeners 内部会 cloneNode 去重，重复触发无副作用）
  */
 (function () {
     'use strict';
 
-    var VERSION = '2.0.0';
+    var VERSION = '2.1.0';
 
     function ready(fn) {
         if (document.readyState === 'loading') {
@@ -31,17 +31,53 @@
         var navLinks = document.querySelector('.nav-links');
         if (!btn || !navLinks) return;
 
-        btn.addEventListener('click', function () {
-            btn.classList.toggle('active');
-            navLinks.classList.toggle('mobile-open');
+        function isOpen() {
+            return navLinks.classList.contains('mobile-open');
+        }
+
+        function setOpen(open) {
+            navLinks.classList.toggle('mobile-open', open);
+            btn.classList.toggle('active', open);
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', '打开导航菜单');
+
+        btn.addEventListener('click', function (e) {
+            // 阻止冒泡，否则会被下面的「点外部关闭」立刻关掉
+            e.stopPropagation();
+            setOpen(!isOpen());
         });
 
         navLinks.querySelectorAll('a').forEach(function (link) {
             link.addEventListener('click', function () {
-                btn.classList.remove('active');
-                navLinks.classList.remove('mobile-open');
+                setOpen(false);
             });
         });
+
+        // 点抽屉外面关闭
+        document.addEventListener('click', function (e) {
+            if (!isOpen()) return;
+            if (navLinks.contains(e.target) || btn.contains(e.target)) return;
+            setOpen(false);
+        });
+
+        // Esc 关闭
+        document.addEventListener('keydown', function (e) {
+            if ((e.key === 'Escape' || e.key === 'Esc') && isOpen()) {
+                setOpen(false);
+                btn.focus();
+            }
+        });
+
+        // 视口回到桌面宽度时把状态清干净，避免「看不见但仍占着类名 / 锁着滚动」
+        if (window.matchMedia) {
+            var mq = window.matchMedia('(min-width: 901px)');
+            var sync = function () { if (mq.matches) setOpen(false); };
+            if (mq.addEventListener) mq.addEventListener('change', sync);
+            else if (mq.addListener) mq.addListener(sync);
+        }
     }
 
     ready(function () {

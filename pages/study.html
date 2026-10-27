@@ -367,6 +367,9 @@
             const SUCK_LEAD = 60;   // 整段吸回相对“目录开始回中”的延时，形成先动后收的衔接
             const SUCK_TOTAL = 450; // 整段吸回总时长（= 目录回中 / 背板缩窄的 450ms，三者一起收尾）
             const HEIGHT_MS = 260;  // 收起时的高度过渡（比展开快，避免拖一段空尾巴）
+            // 移动端：跳过量取与喷出/吸回，只保留高度展开，过渡也更短
+            const COMPACT = window.matchMedia('(max-width: 900px)');
+            const COMPACT_MS = 180;
             const section = document.querySelector('.glass-section');
 
             // 有任一分组展开时背板撑满，全部收起时收窄居中
@@ -423,6 +426,7 @@
 
             function expand(group, btn) {
                 const wrap = group.querySelector('.note-masonry-wrap');
+                const compact = COMPACT.matches;
 
                 group.classList.remove('is-closing', 'is-opening');
                 btn.setAttribute('aria-expanded', 'true');
@@ -433,8 +437,13 @@
                 wrap.style.display = 'block';
                 wrap.style.height = 'auto';
 
-                // 目录卡片此时还在居中位置，卡片就从这个位置喷出
-                const info = measure(group, btn, wrap);
+                if (compact) {
+                    // 移动端省掉每张卡的 getBoundingClientRect + 逐卡位移写入
+                    wrap.style.setProperty('--hms', COMPACT_MS + 'ms');
+                } else {
+                    // 目录卡片此时还在居中位置，卡片就从这个位置喷出
+                    measure(group, btn, wrap);
+                }
 
                 const target = wrap.scrollHeight;
                 wrap.style.height = '0px';
@@ -453,16 +462,43 @@
                     }
                 });
 
+                if (compact) return;
+
+                const info = { maxD: wrap.querySelectorAll('.note-card').length - 1 };
                 group.classList.add('is-opening');
                 clearTimeout(group._timer);
                 group._timer = setTimeout(function () {
                     group.classList.remove('is-opening');
-                }, info.maxD * SPRAY_GAP + SPRAY_MS + 80);
+                }, Math.max(0, info.maxD) * SPRAY_GAP + SPRAY_MS + 80);
             }
 
             function collapse(group, btn) {
                 const wrap = group.querySelector('.note-masonry-wrap');
                 if (!wrap.style.display || wrap.style.display === 'none') return;
+
+                btn.setAttribute('aria-expanded', 'false');
+
+                // 移动端：不跑吸回动画，也不做分段延迟，只收高度
+                if (COMPACT.matches) {
+                    group.classList.remove('is-opening', 'is-closing');
+                    wrap.style.setProperty('--hms', COMPACT_MS + 'ms');
+                    group.setAttribute('data-open', '0');
+                    syncSection();
+
+                    wrap.style.height = wrap.scrollHeight + 'px';
+                    void wrap.offsetHeight;
+                    wrap.style.height = '0px';
+
+                    clearTimeout(group._timer2);
+                    group._timer2 = setTimeout(function () {
+                        if (group.getAttribute('data-open') === '0') {
+                            wrap.style.display = 'none';
+                            wrap.style.height = '';
+                        }
+                        wrap.style.removeProperty('--hms');
+                    }, COMPACT_MS + 40);
+                    return;
+                }
 
                 // --sx/--sy 沿用展开时量的值：终点是目录卡片回中之后的位置
                 const cards = Array.prototype.slice.call(wrap.querySelectorAll('.note-card'));
@@ -484,7 +520,6 @@
 
                 group.classList.remove('is-opening');
                 group.classList.add('is-closing');
-                btn.setAttribute('aria-expanded', 'false');
 
                 // 三条动画同一帧触发（吸回本身由 --lead 略晚起步）：
                 //   吸回     -> 上面的 is-closing，先等 SUCK_LEAD 再开始
