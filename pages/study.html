@@ -377,11 +377,14 @@
                 );
             }
 
-            // 量出每张卡相对“目录卡片位置”的位移，并按远近排出延迟层次。
+            // 量出每张卡相对“目录卡片展开后位置”的位移，并按远近排出延迟层次。
             // 必须在没有 transform 干扰、且布局已就绪（display:block + height:auto）时调用。
             function measure(group, btn, wrap) {
                 const pill = btn.getBoundingClientRect();
-                const ox = pill.left + 28;
+                // 参考点用“展开后”的左端，而不是 pill 当前（居中）的左端：
+                // 收起时 pill 已经在左边，若用居中位置算，卡片会朝中间收。
+                // .note-group 始终是整行宽，左端不受展开影响，两边取值一致。
+                const ox = group.getBoundingClientRect().left + 28;
                 const oy = pill.top + pill.height / 2;
 
                 const cards = Array.prototype.slice.call(wrap.querySelectorAll('.note-card'));
