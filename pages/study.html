@@ -71,11 +71,11 @@
             <!-- 按科目划分的折叠栏目 -->
 
             <!-- 计算机系统基础（CSAPP） -->
-            <div class="collapsible-section">
+            <div class="collapsible-section" data-open="0">
                 <div class="collapsible-header" onclick="toggleCollapsible(this)">
                     <h3>计算机系统基础（CSAPP）</h3>
-                    
-                    <span class="collapse-icon">▼</span>
+                    <span class="collapse-count">8</span>
+                    <span class="collapse-icon" aria-hidden="true"></span>
                 </div>
                 
                 <div class="collapsible-content">
@@ -120,11 +120,11 @@
             </div>
 
             <!-- 数据结构 -->
-            <div class="collapsible-section">
+            <div class="collapsible-section" data-open="0">
                 <div class="collapsible-header" onclick="toggleCollapsible(this)">
                     <h3>数据结构</h3>
-
-                    <span class="collapse-icon">▼</span>
+                    <span class="collapse-count">1</span>
+                    <span class="collapse-icon" aria-hidden="true"></span>
                 </div>
 
                 <div class="collapsible-content">
@@ -136,11 +136,11 @@
             </div>
 
             <!-- 密码学 -->
-            <div class="collapsible-section">
+            <div class="collapsible-section" data-open="0">
                 <div class="collapsible-header" onclick="toggleCollapsible(this)">
                     <h3>密码学</h3>
-
-                    <span class="collapse-icon">▼</span>
+                    <span class="collapse-count">3</span>
+                    <span class="collapse-icon" aria-hidden="true"></span>
                 </div>
 
                 <div class="collapsible-content">
@@ -162,11 +162,11 @@
             </div>
 
             <!-- 量子信息与计算 -->
-            <div class="collapsible-section">
+            <div class="collapsible-section" data-open="0">
                 <div class="collapsible-header" onclick="toggleCollapsible(this)">
                     <h3>量子信息与计算</h3>
-
-                    <span class="collapse-icon">▼</span>
+                    <span class="collapse-count">2</span>
+                    <span class="collapse-icon" aria-hidden="true"></span>
                 </div>
 
                 <div class="collapsible-content">
@@ -183,11 +183,11 @@
             </div>
 
             <!-- 其他 -->
-            <div class="collapsible-section">
+            <div class="collapsible-section" data-open="0">
                 <div class="collapsible-header" onclick="toggleCollapsible(this)">
                     <h3>其他</h3>
-
-                    <span class="collapse-icon">▼</span>
+                    <span class="collapse-count">1</span>
+                    <span class="collapse-icon" aria-hidden="true"></span>
                 </div>
 
                 <div class="collapsible-content">
@@ -260,18 +260,18 @@
         // 用 data-open 记录状态：仅靠 maxHeight 真假判断会在"首次展开后再收起"时
         // 失效（收起把 maxHeight 设为空字符串，判定为假 → 又走展开分支）。
         function toggleCollapsible(header) {
+            const section = header.closest('.collapsible-section');
             const content = header.nextElementSibling;
-            const icon = header.querySelector('.collapse-icon');
             const open = content.getAttribute('data-open') === '1';
 
             if (open) {
                 content.style.maxHeight = null;
                 content.setAttribute('data-open', '0');
-                icon.textContent = '▼';
+                if (section) section.setAttribute('data-open', '0');
             } else {
                 content.style.maxHeight = content.scrollHeight + 'px';
                 content.setAttribute('data-open', '1');
-                icon.textContent = '▲';
+                if (section) section.setAttribute('data-open', '1');
             }
         }
 

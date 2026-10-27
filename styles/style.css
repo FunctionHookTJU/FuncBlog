@@ -929,58 +929,113 @@ footer {
     margin: 0.5rem;
 }
 
-/* 折叠栏目样式 */
+/* 折叠栏目样式（紧凑手风琴） */
 .collapsible-section {
-    margin-top: 1.5rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    margin-top: 0.55rem;
+    border: 1px solid rgba(139, 92, 246, 0.16);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.75);
     overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.collapsible-section:hover {
+    border-color: rgba(139, 92, 246, 0.36);
+}
+
+.collapsible-section[data-open="1"] {
+    box-shadow: 0 6px 20px rgba(109, 74, 255, 0.10);
 }
 
 .collapsible-header {
-    background-color: #f8f9fa;
-    padding: 1rem 1.5rem;
-    cursor: pointer;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    transition: background-color 0.3s ease;
+    gap: 0.55rem;
+    padding: 0.55rem 0.85rem;
+    cursor: pointer;
+    background: transparent;
+    transition: background-color 0.2s ease;
+    user-select: none;
 }
 
 .collapsible-header:hover {
-    background-color: #e9ecef;
+    background-color: rgba(139, 92, 246, 0.06);
 }
 
 .collapsible-header h3 {
     margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.4;
     color: var(--primary-color);
-    font-size: 1.3rem;
 }
 
+/* 右侧条目数徽标 */
+.collapse-count {
+    margin-left: auto;
+    padding: 0.16rem 0.42rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    color: #6d4aff;
+    background: rgba(139, 92, 246, 0.12);
+    font-variant-numeric: tabular-nums;
+}
+
+/* 纯 CSS 箭头，靠 rotate 转向，不再用 ▼ / ▲ 文字 */
 .collapse-icon {
-    font-size: 0.8rem;
-    transition: transform 0.3s ease;
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    color: #8b7bd8;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+}
+
+.collapsible-section[data-open="1"] .collapse-icon {
+    transform: rotate(-135deg);
 }
 
 .collapsible-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    background-color: white;
+    background-color: transparent;
 }
 
 .collapsible-content > * {
-    padding: 1rem 1.5rem;
+    padding: 0.7rem 0.85rem;
 }
 
 .collapsible-content .pdf-item {
-    border-bottom: 1px solid #f0f0f0;
     margin: 0;
+    padding: 0.62rem 0.85rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.collapsible-content .pdf-item:hover {
+    transform: none;
+    background-color: rgba(139, 92, 246, 0.06);
+    box-shadow: none;
 }
 
 .collapsible-content .pdf-item:last-child {
     border-bottom: none;
+}
+
+.collapsible-content .pdf-item h3 {
+    font-size: 0.9rem;
+    margin-bottom: 0.15rem;
+}
+
+.collapsible-content .pdf-item p {
+    font-size: 0.82rem;
+    margin: 0;
 }
 
 /* 分页控件样式 */
