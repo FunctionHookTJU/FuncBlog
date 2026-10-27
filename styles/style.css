@@ -1090,15 +1090,18 @@ footer {
     display: none;
     height: 0;
     overflow: hidden;
-    transition: height 0.4s cubic-bezier(0.22, 0.8, 0.28, 1);
+    /* --hms 由 JS 在收起时改写：收起的高度过渡要和卡片吸回同时收尾，比展开短 */
+    transition: height var(--hms, 0.4s) cubic-bezier(0.22, 0.8, 0.28, 1);
 }
 
 .note-masonry-wrap > .note-masonry {
     min-width: 0;
 }
 
-/* 喷出 / 吸回：每张卡的起点都是目录卡片位置，位移量 --dx/--dy 由 JS 现量，
-   延迟用 --d（按与目录的距离从小到大排），所以两个方向都是从左上到右下由近及远 */
+/* 喷出 / 吸回：位移量与次序由 JS 现量。
+   --dx/--dy = 到「目录展开后（靠左）」的位移，喷出的起点
+   --sx/--sy = 到「目录收回后（居中）」的位移，吸回的终点
+   --d 是按与目录距离从小到大的排名，所以两个方向都是从左上到右下由近及远 */
 @keyframes noteSpray {
     from {
         opacity: 0;
@@ -1127,7 +1130,8 @@ footer {
 
     to {
         opacity: 0;
-        transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(0.2);
+        /* 终点是目录卡片「回到居中之后」的位置，回退值沿用喷出的位移 */
+        transform: translate(var(--sx, var(--dx, 0px)), var(--sy, var(--dy, 0px))) scale(0.2);
     }
 }
 
@@ -1137,9 +1141,10 @@ footer {
 }
 
 .note-group.is-closing .note-card {
-    animation: noteSuck 0.3s cubic-bezier(0.5, 0, 0.75, 0) both;
-    /* --gap 由 JS 按卡片数压缩，保证整段吸回和目录回中、背板缩窄同时结束 */
-    animation-delay: calc(var(--d, 0) * var(--gap, 30ms));
+    animation: noteSuck 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+    /* --lead：整段吸回相对「目录开始回中」的延时，先让目录动起来再收卡；
+       --gap 由 JS 按卡片数压缩，保证整段吸回和目录回中、背板缩窄同时收尾 */
+    animation-delay: calc(var(--lead, 0ms) + var(--d, 0) * var(--gap, 30ms));
 }
 
 /* 瀑布流：只给列宽，列数由容器宽度自动决定（见 .note-masonry 注释处说明） */

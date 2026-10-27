@@ -361,11 +361,12 @@
 
         // 学习笔记：分组默认收起，点击后卡片从目录位置喷出
         (function () {
-            const DURATION = 400;   // 高度过渡时长
             const SPRAY_GAP = 55;   // 喷出时相邻两张的间隔
             const SPRAY_MS = 550;   // 单张喷出时长
             const SUCK_MS = 300;    // 单张吸回时长
-            const SUCK_TOTAL = 480; // 整段吸回总时长（与目录回中、背板缩窄对齐）
+            const SUCK_LEAD = 60;   // 整段吸回相对“目录开始回中”的延时，形成先动后收的衔接
+            const SUCK_TOTAL = 450; // 整段吸回总时长（= 目录回中 / 背板缩窄的 450ms，三者一起收尾）
+            const HEIGHT_MS = 260;  // 收起时的高度过渡（比展开快，避免拖一段空尾巴）
             const section = document.querySelector('.glass-section');
 
             // 有任一分组展开时背板撑满，全部收起时收窄居中
@@ -377,20 +378,26 @@
                 );
             }
 
-            // 量出每张卡相对“目录卡片展开后位置”的位移，并按远近排出延迟层次。
-            // 必须在没有 transform 干扰、且布局已就绪（display:block + height:auto）时调用。
+            // 量出每张卡相对“目录卡片”的位移，并按远近排出延迟层次。
+            // 必须Layout就绪（display:block + height:auto）时调用；
+            // 此时目录卡片还停在居中位，所以能一次量出两个参考点：
+            //   喷出起点 = 目录展开后（贴左）的位置
+            //   吸回终点 = 目录收回后（居中）的位置
             function measure(group, btn, wrap) {
+                const gRect = group.getBoundingClientRect();
                 const pill = btn.getBoundingClientRect();
-                // 参考点用“展开后”的左端，而不是 pill 当前（居中）的左端：
-                // 收起时 pill 已经在左边，若用居中位置算，卡片会朝中间收。
-                // .note-group 始终是整行宽，左端不受展开影响，两边取值一致。
-                const ox = group.getBoundingClientRect().left + 28;
+
+                // 贴左：.note-group 始终是整行宽，左端不随展开/收起变化
+                const oxOpen = gRect.left + 28;
+                // 居中：用组宽和按钮自身宽度算，不依赖当前的 margin-left，
+                // 这样即使在上一次动画没结束时再次展开也能算准
+                const oxCenter = gRect.left + (gRect.width - btn.offsetWidth) / 2 + 28;
                 const oy = pill.top + pill.height / 2;
 
                 const cards = Array.prototype.slice.call(wrap.querySelectorAll('.note-card'));
                 const rects = cards.map(function (c) { return c.getBoundingClientRect(); });
                 const dists = rects.map(function (r) {
-                    return Math.hypot(r.left + r.width / 2 - ox, r.top + r.height / 2 - oy);
+                    return Math.hypot(r.left + r.width / 2 - oxOpen, r.top + r.height / 2 - oy);
                 });
 
                 // 由近及远排名：离目录越近越早动
@@ -400,8 +407,11 @@
                 order.forEach(function (pair, k) { rank[pair[1]] = k; });
 
                 cards.forEach(function (card, i) {
-                    card.style.setProperty('--dx', Math.round(ox - rects[i].left) + 'px');
-                    card.style.setProperty('--dy', Math.round(oy - (rects[i].top + rects[i].height / 2)) + 'px');
+                    const cy = rects[i].top + rects[i].height / 2;
+                    card.style.setProperty('--dx', Math.round(oxOpen - rects[i].left) + 'px');
+                    card.style.setProperty('--dy', Math.round(oy - cy) + 'px');
+                    card.style.setProperty('--sx', Math.round(oxCenter - rects[i].left) + 'px');
+                    card.style.setProperty('--sy', Math.round(oy - cy) + 'px');
                     card.style.setProperty('--d', rank[i]);
                 });
 
@@ -418,6 +428,8 @@
                 btn.setAttribute('aria-expanded', 'true');
 
                 // 先让高度回到 auto，布局就绪后才能量得准
+                // （收起时改过的 --hms 要清掉，否则展开会用收起那套更快的时长）
+                wrap.style.removeProperty('--hms');
                 wrap.style.display = 'block';
                 wrap.style.height = 'auto';
 
@@ -452,26 +464,30 @@
                 const wrap = group.querySelector('.note-masonry-wrap');
                 if (!wrap.style.display || wrap.style.display === 'none') return;
 
-                // --dx/--dy 沿用展开时量的值，所以吸回轨迹和喷出完全对称
+                // --sx/--sy 沿用展开时量的值：终点是目录卡片回中之后的位置
                 const cards = Array.prototype.slice.call(wrap.querySelectorAll('.note-card'));
                 let maxD = 0;
                 cards.forEach(function (c) {
                     maxD = Math.max(maxD, parseInt(c.style.getPropertyValue('--d'), 10) || 0);
                 });
 
-                // 卡片越多间隔压得越紧，让整段吸回在 SUCK_TOTAL 内结束，
-                // 才能和目录回中、背板缩窄同时收尾
+                // 卡片越多间隔压得越紧，让整段吸回（含前面的延时）在 SUCK_TOTAL 内收尾，
+                // 才能和目录回中、背板缩窄同时结束
                 const gap = maxD > 0
-                    ? Math.max(0, Math.min(40, Math.round((SUCK_TOTAL - SUCK_MS) / maxD)))
+                    ? Math.max(0, Math.min(40, Math.round((SUCK_TOTAL - SUCK_LEAD - SUCK_MS) / maxD)))
                     : 0;
+                const suckTotal = SUCK_LEAD + maxD * gap + SUCK_MS;
+
                 group.style.setProperty('--gap', gap + 'ms');
+                group.style.setProperty('--lead', SUCK_LEAD + 'ms');
+                wrap.style.setProperty('--hms', HEIGHT_MS + 'ms');
 
                 group.classList.remove('is-opening');
                 group.classList.add('is-closing');
                 btn.setAttribute('aria-expanded', 'false');
 
-                // 三条动画同时触发：
-                //   吸回   -> 上面的 is-closing
+                // 三条动画同一帧触发（吸回本身由 --lead 略晚起步）：
+                //   吸回     -> 上面的 is-closing，先等 SUCK_LEAD 再开始
                 //   目录回中 -> data-open 归 0（margin-left 过渡）
                 //   背板缩窄 -> syncSection 摘掉 has-open（::before 宽度过渡）
                 group.setAttribute('data-open', '0');
@@ -480,12 +496,13 @@
                 clearTimeout(group._timer);
                 clearTimeout(group._timer2);
 
-                // 高度稍晚一点起，避免一上来就把还在飞的卡片裁掉
+                // 高度等卡片动起来（吸回已起步）再收，避免一上来就把还在飞的卡片裁掉
+                const heightAt = Math.round(SUCK_LEAD + (suckTotal - SUCK_LEAD) * 0.5);
                 group._timer = setTimeout(function () {
                     wrap.style.height = wrap.scrollHeight + 'px';
                     void wrap.offsetHeight;
                     wrap.style.height = '0px';
-                }, Math.round(SUCK_TOTAL * 0.3));
+                }, heightAt);
 
                 group._timer2 = setTimeout(function () {
                     if (group.getAttribute('data-open') === '0') {
@@ -494,7 +511,9 @@
                     }
                     group.classList.remove('is-closing');
                     group.style.removeProperty('--gap');
-                }, Math.max(SUCK_TOTAL, Math.round(SUCK_TOTAL * 0.3) + DURATION) + 40);
+                    group.style.removeProperty('--lead');
+                    wrap.style.removeProperty('--hms');
+                }, heightAt + HEIGHT_MS + 40);
             }
 
             function setOpen(btn, open) {
