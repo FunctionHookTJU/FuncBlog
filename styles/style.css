@@ -1000,14 +1000,16 @@ footer {
     font-size: 1rem;
 }
 
-/* 分组标题本身就是折叠按钮：收窄 + 居中 */
+/* 分组标题本身就是折叠按钮：收起时居中，展开后滑到卡片左侧正上方 */
 .note-group-toggle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     width: 100%;
     max-width: 380px;
-    margin: 0 auto;
+    /* 50% 是父容器宽度，减半个自身宽度 = 水平居中；显式写长度才能做过渡 */
+    margin-left: max(0px, calc(50% - 190px));
+    margin-right: auto;
     padding: 0.55rem 0.85rem;
     border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 12px;
@@ -1024,7 +1026,15 @@ footer {
     color: var(--primary-color);
     text-align: left;
     cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        margin-left 0.45s cubic-bezier(0.22, 0.8, 0.28, 1),
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* 展开后贴到卡片左边缘（卡片不足 3 张时是居中排列，此时不左移） */
+.note-group[data-open="1"]:not(.is-few-group) .note-group-toggle {
+    margin-left: 0;
 }
 
 .note-group-toggle:hover {
@@ -1087,33 +1097,16 @@ footer {
     min-width: 0;
 }
 
-/* 展开动画：整块从左上角向右下角斜切揭开 */
-@keyframes noteReveal {
-    from {
-        clip-path: inset(0 100% 100% 0);
-    }
-
-    to {
-        clip-path: inset(0 0 0 0);
-    }
-}
-
-/* 收起动画：同一条对角线反向收回 */
-@keyframes noteHide {
-    from {
-        clip-path: inset(0 0 0 0);
-    }
-
-    to {
-        clip-path: inset(0 100% 100% 0);
-    }
-}
-
-/* 单张卡片：从自己的左上角轻微放大淡入 */
-@keyframes noteCardIn {
+/* 喷出 / 吸回：每张卡的起点都是目录卡片位置，位移量 --dx/--dy 由 JS 现量，
+   延迟用 --d（按与目录的距离从小到大排），所以两个方向都是从左上到右下由近及远 */
+@keyframes noteSpray {
     from {
         opacity: 0;
-        transform: translate(-8px, -8px) scale(0.95);
+        transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(0.2);
+    }
+
+    55% {
+        opacity: 1;
     }
 
     to {
@@ -1122,18 +1115,30 @@ footer {
     }
 }
 
-.note-group.is-opening .note-masonry {
-    animation: noteReveal 0.46s cubic-bezier(0.22, 0.8, 0.28, 1) both;
-}
+@keyframes noteSuck {
+    from {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
 
-.note-group.is-closing .note-masonry {
-    animation: noteHide 0.4s cubic-bezier(0.4, 0, 0.6, 1) both;
+    40% {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(0.2);
+    }
 }
 
 .note-group.is-opening .note-card {
-    transform-origin: top left;
-    animation: noteCardIn 0.4s cubic-bezier(0.22, 0.8, 0.28, 1) both;
-    animation-delay: calc(var(--i, 0) * 45ms);
+    animation: noteSpray 0.55s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+    animation-delay: calc(var(--d, 0) * 55ms);
+}
+
+.note-group.is-closing .note-card {
+    animation: noteSuck 0.45s cubic-bezier(0.5, 0, 0.75, 0) both;
+    animation-delay: calc(var(--d, 0) * 45ms);
 }
 
 /* 瀑布流：只给列宽，列数由容器宽度自动决定（见 .note-masonry 注释处说明） */
@@ -1264,13 +1269,14 @@ footer {
 
     .note-masonry-wrap,
     .glass-section::before,
-    .glass-section h2 {
+    .glass-section h2,
+    .note-group-toggle {
         transition: none;
     }
 
     .note-group.is-opening .note-masonry,
-    .note-group.is-closing .note-masonry,
-    .note-group.is-opening .note-card {
+    .note-group.is-opening .note-card,
+    .note-group.is-closing .note-card {
         animation: none;
     }
 }

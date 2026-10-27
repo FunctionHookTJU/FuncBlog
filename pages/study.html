@@ -359,9 +359,13 @@
             }
         });
 
-        // 学习笔记：分组默认收起，点击展开为瀑布流
+        // 学习笔记：分组默认收起，点击后卡片从目录位置喷出
         (function () {
-            const DURATION = 400;
+            const DURATION = 400;   // 高度过渡时长
+            const SPRAY_GAP = 55;   // 喷出时相邻两张的间隔
+            const SPRAY_MS = 550;   // 单张喷出时长
+            const SUCK_GAP = 45;    // 吸回时的间隔
+            const SUCK_MS = 450;    // 单张吸回时长
             const section = document.querySelector('.glass-section');
 
             // 有任一分组展开时背板撑满，全部收起时收窄居中
@@ -373,22 +377,57 @@
                 );
             }
 
+            // 量出每张卡相对“目录卡片位置”的位移，并按远近排出延迟层次。
+            // 必须在没有 transform 干扰、且布局已就绪（display:block + height:auto）时调用。
+            function measure(group, btn, wrap) {
+                const pill = btn.getBoundingClientRect();
+                const ox = pill.left + 28;
+                const oy = pill.top + pill.height / 2;
+
+                const cards = Array.prototype.slice.call(wrap.querySelectorAll('.note-card'));
+                const rects = cards.map(function (c) { return c.getBoundingClientRect(); });
+                const dists = rects.map(function (r) {
+                    return Math.hypot(r.left + r.width / 2 - ox, r.top + r.height / 2 - oy);
+                });
+
+                // 由近及远排名：离目录越近越早动
+                const order = dists.map(function (d, i) { return [d, i]; })
+                    .sort(function (a, b) { return a[0] - b[0]; });
+                const rank = new Array(cards.length);
+                order.forEach(function (pair, k) { rank[pair[1]] = k; });
+
+                cards.forEach(function (card, i) {
+                    card.style.setProperty('--dx', Math.round(ox - rects[i].left) + 'px');
+                    card.style.setProperty('--dy', Math.round(oy - (rects[i].top + rects[i].height / 2)) + 'px');
+                    card.style.setProperty('--d', rank[i]);
+                });
+
+                return {
+                    cards: cards,
+                    maxD: cards.length ? cards.length - 1 : 0
+                };
+            }
+
             function expand(group, btn) {
                 const wrap = group.querySelector('.note-masonry-wrap');
 
-                group.classList.remove('is-closing');
-                group.setAttribute('data-open', '1');
+                group.classList.remove('is-closing', 'is-opening');
                 btn.setAttribute('aria-expanded', 'true');
-                syncSection();
 
-                // 先让高度回到 auto 量出真实高度，再 0 -> h 起过渡。
-                // 顺序不能反：高度为 0 时多列布局会失衡（每卡一列），量出来的值不作数。
+                // 先让高度回到 auto，布局就绪后才能量得准
                 wrap.style.display = 'block';
                 wrap.style.height = 'auto';
+
+                // 目录卡片此时还在居中位置，卡片就从这个位置喷出
+                const info = measure(group, btn, wrap);
+
                 const target = wrap.scrollHeight;
                 wrap.style.height = '0px';
                 void wrap.offsetHeight;
                 wrap.style.height = target + 'px';
+
+                group.setAttribute('data-open', '1');
+                syncSection();
 
                 // 过渡结束后交还给内容自己撑高，之后窗口缩放也不会被裁
                 wrap.addEventListener('transitionend', function onEnd(e) {
@@ -399,49 +438,57 @@
                     }
                 });
 
-                // 给每张卡片一个序号，CSS 用它做逐张延迟
-                wrap.querySelectorAll('.note-card').forEach(function (card, i) {
-                    card.style.setProperty('--i', i);
-                });
-
-                // 斜切揭开只在“打开”时跑一次。结束后必须移除类，
-                // 否则 animation-fill-mode: both 会冻结 transform，hover 失效
                 group.classList.add('is-opening');
                 clearTimeout(group._timer);
                 group._timer = setTimeout(function () {
                     group.classList.remove('is-opening');
-                }, 900);
+                }, info.maxD * SPRAY_GAP + SPRAY_MS + 80);
             }
 
             function collapse(group, btn) {
                 const wrap = group.querySelector('.note-masonry-wrap');
                 if (!wrap.style.display || wrap.style.display === 'none') return;
 
+                // --dx/--dy 沿用展开时量的值，所以吸回轨迹和喷出完全对称
+                const cards = wrap.querySelectorAll('.note-card');
+                let maxD = 0;
+                Array.prototype.forEach.call(cards, function (c) {
+                    maxD = Math.max(maxD, parseInt(c.style.getPropertyValue('--d'), 10) || 0);
+                });
+                const last = maxD * SUCK_GAP + SUCK_MS;
+
                 group.classList.remove('is-opening');
-                group.setAttribute('data-open', '0');
-                btn.setAttribute('aria-expanded', 'false');
-                syncSection();
-
-                // 从当前实际高度起步，否则 auto -> 0 不会有过渡
-                wrap.style.height = wrap.scrollHeight + 'px';
-                void wrap.offsetHeight;
-                wrap.style.height = '0px';
-
-                // 收起走同一条对角线的反向动画
                 group.classList.add('is-closing');
+                btn.setAttribute('aria-expanded', 'false');
+
                 clearTimeout(group._timer);
+                clearTimeout(group._timer2);
+
+                // 高度提前收，和最后吸回的几张重叠，避免收完留一段空白
                 group._timer = setTimeout(function () {
-                    if (group.getAttribute('data-open') === '0') {
-                        wrap.style.display = 'none';
-                        wrap.style.height = '';
-                    }
-                    group.classList.remove('is-closing');
-                }, DURATION + 80);
+                    wrap.style.height = wrap.scrollHeight + 'px';
+                    void wrap.offsetHeight;
+                    wrap.style.height = '0px';
+                }, Math.round(last * 0.55));
+
+                // 全部吸回后，目录卡片滑回中间
+                group._timer2 = setTimeout(function () {
+                    group.setAttribute('data-open', '0');
+                    syncSection();
+                    group._timer2 = setTimeout(function () {
+                        if (group.getAttribute('data-open') === '0') {
+                            wrap.style.display = 'none';
+                            wrap.style.height = '';
+                        }
+                        group.classList.remove('is-closing');
+                    }, DURATION);
+                }, last);
             }
 
             function setOpen(btn, open) {
                 const group = btn.closest('.note-group');
                 clearTimeout(group._timer);
+                clearTimeout(group._timer2);
                 if (open) expand(group, btn);
                 else collapse(group, btn);
             }
@@ -455,7 +502,11 @@
 
             // 一两张卡的组改成居中排列（多列布局做不到居中）
             document.querySelectorAll('.note-masonry').forEach(function (m) {
-                m.classList.toggle('is-few', m.querySelectorAll('.note-card').length <= 2);
+                const few = m.querySelectorAll('.note-card').length <= 2;
+                m.classList.toggle('is-few', few);
+                // 少卡组是居中排列的，目录卡片就不左移了
+                const group = m.closest('.note-group');
+                if (group) group.classList.toggle('is-few-group', few);
             });
 
             syncSection();
