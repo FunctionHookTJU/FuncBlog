@@ -931,29 +931,64 @@ footer {
 
 /* ---- 学习笔记：科目分组 + 瀑布流 + 磨砂玻璃卡片 ---- */
 
-/* 内容区本身也要半透明，否则玻璃卡片背后是纯白，模糊看不出效果 */
+/* 内容区：布局宽度恒为整行，绝不参与动画。
+   可见的玻璃板交给 ::before 承载，只给那一层做宽度动画——
+   否则宽度一变，多列容器每帧重算列宽，卡内文字会反复换行（重排/回流）。 */
+/* 学习笔记页的容器要定宽：body 是纵向 flex，.container 的左右 auto 边距
+   会取消 cross-axis 拉伸，宽度退化成由内容撑开——收起时最宽只剩 380 的折叠条，
+   容器会缩到 400 出头，多列因此只剩一列。 */
+.study-main {
+    width: 100%;
+}
+
 .glass-section {
+    position: relative;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.glass-section > * {
+    position: relative;
+    z-index: 1;
+}
+
+.glass-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    z-index: 0;
+    width: 460px;
+    transform: translateX(-50%);
+    border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.34);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
     backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.45);
     box-shadow: 0 10px 40px rgba(31, 38, 135, 0.12);
+    transition: width 0.45s cubic-bezier(0.22, 0.8, 0.28, 1);
+    pointer-events: none;
+}
 
-    /* 全部收起时背板收窄并居中；有分组展开时撑满 */
-    max-width: 460px;
+.glass-section.has-open::before {
+    width: 100%;
+}
+
+/* 标题的分隔线要跟着背板走，否则收窄时会横穿整行戳到背板外 */
+.glass-section h2 {
+    width: calc(460px - 4rem);
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
-    transition:
-        max-width 0.45s cubic-bezier(0.22, 0.8, 0.28, 1),
-        background-color 0.3s ease;
-}
-
-.glass-section.has-open {
-    max-width: 100%;
-}
-
-.glass-section h2 {
     border-bottom-color: rgba(139, 92, 246, 0.45);
+    transition: width 0.45s cubic-bezier(0.22, 0.8, 0.28, 1);
+}
+
+.glass-section.has-open h2 {
+    width: 100%;
 }
 
 .note-group + .note-group {
@@ -1038,27 +1073,18 @@ footer {
     transform: rotate(-135deg);
 }
 
-/* 折叠容器：用 0fr -> 1fr 做高度过渡。
-   好处是高度由内容自己决定，不用 JS 量 scrollHeight——
-   背板宽度变化会改变列数进而改变高度，固定 max-height 会算错。 */
+/* 折叠容器：用 display + 显式 height 动画。
+   不能用 grid-template-rows: 0fr —— 高度 0 时多列无法平衡，
+   每张卡会被挤成单独一列，容器宽度暴涨（实测 1836px，scrollWidth 14786）。 */
 .note-masonry-wrap {
-    display: grid;
-    grid-template-rows: 0fr;
-    padding-top: 0;
-    transition:
-        grid-template-rows 0.4s cubic-bezier(0.22, 0.8, 0.28, 1),
-        padding-top 0.4s cubic-bezier(0.22, 0.8, 0.28, 1);
-}
-
-.note-group[data-open="1"] .note-masonry-wrap {
-    grid-template-rows: 1fr;
-    padding-top: 0.7rem;
+    display: none;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.4s cubic-bezier(0.22, 0.8, 0.28, 1);
 }
 
 .note-masonry-wrap > .note-masonry {
-    min-height: 0;
-    /* 必须：行高 0fr 只是把网格行压成 0，内容仍会溢出显示 */
-    overflow: hidden;
+    min-width: 0;
 }
 
 /* 展开动画：整块从左上角向右下角斜切揭开 */
@@ -1114,6 +1140,7 @@ footer {
 .note-masonry {
     column-width: 300px;
     column-gap: 14px;
+    padding-top: 0.7rem;
 }
 
 .note-card {
@@ -1203,7 +1230,7 @@ footer {
 
 /* 不支持 backdrop-filter 的浏览器退回高不透明度底，保证文字可读 */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    .glass-section {
+    .glass-section::before {
         background-color: rgba(255, 255, 255, 0.78);
     }
 
@@ -1222,7 +1249,8 @@ footer {
     }
 
     .note-masonry-wrap,
-    .glass-section {
+    .glass-section::before,
+    .glass-section h2 {
         transition: none;
     }
 

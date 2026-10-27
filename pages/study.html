@@ -61,7 +61,7 @@
         });
     </script>
     
-    <main class="container">
+    <main class="container study-main">
         
         <section class="content-section glass-section">
             <h2 style="text-align: center;">学习笔记</h2>
@@ -210,12 +210,32 @@
             <div class="note-group" data-open="0">
                 <h3 class="note-group-heading">
                     <button class="note-group-toggle" type="button" aria-expanded="false" aria-controls="g-5">
-                        <span class="note-group-name">其他</span>
+                        <span class="note-group-name">软件工程</span>
                         <span class="note-group-count">1</span>
                         <span class="note-group-chevron" aria-hidden="true"></span>
                     </button>
                 </h3>
                 <div class="note-masonry-wrap" id="g-5">
+                    <div class="note-masonry">
+
+                        <article class="note-card" onclick="window.location.href='software-engineering/'" tabindex="0" role="link">
+                            <span class="note-tag">讲义</span>
+                            <h4 class="note-card-title">软件工程讲义：全课程十讲</h4>
+                            <p class="note-card-desc">依据《软件工程》第 1–10 章共 869 页课件整理的完整笔记，含第 0 章前置补课（抽象与模型、面向对象四件套、UML 与内聚耦合）、软件危机与工程内涵、五种过程模型与选型、需求工程与用例建模、UML 九图与 OOA 三模型（含 ATM 实战）、七条设计原则与内聚耦合七级、六种架构风格与设计模式、结构化编码与调试、白盒黑盒测试与五种覆盖标准、四种维护与再工程；每讲附小结与自测题，分 36 节阅读</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-group" data-open="0">
+                <h3 class="note-group-heading">
+                    <button class="note-group-toggle" type="button" aria-expanded="false" aria-controls="g-6">
+                        <span class="note-group-name">其他</span>
+                        <span class="note-group-count">1</span>
+                        <span class="note-group-chevron" aria-hidden="true"></span>
+                    </button>
+                </h3>
+                <div class="note-masonry-wrap" id="g-6">
                     <div class="note-masonry">
 
                         <article class="note-card" onclick="window.location.href='../docs/index.html'" tabindex="0" role="link">
@@ -287,6 +307,7 @@
 
         // 学习笔记：分组默认收起，点击展开为瀑布流
         (function () {
+            const DURATION = 400;
             const section = document.querySelector('.glass-section');
 
             // 有任一分组展开时背板撑满，全部收起时收窄居中
@@ -298,40 +319,77 @@
                 );
             }
 
+            function expand(group, btn) {
+                const wrap = group.querySelector('.note-masonry-wrap');
+
+                group.classList.remove('is-closing');
+                group.setAttribute('data-open', '1');
+                btn.setAttribute('aria-expanded', 'true');
+                syncSection();
+
+                // 先让高度回到 auto 量出真实高度，再 0 -> h 起过渡。
+                // 顺序不能反：高度为 0 时多列布局会失衡（每卡一列），量出来的值不作数。
+                wrap.style.display = 'block';
+                wrap.style.height = 'auto';
+                const target = wrap.scrollHeight;
+                wrap.style.height = '0px';
+                void wrap.offsetHeight;
+                wrap.style.height = target + 'px';
+
+                // 过渡结束后交还给内容自己撑高，之后窗口缩放也不会被裁
+                wrap.addEventListener('transitionend', function onEnd(e) {
+                    if (e.propertyName !== 'height') return;
+                    wrap.removeEventListener('transitionend', onEnd);
+                    if (group.getAttribute('data-open') === '1') {
+                        wrap.style.height = 'auto';
+                    }
+                });
+
+                // 给每张卡片一个序号，CSS 用它做逐张延迟
+                wrap.querySelectorAll('.note-card').forEach(function (card, i) {
+                    card.style.setProperty('--i', i);
+                });
+
+                // 斜切揭开只在“打开”时跑一次。结束后必须移除类，
+                // 否则 animation-fill-mode: both 会冻结 transform，hover 失效
+                group.classList.add('is-opening');
+                clearTimeout(group._timer);
+                group._timer = setTimeout(function () {
+                    group.classList.remove('is-opening');
+                }, 900);
+            }
+
+            function collapse(group, btn) {
+                const wrap = group.querySelector('.note-masonry-wrap');
+                if (!wrap.style.display || wrap.style.display === 'none') return;
+
+                group.classList.remove('is-opening');
+                group.setAttribute('data-open', '0');
+                btn.setAttribute('aria-expanded', 'false');
+                syncSection();
+
+                // 从当前实际高度起步，否则 auto -> 0 不会有过渡
+                wrap.style.height = wrap.scrollHeight + 'px';
+                void wrap.offsetHeight;
+                wrap.style.height = '0px';
+
+                // 收起走同一条对角线的反向动画
+                group.classList.add('is-closing');
+                clearTimeout(group._timer);
+                group._timer = setTimeout(function () {
+                    if (group.getAttribute('data-open') === '0') {
+                        wrap.style.display = 'none';
+                        wrap.style.height = '';
+                    }
+                    group.classList.remove('is-closing');
+                }, DURATION + 80);
+            }
+
             function setOpen(btn, open) {
                 const group = btn.closest('.note-group');
-                const wrap = group.querySelector('.note-masonry-wrap');
                 clearTimeout(group._timer);
-
-                if (open) {
-                    group.classList.remove('is-closing');
-                    group.setAttribute('data-open', '1');
-                    btn.setAttribute('aria-expanded', 'true');
-
-                    // 给每张卡片一个序号，CSS 用它做逐张延迟
-                    wrap.querySelectorAll('.note-card').forEach(function (card, i) {
-                        card.style.setProperty('--i', i);
-                    });
-
-                    // 斜切揭开只在“打开”时跑一次。结束后必须移除类，
-                    // 否则 animation-fill-mode: both 会冻结 transform，hover 失效
-                    group.classList.add('is-opening');
-                    group._timer = setTimeout(function () {
-                        group.classList.remove('is-opening');
-                    }, 900);
-                } else {
-                    group.classList.remove('is-opening');
-                    group.setAttribute('data-open', '0');
-                    btn.setAttribute('aria-expanded', 'false');
-
-                    // 收起走同一条对角线的反向动画，结束后同样清类
-                    group.classList.add('is-closing');
-                    group._timer = setTimeout(function () {
-                        group.classList.remove('is-closing');
-                    }, 460);
-                }
-
-                syncSection();
+                if (open) expand(group, btn);
+                else collapse(group, btn);
             }
 
             document.querySelectorAll('.note-group-toggle').forEach(function (btn) {
