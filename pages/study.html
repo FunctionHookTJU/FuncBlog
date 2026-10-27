@@ -364,8 +364,8 @@
             const DURATION = 400;   // 高度过渡时长
             const SPRAY_GAP = 55;   // 喷出时相邻两张的间隔
             const SPRAY_MS = 550;   // 单张喷出时长
-            const SUCK_GAP = 45;    // 吸回时的间隔
-            const SUCK_MS = 450;    // 单张吸回时长
+            const SUCK_MS = 300;    // 单张吸回时长
+            const SUCK_TOTAL = 480; // 整段吸回总时长（与目录回中、背板缩窄对齐）
             const section = document.querySelector('.glass-section');
 
             // 有任一分组展开时背板撑满，全部收起时收窄居中
@@ -453,39 +453,48 @@
                 if (!wrap.style.display || wrap.style.display === 'none') return;
 
                 // --dx/--dy 沿用展开时量的值，所以吸回轨迹和喷出完全对称
-                const cards = wrap.querySelectorAll('.note-card');
+                const cards = Array.prototype.slice.call(wrap.querySelectorAll('.note-card'));
                 let maxD = 0;
-                Array.prototype.forEach.call(cards, function (c) {
+                cards.forEach(function (c) {
                     maxD = Math.max(maxD, parseInt(c.style.getPropertyValue('--d'), 10) || 0);
                 });
-                const last = maxD * SUCK_GAP + SUCK_MS;
+
+                // 卡片越多间隔压得越紧，让整段吸回在 SUCK_TOTAL 内结束，
+                // 才能和目录回中、背板缩窄同时收尾
+                const gap = maxD > 0
+                    ? Math.max(0, Math.min(40, Math.round((SUCK_TOTAL - SUCK_MS) / maxD)))
+                    : 0;
+                group.style.setProperty('--gap', gap + 'ms');
 
                 group.classList.remove('is-opening');
                 group.classList.add('is-closing');
                 btn.setAttribute('aria-expanded', 'false');
 
+                // 三条动画同时触发：
+                //   吸回   -> 上面的 is-closing
+                //   目录回中 -> data-open 归 0（margin-left 过渡）
+                //   背板缩窄 -> syncSection 摘掉 has-open（::before 宽度过渡）
+                group.setAttribute('data-open', '0');
+                syncSection();
+
                 clearTimeout(group._timer);
                 clearTimeout(group._timer2);
 
-                // 高度提前收，和最后吸回的几张重叠，避免收完留一段空白
+                // 高度稍晚一点起，避免一上来就把还在飞的卡片裁掉
                 group._timer = setTimeout(function () {
                     wrap.style.height = wrap.scrollHeight + 'px';
                     void wrap.offsetHeight;
                     wrap.style.height = '0px';
-                }, Math.round(last * 0.55));
+                }, Math.round(SUCK_TOTAL * 0.3));
 
-                // 全部吸回后，目录卡片滑回中间
                 group._timer2 = setTimeout(function () {
-                    group.setAttribute('data-open', '0');
-                    syncSection();
-                    group._timer2 = setTimeout(function () {
-                        if (group.getAttribute('data-open') === '0') {
-                            wrap.style.display = 'none';
-                            wrap.style.height = '';
-                        }
-                        group.classList.remove('is-closing');
-                    }, DURATION);
-                }, last);
+                    if (group.getAttribute('data-open') === '0') {
+                        wrap.style.display = 'none';
+                        wrap.style.height = '';
+                    }
+                    group.classList.remove('is-closing');
+                    group.style.removeProperty('--gap');
+                }, Math.max(SUCK_TOTAL, Math.round(SUCK_TOTAL * 0.3) + DURATION) + 40);
             }
 
             function setOpen(btn, open) {

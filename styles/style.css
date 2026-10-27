@@ -1137,8 +1137,9 @@ footer {
 }
 
 .note-group.is-closing .note-card {
-    animation: noteSuck 0.45s cubic-bezier(0.5, 0, 0.75, 0) both;
-    animation-delay: calc(var(--d, 0) * 45ms);
+    animation: noteSuck 0.3s cubic-bezier(0.5, 0, 0.75, 0) both;
+    /* --gap 由 JS 按卡片数压缩，保证整段吸回和目录回中、背板缩窄同时结束 */
+    animation-delay: calc(var(--d, 0) * var(--gap, 30ms));
 }
 
 /* 瀑布流：只给列宽，列数由容器宽度自动决定（见 .note-masonry 注释处说明） */
