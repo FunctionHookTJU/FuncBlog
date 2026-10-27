@@ -1143,6 +1143,20 @@ footer {
     padding-top: 0.7rem;
 }
 
+/* 只有一两张卡时不摆瀑布流，改成居中一排，避免孤零零贴着左边 */
+.note-masonry.is-few {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.note-masonry.is-few .note-card {
+    flex: 0 1 340px;
+    max-width: 340px;
+    margin: 0;
+}
+
 .note-card {
     /* 关键：不让卡片被拆到两列 */
     display: block;
