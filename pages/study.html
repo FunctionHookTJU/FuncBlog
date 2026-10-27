@@ -63,137 +63,166 @@
     
     <main class="container">
         
-        <section class="content-section">
+        <section class="content-section glass-section">
             <h2 style="text-align: center;">学习笔记</h2>
-            
-            <!--<p>也是借了北大大佬的光（<a href="https://kuiningzzzz.github.io/" target="_blank" rel="noopener noreferrer">@奎宁zzzz</a>），跟风做了个人主页，放一点学习生活的内容，总比整天闲着强。</p>-->
-            
-            <!-- 按科目划分的折叠栏目 -->
 
-            <!-- 计算机系统基础（CSAPP） -->
-            <div class="collapsible-section" data-open="0">
-                <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                    <h3>计算机系统基础（CSAPP）</h3>
-                    <span class="collapse-count">8</span>
-                    <span class="collapse-icon" aria-hidden="true"></span>
-                </div>
-                
-                <div class="collapsible-content">
-                    <div class="pdf-item" onclick="openPDF('../assets/files/实验1-位操作.pdf')">
-                        <h3>Lab1学习笔记</h3>
-                        <p>实验1 Bit Lab的相关学习内容和总结</p>
-                    </div>
+            <!-- 按科目分组的瀑布流卡片（磨砂玻璃，默认收起） -->
+            <div class="note-group" data-open="0">
+                <h3 class="note-group-heading">
+                    <button class="note-group-toggle" type="button" aria-expanded="false" aria-controls="g-1">
+                        <span class="note-group-name">计算机系统基础（CSAPP）</span>
+                        <span class="note-group-count">8</span>
+                        <span class="note-group-chevron" aria-hidden="true"></span>
+                    </button>
+                </h3>
+                <div class="note-masonry-wrap" id="g-1">
+                    <div class="note-masonry">
 
-                    <div class="pdf-item" onclick="openPDF('../assets/files/实验2-整数与浮点数.pdf')">
-                        <h3>Lab2学习笔记</h3>
-                        <p>实验2 Data Lab的相关学习内容和总结</p>
-                    </div>
+                        <article class="note-card" onclick="openPDF('../assets/files/实验1-位操作.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Lab1学习笔记</h4>
+                            <p class="note-card-desc">实验1 Bit Lab的相关学习内容和总结</p>
+                        </article>
 
-                    <div class="pdf-item" onclick="openPDF('../assets/files/实验3-拆弹专家.pdf')">
-                        <h3>Lab3学习笔记</h3>
-                        <p>实验3 Bomb Lab的相关学习内容和总结</p>
-                    </div>
+                        <article class="note-card" onclick="openPDF('../assets/files/实验2-整数与浮点数.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Lab2学习笔记</h4>
+                            <p class="note-card-desc">实验2 Data Lab的相关学习内容和总结</p>
+                        </article>
 
-                    <div class="pdf-item" onclick="openPDF('../assets/files/实验4-代码注入攻击.pdf')">
-                        <h3>Lab4学习笔记</h3>
-                        <p>实验4 Attack Lab的相关学习内容和总结</p>
-                    </div>
+                        <article class="note-card" onclick="openPDF('../assets/files/实验3-拆弹专家.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Lab3学习笔记</h4>
+                            <p class="note-card-desc">实验3 Bomb Lab的相关学习内容和总结</p>
+                        </article>
 
-                    <div class="pdf-item" onclick="openPDF('../assets/files/Lab5.pdf')">
-                        <h3>Lab5学习笔记</h3>
-                        <p>实验5 Cache Lab的相关学习内容和总结</p>
-                    </div>
+                        <article class="note-card" onclick="openPDF('../assets/files/实验4-代码注入攻击.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Lab4学习笔记</h4>
+                            <p class="note-card-desc">实验4 Attack Lab的相关学习内容和总结</p>
+                        </article>
 
-                    <div class="pdf-item" onclick="openPDF('../assets/files/shelllab暑假学习笔记.pdf')">
-                        <h3>Shell学习笔记</h3>
-                        <p>Shell lab的相关学习内容和总结</p>
-                    </div>
-                    <div class="pdf-item" onclick="openPDF('../assets/files/proxylab暑假学习笔记.pdf')">
-                        <h3>Proxy学习笔记</h3>
-                        <p>Proxy lab的相关学习内容和总结</p>
-                    </div>
-                    <div class="pdf-item" onclick="openPDF('../assets/files/malloclab暑假学习笔记.pdf')">
-                        <h3>Malloc学习笔记</h3>
-                        <p>Malloc lab的相关学习内容和总结</p>
-                    </div>
-                </div>
-            </div>
+                        <article class="note-card" onclick="openPDF('../assets/files/Lab5.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Lab5学习笔记</h4>
+                            <p class="note-card-desc">实验5 Cache Lab的相关学习内容和总结</p>
+                        </article>
 
-            <!-- 数据结构 -->
-            <div class="collapsible-section" data-open="0">
-                <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                    <h3>数据结构</h3>
-                    <span class="collapse-count">1</span>
-                    <span class="collapse-icon" aria-hidden="true"></span>
-                </div>
+                        <article class="note-card" onclick="openPDF('../assets/files/shelllab暑假学习笔记.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Shell学习笔记</h4>
+                            <p class="note-card-desc">Shell lab的相关学习内容和总结</p>
+                        </article>
 
-                <div class="collapsible-content">
-                    <div class="pdf-item" onclick="window.open('https://github.com/FunctionHookTJU/DataStructure-TJU', '_blank')">
-                        <h3>天津大学数据结构课程上机作业（更新中）</h3>
-                        <p>天津大学数据结构上机作业（更新中，自己参考ai写的）</p>
+                        <article class="note-card" onclick="openPDF('../assets/files/proxylab暑假学习笔记.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Proxy学习笔记</h4>
+                            <p class="note-card-desc">Proxy lab的相关学习内容和总结</p>
+                        </article>
+
+                        <article class="note-card" onclick="openPDF('../assets/files/malloclab暑假学习笔记.pdf')" tabindex="0" role="link">
+                            <span class="note-tag">PDF</span>
+                            <h4 class="note-card-title">Malloc学习笔记</h4>
+                            <p class="note-card-desc">Malloc lab的相关学习内容和总结</p>
+                        </article>
                     </div>
                 </div>
             </div>
 
-            <!-- 密码学 -->
-            <div class="collapsible-section" data-open="0">
-                <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                    <h3>密码学</h3>
-                    <span class="collapse-count">3</span>
-                    <span class="collapse-icon" aria-hidden="true"></span>
-                </div>
+            <div class="note-group" data-open="0">
+                <h3 class="note-group-heading">
+                    <button class="note-group-toggle" type="button" aria-expanded="false" aria-controls="g-2">
+                        <span class="note-group-name">数据结构</span>
+                        <span class="note-group-count">1</span>
+                        <span class="note-group-chevron" aria-hidden="true"></span>
+                    </button>
+                </h3>
+                <div class="note-masonry-wrap" id="g-2">
+                    <div class="note-masonry">
 
-                <div class="collapsible-content">
-                    <div class="pdf-item" onclick="window.location.href='crypto-des-aes/'">
-                        <h3>密码学讲义：DES 与 AES</h3>
-                        <p>依据《第二讲 数据加密标准(DES)》与《第三讲 高级加密标准(AES)》课件整理的完整讲义，含 Feistel 结构、差分分析、有限域 GF(2ⁿ)、AES 四层变换与加密模式；公式已按章节预渲染为静态 KaTeX，分 30 节阅读</p>
-                    </div>
-
-                    <div class="pdf-item" onclick="window.location.href='crypto-hash-rsa/'">
-                        <h3>密码学讲义：Hash 函数与 RSA / Rabin</h3>
-                        <p>依据《第四讲 密码 Hash 函数》与《第五讲 RSA 和 Rabin 算法》课件整理的完整讲义，含模运算与欧拉定理、生日悖论、MDC / MAC、RSA 加解密与安全性、Rabin 算法；公式已按章节预渲染为静态 KaTeX，分 78 节阅读</p>
-                    </div>
-
-                    <div class="pdf-item" onclick="window.location.href='crypto-dl-signature/'">
-                        <h3>密码学讲义：离散对数与数字签名</h3>
-                        <p>依据《第六讲 离散对数》《第七讲 数字签名(上)》《第八讲 数字签名(下)》三份课件整理的完整讲义，含离散对数问题（DLP）与五种求解算法、ElGamal 加密与比特承诺、RSA / Rabin 签名及其攻击与工程问题、DSA / ElGamal / Schnorr 签名与生日攻击；公式已按章节预渲染为静态 KaTeX，并内嵌 72 张 PPT 截图，分 42 节阅读</p>
+                        <article class="note-card" onclick="window.open('https://github.com/FunctionHookTJU/DataStructure-TJU', '_blank')" tabindex="0" role="link">
+                            <span class="note-tag">GitHub</span>
+                            <h4 class="note-card-title">天津大学数据结构课程上机作业（更新中）</h4>
+                            <p class="note-card-desc">天津大学数据结构上机作业（更新中，自己参考ai写的）</p>
+                        </article>
                     </div>
                 </div>
             </div>
 
-            <!-- 量子信息与计算 -->
-            <div class="collapsible-section" data-open="0">
-                <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                    <h3>量子信息与计算</h3>
-                    <span class="collapse-count">2</span>
-                    <span class="collapse-icon" aria-hidden="true"></span>
-                </div>
+            <div class="note-group" data-open="0">
+                <h3 class="note-group-heading">
+                    <button class="note-group-toggle" type="button" aria-expanded="false" aria-controls="g-3">
+                        <span class="note-group-name">密码学</span>
+                        <span class="note-group-count">3</span>
+                        <span class="note-group-chevron" aria-hidden="true"></span>
+                    </button>
+                </h3>
+                <div class="note-masonry-wrap" id="g-3">
+                    <div class="note-masonry">
 
-                <div class="collapsible-content">
-                    <div class="pdf-item" onclick="window.location.href='quantum-foundations/'">
-                        <h3>量子力学讲义：导论与量子力学基础</h3>
-                        <p>依据《2026 P1 导论 &amp; 量子力学基础》课件整理的完整讲义，含第 0 章前置知识补课（复向量空间与狄拉克记号、厄米/酉算子、概率与测量语言、张量积）、双缝干涉与信息擦除、状态向量形式化的四条公理、密度算子形式化与偏迹/施密特分解、布洛赫球；公式已按小节预渲染为静态 KaTeX，分 38 节阅读</p>
-                    </div>
+                        <article class="note-card" onclick="window.location.href='crypto-des-aes/'" tabindex="0" role="link">
+                            <span class="note-tag">讲义</span>
+                            <h4 class="note-card-title">密码学讲义：DES 与 AES</h4>
+                            <p class="note-card-desc">依据《第二讲 数据加密标准(DES)》与《第三讲 高级加密标准(AES)》课件整理的完整讲义，含 Feistel 结构、差分分析、有限域 GF(2ⁿ)、AES 四层变换与加密模式；公式已按章节预渲染为静态 KaTeX，分 30 节阅读</p>
+                        </article>
 
-                    <div class="pdf-item" onclick="window.location.href='quantum-info-computing/'">
-                        <h3>量子信息讲义：纠缠、上下文与量子计算</h3>
-                        <p>依据《2026 P2 量子信息与量子计算》课件整理的完整讲义，含 EPR 佯谬与局域隐变量模型、CHSH 不等式与实验判决、量子上下文性与 KS 定理 / KCBS 不等式、BB84 量子密钥分发与不可克隆定理、超密编码、通用计算模型与 Grover 算法；公式已按小节预渲染为静态 KaTeX，分 30 节阅读</p>
+                        <article class="note-card" onclick="window.location.href='crypto-hash-rsa/'" tabindex="0" role="link">
+                            <span class="note-tag">讲义</span>
+                            <h4 class="note-card-title">密码学讲义：Hash 函数与 RSA / Rabin</h4>
+                            <p class="note-card-desc">依据《第四讲 密码 Hash 函数》与《第五讲 RSA 和 Rabin 算法》课件整理的完整讲义，含模运算与欧拉定理、生日悖论、MDC / MAC、RSA 加解密与安全性、Rabin 算法；公式已按章节预渲染为静态 KaTeX，分 78 节阅读</p>
+                        </article>
+
+                        <article class="note-card" onclick="window.location.href='crypto-dl-signature/'" tabindex="0" role="link">
+                            <span class="note-tag">讲义</span>
+                            <h4 class="note-card-title">密码学讲义：离散对数与数字签名</h4>
+                            <p class="note-card-desc">依据《第六讲 离散对数》《第七讲 数字签名(上)》《第八讲 数字签名(下)》三份课件整理的完整讲义，含离散对数问题（DLP）与五种求解算法、ElGamal 加密与比特承诺、RSA / Rabin 签名及其攻击与工程问题、DSA / ElGamal / Schnorr 签名与生日攻击；公式已按章节预渲染为静态 KaTeX，并内嵌 72 张 PPT 截图，分 42 节阅读</p>
+                        </article>
                     </div>
                 </div>
             </div>
 
-            <!-- 其他 -->
-            <div class="collapsible-section" data-open="0">
-                <div class="collapsible-header" onclick="toggleCollapsible(this)">
-                    <h3>其他</h3>
-                    <span class="collapse-count">1</span>
-                    <span class="collapse-icon" aria-hidden="true"></span>
-                </div>
+            <div class="note-group" data-open="0">
+                <h3 class="note-group-heading">
+                    <button class="note-group-toggle" type="button" aria-expanded="false" aria-controls="g-4">
+                        <span class="note-group-name">量子信息与计算</span>
+                        <span class="note-group-count">2</span>
+                        <span class="note-group-chevron" aria-hidden="true"></span>
+                    </button>
+                </h3>
+                <div class="note-masonry-wrap" id="g-4">
+                    <div class="note-masonry">
 
-                <div class="collapsible-content">
-                    <div class="pdf-item" onclick="window.location.href='../docs/index.html'">
-                        <h3>个人技术文档</h3>
-                        <p>使用md文件渲染的技术文档页面，亟待升级为动态页面</p>
+                        <article class="note-card" onclick="window.location.href='quantum-foundations/'" tabindex="0" role="link">
+                            <span class="note-tag">讲义</span>
+                            <h4 class="note-card-title">量子力学讲义：导论与量子力学基础</h4>
+                            <p class="note-card-desc">依据《2026 P1 导论 &amp; 量子力学基础》课件整理的完整讲义，含第 0 章前置知识补课（复向量空间与狄拉克记号、厄米/酉算子、概率与测量语言、张量积）、双缝干涉与信息擦除、状态向量形式化的四条公理、密度算子形式化与偏迹/施密特分解、布洛赫球；公式已按小节预渲染为静态 KaTeX，分 38 节阅读</p>
+                        </article>
+
+                        <article class="note-card" onclick="window.location.href='quantum-info-computing/'" tabindex="0" role="link">
+                            <span class="note-tag">讲义</span>
+                            <h4 class="note-card-title">量子信息讲义：纠缠、上下文与量子计算</h4>
+                            <p class="note-card-desc">依据《2026 P2 量子信息与量子计算》课件整理的完整讲义，含 EPR 佯谬与局域隐变量模型、CHSH 不等式与实验判决、量子上下文性与 KS 定理 / KCBS 不等式、BB84 量子密钥分发与不可克隆定理、超密编码、通用计算模型与 Grover 算法；公式已按小节预渲染为静态 KaTeX，分 30 节阅读</p>
+                        </article>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-group" data-open="0">
+                <h3 class="note-group-heading">
+                    <button class="note-group-toggle" type="button" aria-expanded="false" aria-controls="g-5">
+                        <span class="note-group-name">其他</span>
+                        <span class="note-group-count">1</span>
+                        <span class="note-group-chevron" aria-hidden="true"></span>
+                    </button>
+                </h3>
+                <div class="note-masonry-wrap" id="g-5">
+                    <div class="note-masonry">
+
+                        <article class="note-card" onclick="window.location.href='../docs/index.html'" tabindex="0" role="link">
+                            <span class="note-tag">文档</span>
+                            <h4 class="note-card-title">个人技术文档</h4>
+                            <p class="note-card-desc">使用md文件渲染的技术文档页面，亟待升级为动态页面</p>
+                        </article>
                     </div>
                 </div>
             </div>
@@ -255,34 +284,48 @@
                 backToTop.style.display = 'none';
             }
         });
-        
-        // 折叠栏目功能
-        // 用 data-open 记录状态：仅靠 maxHeight 真假判断会在"首次展开后再收起"时
-        // 失效（收起把 maxHeight 设为空字符串，判定为假 → 又走展开分支）。
-        function toggleCollapsible(header) {
-            const section = header.closest('.collapsible-section');
-            const content = header.nextElementSibling;
-            const open = content.getAttribute('data-open') === '1';
 
-            if (open) {
-                content.style.maxHeight = null;
-                content.setAttribute('data-open', '0');
-                if (section) section.setAttribute('data-open', '0');
-            } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                content.setAttribute('data-open', '1');
-                if (section) section.setAttribute('data-open', '1');
+        // 学习笔记：分组默认收起，点击展开为瀑布流
+        (function () {
+            function setOpen(btn, open) {
+                const group = btn.closest('.note-group');
+                const wrap = group.querySelector('.note-masonry-wrap');
+
+                if (open) {
+                    // 先量实际高度再固定，才能有高度过渡
+                    wrap.style.maxHeight = wrap.scrollHeight + 'px';
+                    group.setAttribute('data-open', '1');
+                    btn.setAttribute('aria-expanded', 'true');
+                } else {
+                    wrap.style.maxHeight = null;
+                    group.setAttribute('data-open', '0');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
             }
-        }
 
-        // 页面加载完成后初始化折叠栏目（默认全部收起）
-        document.addEventListener('DOMContentLoaded', function() {
-            const contents = document.querySelectorAll('.collapsible-content');
-            contents.forEach(content => {
-                content.style.maxHeight = null;
-                content.setAttribute('data-open', '0');
+            document.querySelectorAll('.note-group-toggle').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const group = btn.closest('.note-group');
+                    setOpen(btn, group.getAttribute('data-open') !== '1');
+                });
             });
-        });
+
+            // 展开状态下窗口尺寸变化会改变列数进而改变高度，重算一次避免被裁
+            let rt = null;
+            window.addEventListener('resize', function () {
+                clearTimeout(rt);
+                rt = setTimeout(function () {
+                    document.querySelectorAll('.note-group[data-open="1"]').forEach(function (g) {
+                        const wrap = g.querySelector('.note-masonry-wrap');
+                        const btn = g.querySelector('.note-group-toggle');
+                        wrap.style.maxHeight = 'none';
+                        const h = wrap.scrollHeight;
+                        wrap.style.maxHeight = h + 'px';
+                        btn.setAttribute('aria-expanded', 'true');
+                    });
+                }, 150);
+            });
+        })();
     </script>
     </main>
 

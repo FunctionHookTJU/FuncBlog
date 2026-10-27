@@ -929,61 +929,87 @@ footer {
     margin: 0.5rem;
 }
 
-/* 折叠栏目样式（紧凑手风琴） */
-.collapsible-section {
-    margin-top: 0.55rem;
-    border: 1px solid rgba(139, 92, 246, 0.16);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.75);
-    overflow: hidden;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+/* ---- 学习笔记：科目分组 + 瀑布流 + 磨砂玻璃卡片 ---- */
+
+/* 内容区本身也要半透明，否则玻璃卡片背后是纯白，模糊看不出效果 */
+.glass-section {
+    background-color: rgba(255, 255, 255, 0.34);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
+    backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 10px 40px rgba(31, 38, 135, 0.12);
 }
 
-.collapsible-section:hover {
-    border-color: rgba(139, 92, 246, 0.36);
+.glass-section h2 {
+    border-bottom-color: rgba(139, 92, 246, 0.45);
 }
 
-.collapsible-section[data-open="1"] {
-    box-shadow: 0 6px 20px rgba(109, 74, 255, 0.10);
+.note-group + .note-group {
+    margin-top: 0.7rem;
 }
 
-.collapsible-header {
+.note-group-heading {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* 分组标题本身就是折叠按钮 */
+.note-group-toggle {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
+    gap: 0.5rem;
+    width: 100%;
     padding: 0.55rem 0.85rem;
-    cursor: pointer;
-    background: transparent;
-    transition: background-color 0.2s ease;
-    user-select: none;
-}
-
-.collapsible-header:hover {
-    background-color: rgba(139, 92, 246, 0.06);
-}
-
-.collapsible-header h3 {
-    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.45);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    backdrop-filter: blur(12px) saturate(160%);
+    box-shadow:
+        0 4px 14px rgba(31, 38, 135, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    font: inherit;
     font-size: 0.95rem;
     font-weight: 600;
-    line-height: 1.4;
+    letter-spacing: 0.01em;
     color: var(--primary-color);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* 右侧条目数徽标 */
-.collapse-count {
-    margin-left: auto;
-    padding: 0.16rem 0.42rem;
+.note-group-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.62);
+}
+
+.note-group-toggle:focus-visible {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 2px;
+}
+
+/* 左侧竖条 */
+.note-group-toggle::before {
+    content: "";
+    flex: none;
+    width: 3px;
+    height: 1em;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #8b5cf6, rgba(139, 92, 246, 0.35));
+}
+
+.note-group-count {
+    padding: 0.08rem 0.4rem;
     border-radius: 999px;
-    font-size: 0.7rem;
-    line-height: 1.2;
+    font-size: 0.68rem;
+    line-height: 1.4;
     color: #6d4aff;
-    background: rgba(139, 92, 246, 0.12);
+    background: rgba(139, 92, 246, 0.14);
     font-variant-numeric: tabular-nums;
 }
 
-/* 纯 CSS 箭头，靠 rotate 转向，不再用 ▼ / ▲ 文字 */
-.collapse-icon {
+/* 右侧箭头，靠 data-open 翻转 */
+.note-group-chevron {
+    margin-left: auto;
     flex: none;
     width: 7px;
     height: 7px;
@@ -994,48 +1020,128 @@ footer {
     transition: transform 0.25s ease;
 }
 
-.collapsible-section[data-open="1"] .collapse-icon {
+.note-group[data-open="1"] .note-group-chevron {
     transform: rotate(-135deg);
 }
 
-.collapsible-content {
+/* 折叠容器：默认高度 0，点击后由 JS 设到内容实际高度 */
+.note-masonry-wrap {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease;
-    background-color: transparent;
+    transition: max-height 0.32s ease;
 }
 
-.collapsible-content > * {
-    padding: 0.7rem 0.85rem;
+/* 瀑布流：只给列宽，列数由容器宽度自动决定（见 .note-masonry 注释处说明） */
+.note-masonry {
+    column-width: 300px;
+    column-gap: 14px;
+    padding-top: 0.7rem;
 }
 
-.collapsible-content .pdf-item {
+.note-card {
+    /* 关键：不让卡片被拆到两列 */
+    display: block;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    margin: 0 0 14px;
+    padding: 0.95rem 1.05rem 1rem;
+    border-radius: 14px;
+
+    /* 半透明底 */
+    background-color: rgba(255, 255, 255, 0.58);
+    /* 背景模糊 + 提升饱和度，玻璃才通透 */
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(14px) saturate(180%);
+    /* 1px 高光边，模拟玻璃切面 */
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    /* 外投影给层次，内高光给厚度 */
+    box-shadow:
+        0 6px 20px rgba(31, 38, 135, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
+
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.note-card:hover {
+    transform: translateY(-2px);
+    background-color: rgba(255, 255, 255, 0.72);
+    box-shadow:
+        0 12px 28px rgba(31, 38, 135, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.note-card:active {
+    transform: translateY(0);
+}
+
+.note-card:focus-visible {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 2px;
+}
+
+.note-tag {
+    display: inline-block;
+    margin-bottom: 0.45rem;
+    padding: 0.08rem 0.4rem;
+    border-radius: 6px;
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    color: #6d4aff;
+    background: rgba(139, 92, 246, 0.14);
+}
+
+.note-card-title {
+    margin: 0 0 0.35rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: #2b2350;
+}
+
+.note-card-desc {
     margin: 0;
-    padding: 0.62rem 0.85rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: 0;
-    background: transparent;
-    box-shadow: none;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    color: #4a4a5a;
 }
 
-.collapsible-content .pdf-item:hover {
-    transform: none;
-    background-color: rgba(139, 92, 246, 0.06);
-    box-shadow: none;
+/* 窄屏：单列，减少内边距 */
+@media (max-width: 640px) {
+    .note-masonry {
+        column-width: auto;
+        column-count: 1;
+    }
+
+    .note-card {
+        padding: 0.85rem 0.9rem;
+    }
+
+    .glass-section {
+        padding: 1.2rem;
+    }
 }
 
-.collapsible-content .pdf-item:last-child {
-    border-bottom: none;
+/* 不支持 backdrop-filter 的浏览器退回高不透明度底，保证文字可读 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-section {
+        background-color: rgba(255, 255, 255, 0.78);
+    }
+
+    .note-card {
+        background-color: rgba(255, 255, 255, 0.92);
+    }
 }
 
-.collapsible-content .pdf-item h3 {
-    font-size: 0.9rem;
-    margin-bottom: 0.15rem;
-}
+@media (prefers-reduced-motion: reduce) {
+    .note-card {
+        transition: none;
+    }
 
-.collapsible-content .pdf-item p {
-    font-size: 0.82rem;
-    margin: 0;
+    .note-card:hover {
+        transform: none;
+    }
 }
 
 /* 分页控件样式 */
