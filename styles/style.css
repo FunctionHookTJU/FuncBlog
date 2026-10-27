@@ -953,12 +953,13 @@ footer {
     font-size: 1rem;
 }
 
-/* 分组标题本身就是折叠按钮 */
+/* 分组标题本身就是折叠按钮：靠左、定宽收窄，不铺满整行 */
 .note-group-toggle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     width: 100%;
+    max-width: 380px;
     padding: 0.55rem 0.85rem;
     border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 12px;
@@ -1028,7 +1029,41 @@ footer {
 .note-masonry-wrap {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.32s ease;
+    transition: max-height 0.36s cubic-bezier(0.22, 0.8, 0.28, 1);
+}
+
+/* 展开动画：整块从左上角向右下角斜切揭开 */
+@keyframes noteReveal {
+    from {
+        clip-path: inset(0 100% 100% 0);
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+/* 单张卡片：从自己的左上角轻微放大淡入 */
+@keyframes noteCardIn {
+    from {
+        opacity: 0;
+        transform: translate(-8px, -8px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+.note-group.is-opening .note-masonry {
+    animation: noteReveal 0.46s cubic-bezier(0.22, 0.8, 0.28, 1) both;
+}
+
+.note-group.is-opening .note-card {
+    transform-origin: top left;
+    animation: noteCardIn 0.4s cubic-bezier(0.22, 0.8, 0.28, 1) both;
+    animation-delay: calc(var(--i, 0) * 45ms);
 }
 
 /* 瀑布流：只给列宽，列数由容器宽度自动决定（见 .note-masonry 注释处说明） */
@@ -1141,6 +1176,15 @@ footer {
 
     .note-card:hover {
         transform: none;
+    }
+
+    .note-masonry-wrap {
+        transition: none;
+    }
+
+    .note-group.is-opening .note-masonry,
+    .note-group.is-opening .note-card {
+        animation: none;
     }
 }
 

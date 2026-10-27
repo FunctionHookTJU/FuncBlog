@@ -296,10 +296,22 @@
                     wrap.style.maxHeight = wrap.scrollHeight + 'px';
                     group.setAttribute('data-open', '1');
                     btn.setAttribute('aria-expanded', 'true');
+
+                    // 给每张卡片一个序号，CSS 用它做逐张延迟
+                    wrap.querySelectorAll('.note-card').forEach(function (card, i) {
+                        card.style.setProperty('--i', i);
+                    });
+                    // 从左上到右下斜切揭开的动画只在“打开”时跑一次
+                    group.classList.add('is-opening');
+                    clearTimeout(group.datasetTimer);
+                    group.datasetTimer = setTimeout(function () {
+                        group.classList.remove('is-opening');
+                    }, 900);
                 } else {
                     wrap.style.maxHeight = null;
                     group.setAttribute('data-open', '0');
                     btn.setAttribute('aria-expanded', 'false');
+                    group.classList.remove('is-opening');
                 }
             }
 
