@@ -938,6 +938,18 @@ footer {
     backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.45);
     box-shadow: 0 10px 40px rgba(31, 38, 135, 0.12);
+
+    /* 全部收起时背板收窄并居中；有分组展开时撑满 */
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+    transition:
+        max-width 0.45s cubic-bezier(0.22, 0.8, 0.28, 1),
+        background-color 0.3s ease;
+}
+
+.glass-section.has-open {
+    max-width: 100%;
 }
 
 .glass-section h2 {
@@ -953,13 +965,14 @@ footer {
     font-size: 1rem;
 }
 
-/* 分组标题本身就是折叠按钮：靠左、定宽收窄，不铺满整行 */
+/* 分组标题本身就是折叠按钮：收窄 + 居中 */
 .note-group-toggle {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     width: 100%;
     max-width: 380px;
+    margin: 0 auto;
     padding: 0.55rem 0.85rem;
     border: 1px solid rgba(255, 255, 255, 0.55);
     border-radius: 12px;
@@ -1025,11 +1038,27 @@ footer {
     transform: rotate(-135deg);
 }
 
-/* 折叠容器：默认高度 0，点击后由 JS 设到内容实际高度 */
+/* 折叠容器：用 0fr -> 1fr 做高度过渡。
+   好处是高度由内容自己决定，不用 JS 量 scrollHeight——
+   背板宽度变化会改变列数进而改变高度，固定 max-height 会算错。 */
 .note-masonry-wrap {
-    max-height: 0;
+    display: grid;
+    grid-template-rows: 0fr;
+    padding-top: 0;
+    transition:
+        grid-template-rows 0.4s cubic-bezier(0.22, 0.8, 0.28, 1),
+        padding-top 0.4s cubic-bezier(0.22, 0.8, 0.28, 1);
+}
+
+.note-group[data-open="1"] .note-masonry-wrap {
+    grid-template-rows: 1fr;
+    padding-top: 0.7rem;
+}
+
+.note-masonry-wrap > .note-masonry {
+    min-height: 0;
+    /* 必须：行高 0fr 只是把网格行压成 0，内容仍会溢出显示 */
     overflow: hidden;
-    transition: max-height 0.36s cubic-bezier(0.22, 0.8, 0.28, 1);
 }
 
 /* 展开动画：整块从左上角向右下角斜切揭开 */
@@ -1040,6 +1069,17 @@ footer {
 
     to {
         clip-path: inset(0 0 0 0);
+    }
+}
+
+/* 收起动画：同一条对角线反向收回 */
+@keyframes noteHide {
+    from {
+        clip-path: inset(0 0 0 0);
+    }
+
+    to {
+        clip-path: inset(0 100% 100% 0);
     }
 }
 
@@ -1060,6 +1100,10 @@ footer {
     animation: noteReveal 0.46s cubic-bezier(0.22, 0.8, 0.28, 1) both;
 }
 
+.note-group.is-closing .note-masonry {
+    animation: noteHide 0.4s cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
 .note-group.is-opening .note-card {
     transform-origin: top left;
     animation: noteCardIn 0.4s cubic-bezier(0.22, 0.8, 0.28, 1) both;
@@ -1070,7 +1114,6 @@ footer {
 .note-masonry {
     column-width: 300px;
     column-gap: 14px;
-    padding-top: 0.7rem;
 }
 
 .note-card {
@@ -1178,11 +1221,13 @@ footer {
         transform: none;
     }
 
-    .note-masonry-wrap {
+    .note-masonry-wrap,
+    .glass-section {
         transition: none;
     }
 
     .note-group.is-opening .note-masonry,
+    .note-group.is-closing .note-masonry,
     .note-group.is-opening .note-card {
         animation: none;
     }

@@ -287,13 +287,24 @@
 
         // 学习笔记：分组默认收起，点击展开为瀑布流
         (function () {
+            const section = document.querySelector('.glass-section');
+
+            // 有任一分组展开时背板撑满，全部收起时收窄居中
+            function syncSection() {
+                if (!section) return;
+                section.classList.toggle(
+                    'has-open',
+                    !!section.querySelector('.note-group[data-open="1"]')
+                );
+            }
+
             function setOpen(btn, open) {
                 const group = btn.closest('.note-group');
                 const wrap = group.querySelector('.note-masonry-wrap');
+                clearTimeout(group._timer);
 
                 if (open) {
-                    // 先量实际高度再固定，才能有高度过渡
-                    wrap.style.maxHeight = wrap.scrollHeight + 'px';
+                    group.classList.remove('is-closing');
                     group.setAttribute('data-open', '1');
                     btn.setAttribute('aria-expanded', 'true');
 
@@ -301,18 +312,26 @@
                     wrap.querySelectorAll('.note-card').forEach(function (card, i) {
                         card.style.setProperty('--i', i);
                     });
-                    // 从左上到右下斜切揭开的动画只在“打开”时跑一次
+
+                    // 斜切揭开只在“打开”时跑一次。结束后必须移除类，
+                    // 否则 animation-fill-mode: both 会冻结 transform，hover 失效
                     group.classList.add('is-opening');
-                    clearTimeout(group.datasetTimer);
-                    group.datasetTimer = setTimeout(function () {
+                    group._timer = setTimeout(function () {
                         group.classList.remove('is-opening');
                     }, 900);
                 } else {
-                    wrap.style.maxHeight = null;
+                    group.classList.remove('is-opening');
                     group.setAttribute('data-open', '0');
                     btn.setAttribute('aria-expanded', 'false');
-                    group.classList.remove('is-opening');
+
+                    // 收起走同一条对角线的反向动画，结束后同样清类
+                    group.classList.add('is-closing');
+                    group._timer = setTimeout(function () {
+                        group.classList.remove('is-closing');
+                    }, 460);
                 }
+
+                syncSection();
             }
 
             document.querySelectorAll('.note-group-toggle').forEach(function (btn) {
@@ -322,21 +341,7 @@
                 });
             });
 
-            // 展开状态下窗口尺寸变化会改变列数进而改变高度，重算一次避免被裁
-            let rt = null;
-            window.addEventListener('resize', function () {
-                clearTimeout(rt);
-                rt = setTimeout(function () {
-                    document.querySelectorAll('.note-group[data-open="1"]').forEach(function (g) {
-                        const wrap = g.querySelector('.note-masonry-wrap');
-                        const btn = g.querySelector('.note-group-toggle');
-                        wrap.style.maxHeight = 'none';
-                        const h = wrap.scrollHeight;
-                        wrap.style.maxHeight = h + 'px';
-                        btn.setAttribute('aria-expanded', 'true');
-                    });
-                }, 150);
-            });
+            syncSection();
         })();
     </script>
     </main>
