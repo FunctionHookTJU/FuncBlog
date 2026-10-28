@@ -139,11 +139,11 @@
 </tbody>
 </table>
 <p><mark class="bubu">补</mark><strong>第①类最值得注意：它说的是"在开发阶段做的、为了将来好维护的事"</strong>。也就是说，<strong>维护的质量在你写第一行代码时就决定了</strong>。这正是第 6 讲的"设计原则"、第 8 讲的"程序风格"存在的理由——它们不是"洁癖"，它们是<strong>维护成本的前置投资</strong>。</p>
-<h3>3.1 代码重组（Restructuring）</h3>
+<h3>2.1 代码重组（Restructuring）</h3>
 <p>定义：在<strong>不改变软件功能</strong>的前提下，对程序代码进行重新组织，使重组后的代码具有<strong>更好的可维护性</strong>，能够有效支持对代码的变更。</p>
 <p>流程（PPT 第 22 页）：读入程序代码 → 转为内部表示 → 代码转换 → 输出易于维护的代码。</p>
 <p><mark class="bubu">补</mark><strong>代码重组的三个"不变"</strong>：<strong>功能不变、架构不变、设计不变</strong>——只动代码内部的组织形式（提取函数、重命名、消除重复、调整顺序）。所以它是<strong>风险最低</strong>的一种维护改造，通常可以靠自动化工具 + 回归测试保证安全。<strong>这也是"重构"（refactoring）的基础形态。</strong></p>
-<h3>3.2 逆向工程（Reverse Engineering）</h3>
+<h3>2.2 逆向工程（Reverse Engineering）</h3>
 <p>定义：基于<strong>低抽象层次</strong>的软件制品，通过理解和分析，<strong>产生高抽象层次的软件制品</strong>。</p>
 <p>两个层次：</p>
 <ul>
@@ -152,12 +152,12 @@
 </ul>
 <p>典型应用场景：分析已有程序，寻求比源代码更高层次的抽象形式（如设计甚至需求）。</p>
 <p><mark class="bubu">补</mark><strong>逆向工程要解决的问题正是第 10 讲开头那条痛点</strong>："待维护软件不能提供文档"或"文档与代码不一致"。<strong>注意它不改变代码</strong>——它只"往上抽"，把丢失的信息补回来。<strong>输出的是理解，不是产品。</strong></p>
-<h3>3.3 设计重构（Design Recovery / 设计恢复）</h3>
+<h3>2.3 设计重构（Design Recovery / 设计恢复）</h3>
 <p>定义（PPT 第 24 页）：如果软件设计文档缺失、文档与代码不一致、或设计内容不详实，维护工程师可用<strong>设计重构</strong>手段获得设计方面的文档信息。</p>
 <p>做法：读入程序代码，理解分析<strong>变量使用、模块内部的封装、模块之间的调用或消息传递、程序的控制路径</strong>等信息，产生用自然语言或图形化信息描述的软件设计文档。</p>
 <p>关键定性：<strong>它是逆向工程的一种具体表现形式。</strong></p>
 <p><mark class="bubu">补</mark><strong>设计重构和逆向工程的区别只在"粒度/产出物"</strong>：逆向工程是总称，可以产出设计模型，也可以产出需求模型；设计重构特指"产出设计文档"这一种。<strong>考试如果问"二者关系"，答案就是"设计重构是逆向工程的一种具体形式"。</strong></p>
-<h3>3.4 再工程（Re-engineering）</h3>
+<h3>2.4 再工程（Re-engineering）</h3>
 <p>定义（PPT 第 25 页）：通过<strong>分析和变更软件的架构</strong>，实现更高质量的软件系统的过程。</p>
 <p>关键定性：<strong>再工程既包括逆向工程也包括正向工程</strong>。</p>
 <p>流程：</p>
@@ -172,6 +172,11 @@
            └────────── 再工程（包住上面全部）──────────┘
 </code></pre>
 <p>用一句话概括四者：</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch10_p026.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch10_p026.png" alt="逆向工程、代码重组、设计重构与再工程"></a>
+<figcaption><b>图 10-3　逆向工程、代码重组、设计重构与再工程</b>　（PPT 第 26 页）图中间是「设计模型 1…n」与「实现模型」，上方「需求模型」；左侧箭头标「逆向工程」（从实现往上抽），右侧标「正向工程」（从设计往下生成），「文档和设计重构」指向「更高质量的软件设计」，「代码重组」在实现模型之间横向作用，整个大框标「再工程」。<strong>只需分清四种箭头方向</strong>：向上＝逆向、向下＝正向、横向＝重组、全包＝再工程。</figcaption>
+</figure>
+
 <table>
 <thead>
 <tr>
@@ -209,7 +214,7 @@
 </tbody>
 </table>
 <p><mark class="bubu">补</mark><strong>这个排序就是"改造力度"的排序</strong>：重组 &lt; 逆向 &lt; 再工程。<strong>实践中的正确顺序也是这个</strong>：先试着重组（最便宜），不行再逆向出设计（看清结构），实在不行才再工程（改架构）。<strong>跳过前两步直接"推倒重写"，是软件史上最常见的灾难。</strong></p>
-<h3>3.5 可维护软件的十条原则</h3>
+<h3>2.5 可维护软件的十条原则</h3>
 <p>课件第 27–28 页推荐了一本书（按"从小到大、从细微到宏观"提取了编写可维护软件的十大编程原则），并列出这十条。这份清单几乎可以直接当"代码评审检查表"：</p>
 <table>
 <thead>
@@ -273,7 +278,7 @@
 </tbody>
 </table>
 <p><mark class="bubu">补</mark><strong>这十条和第 6 讲的内聚耦合、第 8 讲的程序风格是同一套东西的不同表述</strong>。"函数不超过 15 行"对应"功能内聚"（一件事才能 15 行写完），"分支点不超过 4 个"对应"复杂度可控"，"参数不超过 4 个"对应"标记耦合要少传"。<strong>看到这些数字别当教条，它们是在说：超过这个量级，人就理解不了了。</strong></p>
-<h3>3.6 什么是坏代码：六个"错误"</h3>
+<h3>2.6 什么是坏代码：六个"错误"</h3>
 <p>课件第 29–34 页用反讽的方式列了六条"坏代码哲学"，每一条都很好笑也很准确：</p>
 <table>
 <thead>
@@ -328,6 +333,11 @@
    → 复审 → 修改过的软件
 </code></pre>
 <p>分支逻辑：纠错性维护按"严重 / 不严重"分级，严重的"将改正错误列入计划"，不严重的"将安排好的工作量列入计划"；完善性与适应性维护则走"进行问题分析 → 确定更改要求"。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch10_p036.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch10_p036.png" alt="软件维护的工作流程图"></a>
+<figcaption><b>图 10-4　软件维护的工作流程图</b>　（PPT 第 36 页）图从左到右是：用户/维护人员提出「维护要求」→「确认维护类型」（分纠错 / 完善 / 适应三支）→ 评价严重程度或优先级 → 进行问题分析、确定更改要求 → 理解分析程序 → 安排计划 → 修改程序 → 测试程序 → 复审 → 修改过的软件。<strong>重点是那些分叉</strong>：不同维护类型走不同分支，纠错看「严重不严重」，完善/适应看「优先级高低」。</figcaption>
+</figure>
+
 <h4>维护的管理流程（PPT 第 37–38 页）</h4>
 <p>课件强调：<strong>维护工作不仅是技术性的，还需要大量管理工作配合</strong>。管理部门应对提交的修改方案进行分析和审查，对修改带来的影响作充分估计，<strong>对于不妥的修改予以撤销</strong>；需修改主文档时，管理部门更应仔细审查。</p>
 <p>流程主干：</p>
@@ -371,7 +381,7 @@
 <li><strong>文档和模型副作用</strong>：改代码的同时<strong>必须同步修改相关模型和文档</strong>，确保模型—代码、文档—模型、文档—代码三者相互一致。</li>
 </ul>
 <p><mark class="bubu">补</mark><strong>第（1）类问题最容易被技术人忽略，但它是真实存在的组织问题</strong>。它的解法不在技术里，在制度里：给维护工作独立的考核与晋升通道、让维护工程师早期参与开发、建立"谁开发谁支持"的责任期。<strong>这也是为什么软件工程被归为"多学科交叉"（第 2 讲）——它真的有人和管理的那一半。</strong></p>
-<h3>4 维护成本与可维护性</h3>
+<h3>4.1 维护成本</h3>
 <h4>成本趋势</h4>
 <p>课件第 44 页给了一条上升曲线：</p>
 <table>
@@ -410,6 +420,11 @@
 <div class="jysmath jysmath-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>M</mi><mo>=</mo><mi>P</mi><mo>+</mo><mi>K</mi><mo>⋅</mo><msup><mi>e</mi><mrow><mo stretchy="false">(</mo><mi>c</mi><mo>−</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">M = P + K \cdot e^{(c-d)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.938em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.938em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">c</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">d</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span></div>
 <p>各符号含义：<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span> 为维护总工作量，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span></span> 为<strong>生产性</strong>工作量，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span></span> 为<strong>经验常数</strong>，<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span> 为<strong>复杂度</strong>（设计好坏和文档完整程度），<span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 为<strong>对欲维护软件的熟悉程度</strong>。</p>
 <p><mark class="bubu">补</mark><strong>这个公式的价值全在指数上</strong>，把它翻译成人话：</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch10_p044.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch10_p044.png" alt="维护成本与工作量模型"></a>
+<figcaption><b>图 10-5　维护成本与工作量模型</b>　（PPT 第 44 页）图左上角是维护成本占比的年代数据（70 年代 35%–40% → 80 年代 60% → 90 年代 75% → 如今 80% 以上），右侧红框是公式 M = P + K·e^(c−d) 及各符号含义（P 生产性工作量、K 经验常数、C 复杂度、D 熟悉程度），下方两行是「助动性 / 生产性」两类工作量的定义。<strong>配合正文读：C 在指数上，所以「文档齐全」的收益是被放大的。</strong></figcaption>
+</figure>
+
 <ul>
 <li><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span></span></span></span></span> 越大（设计越差、文档越缺）→ <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mo stretchy="false">(</mo><mi>c</mi><mo>−</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">e^{(c-d)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.888em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">c</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">d</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span></span></span></span></span> 指数级上升 → <strong>维护量爆炸</strong>；</li>
 <li><span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi></mrow><annotation encoding="application/x-tex">d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></span> 越大（越熟悉这个系统）→ 指数分母变小 → 维护量显著下降。</li>

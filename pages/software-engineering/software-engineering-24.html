@@ -138,6 +138,11 @@
 </tbody>
 </table>
 <p>约束（PPT 第 5 页）：层与层之间是"<strong>请求—服务</strong>"关系；合理的抽象层次划分和软构件组织是关键。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch07_p005.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p005.png" alt="分层体系结构示例"></a>
+<figcaption><b>图 7-1　分层体系结构示例</b>　（PPT 第 5 页）图上三层横条从下往上：服务 → 业务 → 界面，每层里排着若干构件方框，层间用「请求/服务」箭头连接，右侧竖线标「交互和约束」。<strong>看图顺序：先看有几层，再看每层放了哪些构件，最后看跨层箭头是单向还是双向</strong>——单向是严格分层，双向就是允许跳层，那是另一种取舍。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>分层的代价必须说清楚</strong>：请求要穿过每一层，<strong>性能有损耗</strong>；而且"某一层能不能跳过下一层直接调更下层"是个永恒争论（严格分层不允许，松散分层允许）。<strong>严格分层换可替换性，松散分层换性能</strong>——这就是第 6 讲说的"设计就是权衡"。</p>
 <h3>C/S 与两级/三级架构</h3>
 <p><strong>C/S 结构</strong>（PPT 第 6 页）：一种分布式模型，采用"发请求、得结果"的模式。客户机向服务器发出请求（数据、网页、文件传输），服务器响应并回传结果，客户机再把结果格式化呈现给用户。</p>
@@ -173,6 +178,11 @@
 </tbody>
 </table>
 <p>课件的结论：<strong>两层 C/S 架构将数据表示和处理逻辑分开，但应用逻辑和两端之一是紧耦合的，不适宜多用户、多数据库，是非安全的网络环境。</strong></p>
+<figure class="fig">
+<a href="../../assets/img/se/ch07_p009.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p009.png" alt="两层架构中的三种逻辑映射"></a>
+<figcaption><b>图 7-2　两层架构中的三种逻辑映射</b>　（PPT 第 9 页）图分客户机/服务器两栏，中间画出 C/S 应用1/2/3 三种切法：应用1（用户界面+逻辑应用 / 数据访问）、应用2（用户界面 / 逻辑应用+数据访问）、应用3（用户界面+数据访问 / 逻辑应用）。底部红字是课件判断：「应用逻辑和两端之一是紧耦合的」——<strong>这张图就是「为什么要有三层」的论证。</strong></figcaption>
+</figure>
+
 <p><strong>三级/多级模型</strong>（PPT 第 10 页）：</p>
 <table>
 <thead>
@@ -234,6 +244,11 @@
 </ul>
 <p><mark class="bubu">补</mark><strong>这就是"生产者—消费者"模型的雏形</strong>：两个主动过滤器 = 两个生产者抢一个队列，必须有缓冲区；一主一被 = 生产者直接调消费者（同步调用）。<strong>"用不用队列"这个现代架构问题的答案，在这里就已经给出了。</strong></p>
 <p><strong>经典示例</strong>（PPT 第 15 页）：编译器——源码 → 词法分析 → 语法分析 → 生成中间码 → 代码优化 → 可执行代码，每一步之间都是数据流。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch07_p013.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p013.png" alt="管道-过滤器示例：编译器"></a>
+<figcaption><b>图 7-3　管道-过滤器示例：编译器</b>　（PPT 第 13 页）图上一条从「源程序」出发的管线，中间四个方框是过滤器（词法分析、语法分析、代码优化…），方框之间是管道，最后汇到「目标代码」。<strong>注意每个方框都是黑盒</strong>：只声明输入什么、输出什么——这正是正文说「可独立升级过滤器」的前提。</figcaption>
+</figure>
+
 <p><strong>特点</strong>：自然地解决具有数据流特征的软件需求；可独立更新、升级过滤器来实现系统的扩展和进化。</p>
 <p><mark class="bubu">补</mark><strong>"可独立升级过滤器"这句话有前提</strong>：前提是<strong>数据格式约定不变</strong>。如果词法分析的输出格式改了，下游全部要改。所以管道-过滤器的真正约束不是"松耦合"，而是"<strong>用统一的数据格式换取独立性</strong>"。</p>
 <h3>黑板风格</h3>
@@ -316,6 +331,11 @@
 <li><strong>模型</strong>：进行业务逻辑处理，把结果回送控制器，必要时把<strong>数据变化事件通知给所有视图</strong>。</li>
 </ol>
 <p><mark class="bubu">补</mark><strong>MVC 最精妙的地方是"模型不知道视图存在"</strong>：模型只负责"数据变了就广播"，谁在听、听了干什么，它不管。这个"观察者"机制让<strong>一模型多视图</strong>成为可能（同一份数据同时以表格和图表展示）。所以 MVC 的价值不在于"分三层"，而在于<strong>它把"变化的方向"解耦了</strong>：数据变化 → 通知；界面变化 → 不影响数据。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch07_p025.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p025.png" alt="MVC 体系结构示意"></a>
+<figcaption><b>图 7-4　MVC 体系结构示意</b>　（PPT 第 25 页）图上三块：View（视图）、Controller（控制器）、Model（模型），箭头构成 View→Controller→Model→View 的环。<strong>这个环就是正文那三条运行约束</strong>：视图把界面动作交给控制器，控制器调模型，模型处理完通知所有视图更新。抓一个细节：<strong>模型到视图是「通知」，不是「调用」。</strong></figcaption>
+</figure>
+
 <h3>SOA</h3>
 <p><strong>三个角色</strong>（PPT 第 27 页）：</p>
 <ul>
@@ -328,6 +348,11 @@
 <p><mark class="bubu">补</mark><strong>SOA 的三个缩写值得记一下</strong>：UDDI（ Universal Description, Discovery and Integration）负责"服务怎么被找到"，WSDL（Web Services Description Language）负责"服务长什么样"，SOAP 负责"怎么调"。<strong>它们是"注册—描述—绑定"三个动作的对应协议。</strong></p>
 <h3>消息总线</h3>
 <p><strong>结构</strong>（PPT 第 31 页）：一组软构件 + 一条称为"<strong>消息总线</strong>"的连接件。总线是构件之间的通信桥梁，实现消息的发送、接收、转发、处理；每个构件通过接入总线实现收发。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch07_p031.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p031.png" alt="消息总线风格"></a>
+<figcaption><b>图 7-5　消息总线风格</b>　（PPT 第 31 页）图上中间一条粗横条是「消息总线」，上下挂着六个「软构件」方框，每个构件只有一条线接到总线。<strong>数一下线：六个构件六条线</strong>——这就是总线风格解决的问题（两两直连要 15 条）。代价也在这张图上：总线是唯一通道，它出问题全都通不了。</figcaption>
+</figure>
+
 <p><strong>技术背景</strong>（PPT 第 32 页）：流行的 ORB 标准有两种——<strong>CORBA</strong>（Common Object Request Broker Architecture）与 <strong>DCOM</strong>（Distributed Component Object Model）。"软件总线"的中间件即<strong>对象请求代理（ORB）</strong>。分布式对象结构具有很好的开放性和透明性，用户可以方便地在总线上添加、更新、删除组件对象。每个对象在逻辑上平等，互为对方提供服务：提供服务的对象是服务器，提出请求的是客户。</p>
 <p><mark class="bubu">补</mark><strong>总线风格解决的是"n 个构件两两通信要 n(n-1)/2 条连接"的问题</strong>：接上总线后只需要 n 条连接。代价是<strong>总线本身成为单点</strong>——总线挂了全挂，总线慢了全慢。这也是后来"企业服务总线（ESB）"被人诟病、转向"事件驱动/消息队列"的原因。</p>
 <h3>六种风格的选型表（课件第 91 页原表）</h3>
@@ -373,6 +398,10 @@
 </tbody>
 </table>
 <p><mark class="bubu">补</mark><strong>选型的三问</strong>：①系统的主要特征是"<strong>数据流</strong>"还是"<strong>交互</strong>"还是"<strong>共享状态</strong>"？②要不要支持<strong>多客户端/异构</strong>？③变更主要发生在<strong>哪一层</strong>（界面变 → MVC/分层；处理步骤变 → 管道；参与者变 → SOA/总线）？</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch06_p091.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch06_p091.png" alt="六种体系结构风格的适用场合"></a>
+<figcaption><b>图 7-6　六种体系结构风格的适用场合</b>　（PPT 第 91 页）正文那张选型表的原始出处：五列（类别、特点、典型应用），六行（管道/过滤器、层次、MVC、SOA、消息总线等）。<strong>复习时只看「典型应用」那一列</strong>——考试给场景，问的往往就是「它落在哪一行」。</figcaption>
+</figure>
 <div class="pager"><a class="pg prev" href="software-engineering-23.html"><span>← 上一节</span><b>3–4 面向对象设计、架构风格与设计评审</b></a><a class="pg next" href="software-engineering-25.html"><span>下一节 →</span><b>2–3 用户界面设计与详细设计工具</b></a></div>
 </div>
 

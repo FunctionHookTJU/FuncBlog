@@ -258,6 +258,11 @@
 <p><strong>第 2 步：确定关联</strong>（PPT 第 72 页）</p>
 <p>关联的三个来源：①直接提取动词短语（"储户拥有账户"→ 拥有）；②需求陈述中隐含的关联；③根据问题域知识得出的关联。</p>
 <p>ATM 初始对象图上出现的关联有：组成、保管、拥有、访问、通信、输入、修改、授权、雇佣，并且标上了多重性（<code>1+</code>、<code>1</code>、<code>*</code>）。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p073.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p073.png" alt="ATM 系统的原始对象图"></a>
+<figcaption><b>图 5-7　ATM 系统的原始对象图</b>　（PPT 第 73 页）这就是「第 2 步」画出来的第一版：11 个类（总行、分行、中央计算机、分行计算机、柜员终端、柜员、储户、账户、事务、现金兑换卡、ATM）用带多重性的连线连起来，线旁标着组成/保管/拥有/访问/通信/输入/修改/授权/雇佣。<strong>看图先数连线，再看每条线两端的重数</strong>——正文说「关联能帮助发现漏掉的类」，就是因为画线时不得不追问「这两个东西是一对多还是多对多」。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>"关联能帮助发现漏掉的类"</strong>：课件说得很好——"分析和确定关联，能促使分析员考虑问题域的边界情况，有助于发现那些尚未发现的类"。比如你画到"柜员—柜员终端"，就会想"柜员怎么登录？"于是发现"柜员事务"这个类。</p>
 <p><strong>第 3 步：划分主题</strong>（PPT 第 74–75 页）</p>
 <p>把 ATM 系统划成三个主题：<strong>总行、分行、ATM</strong>。课件还诚实地补了一句："实际上，ATM 系统规模并不大，也可以不划分主题层。"</p>
@@ -305,6 +310,10 @@
 </tbody>
 </table>
 <p><mark class="bubu">补</mark><strong>这三处修改分别对应三条设计直觉</strong>：①一个类有两个独立职责 → 拆（这就是后来的"单一职责原则"，第 6 讲）；②有属性、有生命周期的事件 → 建类；③现实中不可分的东西 → 不要硬拆。<strong>它们是"内聚"概念在分析阶段的预演。</strong></p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p081.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p081.png" alt="修改后的 ATM 对象模型"></a>
+<figcaption><b>图 5-8　修改后的 ATM 对象模型</b>　（PPT 第 81 页）把这张和图 5-7 对着看，就能看出「反复修改」改了什么：现金兑换卡被拆成「卡权限」与「现金兑换卡」，「分行」与「分行计算机」合并，事务类补上了自己的属性。<strong>同一系统的两版对象图并排放，是本章最直观的一课：模型不是一次画对的。</strong></figcaption>
+</figure>
 <div class="pager"><a class="pg prev" href="software-engineering-18.html"><span>← 上一节</span><b>2.1–2.4 三模型与五层次</b></a><a class="pg next" href="software-engineering-20.html"><span>下一节 →</span><b>2.5–3 动态模型、功能模型与需求变更</b></a></div>
 </div>
 

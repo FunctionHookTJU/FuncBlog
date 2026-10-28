@@ -133,6 +133,11 @@
 </code></pre>
 <p>两条曲线：<strong>每个模块的成本</strong>随模块数线性上升（每个模块都要设计、编码、测试）；<strong>接口开销</strong>也随模块数上升（模块越多，模块间的连线越多，而连线数大致按 n² 增长）。总成本先降后升，中间有个<strong>最小成本区域</strong>。</p>
 <p><mark class="bubu">补</mark><strong>这就是"过度设计"的定量解释</strong>：把系统切成 200 个微服务，你会得到 200 个部署单元、上千条调用链、无数的版本兼容问题——<strong>接口开销吃掉了分解带来的全部收益</strong>。所以第 2 讲的"分而治之"必须配一个刹车：<strong>拆到"每个模块都能被一个人在一周内理解"就够了。</strong></p>
+<figure class="fig">
+<a href="../../assets/img/se/ch06_p026.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch06_p026.png" alt="软件工程基本定理与成本曲线"></a>
+<figcaption><b>图 6-2　软件工程基本定理与成本曲线</b>　（PPT 第 26 页）图上方红框是定理：C(P1+P2) > C(P1)+C(P2)，E(P1+P2) > E(P1)+E(P2)。下方那条 U 形曲线是工程推论：横轴「设计模块总数」，纵轴「工作量或成本」，红箭头标「每个模块的成本」（随模块数上升），黑箭头标「用于接口的开销」（升得更快），中间蓝色区域就是<strong>最小成本区域</strong>。正文说「分解不是越多越好」，依据就是这片蓝色。</figcaption>
+</figure>
+
 <h3>模块独立性：内聚与耦合</h3>
 <p><strong>模块独立性</strong>的定义（PPT 第 27 页）：</p>
 <blockquote>
@@ -201,6 +206,11 @@
 </tbody>
 </table>
 <p>记忆口诀（从低到高）：<strong>巧、逻、时、过、通、顺、功</strong>。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch06_p028.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch06_p028.png" alt="内聚的七个等级"></a>
+<figcaption><b>图 6-3　内聚的七个等级</b>　（PPT 第 28 页）图上七个小方块就是正文表格的图形版：从左到右「功能、信息、通信、过程、时间、逻辑、巧合」，上方箭头标「内聚性：高 ←→ 低」，底部标「模块独立性：弱 ←→ 强」。<strong>注意方向是「左边最好」</strong>——功能内聚排在最左。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>怎么快速判定？问三个问题</strong>：</p>
 <ol>
 <li>这些代码之间<strong>有没有数据依赖</strong>？没有 → 偶然/逻辑/时间。</li>
@@ -268,6 +278,11 @@
 <p><mark class="bubu">补</mark><strong>公共耦合 vs 外部耦合的区别，课件说得很清楚</strong>："和公共耦合很像，区别就是一个是<strong>简单变量</strong>，一个是<strong>复杂数据结构</strong>。" 这条辨析几乎每年都考。</p>
 <p><mark class="bubu">补</mark><strong>从控制耦合开始有一个重要转折</strong>，课件原文："从控制耦合开始，模块的数据就放在自己内部了，不同模块之间通过接口互相调用。" 也就是说，前三类（内容/公共/外部）是<strong>共享存储</strong>式的耦合，后四类（控制/标记/数据/非直接）是<strong>接口调用</strong>式的耦合。<strong>前者你无法从签名看出依赖，后者可以。</strong> 这是"为什么共享全局变量最危险"的准确回答。</p>
 <p><mark class="bubu">补</mark><strong>"标记耦合比数据耦合差"这一点反直觉</strong>，但原因很实在：传一个对象过去，被调用方<strong>可能用到对象里的任何字段</strong>，于是它和"这个对象的完整结构"耦合了；以后对象加字段、改字段类型，都可能影响它。只传一个 <code>int</code> 则不可能。<strong>所以原则是：传你需要的最小集合</strong>（这就是后来"接口最小化"的由来）。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch06_p034.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch06_p034.png" alt="耦合的七个等级"></a>
+<figcaption><b>图 6-4　耦合的七个等级</b>　（PPT 第 34 页）图上七个方块从左到右：非直接、数据、标记、控制、外部、公共、内容；上方标「耦合性：低 ←→ 高」，底部标「模块独立性：强 ←→ 弱」。顶部红字是定义：「取决于各个模块之间接口的复杂程度、调用模块的方式以及哪些信息通过接口」。<strong>方向和内聚一样是「左边最好」，别背反了。</strong></figcaption>
+</figure>
+
 <h3>四道选择题（课件第 45 页原题）</h3>
 <p>这四题是这一节的"验收标准"，答案与解析如下：</p>
 <p><strong>1. 衡量模块独立性的度量标准是（ ）</strong>

@@ -287,6 +287,11 @@
 确认测试    集成测试    单元测试   （编码）
 </code></pre>
 <p><strong>测试活动的关系</strong>（PPT 第 20 页）：单元测试 → 集成测试 → 确认测试 → 其他测试（性能、安全、强度等），"<strong>循序渐进、逐层递进</strong>"。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch09_p019.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p019.png" alt="测试活动与开发阶段的对应"></a>
+<figcaption><b>图 9-1　测试活动与开发阶段的对应</b>　（PPT 第 19 页）图左列是「软件开发过程」（需求分析、概要设计、详细设计、编码），右列是「软件测试过程」（确认测试、集成测试、单元测试），中间的斜箭头把两边一一配上：<strong>需求分析 ↔ 确认测试、概要设计 ↔ 集成测试、详细设计 ↔ 单元测试</strong>。底部红字「要对软件进行系统的测试」。这张图是「测试计划要提前定」的图形依据。</figcaption>
+</figure>
+
 <p><strong>测试过程</strong>（PPT 第 21 页）：</p>
 <pre><code>制订测试计划 → 代码检查/走查 → 单元测试 → 集成测试 → 确认测试
                     ↑                                  ↓
@@ -294,6 +299,11 @@
                                     → 评价测试效果
 </code></pre>
 <p><mark class="bubu">补</mark><strong>注意流程里有"代码检查/走查"，它在测试之前</strong>。这说明"测试 ≠ 质量保证的全部"：走查是<strong>不运行程序</strong>的人工检查，成本低、对"规范性问题"有效；测试是<strong>运行程序</strong>的动态检查，对"行为错误"有效。<strong>两者互补，不能互相替代。</strong></p>
+<figure class="fig">
+<a href="../../assets/img/se/ch09_p021.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p021.png" alt="软件测试过程"></a>
+<figcaption><b>图 9-2　软件测试过程</b>　（PPT 第 21 页）图上主链是「制订测试计划 → 代码检查/走查 → 单元测试 → 集成测试 → 确认测试 → 评价测试效果」；右侧一条回路是「出现软件失效 → 调试 → 修复 → 回归测试」，回归测试的箭头又指回单元测试。<strong>看图抓两件事</strong>：走查在测试之前（不运行程序），以及回归测试是个闭环。</figcaption>
+</figure>
+
 <h3>2.4.1 单元测试</h3>
 <p><strong>测试对象</strong>（PPT 第 22 页）：对软件<strong>基本模块单元</strong>进行测试——过程、函数、方法、类。</p>
 <p><strong>测试方法</strong>：大多采用<strong>白盒测试技术</strong>。
@@ -327,6 +337,11 @@
 </table>
 <p>流程是：驱动程序 → 被测模块（+ 桩模块替代其依赖）→ 测试结果。</p>
 <p><mark class="bubu">补</mark><strong>驱动和桩的方向千万别搞反</strong>：<strong>驱动在上面（调用者），桩在下面（被调用者）</strong>。记忆法：<strong>"驱动开车来找你，桩是你在下面垫的假腿"</strong>。第 9 讲后面讲集成测试时，自顶向下集成需要<strong>桩</strong>（下层还没做，用假的顶上），自底向上集成需要<strong>驱动</strong>（上层还没做，写个假的来调用）——这个对应关系是最经典的考点。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch09_p023.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p023.png" alt="单元测试的运行环境"></a>
+<figcaption><b>图 9-3　单元测试的运行环境</b>　（PPT 第 23 页）图上方是「驱动程序」，下方是「被测模块」，再往下挂两个「桩模块」；左侧「测试结果」、右侧「测试用例」分别进出驱动程序。<strong>方向一眼可辨：驱动在上面（它调用被测模块），桩在下面（被被测模块调用）。</strong> 这张图也解释了单元测试为什么常常跑不起来——缺驱动或缺桩。</figcaption>
+</figure>
+
 <p><strong>单元测试的依据和对象</strong>（PPT 第 24–25 页）：依据是<strong>设计文档</strong>（程序流程），对象是<strong>模块代码</strong>，关注模块的功能、接口和流程。</p>
 <p><mark class="kanwu">勘误</mark>课件第 22 页列了五项测试内容（接口、局部数据结构、独立路径、错误处理、边界条件），第 24 页却只列了四项（执行路径、错误处理、模块接口、边界条件），漏了"局部数据结构"。以第 22 页的五项为准。</p>
 <div class="pager"><a class="pg prev" href="software-engineering-28.html"><span>← 上一节</span><b>3 调试、求助与程序设计风格</b></a><a class="pg next" href="software-engineering-30.html"><span>下一节 →</span><b>3.1–3.4 白盒测试：逻辑覆盖与基本路径</b></a></div>

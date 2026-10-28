@@ -127,6 +127,11 @@
 <p>软件是指在计算机系统的支持下，能够完成特定功能与性能的<strong>程序、数据和相关文档</strong>。</p>
 </blockquote>
 <p>从开发的角度看，这三者合起来叫<strong>软件制品（Software Artifact）</strong>。<mark class="bubu">补</mark>"制品"这个词在后面出现频率极高（过程模型每个阶段的产物、配置管理的对象、需求变更影响的东西，都是"制品"），它强调的是<strong>可交付、可检查、可版本化</strong>——不是"脑子里想清楚了"。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch01_p006.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch01_p006.png" alt="软件 = 文档 + 代码 + 数据"></a>
+<figcaption><b>图 1-1　软件 = 文档 + 代码 + 数据</b>　（PPT 第 6 页）对应正文那句「软件 = 程序 + 数据 + 文档」。图上一行三个方框用加号连起来，右侧箭头指向「软件制品（Software Artifact）」——<strong>是「加起来」而不是「三选一」</strong>，所以后面每个开发阶段都要交出成套制品，不能只交代码。</figcaption>
+</figure>
+
 <h4>文档：记录软件开发活动和阶段性成果的阐述性资料</h4>
 <p>课件第 7 页给了文档的四项作用：定义和理解软件、记录开发成果、辅助不同人员间的交流。常见类型有需求文档、设计文档、测试文档、用户手册。</p>
 <p>课件第 8 页追问"为什么需要文档"，理由很有生活感：</p>
@@ -149,6 +154,11 @@
   程序        ┌───┴───┐
              数据    文档
 </code></pre>
+<figure class="fig">
+<a href="../../assets/img/se/ch01_p012.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch01_p012.png" alt="从开发者角度看软件的构成"></a>
+<figcaption><b>图 1-2　从开发者角度看软件的构成</b>　（PPT 第 12 页）正文那个三层树就是这张图：左侧「程序」归入「可执行部分」，右侧「数据」「文档」归入「不可执行部分」，两处都用红字标出分类名。<strong>抓住这条分界线</strong>——它把「能被编译器检查的」和「只能靠人保证的」分开了，后面每一种「制品」概念都从这条线上长出来。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>这张图解释了软件工程为什么"虚"</strong>：可执行部分有编译器帮你检查，不可执行部分（数据设计、文档、模型）没有任何工具能自动验证"对不对"。所以这门课的核心能力，是<strong>在没有编译器的地方保持严谨</strong>。</p>
 <h3>软件概念给我们的两点启示</h3>
 <p>课件第 13 页写得很直接：</p>

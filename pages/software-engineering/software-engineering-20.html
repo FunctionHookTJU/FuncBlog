@@ -157,6 +157,11 @@
 • ATM 打印账单，退卡
 </code></pre>
 <p>异常脚本则是：密码输错 → 拒绝 → 重新输入 → 中途按"取消" → 退卡。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p089.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p089.png" alt="ATM 系统的正常情况脚本"></a>
+<figcaption><b>图 5-9　ATM 系统的正常情况脚本</b>　（PPT 第 89 页）图上就是正文那段脚本的原件，十来行，每行一个「系统—用户」的往返。它的价值在于<strong>逼你发现漏掉的交互</strong>：比如「ATM 吐出现金并请储户拿走」这一步，只画状态图不会想到「请储户拿走」这个动作，写脚本时才会想起来。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>两份脚本的差别就是"主成功场景"和"替代场景"</strong>（第 4 讲已讲）。<strong>写脚本的价值在于它是"人类语言"，用户能看懂并能指出错漏</strong>——这正是第 5 讲开头说的"初步需求不具体"的解药。</p>
 <p><strong>（2）设想用户界面</strong>（PPT 第 91 页）：在写脚本时顺手把界面画出来，能进一步暴露需求的模糊处。</p>
 <p><strong>（3）画事件跟踪图</strong>（PPT 第 92–94 页）</p>
@@ -169,6 +174,11 @@
         │       │       │       │
 </code></pre>
 <p><strong>横向是对象</strong>（每列一个对象），<strong>纵向是事件发生顺序</strong>。分析每个脚本，提取所有外部事件（用户交互的信号、输入、输出、中断、动作），并区分每类事件的发送对象与接收对象。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p094.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p094.png" alt="ATM 事件跟踪图"></a>
+<figcaption><b>图 5-10　ATM 事件跟踪图</b>　（PPT 第 94 页）这张图正是按「垂直方向表事件顺序、水平方向列出对象」画的：三列分别是 ATM、总行、分行，每一行是一个事件（「插入现金兑换卡」「请求验证账户」「验证密码」…），事件落在哪列就在哪列打点，再用横线连到下一列。<strong>它就是顺序图的前身</strong>——加上生命线与箭头样式，就成了第 5 讲后面讲的顺序图。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>事件跟踪图就是"顺序图的前身"</strong>——它只有"谁给谁发消息"的二维网格，没有生命线和激活期。所以<strong>会画事件跟踪图，顺序图就自然会画</strong>，只是加上对象框、生命线和箭头样式而已。</p>
 <p><strong>（4）画状态图</strong>（PPT 第 95–97 页）</p>
 <p>三个基本概念：</p>
@@ -195,6 +205,11 @@
 </tbody>
 </table>
 <p>画法：状态用圆角框/椭圆，框内标状态名，行为用 <code>do:</code> 标明；箭头标 <code>事件[条件]</code>。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p096.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p096.png" alt="ATM 类的状态图"></a>
+<figcaption><b>图 5-11　ATM 类的状态图</b>　（PPT 第 96 页）图上十几个圆角框就是 ATM 这一个对象的所有状态（主屏、要求密码、验证账号、要求类型、要求金额、处理事务、吐出现金、打印账单、退卡、取消、等待网络响应…），框内一律写 `Do: 某动作`，箭头旁写触发事件（插卡可读的 / 密码错 / 无效账户 / 事务失败…）。<strong>每个类各画一张，几张图靠「共享事件」缝合</strong>——「请求验证账户」就同时出现在 ATM 和总行两张图里。</figcaption>
+</figure>
+
 <p>课件给了 ATM 类、分行类、总行类三张状态图。ATM 的状态包括：主屏、要求密码、验证账号、处理事务、要求金额、要求类型、吐出现金、打印账单、退卡、取消、等待网络响应、不可读的卡……每张状态图内部都是 <code>Do: 某动作</code>。</p>
 <p><mark class="bubu">补</mark><strong>注意"每个类一张状态图"这个做法</strong>：动态模型不是"整个系统一张大状态图"，而是"每个有显著状态变化的类各一张"，然后通过<strong>共享事件</strong>把它们拼起来（ATM 发出"请求验证账户"，总行收到并转移状态——同一个事件把两张图缝在一起）。<strong>这正是"基于事件共享而互相关联的一组状态图"这句话的含义。</strong></p>
 <p><strong>（5）从事件导出服务</strong>（PPT 第 98 页）</p>
@@ -221,6 +236,11 @@
        密码、事务类型、金额
 </code></pre>
 <p><strong>（2）功能级数据流图</strong>（PPT 第 102 页）：把单一处理框<strong>分解</strong>成若干处理框，描述系统加工、变换数据的基本功能。ATM 的例子分解为：接收输入 → 验卡 → 验证密码 → 检查账户 → 更新账户 → 产生输出 → 显示出错信息 → 选定分行。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p101.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p101.png" alt="ATM 的基本系统模型"></a>
+<figcaption><b>图 5-12　ATM 的基本系统模型</b>　（PPT 第 101 页）图上只有一个处理框「ATM 系统」，左边「储户」是数据源，右边「储户」是数据汇，进出箭头标着数据流（现金兑换卡、分行代码/卡号、密码/事务类型/金额、现金/账单/信息）。<strong>这张图唯一的用途是划边界</strong>：框里是我们要做的，框外是人和别的系统——和用例图的系统边界是同一件事。</figcaption>
+</figure>
+
 <p><strong>（3）细化定义服务</strong>（PPT 第 103 页）</p>
 <p>两个要点：</p>
 <ul>

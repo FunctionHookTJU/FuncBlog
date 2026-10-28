@@ -119,6 +119,11 @@
 </blockquote>
 <p>课件配了一张曲线图：随着维护活动的进行，软件质量与用户满意度逐渐下滑，而<strong>软件重构</strong>能让曲线重新抬升——所以老化不是不可逆的，但要靠主动干预。</p>
 <p><mark class="bubu">补</mark><strong>这一条和第 1 讲"软件不会磨损和老化"看似矛盾，其实是一体两面</strong>：软件不会<strong>物理</strong>老化（没有材料疲劳、不会生锈），但会<strong>逻辑</strong>老化（结构越来越乱、文档越来越不匹配、每次改动都要绕更多弯）。<strong>判断依据：如果一个系统的"改一个功能需要动五个模块、开三次会"，它就已经在老化了。</strong></p>
+<figure class="fig">
+<a href="../../assets/img/se/ch10_p004.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch10_p004.png" alt="软件逻辑老化曲线"></a>
+<figcaption><b>图 10-1　软件逻辑老化曲线</b>　（PPT 第 4 页）图上横轴是时间、纵轴是「软件质量及用户满意度」：实线随维护活动持续下滑（逻辑老化），中间用三角标出「软件重构」的位置，重构后曲线重新抬升。<strong>它想说的不是「软件会坏」，而是「重构能把它救回来」</strong>——所以老化可管理，不是宿命。</figcaption>
+</figure>
+
 <h3>1.2 什么是软件维护</h3>
 <p>课件给了两个层次的表述。</p>
 <p><strong>通俗版</strong>（PPT 第 5 页）：软件在交付使用后，由于<strong>应用需求和环境变化</strong>以及<strong>自身问题</strong>，对软件系统进行改造和调整的过程。三种触发原因：</p>
@@ -180,6 +185,11 @@
 </tr>
 </tbody>
 </table>
+<figure class="fig">
+<a href="../../assets/img/se/ch10_p012.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch10_p012.png" alt="四类软件维护的比例"></a>
+<figcaption><b>图 10-2　四类软件维护的比例</b>　（PPT 第 12 页）图上是饼图：完善性维护 50%（最大的一块）、纠错性维护 25%、适应性维护 21%、预防性维护 4%。<strong>看这块饼要得出一个反直觉的结论</strong>：维护的主体不是「修 bug」，而是「加功能 / 改功能」——这也是维护为什么更像「在既有结构上继续开发」。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>这组数字有一个反直觉的结论</strong>：<strong>维护工作的主体不是"修 bug"（25%），而是"加功能/改功能"（50%）</strong>。所以"维护 = 修补"是个误解——<strong>它更像"在既有系统上继续开发"</strong>。这也解释了为什么维护那么难：它要求维护者在<strong>别人设计的结构里</strong>做开发，比从零开发多一层理解成本。</p>
 <p><mark class="bubu">补</mark><strong>4% 的预防性维护是最值得反思的数字</strong>：它收益最长远（降低未来所有维护的成本），占比却最低，因为它"看不到即时产出"，最容易被进度压力挤掉。<strong>这是典型的技术债成因。</strong></p>
 <h3>课件第 19 页的五道判断题（原题）</h3>

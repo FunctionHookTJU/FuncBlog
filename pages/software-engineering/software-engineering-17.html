@@ -303,6 +303,11 @@
 </tbody>
 </table>
 <p>语法是：<code>event-name(参数表) [警戒条件] / 动作表达式</code>。例：<code>go up(floor) [timer=time-out] / start motor</code>。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p024.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p024.png" alt="电梯升降的状态图"></a>
+<figcaption><b>图 5-1　电梯升降的状态图</b>　（PPT 第 24 页）正文讲 entry/exit/do 的区别，这张图给了实物：每个圆角框是一个状态（Moving up、Stopped、Idle…），框内 `do:` 后面写「待在这个状态期间一直做的事」（如 `do: move`），箭头上标事件与警戒条件（如 `go up(floor) [timer=time-out]`）。<strong>对照记：do 写在框里，事件写在箭头上。</strong></figcaption>
+</figure>
+
 <p><strong>事件的四种类型</strong>：消息型（同步，其他对象发来消息）、信号型（异步）、时间型（到达特定时间点）、条件型（属性取值满足条件）。</p>
 <p>课件第 24 页用<strong>电梯</strong>举例，这个例子很经典：</p>
 <pre><code>Idle (timer=0, do/increase timer)
@@ -323,6 +328,11 @@
 <li><strong>带对象流的活动图</strong>（PPT 第 27 页）：把涉及的对象放进图中，用<strong>带箭头的虚线</strong>连接到创建/修改/撤销它的活动上，表示对象流。</li>
 </ul>
 <p><mark class="bubu">补</mark><strong>活动图 vs 流程图</strong>：形式上几乎一样，区别在于活动图是 UML 的一部分，支持<strong>并发（分叉/汇合）</strong>、泳道、对象流；而流程图只有顺序分支循环。所以业务流程图常用活动图画，算法细节用流程图/NS 图画（第 7 讲）。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p026.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p026.png" alt="带泳道的活动图"></a>
+<figcaption><b>图 5-4　带泳道的活动图</b>　（PPT 第 26 页）图被竖线切成两条泳道，顶端分别标「申请人」和「贷款业务受理人员」——这就是「泳道表明每个活动由谁负责」。图中间那对粗横线是<strong>分叉/汇合（并发）</strong>，流程图做不到。正文说「一眼看出谁在干什么、哪里要交接」，看这张图就明白。</figcaption>
+</figure>
+
 <h3>顺序图</h3>
 <p>定义（PPT 第 28–29 页）：交互图的一种，描述对象之间<strong>消息发送的先后顺序</strong>，强调<strong>时间顺序</strong>。主要用途是把用例表达的需求转化为更正式、更精细的表达——<strong>用例常被细化为一个或多个顺序图</strong>，同时它也能有效描述"如何分配各类的职责"。</p>
 <p>要素：</p>
@@ -385,8 +395,18 @@
 </tr>
 </tbody>
 </table>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p031.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p031.png" alt="消息图元：五种箭头"></a>
+<figcaption><b>图 5-2　消息图元：五种箭头</b>　（PPT 第 31 页）这一页专门讲箭头形状：图上三组小图分别画出同步消息（实心箭头）、异步消息（开叉箭头）、返回消息（虚线箭头），并标出「带时间延迟的消息」。右上角红字是「叫吃饭」的类比——<strong>同步是等着你答应，异步是叫完就走</strong>，正文引的就是这句。</figcaption>
+</figure>
+
 <p>课件第 31 页用"叫吃饭"的类比讲同步异步（第 0 章已引），还给了<strong>带时间延迟的消息</strong>画法（标注 <code>时延小于10ms</code>）。</p>
 <p><strong>组合片段</strong>（PPT 第 32–33 页）：用来表达交互执行的条件与方式，常用四种：<strong>抉择（alt）、选项（opt）、循环（loop）、并行（par）</strong>。图中用左上角带标签的方框表示，方框内写警戒条件。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p032.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p032.png" alt="带组合片段的顺序图"></a>
+<figcaption><b>图 5-3　带组合片段的顺序图</b>　（PPT 第 32 页）图上方那个大方框就是组合片段，左上角标签写 `opt [printer free]`——意思是「打印机空闲时才执行这一段」；框内还有 `loop(5)` 表示循环。正文那句「左上角带标签的方框、框内写警戒条件」说的就是它。<strong>看图先找左上角小标签，再读框里的消息。</strong></figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>顺序图最容易画错的两个地方</strong>：①<strong>生命线不该画的太长</strong>——对象没参与这段交互就不要画；②<strong>返回消息常被省略</strong>，但在强调"谁等谁"的场合必须画，否则看不出同步还是异步。</p>
 <h3>协作图（通信图）</h3>
 <p>定义（PPT 第 34 页）：交互图的一种，描述<strong>收发消息的对象的组织关系</strong>，强调对象之间的<strong>合作关系</strong>。</p>
@@ -427,6 +447,11 @@
 <li><strong>节点与连接</strong>：节点用<strong>立方体</strong>表示（代表一个物理设备及在其上运行的软件系统）；节点间连线表示通信线路（UML 称"连接"）；通信类型用<strong>构造型</strong>标在连线旁，指定协议或网络类型（<code>&lt;&lt;HTTP&gt;&gt;</code>、<code>&lt;&lt;JDBC&gt;&gt;</code>、<code>&lt;&lt;Web Services&gt;&gt;</code>）。</li>
 <li><strong>构件与接口</strong>：部署图中构件代表可执行的物理代码模块；接口用<strong>一端是小圆圈的直线</strong>表示。</li>
 </ul>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p043.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p043.png" alt="部署图的描述符号"></a>
+<figcaption><b>图 5-5　部署图的描述符号</b>　（PPT 第 43 页）这是部署图的「图例页」：上面两个立方体是节点（物理设备及其上运行的软件），节点之间实线是连接，旁边 `<<HTTP>>`、`<<JDBC>>` 是构造型、标明通信协议；下面那根一端带小圆圈的直线就是「提供的接口」。<strong>画部署图前先认这四样，否则图会画成一堆盒子加乱线。</strong></figcaption>
+</figure>
+
 <p><strong>描述性 vs 实例性部署图</strong>（PPT 第 49–50 页）：</p>
 <ul>
 <li><strong>描述性部署图</strong>：节点写类型名（<code>Web服务器</code>、<code>应用服务器</code>、<code>数据库服务器</code>）；</li>

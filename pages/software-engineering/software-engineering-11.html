@@ -124,6 +124,11 @@
 <p>1970 年提出的<strong>第一个</strong>软件过程模型。六个阶段严格串行：</p>
 <pre><code>需求分析 → 概要设计 → 详细设计 → 编码实现 → 集成测试 → 确认测试
 </code></pre>
+<figure class="fig">
+<a href="../../assets/img/se/ch03_p009.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch03_p009.png" alt="瀑布模型：六个阶段呈阶梯状串行排列"></a>
+<figcaption><b>图 3-1　瀑布模型的六个阶段</b>　（PPT 第 9 页）左边那条阶梯就是上面这行文字的形状：六个方框从上往下一级一级往右下退，每一级的箭头只指向下一级，<strong>没有回头的箭头</strong>——这正是"串行"的图形含义。右下角"1970 提出的第一个软件过程模型"和左下角"适合于需求易于定义、不易变动的软件系统"是它的身份与适用前提，后面讲的三个局限都源于这条没有回头的直线。</figcaption>
+</figure>
+
 <p><strong>三个特点</strong>（PPT 第 9 页）：与软件生命周期相互一致；每个活动结束后需要<strong>评审</strong>；相邻活动间存在<strong>因果关系</strong>。
 <strong>优点</strong>：简单、一目了然、易理解易掌握易应用易管理。
 <strong>适用</strong>：需求易于定义、不易变动的软件系统。</p>
@@ -185,6 +190,11 @@
 </table>
 <p><mark class="bubu">补</mark><strong>请特别看第四列——每个阶段都顺手产出了"下一层的测试计划"。</strong> 这不是巧合，而是软件工程的精髓之一：<strong>测试计划要提前定，否则测试会被进度挤压</strong>。需求阶段定"确认测试"计划（因为需求就是验收标准），概要设计阶段定"集成测试"计划（因为架构决定模块怎么拼），详细设计阶段定"单元测试"计划（因为算法细节决定测什么边界）。第 9 讲会把这条线完整接上。</p>
 <p><strong>局限</strong>（PPT 第 16 页）：<strong>需求确定，过于理想化；缺乏变通，难应对变化</strong>。根因是软件的"易变性"——需求本来就易变、多变。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch03_p016.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch03_p016.png" alt="瀑布局限：课件红字批注"></a>
+<figcaption><b>图 3-2　瀑布局限：课件红字批注</b>　（PPT 第 16 页）与图 3-1 是同一张阶梯，但多了左上角两行红字——「软件需求具有易变、多变的特点」指向阶梯本身，「不足：需求确定，过于理想化；缺乏变通，难应对变化」是结论，右下角还标着「结合课程综合实践思考」。这类红字批注在课件里反复出现，都是老师划的考点。</figcaption>
+</figure>
+
 <p><strong>改进版：带反馈和回溯的瀑布</strong>（PPT 第 17 页）：后期活动发现问题可返回前面活动解决，提高了灵活性。但课件紧接着指出两个新问题：<strong>软件开发处于动荡之中</strong>；<strong>需等到所有功能实现后才能得到可运行软件</strong>。</p>
 <p><mark class="bubu">补</mark><strong>"改进后反而更糟"这件事很有教学价值</strong>：加回溯解决了"改不了"，却换来"一直在改、迟迟看不到东西"。这为后面三个模型（增量、迭代、原型）指明了方向——<strong>要么早点交付一部分，要么早点让用户看到东西</strong>。</p>
 <h3>2.4 增量模型（Incremental Model）</h3>
@@ -229,6 +239,11 @@
 </tr>
 </tbody>
 </table>
+<figure class="fig">
+<a href="../../assets/img/se/ch03_p023.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch03_p023.png" alt="增量（横向）与迭代（纵向）"></a>
+<figcaption><b>图 3-3　增量（横向）与迭代（纵向）</b>　（PPT 第 23 页）这张图专治「增量/迭代分不清」。左边两列是增量：需求分析、概要设计一次性做完，然后「增量1…增量n」各自走详细设计→编码→集成测试；右边两列是迭代：每一列都是<strong>完整的五阶段流程</strong>。底部红字一行写死区别——「增量模型（横向扩展）」「迭代模型（纵向扩展）」。</figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>一个直觉类比</strong>：增量像<strong>盖楼</strong>——先盖一层交付使用，再盖第二层（但地基和图纸一开始就定了）；迭代像<strong>画素描</strong>——先勾勒轮廓，再上明暗，再抠细节，每一轮都是同一张画，但每轮都更完整。</p>
 <h3>2.6 原型模型（Prototype Model）</h3>
 <p>这一节的前置论证很关键（PPT 第 24 页）：<strong>软件需求获取是一关键和瓶颈问题</strong>。</p>
@@ -239,12 +254,22 @@
 </ul>
 <p><strong>原型的作用</strong>（PPT 第 25 页）：作为交流载体和媒介；支持用户参与开发；持续、渐进地导出用户要求。原型具体表现为什么？<strong>用户界面</strong>和<strong>执行流程</strong>。</p>
 <p>流程：快速设计 → 采集和细化需求 → 建造原型 → 客户使用 → 评价原型 → 获得反馈 → （循环）→ 开发软件系统。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch03_p025.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch03_p025.png" alt="原型模型的循环"></a>
+<figcaption><b>图 3-4　原型模型的循环</b>　（PPT 第 25 页）图上是一个环：快速设计 → 建造原型 → 客户使用 → 评价原型 → 获得反馈，绕回「采集和细化需求」；环外左下角有一条箭头指向「开发软件系统」，表示<strong>循环到需求足够清楚才进入正式开发</strong>。旁注「何为软件原型？用户界面 / 执行流程」正是正文那句话。</figcaption>
+</figure>
+
 <p><strong>缺点</strong>：对分析人员要求高——既要懂客户，又要懂技术，还要懂管理，还要把握约束条件。</p>
 <p><mark class="bubu">补</mark><strong>原型有三种命运，要分清</strong>：①<strong>抛弃型</strong>（用完就扔，只为澄清需求）；②<strong>演化型</strong>（逐步长成产品）；③<strong>增量型</strong>（先做界面骨架）。课件这里讲的是①和②的混合用法，重点是"<strong>作为交流媒介</strong>"，不是"先写一半代码"。</p>
 <h3>2.7 螺旋模型（Spiral Model）</h3>
 <p>思路：<strong>集成迭代模型和原型模型，引入风险分析</strong>，是一个<strong>风险驱动</strong>的过程模型。每个迭代分四个阶段，若干活动。适合需求不明确、开发风险高、变更大的项目。不足是<strong>管理复杂</strong>。</p>
 <p>课件定义了<strong>软件风险</strong>：使软件开发受到影响和损失、甚至导致失败的、可能会发生的事件。</p>
 <p><mark class="bubu">补</mark><strong>四个阶段的标准名称</strong>（课件图未给出文字，按 Boehm 原始定义补）：①制定计划（确定目标、方案、约束）②<strong>风险分析</strong>（识别并评估风险，必要时做原型验证）③实施工程（开发与验证）④客户评估（评审结果，计划下一轮）。<strong>判断是不是螺旋模型，就看有没有把"风险分析"当成一个独立阶段</strong>——这是它区别于纯迭代模型的唯一硬标志。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch03_p026.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch03_p026.png" alt="螺旋模型"></a>
+<figcaption><b>图 3-5　螺旋模型</b>　（PPT 第 26 页）图左侧四个象限就是正文补的那四个阶段（制定计划 / 风险分析 / 实施工程 / 客户评估），一圈一圈向外扩表示迭代；右侧红字是它的定位——「集成迭代模型和原型模型」「引入风险分析，风险驱动的过程模型」。<strong>看这张图只认一件事：有没有「风险分析」这一格。</strong></figcaption>
+</figure>
+
 <h3>五种模型对比（课件第 27 页原表）</h3>
 <table>
 <thead>
@@ -294,6 +319,10 @@
 </tr>
 </tbody>
 </table>
+<figure class="fig">
+<a href="../../assets/img/se/ch03_p027.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch03_p027.png" alt="五种过程模型对比（课件原表）"></a>
+<figcaption><b>图 3-6　五种过程模型对比（课件原表）</b>　（PPT 第 27 页）正文那张表的原始出处，五列分别是模型名称、指导思想、关注点、适合软件、管理难度。复习时建议只背两列——<strong>「适合软件」和「管理难度」</strong>，因为考试给场景，要的正是这两列的判断。</figcaption>
+</figure>
 <div class="pager"><a class="pg prev" href="software-engineering-10.html"><span>← 上一节</span><b>3–4 六十年发展脉络与软件工程教育</b></a><a class="pg next" href="software-engineering-12.html"><span>下一节 →</span><b>3 如何选择：没有最好，只有最合适</b></a></div>
 </div>
 

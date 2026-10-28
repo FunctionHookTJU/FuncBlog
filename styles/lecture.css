@@ -409,3 +409,28 @@ mark.kanwu{
 .wrap details[open] summary{ margin-bottom:.5em }
 .wrap details[open] summary::before{ content:"▾ " }
 .wrap details>p:first-of-type{ margin-top:.2em }
+
+/* ===== 课件原图（figure.fig）：图 + 图注，紧贴相关段落 ==================
+   用途：只在正文里配"课件第 N 页的原图"，让读者能对照原图理解要点。
+   约定：<figure class="fig"> 里放 <a>（点击看原图）+ <img> + <figcaption>。
+   注意 .wrap img 已有 margin/box-shadow 规则，这里用更高特异性的选择器覆盖，
+   否则图片会带上 1.6em 的上下外边距、在卡片里显得空。 */
+.wrap figure.fig{
+  margin:1.5em 0; padding:12px 12px 6px;
+  background:var(--bg2); border:1px solid var(--line); border-radius:12px;
+}
+.wrap figure.fig a{ display:block; line-height:0; }
+.wrap figure.fig img{
+  display:block; margin:0 auto; max-width:100%; height:auto;
+  border-radius:6px; box-shadow:0 2px 12px rgba(0,0,0,.18);
+}
+.wrap figure.fig figcaption{
+  margin:11px 2px 4px; padding-top:10px; border-top:1px dashed var(--line);
+  font-size:.855em; line-height:1.85; color:var(--fg2); line-height:1.85;
+}
+.wrap figure.fig figcaption b{ color:var(--accent); font-weight:700; }
+.wrap figure.fig figcaption strong{ color:var(--accent2); }
+@media (max-width:900px){
+  .wrap figure.fig{ padding:8px 8px 4px; border-radius:9px; }
+  .wrap figure.fig figcaption{ font-size:.84em; }
+}

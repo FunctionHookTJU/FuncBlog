@@ -317,6 +317,11 @@
 </tr>
 </tbody>
 </table>
+<figure class="fig">
+<a href="../../assets/img/se/ch04_p084.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p084.png" alt="用例图的三要素（自动售货机例）"></a>
+<figcaption><b>图 4-3　用例图的三要素（自动售货机例）</b>　（PPT 第 84 页）图上是一个完整用例图：左边小人「顾客」、右边小人「售货员」是执行者，中间方框里是用例（买饮料、付款、查询、补货…），连线是关联。正文那张四要素表就是它的读法：<strong>先看框内外的界限（系统边界），再找小人（执行者），最后看连线（关系）。</strong></figcaption>
+</figure>
+
 <p>三种关系的区别（最容易考）：</p>
 <table>
 <thead>
@@ -348,6 +353,11 @@
 </tr>
 </tbody>
 </table>
+<figure class="fig">
+<a href="../../assets/img/se/ch04_p088.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p088.png" alt="用例间的三种关系"></a>
+<figcaption><b>图 4-4　用例间的三种关系</b>　（PPT 第 88 页）这一页把 extend / include / 泛化 的符号与语义并排摆开：扩展关系箭头标 `<<extend>>`，包含关系标 `<<include>>`，泛化用空心三角。正文那句「include 是必做、extend 是可选」就是从这三段定义提炼的——<strong>只让看图判断时，认箭头上的构造型和三角符号即可。</strong></figcaption>
+</figure>
+
 <p><mark class="bubu">补</mark><strong>一句话区分 extend 和 include</strong>：<strong>include 是"我必须做它"（被包含的用例一定会执行），extend 是"我可能会做它"（扩展用例在特定条件下才插入）</strong>。判断口诀：把两个用例连起来读——"每次 A 都必须做 B" → include；"做 A 时可能额外做 C" → extend。</p>
 <h3>用例建模的五步（银行储蓄账户管理系统案例）</h3>
 <p>课件第 90–95 页给了一个完整流程，这是本讲最值得照着做的范例。</p>
@@ -364,6 +374,11 @@
 管理员需要：账户管理、报表生成。银行职员（管理人员）参与"更新账户"。
 转账分成银行内转账、银行间转账，二者<strong>继承</strong>基本转账（→ 泛化）。</p>
 <p><strong>第 3 步：画用例图</strong>：把上面识别出的执行者、用例、include/泛化关系画出来。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch04_p093.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p093.png" alt="银行储蓄账户管理系统用例图"></a>
+<figcaption><b>图 4-5　银行储蓄账户管理系统用例图</b>　（PPT 第 93 页）这就是第 3 步该画出来的结果：左侧四个执行者（客户、银行职员（客户代理）、银行职员（管理人员）、管理员），中间是用例群（开户、存款、取款、转账、注销账户），右侧「其它银行」是外部系统。注意「校验密码」用 `<<include>>` 连到四个业务用例上——<strong>这就是「必用公共步骤」的形状</strong>；「银行内转账/银行间转账」用空心三角指向「转账」，是泛化。</figcaption>
+</figure>
+
 <p><strong>第 4 步：描述用例</strong>（以"取款"为例，PPT 第 94–95 页）：</p>
 <pre><code>用况名称：取款
 参与的执行者：银行职员（客户代理）
