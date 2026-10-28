@@ -22,6 +22,7 @@ desktop.ini
 *.tmp
 *.bak
 *.cache
+__pycache__/
 
 # Node模块（如果将来使用）
 node_modules/

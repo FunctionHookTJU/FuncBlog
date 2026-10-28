@@ -32,7 +32,12 @@ REF = re.compile(
 
 
 def collect_targets(cfg, slug):
-    """返回 (节编号集合, 小节编号集合)。"""
+    """返回 (节编号集合, 小节编号集合)。
+
+    两级编号（如 2.2）同时收自两处：
+      * lectures.json 里以「2.2 …」开头的节标题
+      * 正文 `###` / `####` 标题（本册各讲沿用课件讲内编号，标题里带 1.1 / 3.2 这种）
+    """
     lec = next(l for l in cfg["lectures"] if l["slug"] == slug)
     secs = set()
     for s in lec["sections"]:
@@ -43,8 +48,12 @@ def collect_targets(cfg, slug):
     d = os.path.join(ROOT, "pages", slug, "src")
     for fn in os.listdir(d):
         t = open(os.path.join(d, fn), encoding="utf-8").read()
-        for m in re.finditer(r"^#{3,4}\s+(\d+\.\d+\.\d+)", t, flags=re.M):
-            subs.add(m.group(1))
+        for m in re.finditer(r"^#{3,4}\s+(\d+\.\d+(?:\.\d+)?)(?![\d.])", t, flags=re.M):
+            num = m.group(1)
+            if num.count(".") == 1:
+                secs.add(num)
+            else:
+                subs.add(num)
     return secs, subs
 
 
