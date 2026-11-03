@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2.1–2.4 三模型与五层次 · 软件工程讲义：全课程十讲</title>
+<title>1 九种 UML 图与三个分析视角 · 软件工程讲义：全课程十讲</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
@@ -75,157 +75,391 @@
 <div class="sg">第 4 讲　需求分析基础</div>
 <a class="i" href="software-engineering-13.html">1.1–1.3 需求是什么：质量要求、特点与分类</a>
 <a class="i" href="software-engineering-14.html">1.4–2.2 需求从哪里来：获取方法与需求工程</a>
-<a class="i" href="software-engineering-15.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
-<a class="i" href="software-engineering-16.html">3 需求分析过程、文档与评审</a>
+<a class="i" href="software-engineering-15.html">2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态</a>
+<a class="i" href="software-engineering-16.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
+<a class="i" href="software-engineering-17.html">3 需求分析过程、文档与评审</a>
 <div class="sg">第 5 讲　软件分析</div>
-<a class="i" href="software-engineering-17.html">1 九种 UML 图与三个分析视角</a>
-<a class="i cur" data-h="s-1" href="software-engineering-18.html">2.1–2.4 三模型与五层次</a>
-<a class="i" href="software-engineering-19.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
-<a class="i" href="software-engineering-20.html">2.5–3 动态模型、功能模型与需求变更</a>
+<a class="i cur" data-h="s-1" href="software-engineering-18.html">1 九种 UML 图与三个分析视角</a>
+<a class="i" href="software-engineering-19.html">2.1–2.4 三模型与五层次</a>
+<a class="i" href="software-engineering-20.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
+<a class="i" href="software-engineering-21.html">2.5–3 动态模型、功能模型与需求变更</a>
 <div class="sg">第 6 讲　软件设计基础</div>
-<a class="i" href="software-engineering-21.html">1–2.2 设计概述与七条设计原则</a>
-<a class="i" href="software-engineering-22.html">2.2.2 模块化：内聚与耦合七级</a>
-<a class="i" href="software-engineering-23.html">3–4 面向对象设计、架构风格与设计评审</a>
+<a class="i" href="software-engineering-22.html">1–2.2 设计概述与七条设计原则</a>
+<a class="i" href="software-engineering-23.html">2.2.2 模块化：内聚与耦合七级</a>
+<a class="i" href="software-engineering-24.html">3–4 面向对象设计、架构风格与设计评审</a>
 <div class="sg">第 7 讲　架构、模式与界面</div>
-<a class="i" href="software-engineering-24.html">1 六种架构风格与选型</a>
-<a class="i" href="software-engineering-25.html">2–3 用户界面设计与详细设计工具</a>
-<a class="i" href="software-engineering-26.html">4 设计模式与 OO 实战五步</a>
+<a class="i" href="software-engineering-25.html">1 六种架构风格与选型</a>
+<a class="i" href="software-engineering-26.html">2–3 用户界面设计与详细设计工具</a>
+<a class="i" href="software-engineering-27.html">4 设计模式与 OO 实战五步</a>
 <div class="sg">第 8 讲　编写代码</div>
-<a class="i" href="software-engineering-27.html">1–2 程序设计语言与结构化程序设计</a>
-<a class="i" href="software-engineering-28.html">3 调试、求助与程序设计风格</a>
+<a class="i" href="software-engineering-28.html">1–2 程序设计语言与结构化程序设计</a>
+<a class="i" href="software-engineering-29.html">3 调试、求助与程序设计风格</a>
 <div class="sg">第 9 讲　软件测试</div>
-<a class="i" href="software-engineering-29.html">1–2.4 测试是什么与测试过程</a>
-<a class="i" href="software-engineering-30.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
-<a class="i" href="software-engineering-31.html">3.5–4 黑盒测试、测试过程与组织</a>
+<a class="i" href="software-engineering-30.html">1–2.4 测试是什么与测试过程</a>
+<a class="i" href="software-engineering-31.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
+<a class="i" href="software-engineering-32.html">3.5–4 黑盒测试、测试过程与组织</a>
 <div class="sg">第 10 讲　软件维护与演化</div>
-<a class="i" href="software-engineering-32.html">1 逻辑老化与四种维护</a>
-<a class="i" href="software-engineering-33.html">2–4 维护技术、管理与可维护性</a>
+<a class="i" href="software-engineering-33.html">1 逻辑老化与四种维护</a>
+<a class="i" href="software-engineering-34.html">2–4 维护技术、管理与可维护性</a>
 <div class="sg">附录</div>
-<a class="i" href="software-engineering-34.html">附录 A　术语中英对照表</a>
-<a class="i" href="software-engineering-35.html">附录 B　一页速查表</a>
-<a class="i" href="software-engineering-36.html">附录 C　FAQ 与易错点清单</a>
+<a class="i" href="software-engineering-35.html">附录 A　术语中英对照表</a>
+<a class="i" href="software-engineering-36.html">附录 B　一页速查表</a>
+<a class="i" href="software-engineering-37.html">附录 C　FAQ 与易错点清单</a>
   </nav>
 </aside>
 
 <div class="wrap">
 
-<h2 id="s-1">2.1–2.4 三模型与五层次</h2>
-<h3>2.1 什么是面向对象分析（OOA）</h3>
-<p>课件第 52 页的一句话定义：</p>
-<blockquote>
-<p>面向对象分析，就是<strong>抽取和整理用户需求，并建立问题域精确模型</strong>的过程。</p>
-</blockquote>
-<p>信息来源有三条：<strong>需求陈述、应用领域的专业知识、关于客观世界的常识</strong>。</p>
-<p><mark class="bubu">补</mark><strong>第三条"常识"常被忽略，但它最救命</strong>。举个浅例：给图书馆系统建模，需求陈述里没写"一本书可以被借多次"，但常识告诉你"同一本书会被不同人先后借走"——于是你会建出"借阅记录"这个类。<strong>只读需求文档的人建不出这个类，因为他不知道业务是怎么发生的。</strong> 这就是第 4 讲"现场观摩"为什么重要。</p>
-<h3>2.2 三个子模型：对象、动态、功能</h3>
-<p>课件第 53 页的核心图是这一讲的结构骨架：</p>
-<pre><code>                分析模型
-        ┌───────────┼───────────┐
-    对象模型       动态模型      功能模型
-   （静态结构）   （交互次序）  （数据变换）
-        │            │            │
-      类图         状态图        数据流图
-                   顺序图
-</code></pre>
-<p>三个模型的分工（PPT 第 55 页），这张表必须记牢：</p>
+<h2 id="s-1">1 九种 UML 图与三个分析视角</h2>
+<h3>1.1–1.2 为什么"初步需求"还不够</h3>
+<p>课件第 3 页列了初步软件需求的五个毛病，这五条正好解释"为什么要有第 5 讲"：</p>
 <table>
 <thead>
 <tr>
-<th>模型</th>
-<th>描述什么</th>
+<th>问题</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>不具体</strong></td>
+<td>没有提供细节性内容</td>
+</tr>
+<tr>
+<td><strong>不清晰</strong></td>
+<td>描述不够清晰、直观、详实</td>
+</tr>
+<tr>
+<td><strong>关系不明朗</strong></td>
+<td>没深入分析不同需求项之间的关系</td>
+</tr>
+<tr>
+<td><strong>存在潜在缺陷</strong></td>
+<td>潜在缺陷难以被发现</td>
+</tr>
+<tr>
+<td><strong>没有区分</strong></td>
+<td>没鉴别重要性差别、没区分开发优先级</td>
+</tr>
+</tbody>
+</table>
+<p>于是软件分析的任务是：<strong>基于初步需求，进一步精化和分析，确定优先级，建立需求模型，发现和解决缺陷，形成高质量的模型与需求规格说明书</strong>。</p>
+<p><mark class="bubu">补</mark><strong>这里有个容易混的地方，先说清楚</strong>：第 4 讲是"<strong>需求工程</strong>"（把需求从人嘴里挖出来、写成文档），第 5 讲是"<strong>软件分析</strong>"（把需求精化成模型、检查一致性）。前者偏"沟通与记录"，后者偏"建模与推理"。课件的标题把它们分开，是有道理的。</p>
+<h3>1.3 三个视角</h3>
+<p>课件第 6 页把分析视角分成三类，这张表值得背（第 0 章已给过，这里补上"功能与行为的本质区别"）：</p>
+<table>
+<thead>
+<tr>
+<th>视角</th>
+<th>问什么</th>
+<th>用什么图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>用例视角</strong></td>
+<td>具有哪些功能、功能间有何关系、功能与利益相关方有何关系</td>
+<td>用例图</td>
+</tr>
+<tr>
+<td><strong>行为视角</strong></td>
+<td>用例是如何通过业务领域中一组对象及它们间的交互来达成的</td>
+<td>交互图（顺序/协作）、状态图、活动图</td>
+</tr>
+<tr>
+<td><strong>结构视角</strong></td>
+<td>业务领域有哪些重要概念，它们之间有什么关系</td>
+<td>类图（概念模型）</td>
+</tr>
+</tbody>
+</table>
+<p>课件在这一页留了一个思考题："<strong>功能和行为有何本质性的区别？</strong>"</p>
+<p><mark class="bubu">补</mark><strong>我的回答</strong>：功能回答"<strong>系统能做什么</strong>"（外部可见的能力，静态清单）；行为回答"<strong>系统怎么做成那件事</strong>"（内部对象按时间顺序的协作，动态过程）。同一个功能可以有很多种行为实现——"取款"这个功能不变，但用 ATM 自助还是柜台办理，行为完全不同。所以<strong>功能是"什么"，行为是"怎么"，结构是"谁"</strong>。</p>
+<h3>类图（结构视角的主角）</h3>
+<p>课件第 8 页拆解了一个类框的三部分：<strong>类名 / 属性 / 操作</strong>。</p>
+<pre><code>        Order
+  -id: integer
+  -quantity: integer = 0
+  +Order(id: integer)
+  +getQuantity(): integer
+  +setQuantity(id: integer)
+</code></pre>
+<p>读法要点：</p>
+<ul>
+<li><code>-</code> 表示 private，<code>+</code> 表示 public，<code>#</code> 表示 protected；</li>
+<li>属性写法是 <code>可见性 名称: 类型 = 默认值</code>；</li>
+<li>操作写法是 <code>可见性 名称(参数: 类型): 返回类型</code>；</li>
+<li>还可以加构造型（<code>&lt;&lt;Constructor&gt;&gt;</code>、<code>&lt;&lt;accessor&gt;&gt;</code>、<code>&lt;&lt;mutator&gt;&gt;</code>、<code>&lt;&lt;business logic&gt;&gt;</code>）说明方法职责。</li>
+</ul>
+<p><strong>六种关系的强弱排序</strong>（PPT 第 9–16 页，第 0 章已给符号，这里补上<strong>代码体现</strong>，考试常问"这段代码是哪种关系"）：</p>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>强弱</th>
+<th>代码体现</th>
 <th>一句话</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>对象模型</strong></td>
-<td>静态结构</td>
-<td>定义了<strong>做事情的实体</strong>——静态数据结构</td>
+<td>泛化</td>
+<td>最强</td>
+<td><code>extends</code></td>
+<td>is-a</td>
 </tr>
 <tr>
-<td><strong>动态模型</strong></td>
-<td>交互次序</td>
-<td>规定<strong>什么时候做</strong>——执行操作</td>
+<td>实现</td>
+<td>= 泛化</td>
+<td><code>implements</code></td>
+<td>类实现接口</td>
 </tr>
 <tr>
-<td><strong>功能模型</strong></td>
-<td>数据变换</td>
-<td>系统应该<strong>做什么</strong>——数值变化</td>
+<td>组合</td>
+<td>次强</td>
+<td>成员变量，<strong>整体负责创建销毁部分</strong></td>
+<td>同生共死</td>
+</tr>
+<tr>
+<td>聚合</td>
+<td>中</td>
+<td>成员变量，部分可独立存在</td>
+<td>可分离的整体-部分</td>
+</tr>
+<tr>
+<td>关联</td>
+<td>弱</td>
+<td>成员变量</td>
+<td>一个类知道另一个</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td>最弱</td>
+<td><strong>局部变量、方法参数、静态方法调用</strong></td>
+<td>临时用一下</td>
 </tr>
 </tbody>
 </table>
-<figure class="fig">
-<a href="../../assets/img/se/ch05_p053.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p053.png" alt="面向对象分析模型：三个子模型"></a>
-<figcaption><b>图 5-6　面向对象分析模型：三个子模型</b>　（PPT 第 53 页）正文分工表的图源。最上面「面向对象模型」分出三条：对象模型（静态结构）、动态模型（交互次序）、功能模型（数据变换），每条下面挂对应图（类图 / 状态图·顺序图 / 数据流图）。<strong>记住这个层级：对象模型是主干，另两个是它的两个侧面。</strong></figcaption>
-</figure>
-
-<p>课件特别强调：</p>
-<blockquote>
-<p>在任何情况下，<strong>对象模型始终都是最重要、最基础、最核心的</strong>，它描述了现实世界中的"类—&amp;—对象"以及它们之间的关系，表示目标系统的静态数据结构。</p>
-</blockquote>
-<p><mark class="bubu">补</mark><strong>为什么对象模型最核心？</strong> 因为另外两个模型都<strong>挂在</strong>它上面：状态图描述的是"某个类对象的状态变化"，数据流图里的每个处理框都要"对应到一个对象上的操作"。<strong>没有类，状态图和 DFD 都无处安放。</strong> 这也解释了第 5 讲的实战顺序：先建概念模型，再建用例模型，再鲁棒分析，最后交互建模。</p>
-<h3>2.3 对象模型的五个层次</h3>
-<p>课件第 56 页给出一个很有教学价值的分解：大型系统的对象模型由<strong>五个层次</strong>组成：</p>
+<p><mark class="bubu">补</mark><strong>用"生命周期"一眼区分组合与聚合，用"作用域"一眼区分关联与依赖</strong>：</p>
+<ul>
+<li>组合：<code>class Company { private List&lt;Department&gt; depts = new ArrayList&lt;&gt;(); }</code> —— 部门在构造时创建，公司没了部门也没了。</li>
+<li>聚合：<code>class Car { private List&lt;Tire&gt; tires; }</code> —— 轮胎从外面传进来，车报废轮胎还能用。</li>
+<li>关联：<code>class Teacher { private List&lt;Student&gt; students; }</code> —— 学生是长期持有的字段。</li>
+<li>依赖：<code>class Report { void print(Printer p) { p.output(); } }</code> —— <code>p</code> 只是参数，方法结束就没了。</li>
+</ul>
+<h3>对象图与包图</h3>
+<p><strong>对象图</strong>（PPT 第 18 页）：可以看作<strong>类图的实例</strong>，帮助理解复杂的类图。表示形式与类图几乎相同，<strong>主要差别是对象名下面要加一条下划线</strong>；对象名首字母小写；通常只有名称和属性。</p>
+<p><strong>包图</strong>（PPT 第 19 页）：刻画包间的构成和依赖关系。包可以包含一组有逻辑关联的 UML 模型元素；包间关系有<strong>构成关系</strong>和<strong>依赖关系</strong>。</p>
+<p><mark class="bubu">补</mark><strong>包图的价值在"分而治之"</strong>：课件说它"以结构化、层次化方式组织管理大型软件模型，使得分别处理不同包的开发团队之间的相互干扰程度降至最低"。<strong>这句话是包图存在的唯一理由</strong>——如果只有一个团队，包图画不画都行；一旦有多个团队，包图就是"地盘划分协议"。</p>
+<h3>状态图</h3>
+<p>定义（PPT 第 21 页）：<strong>由状态、变迁、事件和活动组成的状态机</strong>，用来描述类的对象所有可能的状态以及事件发生时状态的转移条件。</p>
+<p>基本符号：</p>
 <table>
 <thead>
 <tr>
-<th>层次</th>
-<th>英文</th>
-<th>内容</th>
+<th>符号</th>
+<th>含义</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>主题层</strong></td>
-<td>subject layer</td>
-<td>把大模型分解成若干概念范畴（主题）</td>
+<td>实心圆</td>
+<td>初始状态（<strong>一个</strong>）</td>
 </tr>
 <tr>
-<td><strong>结构层</strong></td>
-<td>struct layer</td>
-<td>类之间的关系（分类结构、组装结构）</td>
+<td>空心圆套实心圆</td>
+<td>结束状态（<strong>0 个或多个</strong>）</td>
 </tr>
 <tr>
-<td><strong>类—&amp;—对象层</strong></td>
-<td>class &amp; object layer</td>
-<td>类边界、实例边界</td>
+<td>圆角矩形</td>
+<td>状态（内含状态名、状态变量、活动）</td>
 </tr>
 <tr>
-<td><strong>属性层</strong></td>
-<td>attribute layer</td>
-<td>属性、实例连接</td>
-</tr>
-<tr>
-<td><strong>服务层</strong></td>
-<td>service layer</td>
-<td>服务、消息</td>
+<td>箭头</td>
+<td>由事件导致的状态转换</td>
 </tr>
 </tbody>
 </table>
-<p>课件还把这五个层次和软件系统的四个部分对应起来：</p>
-<pre><code>问题论域部分        人机交互部分
-任务管理部分        数据管理部分
+<p><strong>活动区里的三个标准事件</strong>（PPT 第 22 页），这是最常考的点：</p>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>entry</strong></td>
+<td><strong>进入</strong>该状态时的特定动作</td>
+</tr>
+<tr>
+<td><strong>exit</strong></td>
+<td><strong>退出</strong>该状态时的特定动作</td>
+</tr>
+<tr>
+<td><strong>do</strong></td>
+<td><strong>处于</strong>该状态期间持续执行的动作</td>
+</tr>
+</tbody>
+</table>
+<p>语法是：<code>event-name(参数表) [警戒条件] / 动作表达式</code>。例：<code>go up(floor) [timer=time-out] / start motor</code>。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p024.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p024.png" alt="电梯升降的状态图"></a>
+<figcaption><b>图 5-1　电梯升降的状态图</b>　（PPT 第 24 页）正文讲 entry/exit/do 的区别，这张图给了实物：每个圆角框是一个状态（Moving up、Stopped、Idle…），框内 `do:` 后面写「待在这个状态期间一直做的事」（如 `do: move`），箭头上标事件与警戒条件（如 `go up(floor) [timer=time-out]`）。<strong>对照记：do 写在框里，事件写在箭头上。</strong></figcaption>
+</figure>
+
+<p><strong>事件的四种类型</strong>：消息型（同步，其他对象发来消息）、信号型（异步）、时间型（到达特定时间点）、条件型（属性取值满足条件）。</p>
+<p>课件第 24 页用<strong>电梯</strong>举例，这个例子很经典：</p>
+<pre><code>Idle (timer=0, do/increase timer)
+  ├─ go up(floor) ──→ Moving up (do/moving to floor) ──arrived──→ ...
+  ├─ go down(floor) → Moving down (do/moving to floor)
+  └─ [timer=time-out] ──→ Moving to First floor
 </code></pre>
-<p><mark class="bubu">补</mark><strong>为什么要有"主题层"？</strong> 课件给了心理学依据：<strong>Miller 的 7±2 原则</strong>（人的短期记忆一次只能装 5–9 个对象）。一个 ATM 系统有十几个类，还能一眼看完；一个银行核心系统有几百个类，必须划分成"总行""分行""ATM"这样的主题，否则没人能读懂。<strong>主题层不是为了机器，是为了人的注意力。</strong></p>
-<p><mark class="bubu">补</mark>这条原则和第 6 讲"模块化的分解数量"是同一件事的两面：<strong>分解让人能理解，但分解过头会增加接口成本</strong>——所以主题的数量要控制在"一眼能看完"的量级。</p>
-<h3>2.4 构建对象模型的过程</h3>
-<p>课件第 57 页给了一条完整的活动链，这是第 5 讲实战（ATM）的剧本：</p>
-<pre><code>建立用况图 → 发现对象 → 定义属性与服务 → 建立结构与连接
-          → 建立交互图/状态图/活动图 → 原型开发 → 详细说明 → 建立类图
-</code></pre>
-<p>对应的五个主要活动（PPT 第 57 页下半部分）：</p>
-<ol>
-<li>找出类—&amp;—对象；</li>
-<li>定义属性；</li>
-<li>定义服务；</li>
-<li>识别结构；</li>
-<li>识别主题；</li>
-<li>反复修改。</li>
-</ol>
-<p><mark class="bubu">补</mark><strong>注意最后一条"反复修改"不是客气话，而是方法的一部分。</strong> 课件在后面 ATM 案例里专门用一节讲"反复修改"（把"现金兑换卡"拆成两个类、把"分行"和"分行计算机"合并）——<strong>第一版的模型一定是错的，建模的过程就是发现第一版错在哪的过程。</strong></p>
-<h3>一个容易被忽略的方法论要点</h3>
-<p><mark class="bubu">补</mark><strong>面向对象分析的产物是"问题域的精确模型"，不是"软件的架构"。</strong> 这一点在考试里经常设陷阱：问"分析阶段应该画什么图"，答案是用例图、概念类图（领域类图）、顺序图、状态图、活动图——<strong>不包括</strong>构件图、部署图、包图这些偏实现的图。判断标准很简单：<strong>如果这张图上出现了"数据库""服务器""接口协议"这类词，它就不是分析阶段的产物。</strong></p>
-<div class="pager"><a class="pg prev" href="software-engineering-17.html"><span>← 上一节</span><b>1 九种 UML 图与三个分析视角</b></a><a class="pg next" href="software-engineering-19.html"><span>下一节 →</span><b>2.2 对象建模实战：从名词到 ATM 对象模型</b></a></div>
+<p><mark class="bubu">补</mark><strong>注意 <code>do/increase timer</code> 这个写法<strong>：电梯空闲时计时器一直在涨，涨到超时就自动回一楼。</strong><code>do</code> 事件的精髓就是"在这个状态里持续做的事"</strong>，它不需要外部触发——这跟 <code>entry</code>（只做一次）区别很大，考试常考这个区别。</p>
+<h3>活动图</h3>
+<p>定义（PPT 第 25 页）：是<strong>状态图的一种特殊情况</strong>，这些状态大都处于<strong>活动状态</strong>。本质是流程图，描述<strong>活动到活动的控制流</strong>。</p>
+<p>一句话区分交互图与活动图：</p>
+<blockquote>
+<p>交互图强调的是<strong>对象到对象</strong>的控制流，活动图强调的是<strong>活动到活动</strong>的控制流。</p>
+</blockquote>
+<p>两种增强画法：</p>
+<ul>
+<li><strong>带泳道的活动图</strong>（PPT 第 26 页）：泳道表明每个活动由<strong>哪些人或哪些部门</strong>负责完成。这是活动图最实用的变体——一眼看出"谁在干什么、哪里要交接"。</li>
+<li><strong>带对象流的活动图</strong>（PPT 第 27 页）：把涉及的对象放进图中，用<strong>带箭头的虚线</strong>连接到创建/修改/撤销它的活动上，表示对象流。</li>
+</ul>
+<p><mark class="bubu">补</mark><strong>活动图 vs 流程图</strong>：形式上几乎一样，区别在于活动图是 UML 的一部分，支持<strong>并发（分叉/汇合）</strong>、泳道、对象流；而流程图只有顺序分支循环。所以业务流程图常用活动图画，算法细节用流程图/NS 图画（第 7 讲）。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p026.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p026.png" alt="带泳道的活动图"></a>
+<figcaption><b>图 5-4　带泳道的活动图</b>　（PPT 第 26 页）图被竖线切成两条泳道，顶端分别标「申请人」和「贷款业务受理人员」——这就是「泳道表明每个活动由谁负责」。图中间那对粗横线是<strong>分叉/汇合（并发）</strong>，流程图做不到。正文说「一眼看出谁在干什么、哪里要交接」，看这张图就明白。</figcaption>
+</figure>
+
+<h3>顺序图</h3>
+<p>定义（PPT 第 28–29 页）：交互图的一种，描述对象之间<strong>消息发送的先后顺序</strong>，强调<strong>时间顺序</strong>。主要用途是把用例表达的需求转化为更正式、更精细的表达——<strong>用例常被细化为一个或多个顺序图</strong>，同时它也能有效描述"如何分配各类的职责"。</p>
+<p>要素：</p>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>表示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>纵向 = 时间轴</strong></td>
+<td>对象下方的<strong>虚线</strong>是生命线；生命线上的<strong>长条矩形</strong>是活跃期（执行期）</td>
+</tr>
+<tr>
+<td><strong>横向 = 消息</strong></td>
+<td>对象顶部矩形框写对象名（可带下划线，表示是某类的实例）</td>
+</tr>
+<tr>
+<td>消息箭头</td>
+<td>从上到下按时间顺序排列；<strong>箭头形状表示消息类型</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>五种消息</strong>（PPT 第 30–31 页）：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>画法要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>同步消息</strong></td>
+<td>发送者等待接收者处理完才继续</td>
+<td>实心箭头</td>
+</tr>
+<tr>
+<td><strong>异步消息</strong></td>
+<td>发送完不等待，继续自己的处理</td>
+<td>开叉箭头</td>
+</tr>
+<tr>
+<td><strong>自消息</strong></td>
+<td>对象发给自己的消息</td>
+<td>折回自身的箭头</td>
+</tr>
+<tr>
+<td><strong>返回消息</strong></td>
+<td>处理完成，结果沿返回消息传回</td>
+<td>虚线箭头</td>
+</tr>
+<tr>
+<td><strong>创建/销毁消息</strong></td>
+<td>消息传递目标对象的创建与删除</td>
+<td>指向对象框 / 打叉</td>
+</tr>
+</tbody>
+</table>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p031.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p031.png" alt="消息图元：五种箭头"></a>
+<figcaption><b>图 5-2　消息图元：五种箭头</b>　（PPT 第 31 页）这一页专门讲箭头形状：图上三组小图分别画出同步消息（实心箭头）、异步消息（开叉箭头）、返回消息（虚线箭头），并标出「带时间延迟的消息」。右上角红字是「叫吃饭」的类比——<strong>同步是等着你答应，异步是叫完就走</strong>，正文引的就是这句。</figcaption>
+</figure>
+
+<p>课件第 31 页用"叫吃饭"的类比讲同步异步（第 0 章已引），还给了<strong>带时间延迟的消息</strong>画法（标注 <code>时延小于10ms</code>）。</p>
+<p><strong>组合片段</strong>（PPT 第 32–33 页）：用来表达交互执行的条件与方式，常用四种：<strong>抉择（alt）、选项（opt）、循环（loop）、并行（par）</strong>。图中用左上角带标签的方框表示，方框内写警戒条件。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p032.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p032.png" alt="带组合片段的顺序图"></a>
+<figcaption><b>图 5-3　带组合片段的顺序图</b>　（PPT 第 32 页）图上方那个大方框就是组合片段，左上角标签写 `opt [printer free]`——意思是「打印机空闲时才执行这一段」；框内还有 `loop(5)` 表示循环。正文那句「左上角带标签的方框、框内写警戒条件」说的就是它。<strong>看图先找左上角小标签，再读框里的消息。</strong></figcaption>
+</figure>
+
+<p><mark class="bubu">补</mark><strong>顺序图最容易画错的两个地方</strong>：①<strong>生命线不该画的太长</strong>——对象没参与这段交互就不要画；②<strong>返回消息常被省略</strong>，但在强调"谁等谁"的场合必须画，否则看不出同步还是异步。</p>
+<h3>协作图（通信图）</h3>
+<p>定义（PPT 第 34 页）：交互图的一种，描述<strong>收发消息的对象的组织关系</strong>，强调对象之间的<strong>合作关系</strong>。</p>
+<p>一句话记住区别：</p>
+<blockquote>
+<p><strong>顺序图按时间顺序布图，协作图按空间结构布图。</strong></p>
+</blockquote>
+<p>消息标签语法：<code>前缀 守卫条件 序列表达式 [返回值 :=] 消息名</code>，例如 <code>1: [printer free] print(file)</code>。</p>
+<h3>构件图与部署图</h3>
+<p><strong>构件图</strong>（PPT 第 39–40 页）：表示系统中构件与构件之间、类或接口与构件之间的关系。构件之间是<strong>依赖关系</strong>，类/接口与构件之间是<strong>依赖或实现关系</strong>。</p>
+<p>构件的三种形态：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>源构件</strong></td>
+<td>仅在编译时才有意义（如 <code>.java</code>）</td>
+</tr>
+<tr>
+<td><strong>二进制构件</strong></td>
+<td>源构件的编译结果（如 <code>.class</code>、<code>.obj</code>）</td>
+</tr>
+<tr>
+<td><strong>可执行构件</strong></td>
+<td>链接所有二进制构件得到的可执行程序文件</td>
+</tr>
+</tbody>
+</table>
+<p>注意：<strong>构件图只把构件显示成类型</strong>；要显示实例必须用部署图。</p>
+<p><strong>部署图</strong>（PPT 第 43、47 页）：描述系统运行时进行处理的<strong>节点</strong>以及在节点上活动的<strong>构件的配置</strong>，强调物理设备及它们之间的连接关系。用途：描述系统如何部署、显示硬件中的软件与连接协议、平衡运行时计算资源分布、描述组织的硬件网络结构。</p>
+<p>两个描述符号：</p>
+<ul>
+<li><strong>节点与连接</strong>：节点用<strong>立方体</strong>表示（代表一个物理设备及在其上运行的软件系统）；节点间连线表示通信线路（UML 称"连接"）；通信类型用<strong>构造型</strong>标在连线旁，指定协议或网络类型（<code>&lt;&lt;HTTP&gt;&gt;</code>、<code>&lt;&lt;JDBC&gt;&gt;</code>、<code>&lt;&lt;Web Services&gt;&gt;</code>）。</li>
+<li><strong>构件与接口</strong>：部署图中构件代表可执行的物理代码模块；接口用<strong>一端是小圆圈的直线</strong>表示。</li>
+</ul>
+<figure class="fig">
+<a href="../../assets/img/se/ch05_p043.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p043.png" alt="部署图的描述符号"></a>
+<figcaption><b>图 5-5　部署图的描述符号</b>　（PPT 第 43 页）这是部署图的「图例页」：上面两个立方体是节点（物理设备及其上运行的软件），节点之间实线是连接，旁边 `<<HTTP>>`、`<<JDBC>>` 是构造型、标明通信协议；下面那根一端带小圆圈的直线就是「提供的接口」。<strong>画部署图前先认这四样，否则图会画成一堆盒子加乱线。</strong></figcaption>
+</figure>
+
+<p><strong>描述性 vs 实例性部署图</strong>（PPT 第 49–50 页）：</p>
+<ul>
+<li><strong>描述性部署图</strong>：节点写类型名（<code>Web服务器</code>、<code>应用服务器</code>、<code>数据库服务器</code>）；</li>
+<li><strong>实例性部署图</strong>：节点名写成 <code>节点名: 类型名</code>（<code>1#服务器: Web服务器</code>、<code>3#小型机: 应用服务器</code>）。</li>
+</ul>
+<p><mark class="bubu">补</mark><strong>这个区别和第 5 讲的"类 vs 对象"是同一个道理</strong>：描述性部署图说"我们有两类机器"，实例性部署图说"这台机器上跑的是这个"。<strong>画给客户看用描述性，画给运维看用实例性。</strong></p>
+<div class="pager"><a class="pg prev" href="software-engineering-17.html"><span>← 上一节</span><b>3 需求分析过程、文档与评审</b></a><a class="pg next" href="software-engineering-19.html"><span>下一节 →</span><b>2.1–2.4 三模型与五层次</b></a></div>
 </div>
 
 <script>

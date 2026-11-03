@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2.3–2.4 需求怎么描述：从自然语言到 UML 用例 · 软件工程讲义：全课程十讲</title>
+<title>2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态 · 软件工程讲义：全课程十讲</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
@@ -75,402 +75,298 @@
 <div class="sg">第 4 讲　需求分析基础</div>
 <a class="i" href="software-engineering-13.html">1.1–1.3 需求是什么：质量要求、特点与分类</a>
 <a class="i" href="software-engineering-14.html">1.4–2.2 需求从哪里来：获取方法与需求工程</a>
-<a class="i cur" data-h="s-1" href="software-engineering-15.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
-<a class="i" href="software-engineering-16.html">3 需求分析过程、文档与评审</a>
+<a class="i cur" data-h="s-1" href="software-engineering-15.html">2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态</a>
+<a class="i" href="software-engineering-16.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
+<a class="i" href="software-engineering-17.html">3 需求分析过程、文档与评审</a>
 <div class="sg">第 5 讲　软件分析</div>
-<a class="i" href="software-engineering-17.html">1 九种 UML 图与三个分析视角</a>
-<a class="i" href="software-engineering-18.html">2.1–2.4 三模型与五层次</a>
-<a class="i" href="software-engineering-19.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
-<a class="i" href="software-engineering-20.html">2.5–3 动态模型、功能模型与需求变更</a>
+<a class="i" href="software-engineering-18.html">1 九种 UML 图与三个分析视角</a>
+<a class="i" href="software-engineering-19.html">2.1–2.4 三模型与五层次</a>
+<a class="i" href="software-engineering-20.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
+<a class="i" href="software-engineering-21.html">2.5–3 动态模型、功能模型与需求变更</a>
 <div class="sg">第 6 讲　软件设计基础</div>
-<a class="i" href="software-engineering-21.html">1–2.2 设计概述与七条设计原则</a>
-<a class="i" href="software-engineering-22.html">2.2.2 模块化：内聚与耦合七级</a>
-<a class="i" href="software-engineering-23.html">3–4 面向对象设计、架构风格与设计评审</a>
+<a class="i" href="software-engineering-22.html">1–2.2 设计概述与七条设计原则</a>
+<a class="i" href="software-engineering-23.html">2.2.2 模块化：内聚与耦合七级</a>
+<a class="i" href="software-engineering-24.html">3–4 面向对象设计、架构风格与设计评审</a>
 <div class="sg">第 7 讲　架构、模式与界面</div>
-<a class="i" href="software-engineering-24.html">1 六种架构风格与选型</a>
-<a class="i" href="software-engineering-25.html">2–3 用户界面设计与详细设计工具</a>
-<a class="i" href="software-engineering-26.html">4 设计模式与 OO 实战五步</a>
+<a class="i" href="software-engineering-25.html">1 六种架构风格与选型</a>
+<a class="i" href="software-engineering-26.html">2–3 用户界面设计与详细设计工具</a>
+<a class="i" href="software-engineering-27.html">4 设计模式与 OO 实战五步</a>
 <div class="sg">第 8 讲　编写代码</div>
-<a class="i" href="software-engineering-27.html">1–2 程序设计语言与结构化程序设计</a>
-<a class="i" href="software-engineering-28.html">3 调试、求助与程序设计风格</a>
+<a class="i" href="software-engineering-28.html">1–2 程序设计语言与结构化程序设计</a>
+<a class="i" href="software-engineering-29.html">3 调试、求助与程序设计风格</a>
 <div class="sg">第 9 讲　软件测试</div>
-<a class="i" href="software-engineering-29.html">1–2.4 测试是什么与测试过程</a>
-<a class="i" href="software-engineering-30.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
-<a class="i" href="software-engineering-31.html">3.5–4 黑盒测试、测试过程与组织</a>
+<a class="i" href="software-engineering-30.html">1–2.4 测试是什么与测试过程</a>
+<a class="i" href="software-engineering-31.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
+<a class="i" href="software-engineering-32.html">3.5–4 黑盒测试、测试过程与组织</a>
 <div class="sg">第 10 讲　软件维护与演化</div>
-<a class="i" href="software-engineering-32.html">1 逻辑老化与四种维护</a>
-<a class="i" href="software-engineering-33.html">2–4 维护技术、管理与可维护性</a>
+<a class="i" href="software-engineering-33.html">1 逻辑老化与四种维护</a>
+<a class="i" href="software-engineering-34.html">2–4 维护技术、管理与可维护性</a>
 <div class="sg">附录</div>
-<a class="i" href="software-engineering-34.html">附录 A　术语中英对照表</a>
-<a class="i" href="software-engineering-35.html">附录 B　一页速查表</a>
-<a class="i" href="software-engineering-36.html">附录 C　FAQ 与易错点清单</a>
+<a class="i" href="software-engineering-35.html">附录 A　术语中英对照表</a>
+<a class="i" href="software-engineering-36.html">附录 B　一页速查表</a>
+<a class="i" href="software-engineering-37.html">附录 C　FAQ 与易错点清单</a>
   </nav>
 </aside>
 
 <div class="wrap">
 
-<h2 id="s-1">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</h2>
-<h3>2.3 为什么需求要先"粗略地写下来"</h3>
-<p>课件第 73 页先解释了"初步软件需求"这个词：之所以叫初步，是因为这些需求<strong>还很粗略</strong>，只是轮廓，不够具体详尽，可能有遗漏、有不一致和冲突，<strong>后续还需进一步精化和分析</strong>。</p>
-<p>那为什么还要先写下来？因为要"记录下来、描述清楚，形成相关文档，以便于不同人员（需求工程师、用户、客户）交流和讨论，及时发现理解上的偏差"。</p>
-<p><mark class="bubu">补</mark><strong>这一步的价值在于"把错误提前暴露"</strong>。脑子里的需求是完美的，写出来就开始露出裂缝；一旦给别人看，裂缝会迅速变大。第 5 讲整讲都是在"把裂缝补上"——所以第 5 讲叫"软件分析"，而不是"需求分析之二"。</p>
-<h3>三种描述手段及其边界</h3>
+<h2 id="s-1">2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态</h2>
+<p>第 0 章的 0.3 已经把对象、类、消息、多态讲成了骨架，并留下一句"第 4 讲那节只需要看多态的误区和覆盖 vs 重载"。这一节就是那个"那节"：按课件第 41–71 页的原始顺序，把骨架补成可以落笔、可以答题的细节。课件在这里用了三十页、四段代码和一个遥控器类比，光有骨架是接不住这些内容的。</p>
+<h3>十个核心概念：一张清单</h3>
+<p>课件第 41 页（第 48 页又原样重复了一次）把面向对象的概念分成"基本"和"高阶"两层，一共十个：</p>
 <table>
 <thead>
 <tr>
-<th>手段</th>
-<th>优势</th>
-<th>不足</th>
+<th>层</th>
+<th>概念</th>
+<th>英文</th>
+<th>一句话</th>
+<th>课件页</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>自然语言</strong></td>
-<td>最常用；能描述功能/质量/约束三类需求；详细刻画内容与细节；各方都能看懂</td>
-<td>不具体、不准确、有二义、不直观</td>
+<td>基本</td>
+<td><strong>对象</strong></td>
+<td>Object</td>
+<td>具体、有意义的实在实体，属性值构成它的状态</td>
+<td>42</td>
 </tr>
 <tr>
-<td><strong>软件原型</strong></td>
-<td>直观、可展示、可操作；帮助用户确认和导出需求</td>
-<td>主要展示界面与大致流程，<strong>无法描述细节</strong></td>
+<td>基本</td>
+<td><strong>属性</strong></td>
+<td>Attribute</td>
+<td>对象的性质，其<strong>值</strong>定义对象状态</td>
+<td>42</td>
 </tr>
 <tr>
-<td><strong>UML 建模语言</strong></td>
-<td>图形化、结构化；支持多视角；标准化便于交流</td>
-<td>需要学习成本；不表达非功能需求</td>
+<td>基本</td>
+<td><strong>方法（操作）</strong></td>
+<td>Method / Operation</td>
+<td>对象的行为，表示对象对外提供的服务</td>
+<td>42</td>
+</tr>
+<tr>
+<td>基本</td>
+<td><strong>类</strong></td>
+<td>Class</td>
+<td>对<strong>一组</strong>具有相同特征对象的抽象</td>
+<td>44</td>
+</tr>
+<tr>
+<td>基本</td>
+<td><strong>实例</strong></td>
+<td>Instance</td>
+<td>类的具体对象，类是创建它的模板</td>
+<td>44</td>
+</tr>
+<tr>
+<td>基本</td>
+<td><strong>消息</strong></td>
+<td>Message</td>
+<td>一个对象请求另一个对象提供服务的唯一方式</td>
+<td>45</td>
+</tr>
+<tr>
+<td>高阶</td>
+<td><strong>封装</strong></td>
+<td>Encapsulation</td>
+<td>清晰边界 + 明确接口 + 受保护的内部实现</td>
+<td>49</td>
+</tr>
+<tr>
+<td>高阶</td>
+<td><strong>继承</strong></td>
+<td>Inheritance</td>
+<td>类与类之间的一般—特殊关系，子类共享父类特性</td>
+<td>50</td>
+</tr>
+<tr>
+<td>高阶</td>
+<td><strong>多态</strong></td>
+<td>Polymorphism</td>
+<td>同一条消息，不同的对象做出不同的响应</td>
+<td>53</td>
+</tr>
+<tr>
+<td>高阶</td>
+<td><strong>重载</strong></td>
+<td>Overload</td>
+<td>同一个类里多个同名但参数不同的操作</td>
+<td>70</td>
 </tr>
 </tbody>
 </table>
-<p>课件给了三个自然语言的示例（PPT 第 74 页），可以直接当"好需求"的模板：</p>
-<ul>
-<li><strong>功能性</strong>：「软件系统需要对老人在家的状况进行分析，以判断是否出现突发异常情况。一旦出现异常，就需要通知老人家属和医生。」</li>
-<li><strong>质量</strong>：「老人通过语音方式与系统交互，<strong>正确理解老人语音指令的比率应达到 90% 以上</strong>。」</li>
-<li><strong>约束</strong>：「客户端 App 软件须运行在 <strong>Android 4.4 及以上版本</strong>的操作系统。」</li>
-</ul>
-<p>紧接着第 75 页就批评了自然语言的四条不足，用的正是上面那条功能需求：</p>
-<ul>
-<li><strong>不具体</strong>：「老人的信息」是指什么，没刻画清楚；</li>
-<li><strong>不准确</strong>：「突发异常情况」没有明确定义；</li>
-<li><strong>有二义</strong>：不同的人看完会有不同理解；</li>
-<li><strong>不直观</strong>：很难看出到底有哪些功能性和非功能性需求，以及它们之间的关系。</li>
-</ul>
-<p><mark class="bubu">补</mark><strong>这就是"为什么必须有模型"最实在的论证</strong>：自然语言在描述"单个句子"时够用，在描述"一组需求之间的关系"时彻底失效。而软件的本质恰恰是"一堆需求相互关联"。</p>
-<h3>UML：三个字母各自的意思</h3>
-<p>课件第 77 页拆得很干净：</p>
-<table>
-<thead>
-<tr>
-<th>字母</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Unified</strong>（统一）</td>
-<td>提取不同方法中最好的建模技术（OMT/Rumbaugh、Booch method/Booch、OOSE/Jacobson），采用统一标准化的表示方式，支持不同人员交流</td>
-</tr>
-<tr>
-<td><strong>Modeling</strong>（建模）</td>
-<td>基于面向对象的概念和抽象，对现实系统和软件系统进行<strong>可视化建模</strong></td>
-</tr>
-<tr>
-<td><strong>Language</strong>（语言）</td>
-<td>提供图形化图符，用来表示软件系统的一种语言</td>
-</tr>
-</tbody>
-</table>
-<p>页面上还列了它的六项用途：Visualizing、Specifying、Constructing、Documenting、Business Modeling、Communications。</p>
-<p><strong>发展史</strong>（PPT 第 78 页），只需记住几个节点：</p>
-<table>
-<thead>
-<tr>
-<th>时间</th>
-<th>事件</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1994 前</td>
-<td>面向对象方法"群雄逐鹿"，逐渐三分天下</td>
-</tr>
-<tr>
-<td>1994</td>
-<td>Booch 与 Rumbaugh 在 Rational 公司开始 UML 工作，目标是"统一的方法"</td>
-</tr>
-<tr>
-<td>1995</td>
-<td>OOSE 创始人 Jacobson 加盟，重点转向"统一的建模语言"</td>
-</tr>
-<tr>
-<td>1996.6 / 1996.10 / 1997.1 / 1997.11</td>
-<td>推出 UML 0.9 / 0.91 / 1.0 / 1.1</td>
-</tr>
-<tr>
-<td><strong>1997.11</strong></td>
-<td><strong>OMG 批准 UML 1.1 为基于面向对象技术的标准建模语言</strong></td>
-</tr>
-<tr>
-<td>2004</td>
-<td>推出 <strong>UML 2.0</strong>，对 1.x 作了重大修改</td>
-</tr>
-</tbody>
-</table>
-<p><mark class="bubu">补</mark><strong>"三巨头合一"这件事本身就是软件工程史的缩影</strong>：三种方法各自都能用，但用户不知道该学哪个、工具不知道该支持哪个——<strong>标准化的价值不在于"最好"，而在于"唯一"</strong>。这和后来 XML、HTTP 统一江湖是同一个逻辑。</p>
-<p><strong>五视图</strong>（PPT 第 79 页），这是理解 UML 组织方式的钥匙：</p>
-<table>
-<thead>
-<tr>
-<th>视图</th>
-<th>描述什么</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>用例视图</strong> Use-Case View</td>
-<td>项目相关人的需求，把基本需求捕获为用例，是构造其他视图的基础</td>
-</tr>
-<tr>
-<td><strong>逻辑视图</strong> Logical View</td>
-<td>系统功能和词汇</td>
-</tr>
-<tr>
-<td><strong>过程视图</strong> Process View</td>
-<td>系统性能、可伸缩性和吞吐量</td>
-</tr>
-<tr>
-<td><strong>实现视图</strong> Implementation View</td>
-<td>系统组装和配置管理（物理代码的文件和组件）</td>
-</tr>
-<tr>
-<td><strong>部署视图</strong> Deployment View</td>
-<td>系统拓扑结构、分布、移交和安装</td>
-</tr>
-</tbody>
-</table>
-<p><mark class="bubu">补</mark><strong>五视图对应"五类读者"</strong>：用例视图给客户看，逻辑视图给设计者看，过程视图给性能工程师看，实现视图给构建/配置管理员看，部署视图给运维看。<strong>UML 之所以要这么多图，是因为看系统的人太多了</strong>——这正好呼应第 0 章"三个视角"的说法。</p>
-<p><strong>UML 的图</strong>（PPT 第 80 页）按视点分四组：</p>
-<table>
-<thead>
-<tr>
-<th>视点</th>
-<th>图</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>结构</strong></td>
-<td>包图、类图、对象图、构件图</td>
-</tr>
-<tr>
-<td><strong>行为</strong></td>
-<td>状态图、活动图、通信图（协作图）、顺序图</td>
-</tr>
-<tr>
-<td><strong>部署</strong></td>
-<td>部署图</td>
-</tr>
-<tr>
-<td><strong>用例</strong></td>
-<td>用例图</td>
-</tr>
-</tbody>
-</table>
-<p>（每张图的用途见第 5 讲第一节，那里会逐张展开。）</p>
-<p><strong>RUP 四阶段</strong>（PPT 第 81 页）：用例驱动、以体系结构为中心、迭代、增量的软件开发过程：</p>
+<p><mark class="bubu">补</mark><strong>这张清单里藏着一个顺序陷阱</strong>：课件把"重载"列进高阶概念，却没有列"覆盖（Override）"。原因是覆盖在第 69 页才出现，而且它不是独立概念——它是多态三个条件里的第一条（"父类包含了一个被子类覆盖的方法"）。<strong>先有覆盖，才谈得上多态；重载和多态没有关系。</strong> 这个先后关系，清单本身看不出来，下面几节按课件页序把它补上。</p>
+<h3>对象的三块：界面、状态、实现</h3>
+<p>课件第 42 页先给对象下定义：对象是个体或事物的抽象表示，有<strong>属性</strong>（对象的性质，其值定义对象状态）和<strong>操作</strong>（也称方法，对象行为，表示对象提供的服务）。例子是一辆汽车——属性是发动机、变速箱、轮胎、车身、座椅，方法是启动、加速、刹车、保养、修理。</p>
+<p>第 43 页换了一个更工程化的说法，把对象画成三层：</p>
 <ol>
-<li><strong>初始</strong>：理解和分析需求，生成用例模型框架；</li>
-<li><strong>精化</strong>：完成高优先级用例开发，完善用例模型；</li>
-<li><strong>构建</strong>：多次迭代，完成不同优先级用例开发；</li>
-<li><strong>交付</strong>：功能与性能测试，产品化部署。</li>
+<li><strong>界面</strong>：外界能发的消息，只露操作 1、2、3 的签名；</li>
+<li><strong>状态 S</strong>：对象内部此刻的数据；</li>
+<li><strong>实现</strong>：操作 1、2、3 的方法体（怎么算）。</li>
 </ol>
-<h3>2.4 用例：从"谁"和"做什么"入手</h3>
-<p>三个定义要分清（PPT 第 83 页）：</p>
-<ul>
-<li><strong>用例（Use Case）</strong>：文本形式的情节描述，说明某参与者使用系统以实现某一特定目标的情形，描述的是<strong>外部行为者所理解的系统功能</strong>。</li>
-<li><strong>用例建模</strong>：描述一个系统<strong>应该做什么</strong>（功能需求），用用例图来描述（可能有多幅）。</li>
-<li><strong>用例图</strong>：把系统看成一个<strong>黑盒子</strong>，给出用户所感受到的系统行为，但<strong>不描述系统如何实现该功能</strong>。</li>
-</ul>
-<p><strong>四个要素</strong>（PPT 第 84–88 页）：</p>
+<p>课件用一句话收束："对象好像是一个黑盒子，只能通过对象与外界的界面来操作它，实现对对象操作的代码和数据是隐藏在对象内部的。"</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch04_p043.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p043.png" alt="对象的形象表示"></a>
+<figcaption><b>图 4-3　对象的形象表示</b>　（PPT 第 43 页）左侧「界面」用一个括号把操作 1/2/3 圈在一起，表示外界<strong>只能</strong>看到这三个方框；右边那个大框代表对象内部，右上角圆圈是状态 S，下方写着「操作 1、2、3 的实现」。<strong>看这张图的顺序：先看界面上有几个操作（能做什么），再看圈里的 S（现在是什么状态），最后才看实现（怎么做）——这正是调用方的视角，也是黑盒子的意思。</strong></figcaption>
+</figure>
+
+<p><mark class="bubu">补</mark><strong>这三块在后几讲各画一张图，别混</strong>：界面对应类图里"操作"那一格（第 5 讲类图的三部分）；状态 S 对应状态图里的"状态"（第 5 讲动态模型）；实现属于代码，画图时根本不出现。所以课件说"使用对象时只需知道接口形式"——图上本来就只画接口。</p>
+<p><mark class="bubu">补</mark><strong>"简单、方便、安全、可靠"这四个词不是形容词，是因果关系</strong>：调用方只依赖签名（界面），实现换成什么算法都不影响调用方，于是<strong>改动被关在对象内部</strong>。第 6 讲把这件事上升为"信息隐藏"原则，第 6 讲的内聚耦合刻度也是在量"这条边界修得干不干净"。</p>
+<h3>抽象与实例化：一张图里的两个箭头</h3>
+<p>课件第 44 页的定义很短：<strong>类是对一组具有相同特征对象的抽象</strong>，是分类与组织机制，封装了属性和操作；<strong>对象是类的实例，类是创建对象的模板</strong>。紧接着一句对照最值得记：</p>
+<blockquote>
+<p>类是<strong>静态的抽象</strong>；对象是<strong>动态、可运行的实体</strong>。</p>
+</blockquote>
+<p>课件的例子是"老师 → 老师：张义""学生 → 学生：王宏博"——左边是类，右边是带名字的实例。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch04_p044.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p044.png" alt="类与实例"></a>
+<figcaption><b>图 4-4　类（Class）与实例（Instance）</b>　（PPT 第 44 页）上半页是定义（类的抽象机制、封装属性与操作、对象是实例、类是模板），下半页用两个方框箭头示意：左框「学生」→ 右框「学生：王宏博」，左框「老师」→ 右框「老师：张义」。<strong>箭头方向就是实例化方向；把箭头反过来读，就是从具体对象归纳出类的过程——两种读法在需求分析里都要用。</strong></figcaption>
+</figure>
+
+<p>第 47 页把这一层关系算成了明账，用"教师"类生成"李伟"对象：</p>
 <table>
 <thead>
 <tr>
-<th>要素</th>
-<th>要点</th>
+<th>类里写的（抽象）</th>
+<th>对象里存的（实例）</th>
+<th>教师 → 李伟</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>系统</strong></td>
-<td>提供用例的黑盒子；方框边线表示<strong>系统边界</strong>，划定功能范围；用例在框内，外部实体在框外</td>
+<td>数据结构：属性声明</td>
+<td>数据值</td>
+<td>姓名 / 年龄 / 单位 / 职称 / 工资 → 李伟 / 25 / 计算机 / 讲师 / 1000</td>
 </tr>
 <tr>
-<td><strong>执行者（Actor）</strong></td>
-<td>与系统交互的人或其他系统；代表<strong>一种角色而不是具体的人</strong>（一个人可充当多种角色）；与用例之间的直线表示通信联系；一个执行者可连多个用例，反之亦然</td>
+<td>操作：方法名（参数）</td>
+<td>可接收的行为入口</td>
+<td>调工资(…) / 评职称 / 受聘</td>
 </tr>
 <tr>
-<td><strong>用例（Use Case）</strong></td>
-<td>代表某些用户可见的功能，实现一个具体的用户目标；<strong>总是被行为者启动</strong>，并向行为者提供可识别的值；必须是完整的；用例是一个<strong>类</strong>（代表一类功能），其<strong>实例</strong>通常称为<strong>脚本</strong></td>
-</tr>
-<tr>
-<td><strong>关系</strong></td>
-<td>关联、扩展、包含、泛化</td>
+<td>方法：方法体（公式、步骤、条件）</td>
+<td>真正执行的操作</td>
+<td>调工资的计算公式、评职称的步骤与条件</td>
 </tr>
 </tbody>
 </table>
+<p>图的下方是消息：<strong>人事处向对象发消息 <code>李伟.调工资(...)</code></strong>。</p>
 <figure class="fig">
-<a href="../../assets/img/se/ch04_p084.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p084.png" alt="用例图的三要素（自动售货机例）"></a>
-<figcaption><b>图 4-3　用例图的三要素（自动售货机例）</b>　（PPT 第 84 页）图上是一个完整用例图：左边小人「顾客」、右边小人「售货员」是执行者，中间方框里是用例（买饮料、付款、查询、补货…），连线是关联。正文那张四要素表就是它的读法：<strong>先看框内外的界限（系统边界），再找小人（执行者），最后看连线（关系）。</strong></figcaption>
+<a href="../../assets/img/se/ch04_p047.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p047.png" alt="对象、类和消息传递的例子"></a>
+<figcaption><b>图 4-5　对象、类和消息传递的例子</b>　（PPT 第 47 页）左列是类"教师"的三行（属性 / 操作 / 方法），右列是对象"李伟"的三行（状态 / 行为 / 执行的操作），中间用「抽象」（向左）和「实例」（向右）两个箭头连起来；最下方红字是消息「李伟.调工资(...)」。<strong>这张图是全讲最值得记住的一张：它同时说清了"类的三行""对象的三行"和"消息长什么样"。</strong></figcaption>
 </figure>
 
-<p>三种关系的区别（最容易考）：</p>
-<table>
-<thead>
-<tr>
-<th>关系</th>
-<th>符号</th>
-<th>含义</th>
-<th>记忆法</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>扩展</strong></td>
-<td><code>&lt;&lt;extend&gt;&gt;</code></td>
-<td>向一个用例中添加一些动作后构成另一个用例，后者继承前者部分行为</td>
-<td><strong>可选的分支</strong>（"买货"可扩展出"购买散装饮料"）</td>
-</tr>
-<tr>
-<td><strong>包含</strong></td>
-<td><code>&lt;&lt;include&gt;&gt;</code></td>
-<td>一个用例包含另一个用例的<strong>全部步骤</strong></td>
-<td><strong>必用的公共步骤</strong>（开户/取款/存款都包含"校验密码"）</td>
-</tr>
-<tr>
-<td><strong>泛化</strong></td>
-<td>空心三角</td>
-<td>一般用例与更特殊用例的关系，特殊者可继承一般者</td>
-<td><strong>特例复用</strong>（银行内转账、银行间转账都泛化自"转账"）</td>
-</tr>
-</tbody>
-</table>
-<figure class="fig">
-<a href="../../assets/img/se/ch04_p088.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p088.png" alt="用例间的三种关系"></a>
-<figcaption><b>图 4-4　用例间的三种关系</b>　（PPT 第 88 页）这一页把 extend / include / 泛化 的符号与语义并排摆开：扩展关系箭头标 `<<extend>>`，包含关系标 `<<include>>`，泛化用空心三角。正文那句「include 是必做、extend 是可选」就是从这三段定义提炼的——<strong>只让看图判断时，认箭头上的构造型和三角符号即可。</strong></figcaption>
-</figure>
-
-<p><mark class="bubu">补</mark><strong>一句话区分 extend 和 include</strong>：<strong>include 是"我必须做它"（被包含的用例一定会执行），extend 是"我可能会做它"（扩展用例在特定条件下才插入）</strong>。判断口诀：把两个用例连起来读——"每次 A 都必须做 B" → include；"做 A 时可能额外做 C" → extend。</p>
-<h3>用例建模的五步（银行储蓄账户管理系统案例）</h3>
-<p>课件第 90–95 页给了一个完整流程，这是本讲最值得照着做的范例。</p>
-<p><strong>第 1 步：识别执行者</strong></p>
-<ul>
-<li><strong>客户</strong>：到银行办理储蓄业务的人，负责输入密码；</li>
-<li><strong>银行职员（客户代理）</strong>：代表客户进行业务操作；</li>
-<li><strong>银行职员（管理人员）</strong>：根据客户的业务更新账户；</li>
-<li><strong>管理员</strong>：负责账户管理与报表生成。</li>
-</ul>
-<p>（还有"其它银行"作为外部系统参与银行间转账。）</p>
-<p><strong>第 2 步：识别用例</strong></p>
-<p>银行职员（客户代理）需要：开户、存款、取款、转账、注销账户——<strong>这些功能都包含了校验密码的功能</strong>（→ include）。
-管理员需要：账户管理、报表生成。银行职员（管理人员）参与"更新账户"。
-转账分成银行内转账、银行间转账，二者<strong>继承</strong>基本转账（→ 泛化）。</p>
-<p><strong>第 3 步：画用例图</strong>：把上面识别出的执行者、用例、include/泛化关系画出来。</p>
-<figure class="fig">
-<a href="../../assets/img/se/ch04_p093.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch04_p093.png" alt="银行储蓄账户管理系统用例图"></a>
-<figcaption><b>图 4-5　银行储蓄账户管理系统用例图</b>　（PPT 第 93 页）这就是第 3 步该画出来的结果：左侧四个执行者（客户、银行职员（客户代理）、银行职员（管理人员）、管理员），中间是用例群（开户、存款、取款、转账、注销账户），右侧「其它银行」是外部系统。注意「校验密码」用 `<<include>>` 连到四个业务用例上——<strong>这就是「必用公共步骤」的形状</strong>；「银行内转账/银行间转账」用空心三角指向「转账」，是泛化。</figcaption>
-</figure>
-
-<p><strong>第 4 步：描述用例</strong>（以"取款"为例，PPT 第 94–95 页）：</p>
-<pre><code>用况名称：取款
-参与的执行者：银行职员（客户代理）
-前置条件：一个合法的银行职员（客户代理）已登录到该系统
-事件流：
-  基本路径：
-    1. 当选择取款功能时用况开始
-    2. 当输入客户信息（姓名、账号等）后
-       a) 如果客户信息与账户不一致，显示错误信息，可重新输入或结束
-       b) 如果该账户被冻结（如因挂失），显示冻结信息并结束
-    3. 输入并校验密码
-    4. 输入取款金额，若余额小于取款金额，显示错误信息，要求重新输入
-    5. 打印取款单，交客户签字
-    6. 建立取款事件记录，更新账户信息
-    7. 打印存折，用例结束
-  可选路径：
-    1. 在第 5 步客户签字之前的任何时刻，客户可以取消本次取款
-    2. 第 3 步校验密码时，如密码不一致，可重新输入或结束
-后置条件：如果取款成功，客户账户余额被更新（减少），否则余额不变
+<p><mark class="bubu">补</mark><strong>这张图其实是三份账本，对应三次翻译</strong>：属性声明（数据结构）→ 属性值（数据值），是<strong>抽象 ↔ 实例化</strong>；方法名（参数）→ 行为的入口，是<strong>接口 ↔ 实现</strong>；方法体 → 执行的操作，是<strong>声明 ↔ 运行</strong>。课件把"调工资"写了两遍不是笔误——上一遍是"对象能接收哪个消息"，下一遍是"收到之后按什么公式算"。</p>
+<p><mark class="bubu">补</mark><strong>方向感很重要</strong>：需求分析阶段只做向上的箭头（课件第 5 讲就是"从名词找类"，把现实里的实体归纳成类）；编码阶段才做向下的箭头（<code>new</code>）。<strong>在需求阶段就想着怎么写类，会提前锁死实现</strong>——这也是第 5 讲把"分析类"和"设计类"分成两套模型的原因。</p>
+<h3>消息：对象之间唯一的联系方式</h3>
+<p>课件第 45 页：消息传递是实现对象间通讯和协作的基本手段，一个对象向另一个对象发送消息来<strong>请求其服务</strong>。消息的写法固定为：</p>
+<pre><code>接收对象名.消息名(参数)
 </code></pre>
-<p><strong>第 5 步：画活动图</strong>细化流程（含各种判定分支）。</p>
-<p><mark class="bubu">补</mark><strong>这份模板的四个字段各有其用</strong>：<strong>前置条件</strong>说明"什么情况下这个用例才允许开始"；<strong>基本路径</strong>是"一切顺利时的步骤"；<strong>可选路径（扩展）</strong>是"会出什么岔子、怎么处理"；<strong>后置条件</strong>说明"结束后世界变成什么样"。第 9 讲设计测试用例时，基本路径对应正常用例，可选路径对应异常用例——<strong>一份好的用例描述，等于半份测试用例集。</strong></p>
-<h3>场景（Scenario）与 POS 案例</h3>
-<p>课件第 98 页给了一个关键概念：<strong>场景是用例的一条执行路径</strong>（用例实例）。所以<strong>用例是一系列可能场景的集合</strong>。</p>
-<p>以 POS 收银为例：</p>
+<p>课件给的例子是"学生:王宏博 → 课程注册中心 : <code>registerCourse(course-name)</code>"。消息分两类：<strong>同步消息</strong>（请求者需要等待响应者的处理结果）和<strong>异步消息</strong>（发出后继续工作，无需等待）。</p>
+<p>第 46 页把一条消息拆成三段，用 C++ 的写法 <code>MyCircle.Show(Green)</code> 演示——<code>MyCircle</code> 是半径 4、圆心 (100,200) 的 Circle 类对象：</p>
 <ul>
-<li><strong>主成功场景</strong>：顾客带着商品到收银台，顺利完成扫描与信用卡付款；</li>
-<li><strong>替代场景 1</strong>：商品扫描失败 → 提示输入商品唯一码；</li>
-<li><strong>替代场景 2</strong>：信用卡通讯失败 → 提示改用现金；</li>
-<li><strong>替代场景 n</strong>：支付成功后要求退货。</li>
+<li><code>MyCircle</code>：<strong>接收消息的对象的名字</strong>；</li>
+<li><code>Show</code>：<strong>消息选择符</strong>（消息名）；</li>
+<li><code>Green</code>：<strong>消息的变元</strong>（参数）。</li>
 </ul>
-<p>课件第 99–101 页给出了一个"教科书级"的用例说明模板，字段比前面更全：</p>
+<p>对象收到这条消息后，"将执行在 Circle 类中定义的 Show 操作"。</p>
+<p><mark class="bubu">补</mark><strong>消息和函数调用差在哪？</strong> 函数调用是"我指定这段代码去跑"，消息是"我请求那个对象帮我做"。差别在<strong>谁来定实现</strong>：消息只规定"要什么"（选择符 + 变元），"怎么做"由接收对象按自己的类决定。下一节多态之所以能成立，语言学基础就在这里——<strong>同一条 <code>draw()</code> 消息发给矩形和三角形，两个对象各自执行自己的版本</strong>（课件第 53 页的例子）。</p>
+<p><mark class="bubu">补</mark><strong>同步/异步在第 5 讲会变成箭头形状</strong>：顺序图里实心箭头表示同步（等返回），开叉箭头表示异步（不等返回）。0.3 已经给过"叫人吃饭"的类比，这里只补一句工程判断：<strong>会阻塞调用方的是同步，会丢进队列的是异步</strong>——所以实时控制多用同步，通知类多用异步。</p>
+<h3>封装：三个必要条件</h3>
+<p>课件第 49 页把封装定义成"把数据和实现操作的代码集中起来放在对象内部"，并给出三个必要条件：</p>
+<ol>
+<li>有一个清晰的<strong>边界</strong>；</li>
+<li>有明确的<strong>接口</strong>；</li>
+<li>有<strong>受保护的内部实现</strong>。</li>
+</ol>
+<p><mark class="bubu">补</mark><strong>和 0.3 的分工</strong>：0.3 已经讲清了"封装 ≠ 信息隐藏"（封装是语言机制，信息隐藏是设计原则），这里补的是<strong>三个条件各自管什么</strong>——<strong>边界</strong>管"哪些数据和方法属于这个对象"；<strong>接口</strong>就是上一节图里的"界面"，是外界唯一能碰的地方；<strong>受保护</strong>管"实现的改动不外溢"。三者缺一：有边界无接口是"锁死"，有接口无保护是"纸糊的封装"。</p>
+<p><mark class="bubu">补</mark><strong>给一个可以当检查表的判据</strong>：把某个方法的实现整段换掉（只保留签名），调用方<strong>要不要改代码</strong>？不用改 = 封装合格；要改 = 说明内部细节漏到接口上了（比如方法名里带着 <code>sortByArrayIndex</code> 这种实现痕迹）。这个判据在第 6 讲的"信息隐藏"和第 10 讲的"可维护性"里都会再用一次。</p>
+<h3>继承：传递性与类等级</h3>
+<p>课件第 50 页：继承表示类与类之间<strong>一般与特殊</strong>的关系，模拟现实世界类之间的"遗传"；<strong>子（特殊）类可共享父（一般）类的属性和操作</strong>，也可以有自己的独特属性和操作；借助继承可以形成系统的<strong>层次化类结构</strong>（例子是"课程 → 公共课 / 专业课"）。</p>
+<p>第 51 页讲<strong>传递性</strong>：如果类 C 继承类 B、类 B 继承类 A，则类 C 继承类 A。这一页的示意图值得多看一眼——<strong>类 B 的实例 b1 里，同时存在"A 的实例变量"和"B 的实例变量"两块</strong>，即继承来的是对象体内真实的一部分状态，不是"复制了一份代码文本"。</p>
+<p><mark class="bubu">补</mark><strong>这解释了继承的一个隐性成本</strong>：父类每多一个字段，所有子类对象都跟着变大；父类的字段布局一改，子类的内存布局全部重排（这也是为什么很多语言不允许随便改已发布父类的字段）。第 6 讲说"继承是最强的耦合"，根子在这个结构里。</p>
+<p>第 52 页区分两种继承：<strong>单重继承</strong>（一个子类只有一个父类）与<strong>多重继承</strong>（子类拥有多个父类）。</p>
+<p><mark class="bubu">补</mark><strong>课件没讲但常考的那一问：为什么 Java 只支持单重继承？</strong> 多重继承会带来"菱形问题"——B、C 都继承 A 并各自覆盖同一个方法，D 同时继承 B 和 C 时，A 那份到底该用谁的？C++ 的解法是虚继承，Java 的解法是<strong>类只留单继承、把多继承的能力放到接口上</strong>。记住这个因果，比记"Java 不支持多继承"有用。</p>
+<h3>多态：三个特征之外，还有个"执行方式"</h3>
+<p>课件第 53 页给出多态的三个特征（0.3 已逐条列过，这里只提醒它们是<strong>同时成立</strong>的三个条件）：</p>
+<ol>
+<li>一个父类包含了一个被子类<strong>覆盖</strong>的方法；</li>
+<li>用<strong>父类的引用</strong>去引用其不同的子类对象；</li>
+<li>父类引用在调用被覆盖方法时，实际执行的是<strong>子类对象自己的</strong>版本。</li>
+</ol>
+<p>同一页还多给了一样东西，0.3 没写：<strong>多态的执行方式</strong>是"<strong>从具体子类开始，沿继承结构向上找，直至发现为止</strong>"。</p>
+<p><mark class="bubu">补</mark><strong>这句话是"方法查找"（method lookup）的朴素描述</strong>：先看子类有没有这个方法，有就用子类的；没有就往上找父类。所以"子类没覆盖"时行为退回父类版本——<strong>多态不会因为没覆盖而报错，只会"按父类的方式做"</strong>。C++ 的虚函数表、Java 的 <code>invokevirtual</code>，本质都是把这次"向上找"提前做成表。</p>
+<p>课件还给了多态的目的：增加灵活性、减少数据冗余、显著提高可重用性和可扩充性。</p>
+<p><mark class="bubu">补</mark><strong>把"目的"翻译成需求分析的语言</strong>：多态让"新增一种类型"变成"加一个子类"而不是"改所有分支判断"。需求阶段最容易出的问题是"把会变的东西写死在流程里"，而多态正是在设计阶段给"会变的部分"留的口子——第 7 讲的设计模式几乎全是这个口子的不同用法。</p>
+<h3>四个实例：引用、this 与两个误区</h3>
+<p>课件第 54–68 页用了五页代码和六页遥控器类比，就为讲清一件事：<strong>引用和对象是两个东西</strong>。</p>
+<p><strong>实例 1（第 54–58 页）：一个方法，三种结果。</strong> A、B、C 三个类，B、C 继承 A 并各自覆盖 <code>m1()</code>。第 55 页的图把对象内部摊开：<strong>B 对象里同时有"从 A 继承来的 m1()"和"自己覆盖的 m1()"两份</strong>，C 对象同理。于是同一个 <code>m1()</code> 消息发给 a、b、c，得到三种输出。</p>
+<p><mark class="bubu">补</mark><strong>这就是"多态"三个字的字面含义</strong>：同一个消息（形），不同的对象（态）。注意图上"继承来的那份"依然在对象里、依然可以被父类代码调到（<code>super.m1()</code>）——覆盖不是删除，是"优先用新的"。</p>
+<p><strong>实例 2（第 59–60 页）：<code>this</code> 指针指向谁。</strong> A 类里 <code>fun2()</code> 的方法体只有一句 <code>this.fun1();</code>，B 类覆盖了 <code>fun1()</code>。执行 <code>A a = new B(); a.fun2();</code> 时，控制台打印的是 <strong>B 版本</strong>的 <code>fun1()</code>。</p>
+<p><mark class="bubu">补</mark><strong>结论比代码重要</strong>：<code>this</code> 指的是"<strong>接收消息的那个对象</strong>"，不是"写下这行代码的类"。所以父类里写 <code>this.fun1()</code>，跑起来会落到子类的版本上——有了这一点，父类才能写出"骨架固定、细节交给子类"的代码。第 7 讲的<strong>模板方法模式</strong>就是这么来的：父类定流程，子类填步骤。</p>
+<p><strong>实例 3（第 60、62 页）：两个"误区"。</strong> 第 60 页先分清两个动作：<strong>对象声明</strong>是"为引用创建一个空间"（<code>Tester t1;</code>），<strong>对象生成</strong>是"创建一个类的实例，为它分配空间，并把地址赋给引用"（<code>t1 = new Tester();</code>）。第 62 页给了两段只差一个字的代码：</p>
+<pre><code>A a = new B();   B b = (B)a;   // 第一段：a 这个 A 类型引用，指向的是 B 类型对象
+A a = new A();   B b = (B)a;   // 第二段：a 指向的是 A 类型对象，却硬转成 B 类型引用
+</code></pre>
+<p>第一段能跑：向下转型后，<code>b</code> 有权利调用 B 中非共有的方法。第二段会出错：<code>b</code> 的声明是 B，编译器允许你发"调用 <code>b.fun3()</code>"的命令，但 <code>a</code> 实际指向的 A 对象体内根本没有 <code>fun3()</code> 这段代码。</p>
+<p>课件把结论写成一句必须背下来的话：</p>
+<blockquote>
+<p><strong>"引用"所能够调用的"方法"取决于"引用"的类型，而该"方法"如何具体实现取决于"对象"的类型。</strong></p>
+</blockquote>
+<p><mark class="bubu">补</mark><strong>在 Java 里，第二段是强转那一刻就抛 <code>ClassCastException</code></strong>（运行期类型检查），而不是等调用 <code>fun3()</code> 才炸；C++ 的 <code>static_cast</code> 不检查，属于未定义行为。课件写"就会出错"是对的，只是没说清出错时机——<strong>考试若问"什么时候发现"，答案取决于语言</strong>。</p>
+<p><strong>遥控器类比（第 63–68 页）</strong>：老遥控器—老空调、老遥控器—新空调、新遥控器—新空调、新遥控器—老空调，四种组合对应四种代码写法。0.3 已经给了那张四行表，这里只补"<strong>为什么</strong>"：</p>
+<ul>
+<li><strong>按钮在遥控器上</strong> → 编译器只检查"引用类型有没有这个方法"（编译期能调什么）；</li>
+<li><strong>功能在空调里</strong> → 运行时按对象的实际类型去找实现（运行期执行哪个）。</li>
+</ul>
+<p><strong>新遥控器配老空调出错</strong>，正是因为"名单上有、机器上没有"。</p>
+<h3>覆盖与重载：一字之差，两种绑定</h3>
+<p>课件第 69 页讲<strong>覆盖（Override）</strong>：子类增加或重新定义所继承的属性或方法，用新定义的覆盖父类的。代码里 B 继承 A 并重写了 <code>getValue()</code>——<strong>方法名相同、参数表相同、返回值类型相容</strong>。</p>
+<p>第 70 页讲<strong>重载（Overload）</strong>：一个类中有多个同名操作，但它们在<strong>操作数或操作数类型</strong>上有区别，系统根据实参调用不同方法。代码里 <code>A</code> 类有两个 <code>setValue</code>：<code>setValue(int agePara)</code> 和 <code>setValue(String namePara)</code>。</p>
+<p>第 72 页用 <code>+</code> 运算符收尾：同一个 <code>+</code>，两侧是整数时做加法，是字符串时做拼接。</p>
+<p><mark class="bubu">补</mark><strong>0.3 已经给了覆盖 vs 重载的对照表，这里补的是表上没有的那一列——绑定时机</strong>：</p>
 <table>
 <thead>
 <tr>
-<th>字段</th>
-<th>内容（POS 收银）</th>
+<th></th>
+<th>覆盖 Override</th>
+<th>重载 Overload</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>范围</td>
-<td>下一代 POS 系统</td>
+<td>绑定时机</td>
+<td><strong>运行期</strong>动态绑定（看对象）</td>
+<td><strong>编译期</strong>静态绑定（看参数）</td>
 </tr>
 <tr>
-<td>级别</td>
-<td>用户目标</td>
+<td>决定因素</td>
+<td>对象的实际类型</td>
+<td>实参的个数与类型</td>
 </tr>
 <tr>
-<td>主要参与者</td>
-<td>收银员</td>
+<td>返回类型</td>
+<td>必须相容（Java 允许协变返回）</td>
+<td><strong>不参与</strong>区分，只靠返回类型不同不构成重载</td>
 </tr>
 <tr>
-<td>涉众及其关注点</td>
-<td>收银员：准确快速完成收银；顾客：快速付款并拿到凭证以便退货……</td>
-</tr>
-<tr>
-<td>前置条件</td>
-<td>收银员已认证、顾客是超市会员</td>
-</tr>
-<tr>
-<td>后置条件</td>
-<td>正确更新库存、正确计算税金……</td>
-</tr>
-<tr>
-<td>主成功场景</td>
-<td>1. 顾客携带商品到收银台… n. 顾客付款，系统打印票据</td>
-</tr>
-<tr>
-<td>替换场景</td>
-<td>a. 信用卡额度不足要求退货；b. 信用卡无法识别要求退货……</td>
-</tr>
-<tr>
-<td>特殊需求</td>
-<td>90% 情况下刷卡响应 &lt; 30 秒；顾客能在 1 米内看清单价与累计金额</td>
-</tr>
-<tr>
-<td>技术与数据变元</td>
-<td>商品 ID 可扫描或键盘输入；支持中国/欧洲/日本三种编码标准</td>
-</tr>
-<tr>
-<td>发生频率</td>
-<td>可能 16 小时内不间断发生</td>
-</tr>
-<tr>
-<td>其它问题</td>
-<td>收银员下班后是否清点现金结账？未来是否 24 小时营业？</td>
+<td>限制</td>
+<td><code>final</code> / <code>static</code> / <code>private</code> 方法不能覆盖；访问权限不能收紧</td>
+<td>同一类内即可，和继承无关</td>
 </tr>
 </tbody>
 </table>
-<p><mark class="bubu">补</mark><strong>注意最后三行</strong>——"特殊需求"其实是非功能需求，"发生频率"是设计约束的输入（决定并发量），"其它问题"是留给下一轮讨论的开放项。<strong>一份好的用例描述不只描述功能，它顺手把质量需求和开放问题都钉在了纸面上。</strong></p>
-<div class="pager"><a class="pg prev" href="software-engineering-14.html"><span>← 上一节</span><b>1.4–2.2 需求从哪里来：获取方法与需求工程</b></a><a class="pg next" href="software-engineering-16.html"><span>下一节 →</span><b>3 需求分析过程、文档与评审</b></a></div>
+<p><mark class="bubu">补</mark><strong><code>+</code> 运算符这个例子值得多说一句</strong>：它说明"重载是编译期就把答案定死的"——写 <code>1 + 2</code> 和写 <code>"a" + "b"</code>，编译器在编译时就知道要调哪个版本，运行时没有"看情况"的余地。<strong>这也正好反过来印证多态</strong>：多态是运行期才定，重载是编译期就定，<strong>两者只是名字像，机制完全相反</strong>。</p>
+<h3>这一节在整门课里的位置</h3>
+<p>这十个概念是后面所有图的词汇表：第 5 讲的类图（类、属性、操作、六种关系）、对象图（实例）、状态图（状态 S 怎么迁移）、顺序图（消息，同步还是异步），全都是这一节的直接延伸；第 6 讲的内聚耦合、第 7 讲的设计模式，则是"用这套词汇把设计做好"的方法。</p>
+<p>如果只记两条，记这两条：</p>
+<ul>
+<li><strong>抽象方向</strong>：向上是抽象（对象 → 类），向下是实例化（类 → 对象）；需求阶段只做向上。</li>
+<li><strong>绑定时机</strong>：覆盖在运行期、重载在编译期；多态靠前者，语法糖靠后者。</li>
+</ul>
+<div class="pager"><a class="pg prev" href="software-engineering-14.html"><span>← 上一节</span><b>1.4–2.2 需求从哪里来：获取方法与需求工程</b></a><a class="pg next" href="software-engineering-16.html"><span>下一节 →</span><b>2.3–2.4 需求怎么描述：从自然语言到 UML 用例</b></a></div>
 </div>
 
 <script>

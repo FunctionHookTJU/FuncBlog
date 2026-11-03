@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>2.2 对象建模实战：从名词到 ATM 对象模型 · 软件工程讲义：全课程十讲</title>
+<title>2.1–2.4 三模型与五层次 · 软件工程讲义：全课程十讲</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
@@ -75,246 +75,158 @@
 <div class="sg">第 4 讲　需求分析基础</div>
 <a class="i" href="software-engineering-13.html">1.1–1.3 需求是什么：质量要求、特点与分类</a>
 <a class="i" href="software-engineering-14.html">1.4–2.2 需求从哪里来：获取方法与需求工程</a>
-<a class="i" href="software-engineering-15.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
-<a class="i" href="software-engineering-16.html">3 需求分析过程、文档与评审</a>
+<a class="i" href="software-engineering-15.html">2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态</a>
+<a class="i" href="software-engineering-16.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
+<a class="i" href="software-engineering-17.html">3 需求分析过程、文档与评审</a>
 <div class="sg">第 5 讲　软件分析</div>
-<a class="i" href="software-engineering-17.html">1 九种 UML 图与三个分析视角</a>
-<a class="i" href="software-engineering-18.html">2.1–2.4 三模型与五层次</a>
-<a class="i cur" data-h="s-1" href="software-engineering-19.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
-<a class="i" href="software-engineering-20.html">2.5–3 动态模型、功能模型与需求变更</a>
+<a class="i" href="software-engineering-18.html">1 九种 UML 图与三个分析视角</a>
+<a class="i cur" data-h="s-1" href="software-engineering-19.html">2.1–2.4 三模型与五层次</a>
+<a class="i" href="software-engineering-20.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
+<a class="i" href="software-engineering-21.html">2.5–3 动态模型、功能模型与需求变更</a>
 <div class="sg">第 6 讲　软件设计基础</div>
-<a class="i" href="software-engineering-21.html">1–2.2 设计概述与七条设计原则</a>
-<a class="i" href="software-engineering-22.html">2.2.2 模块化：内聚与耦合七级</a>
-<a class="i" href="software-engineering-23.html">3–4 面向对象设计、架构风格与设计评审</a>
+<a class="i" href="software-engineering-22.html">1–2.2 设计概述与七条设计原则</a>
+<a class="i" href="software-engineering-23.html">2.2.2 模块化：内聚与耦合七级</a>
+<a class="i" href="software-engineering-24.html">3–4 面向对象设计、架构风格与设计评审</a>
 <div class="sg">第 7 讲　架构、模式与界面</div>
-<a class="i" href="software-engineering-24.html">1 六种架构风格与选型</a>
-<a class="i" href="software-engineering-25.html">2–3 用户界面设计与详细设计工具</a>
-<a class="i" href="software-engineering-26.html">4 设计模式与 OO 实战五步</a>
+<a class="i" href="software-engineering-25.html">1 六种架构风格与选型</a>
+<a class="i" href="software-engineering-26.html">2–3 用户界面设计与详细设计工具</a>
+<a class="i" href="software-engineering-27.html">4 设计模式与 OO 实战五步</a>
 <div class="sg">第 8 讲　编写代码</div>
-<a class="i" href="software-engineering-27.html">1–2 程序设计语言与结构化程序设计</a>
-<a class="i" href="software-engineering-28.html">3 调试、求助与程序设计风格</a>
+<a class="i" href="software-engineering-28.html">1–2 程序设计语言与结构化程序设计</a>
+<a class="i" href="software-engineering-29.html">3 调试、求助与程序设计风格</a>
 <div class="sg">第 9 讲　软件测试</div>
-<a class="i" href="software-engineering-29.html">1–2.4 测试是什么与测试过程</a>
-<a class="i" href="software-engineering-30.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
-<a class="i" href="software-engineering-31.html">3.5–4 黑盒测试、测试过程与组织</a>
+<a class="i" href="software-engineering-30.html">1–2.4 测试是什么与测试过程</a>
+<a class="i" href="software-engineering-31.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
+<a class="i" href="software-engineering-32.html">3.5–4 黑盒测试、测试过程与组织</a>
 <div class="sg">第 10 讲　软件维护与演化</div>
-<a class="i" href="software-engineering-32.html">1 逻辑老化与四种维护</a>
-<a class="i" href="software-engineering-33.html">2–4 维护技术、管理与可维护性</a>
+<a class="i" href="software-engineering-33.html">1 逻辑老化与四种维护</a>
+<a class="i" href="software-engineering-34.html">2–4 维护技术、管理与可维护性</a>
 <div class="sg">附录</div>
-<a class="i" href="software-engineering-34.html">附录 A　术语中英对照表</a>
-<a class="i" href="software-engineering-35.html">附录 B　一页速查表</a>
-<a class="i" href="software-engineering-36.html">附录 C　FAQ 与易错点清单</a>
+<a class="i" href="software-engineering-35.html">附录 A　术语中英对照表</a>
+<a class="i" href="software-engineering-36.html">附录 B　一页速查表</a>
+<a class="i" href="software-engineering-37.html">附录 C　FAQ 与易错点清单</a>
   </nav>
 </aside>
 
 <div class="wrap">
 
-<h2 id="s-1">2.2 对象建模实战：从名词到 ATM 对象模型</h2>
-<p>课件用第 58–84 页讲一个完整的银行 ATM 案例。这一节把方法抽出来，案例放在后面当演示。</p>
-<h3>第一步：找出候选的类—&amp;—对象</h3>
-<p>课件第 59 页给了"客观事物的五类"，这是找类的第一把钥匙：</p>
-<table>
-<thead>
-<tr>
-<th>类别</th>
-<th>例子</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>① 可感知的物理实体</td>
-<td>飞机、汽车、书</td>
-</tr>
-<tr>
-<td>② 人或组织的角色</td>
-<td>医生、教师、雇主、计算机系</td>
-</tr>
-<tr>
-<td>③ 应该记忆的事件</td>
-<td>飞行、演出、交通事故</td>
-</tr>
-<tr>
-<td>④ 两个或多个对象的相互作用（常有交易或接触性质）</td>
-<td>购买、纳税、结婚</td>
-</tr>
-<tr>
-<td>⑤ 需要说明的概念</td>
-<td>政策、保险政策、版税法</td>
-</tr>
-</tbody>
-</table>
-<p><mark class="bubu">补</mark><strong>第 ③④ 类是最容易漏的</strong>。新手建模往往只找"名词性实体"（人、设备、单据），漏掉"事件"——比如航空系统会漏掉"航班"（事件），只留下"飞机"和"机场"；电商系统会漏掉"订单"（事件），只留下"商品"和"用户"。<strong>判断标准：这件事有没有自己的属性（时间、金额、状态）？有，它就是类。</strong></p>
-<p><strong>第二把钥匙：名词动词法</strong>（PPT 第 60 页）：</p>
-<pre><code>问题陈述 ──选取名词──→ 暂定的对象类 ──排除假类──→ 对象类
+<h2 id="s-1">2.1–2.4 三模型与五层次</h2>
+<h3>2.1 什么是面向对象分析（OOA）</h3>
+<p>课件第 52 页的一句话定义：</p>
+<blockquote>
+<p>面向对象分析，就是<strong>抽取和整理用户需求，并建立问题域精确模型</strong>的过程。</p>
+</blockquote>
+<p>信息来源有三条：<strong>需求陈述、应用领域的专业知识、关于客观世界的常识</strong>。</p>
+<p><mark class="bubu">补</mark><strong>第三条"常识"常被忽略，但它最救命</strong>。举个浅例：给图书馆系统建模，需求陈述里没写"一本书可以被借多次"，但常识告诉你"同一本书会被不同人先后借走"——于是你会建出"借阅记录"这个类。<strong>只读需求文档的人建不出这个类，因为他不知道业务是怎么发生的。</strong> 这就是第 4 讲"现场观摩"为什么重要。</p>
+<h3>2.2 三个子模型：对象、动态、功能</h3>
+<p>课件第 53 页的核心图是这一讲的结构骨架：</p>
+<pre><code>                分析模型
+        ┌───────────┼───────────┐
+    对象模型       动态模型      功能模型
+   （静态结构）   （交互次序）  （数据变换）
+        │            │            │
+      类图         状态图        数据流图
+                   顺序图
 </code></pre>
-<p>具体做法是：把需求陈述里</p>
-<ul>
-<li><strong>名词</strong> → 类—&amp;—对象的候选者</li>
-<li><strong>形容词</strong> → 确定属性的线索</li>
-<li><strong>动词</strong> → 服务的候选者</li>
-</ul>
-<p><strong>筛选：五条删类标准</strong>（PPT 第 61 页），这是最实用的部分：</p>
+<p>三个模型的分工（PPT 第 55 页），这张表必须记牢：</p>
 <table>
 <thead>
 <tr>
-<th>标准</th>
-<th>处理</th>
+<th>模型</th>
+<th>描述什么</th>
+<th>一句话</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>冗余类</strong></td>
-<td>两个类表述同一信息，保留<strong>最富有描述能力</strong>的那个</td>
+<td><strong>对象模型</strong></td>
+<td>静态结构</td>
+<td>定义了<strong>做事情的实体</strong>——静态数据结构</td>
 </tr>
 <tr>
-<td><strong>不相干的类</strong></td>
-<td>与问题无关的，删掉</td>
+<td><strong>动态模型</strong></td>
+<td>交互次序</td>
+<td>规定<strong>什么时候做</strong>——执行操作</td>
 </tr>
 <tr>
-<td><strong>模糊类</strong></td>
-<td>边界定义模糊或范围太广的，删掉（类必须是确定的）</td>
-</tr>
-<tr>
-<td><strong>属性</strong></td>
-<td>某些名词其实是别的对象的属性 → 从类里删掉（但若该性质独立性很重要，应升格为类）</td>
-</tr>
-<tr>
-<td><strong>操作</strong></td>
-<td>名词带动作含义 → 不是类；但具有自身性质且需独立存在的操作，应描述成类</td>
+<td><strong>功能模型</strong></td>
+<td>数据变换</td>
+<td>系统应该<strong>做什么</strong>——数值变化</td>
 </tr>
 </tbody>
 </table>
-<p><mark class="bubu">补</mark><strong>"属性 vs 类"是这里最难的判断</strong>，课件给了一句很有用的判据：<strong>"如果某一性质的独立性很重要，就应该把它归属到类，而不作为属性。"</strong> 举例：</p>
-<ul>
-<li>"颜色" → 通常是商品的<strong>属性</strong>（一个字符串）；</li>
-<li>但如果系统要按色系检索、要做色卡管理、要维护颜色与季节的关系 → "颜色"就该是<strong>类</strong>。</li>
-<li>"地址" → 通常是一个字符串属性；但如果要按省市区统计、要算运费 → 它是<strong>类</strong>（甚至是一棵层级结构）。</li>
-</ul>
-<h3>类的命名：三条规则</h3>
-<p>课件第 62 页，规则简单但很见功力：</p>
-<ol>
-<li><strong>使用标准术语</strong>："交通信号灯"比"信号单元"好；"传送带"比"零件传送设备"好；</li>
-<li><strong>使用具有确切含义的名词</strong>："库房"比"房屋"或"存物场所"更确切；</li>
-<li><strong>必要时用名词短语</strong>："最小的领土单元"、"公司员工"。</li>
-</ol>
-<p><mark class="bubu">补</mark><strong>命名不是小事</strong>。类名是这张图、这份文档、这段代码里出现频率最高的词，一个含糊的类名会让后面所有讨论都含糊。第 8 讲"程序设计风格"里讲变量命名，用的是同一个道理。</p>
-<h3>第二步：定义属性与服务</h3>
-<p><strong>属性怎么找</strong>（PPT 第 63 页），课件给了七个提问角度，非常好用：</p>
-<ul>
-<li>按<strong>一般常识</strong>，该对象应具有哪些属性？</li>
-<li>在<strong>当前问题域</strong>中，该对象应具有哪些属性？</li>
-<li>根据<strong>系统责任</strong>的要求，该对象应具有哪些属性？</li>
-<li>建立该对象是为了<strong>保存和管理哪些信息</strong>？</li>
-<li>对象为了在<strong>服务中实现功能</strong>，需要增设哪些属性？</li>
-<li>是否需要增设属性来<strong>区别对象的不同状态</strong>？</li>
-<li>用什么属性来表示对象的<strong>整体—部分联系和实例连接</strong>？</li>
-</ul>
-<p><mark class="bubu">补</mark><strong>第二条和第三条是配套的</strong>：同一个"学生"，在选课系统里要有"已修学分"，在门禁系统里只要"通行权限"——<strong>属性取决于这个系统要它承担什么责任</strong>，不是"现实里它有什么"。</p>
-<p><strong>服务怎么找</strong>（PPT 第 64 页）：服务是描述对象动态特征（行为）的一个操作序列，有名字、参数表、可见性（<code>+</code> 公有、<code>#</code> 受保护、<code>-</code> 私有）和返回类型。分两类：</p>
-<ul>
-<li><strong>"做"型</strong>：自己完成某件任务；触发其他对象执行动作；控制和协调其他对象内的活动。</li>
-<li><strong>"知道"型</strong>：知道自己的属性；知道与自己相关联对象的信息；知道自己派生或计算出来的事物。</li>
-</ul>
-<p><mark class="bubu">补</mark><strong>"知道型"服务是最容易被忽略的一类</strong>，但它极其常见：<code>getBalance()</code>、<code>isOverdue()</code>、<code>calculateTotal()</code> 都是"知道型"——它们不改状态，只回答一个问题。<strong>如果一个类只有 setter 没有"知道型"方法，说明这个类的职责还没想清楚。</strong></p>
-<h3>第三步：定义结构（四种关系）</h3>
-<p>课件第 65 页把对象与外部的关系归成四种，这是把零散的类连成模型的关键：</p>
-<table>
-<thead>
-<tr>
-<th>关系</th>
-<th>含义</th>
-<th>用什么表示</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>一般—特殊关系</strong></td>
-<td>分类关系（继承）</td>
-<td>一般—特殊结构</td>
-</tr>
-<tr>
-<td><strong>整体—部分关系</strong></td>
-<td>组成关系</td>
-<td>整体—部分结构（组装）</td>
-</tr>
-<tr>
-<td><strong>静态连接关系</strong></td>
-<td>通过对象属性反映的联系</td>
-<td><strong>实例连接</strong></td>
-</tr>
-<tr>
-<td><strong>动态连接关系</strong></td>
-<td>对象行为之间的依赖</td>
-<td><strong>消息连接</strong></td>
-</tr>
-</tbody>
-</table>
-<p><mark class="bubu">补</mark><strong>注意这里用的是"结构"而不是 UML 的"关系"</strong>，因为这是传统的 OOA 术语。对照关系是：一般—特殊 ≈ 泛化；整体—部分 ≈ 聚合/组合；实例连接 ≈ 关联；消息连接 ≈ 依赖/顺序图里的消息。<strong>考试如果同时出现两套术语，按这个表换算即可。</strong></p>
-<h3>ATM 案例：七步走完</h3>
-<p><strong>第 1 步：找出关键词</strong>（PPT 第 69–71 页）</p>
-<p>从 ATM 需求陈述中提取名词：银行、自动取款机、系统、中央计算机、分行计算机、柜员终端、网络、总行、分行、软件、成本、市、街道、营业厅、储蓄所、柜员、储户、现金、支票、账户、事务、现金兑换卡、余额、磁卡、分行代码、卡号、用户、副本、信息、密码、类型、取款额、账单、访问。</p>
-<p>初步筛选后剩下 11 个：<strong>ATM、中央计算机、分行计算机、柜员终端、总行、分行、柜员、储户、账户、事务、现金兑换卡</strong>。</p>
-<p><mark class="bubu">补</mark><strong>被删掉的（软件、成本、市、街道、营业厅、副本、信息、访问……）几乎全是"属性、环境、或系统本身"</strong>。这一步的动作就是前面"五条删类标准"的实战。</p>
-<p><strong>第 2 步：确定关联</strong>（PPT 第 72 页）</p>
-<p>关联的三个来源：①直接提取动词短语（"储户拥有账户"→ 拥有）；②需求陈述中隐含的关联；③根据问题域知识得出的关联。</p>
-<p>ATM 初始对象图上出现的关联有：组成、保管、拥有、访问、通信、输入、修改、授权、雇佣，并且标上了多重性（<code>1+</code>、<code>1</code>、<code>*</code>）。</p>
 <figure class="fig">
-<a href="../../assets/img/se/ch05_p073.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p073.png" alt="ATM 系统的原始对象图"></a>
-<figcaption><b>图 5-7　ATM 系统的原始对象图</b>　（PPT 第 73 页）这就是「第 2 步」画出来的第一版：11 个类（总行、分行、中央计算机、分行计算机、柜员终端、柜员、储户、账户、事务、现金兑换卡、ATM）用带多重性的连线连起来，线旁标着组成/保管/拥有/访问/通信/输入/修改/授权/雇佣。<strong>看图先数连线，再看每条线两端的重数</strong>——正文说「关联能帮助发现漏掉的类」，就是因为画线时不得不追问「这两个东西是一对多还是多对多」。</figcaption>
+<a href="../../assets/img/se/ch05_p053.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p053.png" alt="面向对象分析模型：三个子模型"></a>
+<figcaption><b>图 5-6　面向对象分析模型：三个子模型</b>　（PPT 第 53 页）正文分工表的图源。最上面「面向对象模型」分出三条：对象模型（静态结构）、动态模型（交互次序）、功能模型（数据变换），每条下面挂对应图（类图 / 状态图·顺序图 / 数据流图）。<strong>记住这个层级：对象模型是主干，另两个是它的两个侧面。</strong></figcaption>
 </figure>
 
-<p><mark class="bubu">补</mark><strong>"关联能帮助发现漏掉的类"</strong>：课件说得很好——"分析和确定关联，能促使分析员考虑问题域的边界情况，有助于发现那些尚未发现的类"。比如你画到"柜员—柜员终端"，就会想"柜员怎么登录？"于是发现"柜员事务"这个类。</p>
-<p><strong>第 3 步：划分主题</strong>（PPT 第 74–75 页）</p>
-<p>把 ATM 系统划成三个主题：<strong>总行、分行、ATM</strong>。课件还诚实地补了一句："实际上，ATM 系统规模并不大，也可以不划分主题层。"</p>
-<p><strong>第 4 步：确定属性</strong>（PPT 第 76 页）</p>
-<p>属性确定分<strong>分析</strong>（用名词词组找，如"汽车的颜色""光标的位置"）和<strong>选择</strong>（删掉不正确/不必要的）两步。选择时要防六种错误：</p>
-<ol>
-<li>误把对象当属性；</li>
-<li>误把链属性当属性（本该是关联上的属性，比如"借阅日期"属于"借阅"这条连接，不属于"书"也不属于"人"）；</li>
-<li>误把限定当属性；</li>
-<li>误把内部状态当属性；</li>
-<li>过于细化；</li>
-<li>存在不一致的属性。</li>
-</ol>
-<p><mark class="bubu">补</mark><strong>第 2 条"链属性"是最经典的一类错误</strong>。学生借书，借书日期既不属于学生也不属于书，它属于"学生—书"这条关联。<strong>遇到"只属于某次关系、不属于两端"的属性，就该把这条关系升格为一个类（借阅记录）</strong>——这正是后面"反复修改"要做的事。</p>
-<p><strong>第 5 步：识别继承关系</strong>（PPT 第 78 页）</p>
-<p>两条路径：</p>
-<ul>
-<li><strong>自底向上</strong>：抽象出现有类的共同性质，泛化出父类——模拟<strong>归纳</strong>思维；</li>
-<li><strong>自顶向下</strong>：把现有类细化成更具体的子类——模拟<strong>演绎</strong>思维。</li>
-</ul>
-<p>课件用"学生"举例演示了四轮迭代：先建研究生/本科生 → 归纳出"学生" → 再加专科生 → 再归纳出"大学生"（把本科与专科的共同点提上来）。</p>
-<p><mark class="bubu">补</mark><strong>这个例子说明继承是要"迭代出来"的，不是一次想清楚</strong>。第一版往往把公共属性重复写在每个子类里（学号、姓名、性别），第二版才发现该提上去。<strong>判断标准：如果两个类有三个以上相同的属性，就该考虑抽父类。</strong></p>
-<p><strong>第 6 步：反复修改</strong>（PPT 第 80–81 页）</p>
-<p>课件给了三处具体修改，每一处都有理由，非常值得学：</p>
+<p>课件特别强调：</p>
+<blockquote>
+<p>在任何情况下，<strong>对象模型始终都是最重要、最基础、最核心的</strong>，它描述了现实世界中的"类—&amp;—对象"以及它们之间的关系，表示目标系统的静态数据结构。</p>
+</blockquote>
+<p><mark class="bubu">补</mark><strong>为什么对象模型最核心？</strong> 因为另外两个模型都<strong>挂在</strong>它上面：状态图描述的是"某个类对象的状态变化"，数据流图里的每个处理框都要"对应到一个对象上的操作"。<strong>没有类，状态图和 DFD 都无处安放。</strong> 这也解释了第 5 讲的实战顺序：先建概念模型，再建用例模型，再鲁棒分析，最后交互建模。</p>
+<h3>2.3 对象模型的五个层次</h3>
+<p>课件第 56 页给出一个很有教学价值的分解：大型系统的对象模型由<strong>五个层次</strong>组成：</p>
 <table>
 <thead>
 <tr>
-<th>修改</th>
-<th>理由</th>
+<th>层次</th>
+<th>英文</th>
+<th>内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>把"现金兑换卡"<strong>拆成</strong>"卡权限"和"现金兑换卡"两个类</td>
-<td>它有两个相对独立的功能：既是鉴别权限的卡，又是获取分行代码和卡号的载体。拆开使每个类功能更单一</td>
+<td><strong>主题层</strong></td>
+<td>subject layer</td>
+<td>把大模型分解成若干概念范畴（主题）</td>
 </tr>
 <tr>
-<td>确认"事务"<strong>应当作为类</strong>（不是数据库事务，是客户办一次业务）</td>
-<td>一个事务包含对账户的若干次更新（取款/存款/查询），且有自己属性（类型、金额）</td>
+<td><strong>结构层</strong></td>
+<td>struct layer</td>
+<td>类之间的关系（分类结构、组装结构）</td>
 </tr>
 <tr>
-<td>把"分行"与"分行计算机"<strong>合并</strong></td>
-<td>它们在问题域中是一体的，分开建类只会增加无意义的通信</td>
+<td><strong>类—&amp;—对象层</strong></td>
+<td>class &amp; object layer</td>
+<td>类边界、实例边界</td>
+</tr>
+<tr>
+<td><strong>属性层</strong></td>
+<td>attribute layer</td>
+<td>属性、实例连接</td>
+</tr>
+<tr>
+<td><strong>服务层</strong></td>
+<td>service layer</td>
+<td>服务、消息</td>
 </tr>
 </tbody>
 </table>
-<p><mark class="bubu">补</mark><strong>这三处修改分别对应三条设计直觉</strong>：①一个类有两个独立职责 → 拆（这就是后来的"单一职责原则"，第 6 讲）；②有属性、有生命周期的事件 → 建类；③现实中不可分的东西 → 不要硬拆。<strong>它们是"内聚"概念在分析阶段的预演。</strong></p>
-<figure class="fig">
-<a href="../../assets/img/se/ch05_p081.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch05_p081.png" alt="修改后的 ATM 对象模型"></a>
-<figcaption><b>图 5-8　修改后的 ATM 对象模型</b>　（PPT 第 81 页）把这张和图 5-7 对着看，就能看出「反复修改」改了什么：现金兑换卡被拆成「卡权限」与「现金兑换卡」，「分行」与「分行计算机」合并，事务类补上了自己的属性。<strong>同一系统的两版对象图并排放，是本章最直观的一课：模型不是一次画对的。</strong></figcaption>
-</figure>
-<div class="pager"><a class="pg prev" href="software-engineering-18.html"><span>← 上一节</span><b>2.1–2.4 三模型与五层次</b></a><a class="pg next" href="software-engineering-20.html"><span>下一节 →</span><b>2.5–3 动态模型、功能模型与需求变更</b></a></div>
+<p>课件还把这五个层次和软件系统的四个部分对应起来：</p>
+<pre><code>问题论域部分        人机交互部分
+任务管理部分        数据管理部分
+</code></pre>
+<p><mark class="bubu">补</mark><strong>为什么要有"主题层"？</strong> 课件给了心理学依据：<strong>Miller 的 7±2 原则</strong>（人的短期记忆一次只能装 5–9 个对象）。一个 ATM 系统有十几个类，还能一眼看完；一个银行核心系统有几百个类，必须划分成"总行""分行""ATM"这样的主题，否则没人能读懂。<strong>主题层不是为了机器，是为了人的注意力。</strong></p>
+<p><mark class="bubu">补</mark>这条原则和第 6 讲"模块化的分解数量"是同一件事的两面：<strong>分解让人能理解，但分解过头会增加接口成本</strong>——所以主题的数量要控制在"一眼能看完"的量级。</p>
+<h3>2.4 构建对象模型的过程</h3>
+<p>课件第 57 页给了一条完整的活动链，这是第 5 讲实战（ATM）的剧本：</p>
+<pre><code>建立用况图 → 发现对象 → 定义属性与服务 → 建立结构与连接
+          → 建立交互图/状态图/活动图 → 原型开发 → 详细说明 → 建立类图
+</code></pre>
+<p>对应的五个主要活动（PPT 第 57 页下半部分）：</p>
+<ol>
+<li>找出类—&amp;—对象；</li>
+<li>定义属性；</li>
+<li>定义服务；</li>
+<li>识别结构；</li>
+<li>识别主题；</li>
+<li>反复修改。</li>
+</ol>
+<p><mark class="bubu">补</mark><strong>注意最后一条"反复修改"不是客气话，而是方法的一部分。</strong> 课件在后面 ATM 案例里专门用一节讲"反复修改"（把"现金兑换卡"拆成两个类、把"分行"和"分行计算机"合并）——<strong>第一版的模型一定是错的，建模的过程就是发现第一版错在哪的过程。</strong></p>
+<h3>一个容易被忽略的方法论要点</h3>
+<p><mark class="bubu">补</mark><strong>面向对象分析的产物是"问题域的精确模型"，不是"软件的架构"。</strong> 这一点在考试里经常设陷阱：问"分析阶段应该画什么图"，答案是用例图、概念类图（领域类图）、顺序图、状态图、活动图——<strong>不包括</strong>构件图、部署图、包图这些偏实现的图。判断标准很简单：<strong>如果这张图上出现了"数据库""服务器""接口协议"这类词，它就不是分析阶段的产物。</strong></p>
+<div class="pager"><a class="pg prev" href="software-engineering-18.html"><span>← 上一节</span><b>1 九种 UML 图与三个分析视角</b></a><a class="pg next" href="software-engineering-20.html"><span>下一节 →</span><b>2.2 对象建模实战：从名词到 ATM 对象模型</b></a></div>
 </div>
 
 <script>

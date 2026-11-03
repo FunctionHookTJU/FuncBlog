@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3.5–4 黑盒测试、测试过程与组织 · 软件工程讲义：全课程十讲</title>
+<title>3.1–3.4 白盒测试：逻辑覆盖与基本路径 · 软件工程讲义：全课程十讲</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
@@ -75,554 +75,213 @@
 <div class="sg">第 4 讲　需求分析基础</div>
 <a class="i" href="software-engineering-13.html">1.1–1.3 需求是什么：质量要求、特点与分类</a>
 <a class="i" href="software-engineering-14.html">1.4–2.2 需求从哪里来：获取方法与需求工程</a>
-<a class="i" href="software-engineering-15.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
-<a class="i" href="software-engineering-16.html">3 需求分析过程、文档与评审</a>
+<a class="i" href="software-engineering-15.html">2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态</a>
+<a class="i" href="software-engineering-16.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
+<a class="i" href="software-engineering-17.html">3 需求分析过程、文档与评审</a>
 <div class="sg">第 5 讲　软件分析</div>
-<a class="i" href="software-engineering-17.html">1 九种 UML 图与三个分析视角</a>
-<a class="i" href="software-engineering-18.html">2.1–2.4 三模型与五层次</a>
-<a class="i" href="software-engineering-19.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
-<a class="i" href="software-engineering-20.html">2.5–3 动态模型、功能模型与需求变更</a>
+<a class="i" href="software-engineering-18.html">1 九种 UML 图与三个分析视角</a>
+<a class="i" href="software-engineering-19.html">2.1–2.4 三模型与五层次</a>
+<a class="i" href="software-engineering-20.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
+<a class="i" href="software-engineering-21.html">2.5–3 动态模型、功能模型与需求变更</a>
 <div class="sg">第 6 讲　软件设计基础</div>
-<a class="i" href="software-engineering-21.html">1–2.2 设计概述与七条设计原则</a>
-<a class="i" href="software-engineering-22.html">2.2.2 模块化：内聚与耦合七级</a>
-<a class="i" href="software-engineering-23.html">3–4 面向对象设计、架构风格与设计评审</a>
+<a class="i" href="software-engineering-22.html">1–2.2 设计概述与七条设计原则</a>
+<a class="i" href="software-engineering-23.html">2.2.2 模块化：内聚与耦合七级</a>
+<a class="i" href="software-engineering-24.html">3–4 面向对象设计、架构风格与设计评审</a>
 <div class="sg">第 7 讲　架构、模式与界面</div>
-<a class="i" href="software-engineering-24.html">1 六种架构风格与选型</a>
-<a class="i" href="software-engineering-25.html">2–3 用户界面设计与详细设计工具</a>
-<a class="i" href="software-engineering-26.html">4 设计模式与 OO 实战五步</a>
+<a class="i" href="software-engineering-25.html">1 六种架构风格与选型</a>
+<a class="i" href="software-engineering-26.html">2–3 用户界面设计与详细设计工具</a>
+<a class="i" href="software-engineering-27.html">4 设计模式与 OO 实战五步</a>
 <div class="sg">第 8 讲　编写代码</div>
-<a class="i" href="software-engineering-27.html">1–2 程序设计语言与结构化程序设计</a>
-<a class="i" href="software-engineering-28.html">3 调试、求助与程序设计风格</a>
+<a class="i" href="software-engineering-28.html">1–2 程序设计语言与结构化程序设计</a>
+<a class="i" href="software-engineering-29.html">3 调试、求助与程序设计风格</a>
 <div class="sg">第 9 讲　软件测试</div>
-<a class="i" href="software-engineering-29.html">1–2.4 测试是什么与测试过程</a>
-<a class="i" href="software-engineering-30.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
-<a class="i cur" data-h="s-1" href="software-engineering-31.html">3.5–4 黑盒测试、测试过程与组织</a>
+<a class="i" href="software-engineering-30.html">1–2.4 测试是什么与测试过程</a>
+<a class="i cur" data-h="s-1" href="software-engineering-31.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
+<a class="i" href="software-engineering-32.html">3.5–4 黑盒测试、测试过程与组织</a>
 <div class="sg">第 10 讲　软件维护与演化</div>
-<a class="i" href="software-engineering-32.html">1 逻辑老化与四种维护</a>
-<a class="i" href="software-engineering-33.html">2–4 维护技术、管理与可维护性</a>
+<a class="i" href="software-engineering-33.html">1 逻辑老化与四种维护</a>
+<a class="i" href="software-engineering-34.html">2–4 维护技术、管理与可维护性</a>
 <div class="sg">附录</div>
-<a class="i" href="software-engineering-34.html">附录 A　术语中英对照表</a>
-<a class="i" href="software-engineering-35.html">附录 B　一页速查表</a>
-<a class="i" href="software-engineering-36.html">附录 C　FAQ 与易错点清单</a>
+<a class="i" href="software-engineering-35.html">附录 A　术语中英对照表</a>
+<a class="i" href="software-engineering-36.html">附录 B　一页速查表</a>
+<a class="i" href="software-engineering-37.html">附录 C　FAQ 与易错点清单</a>
   </nav>
 </aside>
 
 <div class="wrap">
 
-<h2 id="s-1">3.5–4 黑盒测试、测试过程与组织</h2>
-<h3>3.5 黑盒测试</h3>
-<p><strong>思想</strong>（PPT 第 83 页）：根据已知的<strong>程序功能和性能</strong>（而非内部细节）设计测试用例，检验程序的每个功能和性能是否正常。依据是"程序的功能和性能描述"，特点是"知道功能，不必了解内部结构和处理细节"。</p>
-<p><strong>黑盒能发现的五类错误</strong>（PPT 第 84 页）：</p>
-<ol>
-<li>不正确或遗漏的<strong>功能</strong>；</li>
-<li><strong>界面</strong>错误；</li>
-<li><strong>数据结构或外部数据库访问</strong>错误；</li>
-<li><strong>性能</strong>错误；</li>
-<li><strong>初始化和终止条件</strong>错误。</li>
-</ol>
-<p><strong>两个优点</strong>（PPT 第 85 页），这两句常被拿来当简答题：</p>
+<h2 id="s-1">3.1–3.4 白盒测试：逻辑覆盖与基本路径</h2>
+<h3>3.1 白盒与黑盒的分界</h3>
+<p>课件第 58 页给的定义极简，但判据很清楚：</p>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>依据</th>
+<th>盒子里是什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>白盒测试</strong></td>
+<td>基于程序<strong>内部的执行流程</strong>设计测试用例</td>
+<td>打开盒子，看结构</td>
+</tr>
+<tr>
+<td><strong>黑盒测试</strong></td>
+<td>基于程序的<strong>外在功能和接口</strong>设计测试用例</td>
+<td>关上盒子，只看功能</td>
+</tr>
+</tbody>
+</table>
+<p>这里的"盒子"对应<strong>基本模块单元</strong>（类方法、函数、过程）——这是测试的基本对象。</p>
+<h3>3.2 为什么要"覆盖"</h3>
+<p>课件第 60 页给了一段很有说服力的说理：</p>
+<blockquote>
+<p>逻辑错误和不正确的假设都会和正确的路径执行成反比。
+我们总是相信路径会被执行，但现实总是与直觉相悖。
+排版印刷的错误是随机的，那么没有测试的路径偶尔也会被运行。</p>
+</blockquote>
+<p><mark class="bubu">补</mark><strong>这段话在说一件事</strong>：<strong>没被测试执行的代码 = 未知代码</strong>。它可能从来没跑过，也可能在某次真实使用中突然跑到并崩溃。更糟的是"偶尔跑到"——这种缺陷极难复现（第 8 讲的三类卡壳情形之一）。<strong>所以覆盖的目的不只是"验证这条路径对不对"，更是"确认这条路径至少能跑通"。</strong></p>
+<p><strong>白盒测试的两个基本问题</strong>（PPT 第 61 页）：</p>
 <ul>
-<li>黑盒测试<strong>与软件如何实现无关</strong>——如果实现发生变化，测试用例仍然可以使用；</li>
-<li>黑盒测试用例的开发<strong>可以与软件实现并行进行</strong>，能够缩短开发周期。</li>
+<li>如何设计测试用例？→ 依据<strong>内部执行流程</strong>生成测试数据；</li>
+<li>设计多少测试用例？→ 遵循<strong>覆盖原则</strong>。</li>
 </ul>
-<p><mark class="bubu">补</mark><strong>第 1 条是黑盒最大的战略价值</strong>：需求不变、实现重写，白盒用例全部作废，黑盒用例原封不动。<strong>第 2 条解释了为什么测试计划能在需求阶段就定</strong>（第 3 讲那张瀑布表）：因为黑盒用例只需要需求，不需要代码。</p>
-<p><strong>四种常用技术</strong>（PPT 第 86 页）：等价分类法、边界值分析、错误猜测法、因果图法。</p>
-<h3>3.6 等价分类法</h3>
-<p><strong>思想</strong>（PPT 第 87 页）：把输入数据集合按输入条件划分为若干<strong>等价类</strong>；每个等价类对输入条件而言是一组有效或无效的输入；<strong>为每个等价类设计一个测试用例</strong>。</p>
-<p>优点：<strong>减少测试次数，不丢失发现错误的机会</strong>——因为同一等价类中的数据"具有相同的测试特征"。</p>
-<p><strong>两类等价类</strong>（PPT 第 88 页）：</p>
+<p>四种覆盖准则：<strong>语句覆盖、分支（判定）覆盖、路径覆盖、基本路径覆盖</strong>。</p>
+<h3>3.3 逻辑覆盖法：五种标准，逐级加严</h3>
+<p>课件第 62–77 页用一个统一的例子贯穿五种覆盖标准。这个例子必须能自己推一遍：</p>
+<pre><code class="language-c">// 输入 A, B, X；输出 A, B, X
+if ((A &gt; 1) &amp;&amp; (B == 0))   X = X / A;      // 判定（一）
+if ((A == 2) || (X &gt; 1))   X = X + 1;      // 判定（二）
+</code></pre>
+<p>流程图上的四个端点：a（入口）、b（判定一取假）、c（判定一取真，执行 X=X/A）、d（判定二取真，执行 X=X+1）、e（出口）。四条可能路径：<strong>L1 = a-c-e</strong>、<strong>L2 = a-b-d</strong>、<strong>L3 = a-b-e</strong>、<strong>L4 = a-c-d</strong>。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch09_p065.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p065.png" alt="语句覆盖：流程图与用例"></a>
+<figcaption><b>图 9-4　语句覆盖：流程图与用例</b>　（PPT 第 65 页）图上画的就是那两行 if 对应的流程图（a/b/c/d/e 五个端点），右侧列出四条路径 L1~L4，下方给出满足语句覆盖的用例 (2,0,4) 与 (2,0,3)。<strong>对照看：这两个用例都走 L1（a-c-e）</strong>，四条语句各执行一次——这正是语句覆盖「最弱」的地方：它压根没碰到 b、d 两条边。</figcaption>
+</figure>
+
+<p>四个条件记作：判定（一）含 <code>A&gt;1</code>、<code>B==0</code>；判定（二）含 <code>A==2</code>、<code>X&gt;1</code>。</p>
 <table>
 <thead>
 <tr>
-<th>类型</th>
-<th>定义</th>
-<th>用途</th>
+<th>覆盖标准</th>
+<th>要求</th>
+<th>本例满足的用例</th>
+<th>覆盖率局限</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>有效等价类</strong></td>
-<td>按规格说明是<strong>合理、有意义</strong>的输入数据集合</td>
-<td>检验程序是否实现预定功能和性能</td>
+<td><strong>语句覆盖</strong></td>
+<td>每条<strong>语句</strong>至少执行一次</td>
+<td>(2, 0, 4) —— 走 L1</td>
+<td>最弱：判定为假的分支没测；若把判定一的"与"误写成"或"，此用例照样通过</td>
 </tr>
 <tr>
-<td><strong>无效等价类</strong></td>
-<td>按规格说明是<strong>不合理、无意义</strong>的输入数据集合</td>
-<td>检验程序是否"不满足规格说明要求"（即错误处理是否有效）</td>
+<td><strong>判定（分支）覆盖</strong></td>
+<td>每个判定的<strong>真、假分支</strong>各至少一次</td>
+<td>(2, 0, 4) 走 L1（两判定均真）+ (1, 1, 1) 走 L2（两判定均假）</td>
+<td>不能保证每个<strong>条件</strong>都取到真假</td>
+</tr>
+<tr>
+<td><strong>条件覆盖</strong></td>
+<td>每个判定中<strong>每个条件</strong>的真、假各至少一次</td>
+<td>(2, 0, 4)（A&gt;1 真、B==0 真、A==2 真、X&gt;1 真）+ (1, 1, 1)（四项全假）</td>
+<td><strong>不保证判定结果被覆盖</strong>（见下方反例）</td>
+</tr>
+<tr>
+<td><strong>判定/条件覆盖</strong></td>
+<td>同时满足判定覆盖与条件覆盖</td>
+<td>同上两组</td>
+<td>不保证<strong>条件组合</strong>被覆盖</td>
+</tr>
+<tr>
+<td><strong>条件组合覆盖</strong></td>
+<td>每个判定中所有<strong>条件取值组合</strong>至少一次</td>
+<td>判定一有 (T,T)(T,F)(F,T)(F,F)；判定二同样 → 至少 4 组用例</td>
+<td>组合数随条件数<strong>指数增长</strong></td>
 </tr>
 </tbody>
 </table>
-<p><strong>六条划分原则</strong>（PPT 第 89–94 页），这是本节最该背的清单：</p>
+<p><strong>条件覆盖不一定满足判定覆盖的反例</strong>（这个反例必须会）：</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch09_p064.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p064.png" alt="逻辑覆盖的 5 种标准"></a>
+<figcaption><b>图 9-5　逻辑覆盖的 5 种标准</b>　（PPT 第 64 页）这一页把五种标准排成一张大表：最左「覆盖标准」，中间「程序结构举例」（画的就是那两行 if 的图），最右「测试用例应满足的条件」（AvB、A∧B、¬A、¬B 等）。<strong>用法</strong>：先看中间那格的图，再对右边那列条件，最后回到正文的用例表去凑。考试问「达到判定覆盖至少要几个用例」，推导过程就在这张表里。</figcaption>
+</figure>
+
+<pre><code class="language-c">if (A &amp;&amp; B) { ... }
+// 用例 1：(A真, B假) → 判定为假
+// 用例 2：(A假, B真) → 判定为假
+</code></pre>
+<p>两个用例把 A、B 的真假都取到了（满足条件覆盖），但<strong>判定结果只出现了"假"</strong>，真分支一次都没走（不满足判定覆盖）。<strong>这就是为什么还需要"判定/条件覆盖"这一层。</strong></p>
+<p><mark class="kanwu">勘误</mark>课件第 71–72 页的"条件取值"表格中，"取真值"与"取假值"两列填写了相同的标记（如 <code>T1 / T1</code>），按上下文应为 <code>T1</code> 与 <code>T̄1</code>（非 T1）之类的对照；这属于课件排版笔误。<strong>判断标准应以文字定义为准</strong>（"每个条件的可能取值至少执行一次"），不要照抄表格。</p>
+<p><strong>五级严格性排序</strong>（后面不一定包含前面，只有"判定/条件"是并集）：</p>
+<pre><code>语句覆盖 &lt; 判定覆盖 &lt; 判定/条件覆盖 &lt; 条件组合覆盖
+                ↑
+            条件覆盖（与判定覆盖互不包含）
+</code></pre>
+<p><mark class="bubu">补</mark><strong>"覆盖率高 ≠ 程序正确"</strong>，这是白盒测试最容易被误解的地方。原因有三：①<strong>覆盖只说明"这段代码被执行过"，不说明"结果对不对"</strong>——它必须配合预期结果比对；②<strong>它测不出"该有的代码没写"</strong>（漏掉的需求根本不在流程图里）；③<strong>它测不出数据相关的错误</strong>（如 <code>X/(A-2)</code> 当 A=2 时的除零，除非用例恰好取到）。所以白盒用来<strong>保证内部逻辑被走遍</strong>，黑盒用来<strong>保证功能被满足</strong>，两者不可替代。</p>
+<h3>3.4 路径测试与基本路径</h3>
+<p><strong>路径覆盖</strong>（PPT 第 79 页）：设计足够的用例，覆盖程序中<strong>每一条可能的执行路径</strong>至少一次；若含循环，则每个循环至少执行一次。</p>
+<p>在同一个例子里，四条路径 L1–L4 各需一个用例：</p>
 <table>
 <thead>
 <tr>
-<th>#</th>
-<th>输入条件的特点</th>
-<th>划分方式</th>
-<th>例子</th>
+<th>路径</th>
+<th>用例</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>规定了<strong>取值范围</strong>或值的个数</td>
-<td>1 个有效 + <strong>2 个</strong>无效（小于下界、大于上界）</td>
-<td>序号 1–999：有效 <code>1≤x≤999</code>；无效 <code>x&lt;1</code>、<code>x&gt;999</code></td>
+<td>L1 = a-c-e</td>
+<td>(2, 0, 4)</td>
 </tr>
 <tr>
-<td>2</td>
-<td>规定了<strong>输入值的集合</strong>或"必须如何"的条件</td>
-<td>1 个有效 + 1 个无效</td>
-<td>C 语言标识符"以字母打头"：字母开头有效；不以字母开头无效</td>
+<td>L2 = a-b-d</td>
+<td>(1, 1, 1)</td>
 </tr>
 <tr>
-<td>3</td>
-<td>输入是<strong>布尔量</strong></td>
-<td>1 个有效 + 1 个无效</td>
-<td>真/假</td>
+<td>L3 = a-b-e</td>
+<td>(1, 1, 2)</td>
 </tr>
 <tr>
-<td>4</td>
-<td>输入是<strong>一组值</strong>且程序对每个值分别处理</td>
-<td><strong>每个值一个有效类</strong> + 1 个无效类</td>
-<td>教授/副教授/讲师/助教分别计分 → 4 个有效类 + 1 个"其他身份"无效类</td>
-</tr>
-<tr>
-<td>5</td>
-<td>输入<strong>必须遵守某规则</strong></td>
-<td>1 个有效 + <strong>若干个</strong>无效（从不同角度违反）</td>
-<td>语句必须以分号结束：以"；"结束有效；以"：""，""、"结束各为一个无效类</td>
-</tr>
-<tr>
-<td>6</td>
-<td>已划分的等价类中元素<strong>处理方式不同</strong></td>
-<td>进一步细分成更小的等价类</td>
-<td>—</td>
-</tr>
-</tbody>
-</table>
-<p><strong>使用时的两个注意</strong>（PPT 第 95 页）：</p>
-<ol>
-<li>划分等价类<strong>不仅要考虑有效类，还要考虑无效类</strong>；</li>
-<li><strong>每一无效等价类至少要用一个测试用例</strong>（不然可能漏掉某类错误），但允许<strong>若干有效等价类合用同一个测试用例</strong>（进一步减少次数）。</li>
-</ol>
-<p><strong>设计测试用例的三条规则</strong>（PPT 第 97 页）：</p>
-<ol>
-<li>为每个等价类规定唯一编号；</li>
-<li>设计新用例，使其<strong>尽可能覆盖尚未被覆盖的有效等价类</strong>，重复直到所有有效类被覆盖；</li>
-<li>设计新用例，使其<strong>仅覆盖一个尚未被覆盖的无效等价类</strong>，重复直到所有无效类被覆盖。</li>
-</ol>
-<p><mark class="bubu">补</mark><strong>为什么无效类要"一对一"？</strong> 因为如果用一个用例同时触发两个错误（比如既长度不对又含非法字符），程序只会报第一个错，第二个错误有没有被正确处理就测不出来——<strong>多个错误会互相遮蔽</strong>。而有效类可以合并，是因为它们走的是同一条正确路径，合并只是省事。</p>
-<p><strong>招工年龄案例</strong>（PPT 第 98–101 页）</p>
-<p>题目：某工厂招工，报名者年龄应在 16–35 周岁之间（截至 1995 年 6 月 30 日），即出生年月不早于 1960 年 7 月、不晚于 1979 年 6 月。出生年月由 6 位数字表示，前 4 位年、后 2 位月。程序自动检验，不合格显示"年龄不合格"。</p>
-<p><strong>等价类表（3 个有效 + 7 个无效）</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>输入数据</th>
-<th>有效等价类</th>
-<th>无效等价类</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>出生年月（形式）</td>
-<td>① 6 位有效数字字符</td>
-<td>② 有非数字字符；③ 少于 6 位；④ 多于 6 位</td>
-</tr>
-<tr>
-<td>对应数值</td>
-<td>⑤ 196007–197906</td>
-<td>⑥ &lt; 196007；⑦ &gt; 197906</td>
-</tr>
-<tr>
-<td>月份</td>
-<td>⑧ 在 1–12 之间</td>
-<td>⑨ 等于"0"；⑩ &gt; 12</td>
-</tr>
-</tbody>
-</table>
-<p><strong>测试用例</strong>：</p>
-<table>
-<thead>
-<tr>
-<th>测试数据</th>
-<th>期望结果</th>
-<th>覆盖的等价类</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>197011</td>
-<td>输入有效</td>
-<td>①⑤⑧</td>
-</tr>
-<tr>
-<td>MAY,70</td>
-<td>输入无效</td>
-<td>②</td>
-</tr>
-<tr>
-<td>19705</td>
-<td>输入无效</td>
-<td>③</td>
-</tr>
-<tr>
-<td>1968011</td>
-<td>输入无效</td>
-<td>④</td>
-</tr>
-<tr>
-<td>196006</td>
-<td>年龄不合格</td>
-<td>⑥</td>
-</tr>
-<tr>
-<td>197907</td>
-<td>年龄不合格</td>
-<td>⑦</td>
-</tr>
-<tr>
-<td>196200</td>
-<td>输入无效</td>
-<td>⑨</td>
-</tr>
-<tr>
-<td>197222</td>
-<td>输入无效</td>
-<td>⑩</td>
-</tr>
-</tbody>
-</table>
-<p><mark class="bubu">补</mark><strong>这张表有个细节值得注意</strong>：形式类错误（②③④）的期望结果是"输入无效"，而数值类错误（⑥⑦）的期望结果是"年龄不合格"——<strong>不同的错误应给出不同的提示</strong>。如果程序对所有错误都只报"输入无效"，那它虽然"拒绝了错误输入"，但用户不知道该改什么，这在质量上仍然是不合格的（第 4 讲"可验证"、第 7 讲"错误信息是否直观"）。</p>
-<h3>3.7 边界值分析法</h3>
-<p><strong>思想</strong>（PPT 第 102 页）：等价类是在值域内<strong>任意取</strong>，边界值必须在<strong>边界附近取</strong>。</p>
-<p>三条规则：</p>
-<ul>
-<li>输入条件是范围 (a, b)：<strong>a、b 以及紧挨 a、b 左右的值</strong>都应作为测试用例；</li>
-<li>输入条件是一组数：选<strong>最大者和最小者、次大和次小者</strong>；</li>
-<li>如果内部数据结构是有界的：设计用例检查该<strong>数据结构的边界</strong>。</li>
-</ul>
-<p><strong>为什么边界更值得测</strong>（PPT 第 103 页）：课件给了直接对比——同一个招工例子，等价分类法设计了 <strong>8</strong> 个用例，边界值分析法设计了 <strong>13</strong> 个；"一般来说，用边界值分析法设计的测试用例要比等价分类法的<strong>代表性更广、发现错误的能力也更强</strong>。但是对边界的分析与确定比较复杂，要求测试人员具有更多经验和耐心。"</p>
-<p><mark class="bubu">补</mark><strong>边界值为什么更容易出错？</strong> 因为边界是"逻辑最密集"的地方：<code>&lt;</code> 还是 <code>&lt;=</code>、<code>0</code> 还是 <code>1</code> 开始、空数组还是单元素、"恰好等于"算不算。<strong>几乎所有 off-by-one 缺陷都发生在边界上</strong>，而等价类的随机取值恰好避开了这些点。</p>
-<p><strong>13 个用例的构成</strong>（PPT 第 104 页原表）：</p>
-<table>
-<thead>
-<tr>
-<th>输入</th>
-<th>用例说明</th>
-<th>测试数据</th>
-<th>期望结果</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>出生年月</td>
-<td>1 个数字字符 / 5 个 / 7 个</td>
-<td>5 / 19705 / 1968011</td>
-<td>输入无效</td>
-</tr>
-<tr>
-<td></td>
-<td>有 1 个非数字字符 / 全是非数字</td>
-<td>19705@ / AUGUST</td>
-<td>输入无效</td>
-</tr>
-<tr>
-<td>对应数值</td>
-<td>35 周岁 / 16 周岁</td>
-<td>196007 / 197906</td>
-<td>合格年龄</td>
-</tr>
-<tr>
-<td></td>
-<td>&gt;35 周岁 / &lt;16 周岁</td>
-<td>196006 / 197907</td>
-<td>不合格年龄</td>
-</tr>
-<tr>
-<td>月份</td>
-<td>月份值为 1 月 / 12 月</td>
-<td>196701 / 197412</td>
-<td>输入有效</td>
-</tr>
-<tr>
-<td></td>
-<td>月份值 &lt;1 / &gt;12</td>
-<td>196700 / 197413</td>
-<td>输入无效</td>
-</tr>
-</tbody>
-</table>
-<h3>3.8 错误猜测法与因果图法</h3>
-<p><strong>错误猜测法</strong>（PPT 第 105 页）：猜测被测程序在哪些地方<strong>容易出错</strong>，针对薄弱环节设计用例。它"比前两种方法更多地依靠测试人员的<strong>直觉与经验</strong>"，所以"一般都先用前两种方法设计用例，再用猜测法补充一些例子作为辅助手段"。</p>
-<p>课件给的经典例子是<strong>排序程序</strong>（PPT 第 106 页），要测五种边界情形：</p>
-<ul>
-<li>输入的线性表为<strong>空表</strong>；</li>
-<li>表中只含<strong>一个</strong>元素；</li>
-<li>表中所有元素<strong>已排好序</strong>；</li>
-<li>输入表<strong>已按逆序</strong>排好；</li>
-<li>表中部分或全部元素<strong>相同</strong>。</li>
-</ul>
-<p><mark class="bubu">补</mark><strong>这五条就是"错误猜测"的正确用法示范</strong>：它不是瞎猜，而是<strong>基于"这类程序通常在哪里翻车"的经验清单</strong>。你可以把它固化成自己的检查表——测任何列表处理函数，先过这五条。</p>
-<p><strong>因果图法</strong>（PPT 第 107 页）：借助图形设计测试用例的一种<strong>系统方法</strong>，适用于"程序有多个输入条件、输出又依赖输入条件各种组合"的情况。因果图是简化了的逻辑图，直观表明<strong>输入条件（原因）</strong>与<strong>输出动作（结果）</strong>之间的相互关系。</p>
-<p><mark class="bubu">补</mark><strong>因果图解决的问题是"组合爆炸"</strong>：4 个输入条件 → 16 种组合，人工枚举容易漏。因果图先把条件之间的约束（异或、包含、唯一、屏蔽）画出来，<strong>删掉不可能的组合</strong>，再转成判定表，最后从判定表生成用例。<strong>它的实质是"用约束剪枝"</strong>，而不是画图本身。</p>
-<h3>3.9 黑盒 vs 白盒：一张总结表（课件第 108 页原表）</h3>
-<table>
-<thead>
-<tr>
-<th>对比项</th>
-<th>黑盒测试</th>
-<th>白盒测试</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>测试对象</strong></td>
-<td>程序的功能</td>
-<td>程序的结构</td>
-</tr>
-<tr>
-<td><strong>测试要求</strong></td>
-<td>逐一验证程序的功能</td>
-<td>程序的每一组成部分至少被测试一次</td>
-</tr>
-<tr>
-<td><strong>采用技术</strong></td>
-<td>等价分类法、边界分析法、错误猜测法、因果图法</td>
-<td>逻辑覆盖法、路径测试法</td>
+<td>L4 = a-c-d</td>
+<td>(3, 0, 3)</td>
 </tr>
 </tbody>
 </table>
 <figure class="fig">
-<a href="../../assets/img/se/ch09_p108.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p108.png" alt="黑盒 vs 白盒（课件原表）"></a>
-<figcaption><b>图 9-7　黑盒 vs 白盒（课件原表）</b>　（PPT 第 108 页）课件小结页的原表，三行对比：测试对象（程序的功能 / 程序的结构）、测试要求（逐一验证功能 / 每一组成部分至少被测一次）、采用技术（等价类、边界值、错误猜测、因果图 / 逻辑覆盖、路径测试）。<strong>这张表可以当第 9 讲的收口</strong>，正文在它下面补了「两者不能互相替代」的理由。</figcaption>
+<a href="../../assets/img/se/ch09_p080.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p080.png" alt="路径覆盖：点覆盖、边覆盖与用例"></a>
+<figcaption><b>图 9-6　路径覆盖：点覆盖、边覆盖与用例</b>　（PPT 第 80 页）图左侧是流程图（a→b/c→d→e），中间标出「点覆盖」（每个圈至少走一次）与「边覆盖」（每条边至少走一次），右下角列出四条用例 `a,b,c,d,e / a,b,d,e / a,c,d,e / a,b,c,e`。<strong>这张图把「点 / 边 / 路径」放在同一张图上</strong>——点覆盖最松、边覆盖居中、路径覆盖最严。</figcaption>
 </figure>
 
-<h3>2.4.2 集成测试</h3>
-<p>（这一节放在黑盒之后讲，因为它用的是黑盒技术。）</p>
-<p><strong>测试对象</strong>（PPT 第 35 页）：软件<strong>模块之间的接口</strong>——过程调用、函数调用、消息传递、远程过程调用（RPC）、网络消息。
-<strong>测试技术</strong>：<strong>黑盒</strong>。
-<strong>时机</strong>：在概要设计阶段就可以设计集成测试用例及计划。</p>
-<p><strong>两种集成策略</strong>（PPT 第 36 页）：<strong>自顶向下集成</strong>（按深度优先或广度优先组装）与<strong>自底向上集成</strong>。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>自顶向下</th>
-<th>自底向上</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>起点</td>
-<td>主控模块（驱动模块）</td>
-<td>最底层模块组成"模块群（cluster）"</td>
-</tr>
-<tr>
-<td>需要什么</td>
-<td><strong>桩模块</strong>（stub）替代下层</td>
-<td><strong>驱动模块</strong>（driver）控制输入输出</td>
-</tr>
-<tr>
-<td>过程</td>
-<td>每次只替换一个桩，每集成一个立即测试，完成后才替换下一个</td>
-<td>对每个模块群测试，删掉驱动，用真实高层模块替代，形成更大的模块群</td>
-</tr>
-<tr>
-<td>优点</td>
-<td>能<strong>尽早检验主要控制和决策机制</strong>，较早发现错误</td>
-<td><strong>不用桩模块</strong>，用例设计相对简单</td>
-</tr>
-<tr>
-<td>缺点</td>
-<td>低层用桩替代<strong>不能反映真实情况</strong>，重要数据不能及时回送到上层，<strong>测试不充分</strong></td>
-<td><strong>最后一个模块加入时才具有整体形象</strong></td>
-</tr>
-<tr>
-<td>共同要求</td>
-<td>为避免修改引入新错误，须不断<strong>回归测试</strong></td>
-<td>同左</td>
-</tr>
-</tbody>
-</table>
-<p>课件的结论很实用：<strong>"它与自顶向下综合测试方法的优缺点正好相反。因此应根据软件特点及工程进度选用适当策略，有时混合使用更有效——上层模块用自顶向下，下层模块用自底向上。"</strong></p>
-<p><mark class="bubu">补</mark><strong>为什么自顶向下必须用桩、自底向上必须用驱动？</strong> 回到第 8 讲那个记忆法：<strong>驱动在上面（调用者），桩在下面（被调用者）</strong>。自顶向下时，上层是真的、下层还没写 → 需要<strong>假的下面</strong>，即桩；自底向上时，下层是真的、上层还没写 → 需要<strong>假的上面</strong>，即驱动。<strong>分清"谁是真的"就能推出"需要哪种替身"。</strong></p>
-<h3>2.4.3 确认测试</h3>
-<p><strong>测试对象</strong>（PPT 第 41 页）：软件的功能和性能；判断目标系统<strong>是否满足用户需求</strong>。
-<strong>依据和标准</strong>：<strong>软件需求规格说明书</strong>。
-<strong>技术</strong>：黑盒。
-<strong>时机</strong>：需求分析阶段就可以设计确认测试用例及计划。</p>
-<p><strong>α 测试与 β 测试</strong>（PPT 第 42 页）：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>α 测试</th>
-<th>β 测试</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>谁来测</td>
-<td>开发公司<strong>内部人员</strong>模拟各类用户行为</td>
-<td><strong>各方面的典型用户</strong>在实际工作中使用</td>
-</tr>
-<tr>
-<td>版本</td>
-<td><strong>α 版本（内部测试版）</strong></td>
-<td><strong>β 版本（外部测试版）</strong>，由 α 测试修改后得到</td>
-</tr>
-<tr>
-<td>环境</td>
-<td>尽可能逼真地模拟实际运行环境和用户操作</td>
-<td><strong>开发者无法控制的</strong>软件现场应用环境</td>
-</tr>
-<tr>
-<td>目的</td>
-<td>发现错误并修正，尽可能涵盖所有可能的用户操作方式</td>
-<td>要求用户报告异常、提出批评意见</td>
-</tr>
-</tbody>
-</table>
-<h3>2.4.4 非功能性测试</h3>
-<p>课件第 44 页列了九类：<strong>性能测试、强度测试、配置和兼容性测试、安全性测试、可靠性测试、用户界面测试、本地化测试、Web 测试、安装测试</strong>。时机：需求分析阶段就可以设计非功能测试用例及计划。</p>
-<p>几个重点：</p>
-<p><strong>性能测试</strong>（PPT 第 45 页）的用例示例（课程注册系统）：测试项"能否支持同时 100 个用户登录，且平均响应时间少于 1.5 秒"；测试输入"由模拟软件模拟 100 个用户"；环境"1 台服务器 + 5 台客户机，模拟软件装在客户机"；步骤"每台客户机依次发 20 个登录请求 → 监控程序记录请求与响应时间 → 处理日志判断是否都成功、计算平均响应时间"；预期输出"每个用户都得到正确服务，平均响应时间 &lt; 1.5 秒"。</p>
-<p><strong>强度测试</strong>（PPT 第 46 页）：可视为性能测试的一部分。区别是——<strong>性能测试</strong>测"正常使用时能否达到指标"；<strong>强度测试</strong>则"不断施加更大的压力和使用强度，确定系统瓶颈或不能接受的性能点，获得系统能提供的最大服务能力"。</p>
-<p>课件的例子极好：双十一的淘宝、春运的 12306、双十一的菜鸟物流、考研调剂网、研究生复试上机考试系统。</p>
-<p><strong>安全性测试</strong>（PPT 第 47 页）的五步：明确潜在安全隐患（哪些内容易被攻击、哪些角色可能是入侵者）→ 明确潜在入侵行为及时机 → 列出每种隐患可能遭到的入侵行为及其可能性 → 确定风险较高的入侵点（按可能性与后果严重程度分析）→ 按风险顺序设计用例。</p>
-<p><strong>用户界面测试</strong>（第 48 页）：也称易用性测试。检查：常用按钮/菜单是否在醒目位置；输出是否清晰有序；错误信息是否直观易理解；软件流程是否符合用户业务过程；界面风格是否一致。</p>
-<p><strong>Web 测试</strong>（第 49 页）：利用浏览器通过超链接把网页联系，需要测大量对象——文本（术语、题目、素材、邮箱、电话的准确性与时效性，拼写）、窗口缩放是否导致格式混乱、超级链接、图片和视频、表单。</p>
-<p><strong>恢复测试</strong>（第 50 页）：检查系统<strong>容错能力</strong>。先"采用各种办法强迫系统失败"，再验证能否尽快恢复。对自动恢复系统，验证重新初始化、检查点、数据恢复、重新启动等机制；对人工干预的恢复系统，还要<strong>估算平均修复时间</strong>是否可接受。</p>
-<h3>2.5–2.6 回归测试与测试原则</h3>
-<p><strong>为什么需要回归测试</strong>（PPT 第 52 页）：修改程序可能<strong>引入新的错误</strong>——原先"正常"的程序现在变得"不正常"。</p>
-<p>回归测试的目的是验证新版本是否<strong>从正常状态回归/退化到不正常状态</strong>；方法是"重新运行所有的测试用例"；<strong>最好能自动化</strong>；<strong>单元测试是回归测试的基础</strong>。</p>
-<p><strong>测试 vs 调试 vs 排错</strong>（PPT 第 53 页），这张表要背：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>测试</th>
-<th>调试</th>
-<th>排错</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>目的</td>
-<td><strong>发现</strong>缺陷</td>
-<td><strong>定位</strong>缺陷</td>
-<td><strong>纠正</strong>错误</td>
-</tr>
-<tr>
-<td>谁做</td>
-<td><strong>独立的测试小组</strong></td>
-<td>开发人员</td>
-<td>开发人员</td>
-</tr>
-</tbody>
-</table>
-<p><strong>十条测试原则</strong>（PPT 第 55–56 页），这是第 9 讲最该背的清单：</p>
-<ol>
-<li><strong>测试应该有计划</strong>——在开发初期就制定，测试之前就应制定；</li>
-<li>所有的测试都应<strong>追溯到用户需求</strong>；</li>
-<li>将 <strong>Pareto 原则</strong>应用于测试——80% 的错误可以在约 20% 的模块中找到根源；</li>
-<li>测试应从"<strong>微观</strong>"开始，逐步转向"宏观"；</li>
-<li><strong>穷举测试是不可能的</strong>；</li>
-<li><strong>每个测试用例都必须定义预期的输出或结果</strong>；</li>
-<li>尽量避免<strong>程序的开发人员测试自己编写的代码</strong>；</li>
-<li>尽量避免<strong>程序开发组织测试自己开发的程序</strong>；</li>
-<li>应<strong>详细检查每次测试的结果</strong>；</li>
-<li>用例不仅要说明<strong>合法有效</strong>的输入，还要描述<strong>不期望的、非法的</strong>输入；</li>
-<li>检查"程序没做希望它做的事"只是测试的一半任务，还应检查"程序是否做了不希望它做的事"；</li>
-<li>避免随意舍弃任何用例，即使非常简单；</li>
-<li><strong>不应在事先假设不会发现错误的情况下来制定测试计划</strong>；</li>
-<li><strong>一个模块存在更多错误的可能性，与该模块已发现错误数量成正比</strong>（缺陷聚集）；</li>
-<li>测试是一个具有相当<strong>创新性和智力挑战</strong>的活动。</li>
-</ol>
-<p><mark class="bubu">补</mark><strong>第 7、8 条的理由值得说透</strong>：不是"不信任开发人员"，而是<strong>认知盲区</strong>——开发者测自己的代码时，会不自觉地沿着"自己写代码时的思路"去测，而缺陷恰恰藏在他没想到的地方。第 11 条也很深：<strong>"没做该做的事"和"做了不该做的事"是两个方向的错误</strong>，前者叫功能缺失，后者叫副作用（比如一个查询函数偷偷改了数据），后者更难发现。</p>
-<h3>4 测试组织、计划与输出</h3>
-<p><strong>成立测试组织</strong>（PPT 第 110 页）：测试是<strong>独立性的工作</strong>，要成立单独的测试小组；小组成员由测试工程师组成；<strong>测试小组不受开发小组管理</strong>，以确保独立性和结果的客观性；<strong>需在开发早期就成立</strong>（尽早介入：培训、了解项目、掌握需求、制定计划）。</p>
-<p><strong>测试计划的内容</strong>（PPT 第 111–112 页），十四条，可当模板：标识符、简介、测试项、待测软件特征、免测软件特征、测试策略和手段、测试项成败标准、测试暂停/停止标准、测试交付物、测试任务、测试环境、职责、进度安排、成本预算、风险与意外。</p>
-<p><mark class="bubu">补</mark><strong>"免测软件特征"这一项很反直觉但很专业</strong>：明确声明"哪些不测"，等于把风险显式化。没有这一项，测试报告永远无法回答"你们为什么没测这个"。</p>
-<p><strong>测试输出</strong>（PPT 第 113 页）：测试计划 + 测试报告（记录测试情况与发现的缺陷），后者分单元测试报告、集成测试报告、确认测试报告、系统测试报告等。</p>
-<p><strong>单元测试工具</strong>（PPT 第 114–124 页）：</p>
-<table>
-<thead>
-<tr>
-<th>语言</th>
-<th>工具</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>C/C++</td>
-<td>C++Test、Cunit、CppTest</td>
-</tr>
-<tr>
-<td>.NET</td>
-<td>NUnit</td>
-</tr>
-<tr>
-<td><strong>Java</strong></td>
-<td><strong>JUnit</strong></td>
-</tr>
-<tr>
-<td>Python</td>
-<td>PyUnit</td>
-</tr>
-</tbody>
-</table>
-<p><strong>JUnit</strong>（1997 年由 Erich Gamma 与 Kent Beck 为 Java 创建）：Erich Gamma 是《设计模式》作者之一，Kent Beck 提出了极限编程、写了《重构》。在 Eclipse 中的四步：①建立一个被测试的类；②建立对应的 JUnit Test 类（<strong>类似主控模块及桩模块</strong>）；③针对自动生成的代码进行修改（编写桩模块）；④执行测试用例。</p>
-<p><strong>常用 Assert 方法</strong>（PPT 第 120 页）：<code>assertArrayEquals</code>（两数组相等）、<code>assertEquals</code>（两对象相等）、<code>assertFalse</code>/<code>assertTrue</code>（布尔判断）、<code>assertNotNull</code>/<code>assertNull</code>（是否为空）、<code>assertNotSame</code>（两个引用是否指向同一对象，注意与 equals 区别）、<code>Fail</code>（让用例失败）。</p>
-<p>课件还给了 JUnit 的名言：<strong>"Keep the bar green to keep the code clean"</strong>（保持绿条，保持代码干净）。</p>
-<hr />
-<h3>第 9 讲 小结</h3>
-<p><strong>一句话串起整讲</strong>：测试是"用设计好的输入去运行程序、比对预期输出"的发现缺陷活动；它按单元→集成→确认逐层递进，用白盒保证内部逻辑被走遍、用黑盒保证外部功能被满足；而所有方法的共同前提是——<strong>穷举不可能，所以要设计高效的用例</strong>。</p>
-<p><strong>核心结论清单</strong></p>
-<ol>
-<li>缺陷是病根（静态），错误是症状（动态）；缺陷来自需求、设计、编码三处并逐级放大。</li>
-<li>测试只负责<strong>发现</strong>，不负责修复；测试者应与开发者独立。</li>
-<li>测试三要素：测试数据、被测程序、预期结果；用例含十项内容，<strong>前提条件最易漏</strong>。</li>
-<li>两大挑战：成本占 30%–50%；不能穷举。</li>
-<li>测试分层：单元（白盒，模块内部）→ 集成（黑盒，模块接口）→ 确认（黑盒，用户需求）→ 系统/非功能。</li>
-<li>单元测试需<strong>驱动（上）+ 桩（下）</strong>；自顶向下用桩，自底向上用驱动。</li>
-<li>五种逻辑覆盖由弱到强：语句 &lt; 判定 &lt; 判定/条件 &lt; 条件组合；条件覆盖与判定覆盖<strong>互不包含</strong>。</li>
-<li>基本路径数 = 环路复杂度 = 判定结点数 + 1。</li>
-<li>黑盒四技术：等价类、边界值、错误猜测、因果图；<strong>无效等价类要一对一</strong>。</li>
-<li>边界值比等价类更强（8 例 vs 13 例），因为边界是 off-by-one 高发区。</li>
-<li>α 测试在内部、β 测试在用户现场且环境不可控。</li>
-<li>回归测试防"改出新错"，最好自动化，单元测试是其基础。</li>
-<li>测试十原则：有计划、可追溯需求、Pareto、微观到宏观、不可穷举、必定期望输出、避免自测、详查结果、含非法输入、缺陷聚集。</li>
-</ol>
-<h3>自测</h3>
-<p><strong>1.</strong> 一个函数 <code>int f(int age)</code> 要求 <code>age</code> 在 18–60 之间。请用等价类法和边界值法分别给出最少的测试数据，并说明为什么边界值法用例更多。</p>
-<details>
-<summary>答案</summary>
-<p><strong>等价类法</strong>（3 个）：有效 <code>18≤age≤60</code>（如 30）；无效 <code>age&lt;18</code>（如 10）；无效 <code>age&gt;60</code>（如 70）。<strong>边界值法</strong>（至少 6 个）：<code>17, 18, 19, 59, 60, 61</code>（下界及其两侧、上界及其两侧），若考虑非整数输入还需加 <code>18</code> 附近的小数。<strong>为什么更多</strong>：等价类只要求"每个类取一个代表"，代表是任意选的，可能恰好避开错误点；边界值强制考察"恰好等于"和"差一"的情形，而 <code>&lt;</code> / <code>&lt;=</code> 写反、数组越界、循环少一次这类缺陷<strong>只会在边界暴露</strong>。课件用招工例子给出了 8 : 13 的实测对比，也是同一个道理。</p>
-</details>
-<p><strong>2.</strong> 为什么"语句覆盖 100%"仍然可能漏掉严重缺陷？举两个不同类型的漏检。</p>
-<details>
-<summary>答案</summary>
-<p>两类典型漏检：①<strong>逻辑运算符错误</strong>——把判定一里的"与"写成"或"，用例 (2,0,4) 走真分支，语句 100% 覆盖，但假分支的行为完全错了（判定覆盖能发现）；②<strong>需求缺失</strong>——该有的判断分支根本没写，流程图里就没有那个结点，覆盖 100% 也无从发现（这只能靠黑盒/需求追溯发现）。补充第三类：<strong>数据相关错误</strong>，如 <code>X/(A-2)</code> 在 A=2 时除零，如果用例没取到 A=2，语句覆盖照样 100%。<strong>结论：覆盖是必要条件，不是充分条件。</strong></p>
-</details>
-<p><strong>3.</strong> 集成测试时，团队从主控模块开始往下测。他们需要写什么替身？为什么这种策略"测试不充分"？</p>
-<details>
-<summary>答案</summary>
-<p>需要写<strong>桩模块（stub）</strong>——因为上层是真的、下层还没集成，必须用假的底层模块顶上，返回预设值。<strong>测试不充分的原因</strong>：桩只能"假装"返回数据，无法反映真实的处理逻辑，所以"重要数据不能及时回送到上层模块"（课件原话）；同时上层模块在真实数据下的行为（如边界值、异常返回、性能）都测不到。它的优点是能尽早检验主要控制和决策机制。实务上常混合使用：上层自顶向下，底层自底向上。</p>
-</details>
-<p><strong>4.</strong> 一个电商系统，功能测试全部通过，上线后大促当天崩了。按第 9 讲，他们漏了哪类测试？</p>
-<details>
-<summary>答案</summary>
-<p>漏了<strong>非功能测试</strong>，具体是<strong>强度测试</strong>（以及性能测试、可靠性测试）。功能测试只验证"每个功能在正常输入下是否正确"，不验证"在高并发、大压力下是否还能正常服务"。课件的定义正好对应：性能测试测"正常使用时能否达到指标"，强度测试则"不断施压，确定系统瓶颈或不能接受的性能点，获得最大服务能力"——双十一的淘宝、春运的 12306 就是这类测试的典型场景。补充：还应做<strong>恢复测试</strong>（崩了能否在指定时间内恢复）和<strong>安全性测试</strong>（大促是攻击高发期）。</p>
-</details>
-<p><strong>5.</strong> 为什么"缺陷聚集"（一个模块已发现的错误越多，它还有更多错误的可能性越大）这条原则，能指导你分配测试资源？</p>
-<details>
-<summary>答案</summary>
-<p>因为它把测试资源从"平均分配"变成"按风险分配"。既然 80% 的缺陷集中在约 20% 的模块（Pareto 原则），而且"已发现缺陷多的模块更可能有更多缺陷"，那么正确的策略是：<strong>一旦某模块发现多个缺陷，就对它追加投入</strong>（更多用例、更严格的覆盖标准、代码评审），而不是把同样多的精力平摊到所有模块。这与第 10 讲"维护成本集中在少数模块"、第 6 讲"内聚耦合差的模块最容易出问题"是同一个判断——<strong>风险从来不是均匀分布的。</strong></p>
-</details>
-<div class="pager"><a class="pg prev" href="software-engineering-30.html"><span>← 上一节</span><b>3.1–3.4 白盒测试：逻辑覆盖与基本路径</b></a><a class="pg next" href="software-engineering-32.html"><span>下一节 →</span><b>1 逻辑老化与四种维护</b></a></div>
+<p><strong>点覆盖与边覆盖</strong>（PPT 第 80–82 页）：</p>
+<ul>
+<li><strong>点覆盖</strong>：每个<strong>结点</strong>（语句）至少执行一次；</li>
+<li><strong>边覆盖</strong>：每条<strong>边</strong>（分支）至少执行一次；</li>
+<li><strong>路径覆盖</strong>：每条<strong>完整路径</strong>至少执行一次。</li>
+</ul>
+<p><mark class="bubu">补</mark><strong>路径数是会爆炸的</strong>。两个顺序 if → 4 条路径；十个顺序 if → 1024 条；加一个循环 → 理论上无限。所以实际工程用<strong>基本路径测试</strong>：不是覆盖所有路径，而是覆盖<strong>一组线性无关的路径</strong>，数量等于<strong>环路复杂度</strong> V(G)。</p>
+<p><strong>环路复杂度怎么算</strong>（课件未给公式，属于补充）：</p>
+<div class="jysmath jysmath-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>G</mi><mo stretchy="false">)</mo><mo>=</mo><mi>E</mi><mo>−</mo><mi>N</mi><mo>+</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">V(G) = E - N + 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mopen">(</span><span class="mord mathnormal">G</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span></div>
+<p>其中 E 是边数、N 是结点数；也可以直接用经验公式：</p>
+<div class="jysmath jysmath-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>G</mi><mo stretchy="false">)</mo><mo>=</mo><mtext>判定结点数</mtext><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">V(G) = \text{判定结点数} + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mopen">(</span><span class="mord mathnormal">G</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord cjk_fallback">判定结点数</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></div>
+<p>本例有两个判定结点，所以 <strong>V(G) = 3</strong>——意味着<strong>至少需要 3 条独立路径</strong>才能覆盖所有边。而全部组合路径是 2×2 = 4 条，其中只有 3 条是线性无关的。<strong>这个差别就是"基本路径测试"存在的理由：它用最少的用例数覆盖所有分支，而不追求覆盖所有组合。</strong></p>
+<p><strong>四道选择题（课件第 78 页原题）</strong></p>
+<p><strong>1. 软件测试的目的是（ ）</strong>
+A. 证明软件的正确性　B. 找出软件系统中存在的所有错误　C. 证明软件系统中存在错误　D. <strong>尽可能多地发现软件系统中的错误</strong>
+→ <strong>D</strong>。A 做不到（不能穷举），B 做不到（不可能找全），C 是曲解（测试不是"为了证明有错"）。</p>
+<p><strong>2. 多选题：使用白盒测试方法时，确定测试数据应根据（ ）</strong>
+A. <strong>程序的内部逻辑</strong>　B. <strong>指定的覆盖标准</strong>　C. 程序的复杂程度　D. 使用说明书
+→ <strong>AB</strong>。白盒看内部逻辑，测多少看覆盖标准。D 是黑盒的依据。</p>
+<p><strong>3. 多选题：属于白盒测试的技术是（ ）</strong>
+A. 边界值分析　B. <strong>语句覆盖</strong>　C. <strong>判定覆盖</strong>　D. <strong>条件覆盖</strong>
+→ <strong>BCD</strong>。边界值分析属于黑盒（等价类/边界值/错误猜测/因果图）。</p>
+<p><strong>4. 软件测试是保证软件质量的重要措施，它的实施应该在（ ）</strong>
+A. 程序编程阶段　B. <strong>软件开发全过程</strong>　C. 软件运行阶段　D. 软件设计阶段
+→ <strong>B</strong>。课件第 19 页的对应表说得很清楚：需求阶段就定确认测试计划，概要设计定集成测试计划，详细设计定单元测试计划——<strong>测试计划从第一天就开始。</strong></p>
+<div class="pager"><a class="pg prev" href="software-engineering-30.html"><span>← 上一节</span><b>1–2.4 测试是什么与测试过程</b></a><a class="pg next" href="software-engineering-32.html"><span>下一节 →</span><b>3.5–4 黑盒测试、测试过程与组织</b></a></div>
 </div>
 
 <script>

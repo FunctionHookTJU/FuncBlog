@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>1 六种架构风格与选型 · 软件工程讲义：全课程十讲</title>
+<title>3–4 面向对象设计、架构风格与设计评审 · 软件工程讲义：全课程十讲</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
@@ -75,334 +75,272 @@
 <div class="sg">第 4 讲　需求分析基础</div>
 <a class="i" href="software-engineering-13.html">1.1–1.3 需求是什么：质量要求、特点与分类</a>
 <a class="i" href="software-engineering-14.html">1.4–2.2 需求从哪里来：获取方法与需求工程</a>
-<a class="i" href="software-engineering-15.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
-<a class="i" href="software-engineering-16.html">3 需求分析过程、文档与评审</a>
+<a class="i" href="software-engineering-15.html">2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态</a>
+<a class="i" href="software-engineering-16.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
+<a class="i" href="software-engineering-17.html">3 需求分析过程、文档与评审</a>
 <div class="sg">第 5 讲　软件分析</div>
-<a class="i" href="software-engineering-17.html">1 九种 UML 图与三个分析视角</a>
-<a class="i" href="software-engineering-18.html">2.1–2.4 三模型与五层次</a>
-<a class="i" href="software-engineering-19.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
-<a class="i" href="software-engineering-20.html">2.5–3 动态模型、功能模型与需求变更</a>
+<a class="i" href="software-engineering-18.html">1 九种 UML 图与三个分析视角</a>
+<a class="i" href="software-engineering-19.html">2.1–2.4 三模型与五层次</a>
+<a class="i" href="software-engineering-20.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
+<a class="i" href="software-engineering-21.html">2.5–3 动态模型、功能模型与需求变更</a>
 <div class="sg">第 6 讲　软件设计基础</div>
-<a class="i" href="software-engineering-21.html">1–2.2 设计概述与七条设计原则</a>
-<a class="i" href="software-engineering-22.html">2.2.2 模块化：内聚与耦合七级</a>
-<a class="i" href="software-engineering-23.html">3–4 面向对象设计、架构风格与设计评审</a>
+<a class="i" href="software-engineering-22.html">1–2.2 设计概述与七条设计原则</a>
+<a class="i" href="software-engineering-23.html">2.2.2 模块化：内聚与耦合七级</a>
+<a class="i cur" data-h="s-1" href="software-engineering-24.html">3–4 面向对象设计、架构风格与设计评审</a>
 <div class="sg">第 7 讲　架构、模式与界面</div>
-<a class="i cur" data-h="s-1" href="software-engineering-24.html">1 六种架构风格与选型</a>
-<a class="i" href="software-engineering-25.html">2–3 用户界面设计与详细设计工具</a>
-<a class="i" href="software-engineering-26.html">4 设计模式与 OO 实战五步</a>
+<a class="i" href="software-engineering-25.html">1 六种架构风格与选型</a>
+<a class="i" href="software-engineering-26.html">2–3 用户界面设计与详细设计工具</a>
+<a class="i" href="software-engineering-27.html">4 设计模式与 OO 实战五步</a>
 <div class="sg">第 8 讲　编写代码</div>
-<a class="i" href="software-engineering-27.html">1–2 程序设计语言与结构化程序设计</a>
-<a class="i" href="software-engineering-28.html">3 调试、求助与程序设计风格</a>
+<a class="i" href="software-engineering-28.html">1–2 程序设计语言与结构化程序设计</a>
+<a class="i" href="software-engineering-29.html">3 调试、求助与程序设计风格</a>
 <div class="sg">第 9 讲　软件测试</div>
-<a class="i" href="software-engineering-29.html">1–2.4 测试是什么与测试过程</a>
-<a class="i" href="software-engineering-30.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
-<a class="i" href="software-engineering-31.html">3.5–4 黑盒测试、测试过程与组织</a>
+<a class="i" href="software-engineering-30.html">1–2.4 测试是什么与测试过程</a>
+<a class="i" href="software-engineering-31.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
+<a class="i" href="software-engineering-32.html">3.5–4 黑盒测试、测试过程与组织</a>
 <div class="sg">第 10 讲　软件维护与演化</div>
-<a class="i" href="software-engineering-32.html">1 逻辑老化与四种维护</a>
-<a class="i" href="software-engineering-33.html">2–4 维护技术、管理与可维护性</a>
+<a class="i" href="software-engineering-33.html">1 逻辑老化与四种维护</a>
+<a class="i" href="software-engineering-34.html">2–4 维护技术、管理与可维护性</a>
 <div class="sg">附录</div>
-<a class="i" href="software-engineering-34.html">附录 A　术语中英对照表</a>
-<a class="i" href="software-engineering-35.html">附录 B　一页速查表</a>
-<a class="i" href="software-engineering-36.html">附录 C　FAQ 与易错点清单</a>
+<a class="i" href="software-engineering-35.html">附录 A　术语中英对照表</a>
+<a class="i" href="software-engineering-36.html">附录 B　一页速查表</a>
+<a class="i" href="software-engineering-37.html">附录 C　FAQ 与易错点清单</a>
   </nav>
 </aside>
 
 <div class="wrap">
 
-<h2 id="s-1">1 六种架构风格与选型</h2>
-<p>第 7 讲的前 34 页内容与第 6 讲第 56–91 页<strong>完全重复</strong>（同一套架构风格幻灯片）。课件这么安排的意思是：架构是设计的第一个也是最重要的决定，值得讲两遍。这一节在第 6 讲的基础上往下钻一层。</p>
-<h3>什么叫"抽象级别"</h3>
-<p>课件第 3–4 页反复问"何为抽象级别？"，这是理解分层风格的前提。</p>
-<p><mark class="bubu">补</mark><strong>抽象级别 = 这一层只关心"向上一层提供什么"，不关心"向下一层怎么实现"。</strong> 判定方法：如果两个构件所在的层次相同，那么它们应该用<strong>同一套词汇</strong>说话；如果一个在用"用户""订单""付款"，一个在用"表""索引""连接池"，它们就不在同一层。</p>
-<p>分层风格的典型三段（PPT 第 4 页）：</p>
+<h2 id="s-1">3–4 面向对象设计、架构风格与设计评审</h2>
+<h3>3.1 面向对象设计方法学：精化，不是翻译</h3>
+<p>课件第 52 页的定义值得逐字读：</p>
+<blockquote>
+<p>针对面向对象需求分析所得到的软件需求模型（如用例图、交互图、分析类图），对其进行<strong>不断精化（而非转换）</strong>，获得软件系统的各类设计元素，如子系统、构件、设计类等，产生不同视角、不同抽象层次的软件设计模型，如软件体系结构图、用例设计交互图、设计类图、活动图等，形成软件系统完整和详尽的设计方案。</p>
+</blockquote>
+<p><mark class="bubu">补</mark><strong>"精化（refinement）而非转换（transformation）"这四个字是 OO 设计的关键区别</strong>。结构化方法里，分析模型（数据流图）和设计模型（结构图）是<strong>两套完全不同</strong>的表示，要靠人工"转换"，转换过程容易丢信息、出偏差——第 5 讲提到的"结构化分析技术存在一个致命的弱点：分析模型和设计模型之间存在本质性的断层"说的就是这件事。而 OO 方法里，分析类图和设计类图<strong>用的是同一套概念</strong>（类、属性、操作、关联），设计只是把分析模型"加细节"：加接口、加可见性、加具体的数据类型、加辅助类。<strong>没有断层，所以不容易丢东西。</strong></p>
+<h3>3.2 面向对象设计的过程</h3>
+<p>课件第 54 页给的流程：</p>
+<pre><code>软件体系结构设计 → 用户界面设计 → 构件/子系统设计 → 用例设计 → 数据设计 → 类设计
+                            （详细设计）
+</code></pre>
+<p>贯穿全程的支撑是"面向对象的概念、机制和建模语言"。</p>
+<p><strong>典型的面向对象设计模型</strong>（PPT 第 55 页）由四个部分组成，这和第 5 讲对象模型的五个层次是对应的：</p>
+<pre><code>问题域部分     人机交互部分
+任务管理部分   数据管理部分
+</code></pre>
 <table>
 <thead>
 <tr>
-<th>层</th>
+<th>子系统</th>
 <th>职责</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>顶层</strong></td>
-<td>直接面向用户，提供交互界面</td>
+<td><strong>问题域子系统</strong></td>
+<td>存放从分析模型直接来的领域类（ATM、账户、储户……）</td>
 </tr>
 <tr>
-<td><strong>中间层</strong></td>
-<td>负责具体的业务处理</td>
+<td><strong>人机交互子系统</strong></td>
+<td>界面类，负责输入输出</td>
 </tr>
 <tr>
-<td><strong>底层</strong></td>
-<td>提供基础性、公共性技术服务，接近硬件、OS 或 DBMS</td>
+<td><strong>任务管理子系统</strong></td>
+<td>并发、进程/线程、事件驱动</td>
+</tr>
+<tr>
+<td><strong>数据管理子系统</strong></td>
+<td>持久化：选存储方式、设计数据格式与相应服务</td>
 </tr>
 </tbody>
 </table>
-<p>约束（PPT 第 5 页）：层与层之间是"<strong>请求—服务</strong>"关系；合理的抽象层次划分和软构件组织是关键。</p>
 <figure class="fig">
-<a href="../../assets/img/se/ch07_p005.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p005.png" alt="分层体系结构示例"></a>
-<figcaption><b>图 7-1　分层体系结构示例</b>　（PPT 第 5 页）图上三层横条从下往上：服务 → 业务 → 界面，每层里排着若干构件方框，层间用「请求/服务」箭头连接，右侧竖线标「交互和约束」。<strong>看图顺序：先看有几层，再看每层放了哪些构件，最后看跨层箭头是单向还是双向</strong>——单向是严格分层，双向就是允许跳层，那是另一种取舍。</figcaption>
+<a href="../../assets/img/se/ch06_p055.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch06_p055.png" alt="典型的面向对象设计模型"></a>
+<figcaption><b>图 6-5　典型的面向对象设计模型</b>　（PPT 第 55 页）图左侧竖排「主题层、类-&amp;对象层、结构层、属性层、服务层」（第 5 讲的对象模型五层次），上方横排「人机交互部分、问题域部分、任务管理部分、数据管理部分」（设计的四个子系统），中间大框标「典型的面向对象设计模型」。<strong>这张图把第 5 讲的分析结构和第 6 讲的设计结构接在一起</strong>：五层次是「看问题的粒度」，四部分是「动手时的分工」。</figcaption>
 </figure>
 
-<p><mark class="bubu">补</mark><strong>分层的代价必须说清楚</strong>：请求要穿过每一层，<strong>性能有损耗</strong>；而且"某一层能不能跳过下一层直接调更下层"是个永恒争论（严格分层不允许，松散分层允许）。<strong>严格分层换可替换性，松散分层换性能</strong>——这就是第 6 讲说的"设计就是权衡"。</p>
-<h3>C/S 与两级/三级架构</h3>
-<p><strong>C/S 结构</strong>（PPT 第 6 页）：一种分布式模型，采用"发请求、得结果"的模式。客户机向服务器发出请求（数据、网页、文件传输），服务器响应并回传结果，客户机再把结果格式化呈现给用户。</p>
-<p>完整应用包含三个相对独立的逻辑部分：<strong>用户界面、应用逻辑、数据访问</strong>。两级 C/S 只有两个端，于是应用逻辑往哪放就有了三种选择（PPT 第 9 页）：</p>
-<table>
-<thead>
-<tr>
-<th>方案</th>
-<th>客户端</th>
-<th>服务器</th>
-<th>特点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>C/S 应用 1</strong></td>
-<td>用户界面 + 逻辑应用</td>
-<td>数据访问</td>
-<td>胖客户端，逻辑在本地，升级要装每台机器</td>
-</tr>
-<tr>
-<td><strong>C/S 应用 2</strong></td>
-<td>用户界面</td>
-<td>逻辑应用 + 数据访问</td>
-<td>瘦客户端，逻辑集中在服务器</td>
-</tr>
-<tr>
-<td><strong>C/S 应用 3</strong></td>
-<td>用户界面 + 数据访问</td>
-<td>逻辑应用</td>
-<td>逻辑与数据分离，界面直连数据库（不安全）</td>
-</tr>
-</tbody>
-</table>
-<p>课件的结论：<strong>两层 C/S 架构将数据表示和处理逻辑分开，但应用逻辑和两端之一是紧耦合的，不适宜多用户、多数据库，是非安全的网络环境。</strong></p>
-<figure class="fig">
-<a href="../../assets/img/se/ch07_p009.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p009.png" alt="两层架构中的三种逻辑映射"></a>
-<figcaption><b>图 7-2　两层架构中的三种逻辑映射</b>　（PPT 第 9 页）图分客户机/服务器两栏，中间画出 C/S 应用1/2/3 三种切法：应用1（用户界面+逻辑应用 / 数据访问）、应用2（用户界面 / 逻辑应用+数据访问）、应用3（用户界面+数据访问 / 逻辑应用）。底部红字是课件判断：「应用逻辑和两端之一是紧耦合的」——<strong>这张图就是「为什么要有三层」的论证。</strong></figcaption>
-</figure>
-
-<p><strong>三级/多级模型</strong>（PPT 第 10 页）：</p>
-<table>
-<thead>
-<tr>
-<th>级</th>
-<th>名称</th>
-<th>职责</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>第一级</td>
-<td><strong>数据库管理结点</strong></td>
-<td>数据存储与管理</td>
-</tr>
-<tr>
-<td>第二级（中间级）</td>
-<td><strong>商业逻辑结点</strong></td>
-<td>应用中的程序逻辑和法则；会用到事务服务、消息服务等</td>
-</tr>
-<tr>
-<td>第三级</td>
-<td><strong>用户界面级</strong></td>
-<td>界面呈现</td>
-</tr>
-</tbody>
-</table>
-<p><mark class="bubu">补</mark><strong>三级架构的本质是把"应用逻辑"从两端解放出来，单独成层</strong>。这一层后来演化成了应用服务器、Web 容器、微服务——<strong>形式上变了，动机没变：让逻辑独立于界面和数据，各自演化。</strong> 这也是"关注点分离"原则最成功的一次落地。</p>
-<h3>管道与过滤器</h3>
-<p><strong>三要素</strong>（PPT 第 12 页）：</p>
+<h4>3.2.2 设计问题域子系统（PPT 第 92–93 页）</h4>
+<p>五个动作：①调整需求；②<strong>重用已有的类</strong>；③把问题域类组合在一起；④增添一般化类以建立协议；⑤映射到具体结构（ATM 例）。</p>
+<p><mark class="bubu">补</mark><strong>"重用已有的类"排在第二位，很说明问题</strong>：设计阶段第一件该想的事不是"我要写什么"，而是"我手上有什么"。这和敏捷里"不要重复造轮子"、第 1 讲讲开源重用是同一个逻辑。</p>
+<h4>3.2.3 设计人机交互子系统（PPT 第 94–95 页）</h4>
+<p><strong>界面设计七准则</strong>（课件原文）：一致性、减少步骤、及时提供反馈信息、提供撤消命令、无须记忆、易学、富有吸引力。</p>
+<p><strong>设计策略</strong>：</p>
 <ul>
-<li><strong>构件</strong>：将功能实现为一系列处理步骤，每步封装在一个<strong>过滤器</strong>构件中；</li>
-<li><strong>连接子</strong>：相邻过滤器间以<strong>管道</strong>连接，一个过滤器的输出经管道流向后续过滤器作为输入；</li>
-<li><strong>数据</strong>：输入由<strong>数据源</strong>（data source）提供，最终输出流向<strong>数据汇</strong>（data sink）；典型数据源/汇包括数据库、文件、其他系统、物理设备。</li>
+<li><strong>分类用户</strong>：按技能水平（初/中/高级）、按职务（总经理/部门经理/职员）、按工作性质（行政/技术）、按专业知识（外专业/专业/系统员）；</li>
+<li><strong>描述用户</strong>：用户类型、特征（年龄、性别、受教育程度、限制因素）、关键成功因素（需求、爱好、习惯）、技能水平、完成本职工作的脚本；</li>
+<li><strong>设计命令层次</strong>：研究现有交互含义与准则 → 确定初始命令层次 → 精化命令层次；</li>
+<li><strong>设计人机交互类</strong>：用交互图表示界面之间的关系。</li>
 </ul>
-<p><strong>两种过滤器与同步问题</strong>（PPT 第 14 页），这是这一节最容易被问倒的地方：</p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>行为</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>主动过滤器</strong></td>
-<td>以循环方式不断从管道<strong>提取</strong>输入数据，并把输出<strong>压入</strong>管道</td>
-</tr>
-<tr>
-<td><strong>被动过滤器</strong></td>
-<td>管道把输入数据<strong>压入</strong>目标端过滤器，过滤器被动等待数据</td>
-</tr>
-</tbody>
-</table>
-<p>设计考虑：</p>
-<ul>
-<li>两端都是主动过滤器 → <strong>管道必须负责同步</strong>，典型方法是<strong>先进先出（FIFO）缓冲器</strong>；</li>
-<li>一端主动一端被动 → 管道的流转可通过前者<strong>直接调用</strong>后者实现。</li>
-</ul>
-<p><mark class="bubu">补</mark><strong>这就是"生产者—消费者"模型的雏形</strong>：两个主动过滤器 = 两个生产者抢一个队列，必须有缓冲区；一主一被 = 生产者直接调消费者（同步调用）。<strong>"用不用队列"这个现代架构问题的答案，在这里就已经给出了。</strong></p>
-<p><strong>经典示例</strong>（PPT 第 15 页）：编译器——源码 → 词法分析 → 语法分析 → 生成中间码 → 代码优化 → 可执行代码，每一步之间都是数据流。</p>
-<figure class="fig">
-<a href="../../assets/img/se/ch07_p013.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p013.png" alt="管道-过滤器示例：编译器"></a>
-<figcaption><b>图 7-3　管道-过滤器示例：编译器</b>　（PPT 第 13 页）图上一条从「源程序」出发的管线，中间四个方框是过滤器（词法分析、语法分析、代码优化…），方框之间是管道，最后汇到「目标代码」。<strong>注意每个方框都是黑盒</strong>：只声明输入什么、输出什么——这正是正文说「可独立升级过滤器」的前提。</figcaption>
-</figure>
-
-<p><strong>特点</strong>：自然地解决具有数据流特征的软件需求；可独立更新、升级过滤器来实现系统的扩展和进化。</p>
-<p><mark class="bubu">补</mark><strong>"可独立升级过滤器"这句话有前提</strong>：前提是<strong>数据格式约定不变</strong>。如果词法分析的输出格式改了，下游全部要改。所以管道-过滤器的真正约束不是"松耦合"，而是"<strong>用统一的数据格式换取独立性</strong>"。</p>
-<h3>黑板风格</h3>
-<p><strong>三类构件</strong>（PPT 第 18 页）：</p>
-<table>
-<thead>
-<tr>
-<th>构件</th>
-<th>职责</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>黑板</strong></td>
-<td>保存问题求解过程中的<strong>状态数据</strong>，并提供这些数据的读写服务</td>
-</tr>
-<tr>
-<td><strong>知识源</strong></td>
-<td>根据黑板中的状态<strong>评价自身可应用性</strong>，做部分求解工作，把结果写回黑板</td>
-</tr>
-<tr>
-<td><strong>控制器</strong></td>
-<td>监视黑板中不断更新的状态，<strong>安排（多个）知识源的活动</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>运行循环</strong>（PPT 第 20 页）：控制器观察黑板状态 → 决定哪些知识源可能有贡献 → 调用它们的评价功能选出参与者 → 被选中的知识源基于黑板数据推进求解并更新黑板 → 控制器重复，直到结果满意。</p>
-<p><strong>优缺点</strong>（PPT 第 23 页）：</p>
-<table>
-<thead>
-<tr>
-<th>优点</th>
-<th>缺点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>可灵活升级和更换知识源与控制构件</td>
-<td>为共享数据，各子系统必须有<strong>一致的数据视图</strong>，影响整体性能</td>
-</tr>
-<tr>
-<td>知识源的独立性和可重用性好（<strong>知识源之间没有交互</strong>）</td>
-<td>子系统的改变可能导致数据结构改变</td>
-</tr>
-<tr>
-<td>容错性和健壮性好（求解动作是探索性的，<strong>允许失败和纠错</strong>）</td>
-<td>统一的数据库结构（备份、安全、访问控制、恢复策略）会影响子系统效率</td>
-</tr>
-</tbody>
-</table>
-<p><mark class="bubu">补</mark><strong>黑板的本质是"共享数据 + 无直接通信"</strong>：知识源彼此不认识，只认识黑板。所以课件举的例子是协作软件 Notion、版本管理软件——<strong>它们都是"多人/多模块对同一份数据做增量修改"</strong>。优点和缺点都来自同一个设计：<strong>共享</strong>。要共享就要统一格式（性能代价），要共享就不能互相调用（独立性收益）。</p>
-<h3>MVC</h3>
-<p><strong>三个构件</strong>（PPT 第 24 页）：</p>
-<table>
-<thead>
-<tr>
-<th>构件</th>
-<th>职责</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>模型（Model）</strong></td>
-<td>存储业务数据，提供业务逻辑处理功能</td>
-</tr>
-<tr>
-<td><strong>视图（View）</strong></td>
-<td>向用户呈现模型中的数据</td>
-</tr>
-<tr>
-<td><strong>控制器（Controller）</strong></td>
-<td>在接获模型的业务逻辑处理结果后，选择适当的视图作为对用户界面动作的响应</td>
-</tr>
-</tbody>
-</table>
-<p><strong>运行约束</strong>（PPT 第 26 页）——这段把三个构件的时序说清楚了，建议按顺序记：</p>
+<h4>3.2.4 设计任务管理子系统（PPT 第 119 页）</h4>
+<p><strong>先分析并发性</strong>：通过 OOA 建立的动态模型判断——<strong>如果两个对象彼此之间不存在交互，或它们同时接受事件，则这两个对象在本质上是并发的</strong>。</p>
+<p>然后设计任务：确定事件驱动型任务、时钟驱动型任务、优先任务、关键任务、协调任务；<strong>尽量减少任务数</strong>；确定资源需求。</p>
+<h4>3.2.5 设计数据管理子系统（PPT 第 120 页）</h4>
+<p>数据管理子系统是"系统存储或检索对象的基本设施"，它建立在某种数据存储管理系统之上，<strong>并隔离了数据存储管理模式的影响</strong>。</p>
+<p>两个设计步骤：</p>
 <ol>
-<li><strong>创建视图</strong>：视图从模型获取数据并呈现界面；视图接受界面动作，转换为内部事件传给控制器；所有视图在收到模型的数据变化通知后向模型查询新数据并更新自己。</li>
-<li><strong>控制器</strong>：把界面事件转换为业务逻辑功能的<strong>调用</strong>；根据模型的处理结果<strong>创建新视图、选择其他视图或维持原视图</strong>。</li>
-<li><strong>模型</strong>：进行业务逻辑处理，把结果回送控制器，必要时把<strong>数据变化事件通知给所有视图</strong>。</li>
+<li><strong>选择数据存储管理模式</strong>：文件管理系统 / 关系数据库管理系统 / 面向对象数据库管理系统；</li>
+<li><strong>设计数据格式 + 设计相应的服务</strong>（针对所选模式）。</li>
 </ol>
-<p><mark class="bubu">补</mark><strong>MVC 最精妙的地方是"模型不知道视图存在"</strong>：模型只负责"数据变了就广播"，谁在听、听了干什么，它不管。这个"观察者"机制让<strong>一模型多视图</strong>成为可能（同一份数据同时以表格和图表展示）。所以 MVC 的价值不在于"分三层"，而在于<strong>它把"变化的方向"解耦了</strong>：数据变化 → 通知；界面变化 → 不影响数据。</p>
-<figure class="fig">
-<a href="../../assets/img/se/ch07_p025.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p025.png" alt="MVC 体系结构示意"></a>
-<figcaption><b>图 7-4　MVC 体系结构示意</b>　（PPT 第 25 页）图上三块：View（视图）、Controller（控制器）、Model（模型），箭头构成 View→Controller→Model→View 的环。<strong>这个环就是正文那三条运行约束</strong>：视图把界面动作交给控制器，控制器调模型，模型处理完通知所有视图更新。抓一个细节：<strong>模型到视图是「通知」，不是「调用」。</strong></figcaption>
-</figure>
-
-<h3>SOA</h3>
-<p><strong>三个角色</strong>（PPT 第 27 页）：</p>
-<ul>
-<li>把软构件抽象为一个个<strong>服务</strong>，每个服务封装特定功能并提供对外可访问的接口；</li>
-<li>任何一个服务既可当<strong>提供方</strong>（接受访问请求），也可当<strong>请求方</strong>（请求其他服务）；</li>
-<li>任何服务需要向<strong>服务注册中心</strong>注册登记，描述其可提供的服务及访问方式，才可对外提供服务。</li>
-</ul>
-<p><strong>协作流程</strong>（PPT 第 28 页）：提供方 → <strong>注册和发布</strong>服务到注册中心；请求方 → 向注册中心<strong>查询</strong>服务；请求方 → <strong>访问和获得</strong>服务。</p>
-<p><strong>特点</strong>（PPT 第 29 页）：服务提供方与请求方独立 → 支持<strong>松耦合</strong>；允许服务角色在运行时<strong>动态调整</strong> → 极强的灵活性；提供 <strong>UDDI、SOAP、WSDL</strong> 等协议支持注册、描述、绑定 → 有效支持<strong>异构服务间交互</strong>。</p>
-<p><mark class="bubu">补</mark><strong>SOA 的三个缩写值得记一下</strong>：UDDI（ Universal Description, Discovery and Integration）负责"服务怎么被找到"，WSDL（Web Services Description Language）负责"服务长什么样"，SOAP 负责"怎么调"。<strong>它们是"注册—描述—绑定"三个动作的对应协议。</strong></p>
-<h3>消息总线</h3>
-<p><strong>结构</strong>（PPT 第 31 页）：一组软构件 + 一条称为"<strong>消息总线</strong>"的连接件。总线是构件之间的通信桥梁，实现消息的发送、接收、转发、处理；每个构件通过接入总线实现收发。</p>
-<figure class="fig">
-<a href="../../assets/img/se/ch07_p031.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch07_p031.png" alt="消息总线风格"></a>
-<figcaption><b>图 7-5　消息总线风格</b>　（PPT 第 31 页）图上中间一条粗横条是「消息总线」，上下挂着六个「软构件」方框，每个构件只有一条线接到总线。<strong>数一下线：六个构件六条线</strong>——这就是总线风格解决的问题（两两直连要 15 条）。代价也在这张图上：总线是唯一通道，它出问题全都通不了。</figcaption>
-</figure>
-
-<p><strong>技术背景</strong>（PPT 第 32 页）：流行的 ORB 标准有两种——<strong>CORBA</strong>（Common Object Request Broker Architecture）与 <strong>DCOM</strong>（Distributed Component Object Model）。"软件总线"的中间件即<strong>对象请求代理（ORB）</strong>。分布式对象结构具有很好的开放性和透明性，用户可以方便地在总线上添加、更新、删除组件对象。每个对象在逻辑上平等，互为对方提供服务：提供服务的对象是服务器，提出请求的是客户。</p>
-<p><mark class="bubu">补</mark><strong>总线风格解决的是"n 个构件两两通信要 n(n-1)/2 条连接"的问题</strong>：接上总线后只需要 n 条连接。代价是<strong>总线本身成为单点</strong>——总线挂了全挂，总线慢了全慢。这也是后来"企业服务总线（ESB）"被人诟病、转向"事件驱动/消息队列"的原因。</p>
-<h3>六种风格的选型表（课件第 91 页原表）</h3>
+<p><mark class="bubu">补</mark><strong>"隔离存储模式的影响"这句话是这一页的精华</strong>：它意味着问题域的对象不应该知道数据存在 MySQL 还是文件里，中间要有一层负责转换（这就是后来"数据访问层/Repository 模式"的雏形）。<strong>换数据库时只改这一层，上层不动</strong>——这是第 6 讲"信息隐藏"原则在架构上的直接应用。</p>
+<h3>3.2.1 架构与设计模式：三层抽象</h3>
+<p>课件第 56–59 页给了两个关键定义：</p>
+<p><strong>软件体系结构（Software Architecture，SA）</strong>，也称软件架构：<strong>从高层抽象角度刻画组成软件系统的设计元素及它们之间的逻辑关联。</strong></p>
+<p><strong>软件设计模式</strong>：以设计重用为目的，采用一种良定义的、正规的、一致的方式记录的软件设计经验；关注在一般或特定设计环境中可能重复出现的设计问题，并给出经过充分实践考验的解决方案。它的要素有五项：<strong>名称、问题、施用和约束条件、解决方案、效果</strong>。</p>
+<p><strong>三层抽象</strong>（PPT 第 58 页），这是理解"模式"这个词的关键：</p>
 <table>
 <thead>
 <tr>
-<th>风格</th>
-<th>特点</th>
-<th>典型应用</th>
+<th>层次</th>
+<th>面向</th>
+<th>例子</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>管道/过滤器</strong></td>
-<td>数据驱动的分级处理，处理流程可灵活重组，过滤器可重用</td>
-<td>数据驱动的事务处理软件，如编译器、Web 服务请求</td>
+<td><strong>体系结构风格</strong></td>
+<td>整个软件系统</td>
+<td>分层、管道与过滤器、黑板、MVC、SOA、总线</td>
 </tr>
 <tr>
-<td><strong>层次风格</strong></td>
-<td>分层抽象、层次间耦合度低、层次功能可重用和可替换</td>
-<td><strong>绝大部分应用软件</strong></td>
+<td><strong>构件设计模式</strong></td>
+<td>子系统或构件</td>
+<td>（中间层模式）</td>
 </tr>
 <tr>
-<td><strong>MVC</strong></td>
-<td>模型、处理、显示职责明确，构件间关系局部化，构件可重用</td>
-<td>单机软件系统、Web 应用</td>
-</tr>
-<tr>
-<td><strong>SOA</strong></td>
-<td>以服务为基本构件，支持异构构件互操作，服务可灵活重用和组装</td>
-<td>部署和运行在云平台上的软件系统</td>
-</tr>
-<tr>
-<td><strong>消息总线</strong></td>
-<td>提供统一消息总线，支持异构构件间消息传递与处理</td>
-<td>异构构件之间消息通信密集的系统</td>
-</tr>
-<tr>
-<td><strong>黑板</strong></td>
-<td>共享数据 + 无直接交互，适合探索性求解</td>
-<td>协作编辑、版本管理、语音识别等</td>
+<td><strong>实现设计模式</strong></td>
+<td>构件中某个特定问题</td>
+<td>23 种 GoF 模式（工厂、单例、观察者……）</td>
 </tr>
 </tbody>
 </table>
-<p><mark class="bubu">补</mark><strong>选型的三问</strong>：①系统的主要特征是"<strong>数据流</strong>"还是"<strong>交互</strong>"还是"<strong>共享状态</strong>"？②要不要支持<strong>多客户端/异构</strong>？③变更主要发生在<strong>哪一层</strong>（界面变 → MVC/分层；处理步骤变 → 管道；参与者变 → SOA/总线）？</p>
+<p><mark class="bubu">补</mark><strong>这三层的关系可以这样理解</strong>：架构风格是"城市的规划"（路怎么走、区分几个片区），构件模式是"小区的设计"（楼怎么排），实现模式是"户型的装修"（房间怎么分隔）。<strong>越往上越影响全局，越往下越影响局部</strong>。第 7 讲会详细展开六种架构风格和 23 种设计模式的分类。</p>
 <figure class="fig">
-<a href="../../assets/img/se/ch06_p091.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch06_p091.png" alt="六种体系结构风格的适用场合"></a>
-<figcaption><b>图 7-6　六种体系结构风格的适用场合</b>　（PPT 第 91 页）正文那张选型表的原始出处：五列（类别、特点、典型应用），六行（管道/过滤器、层次、MVC、SOA、消息总线等）。<strong>复习时只看「典型应用」那一列</strong>——考试给场景，问的往往就是「它落在哪一行」。</figcaption>
+<a href="../../assets/img/se/ch06_p058.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch06_p058.png" alt="不同抽象层次的设计模式"></a>
+<figcaption><b>图 6-6　不同抽象层次的设计模式</b>　（PPT 第 58 页）图右侧三个自上而下的箭头框正好是正文那句类比：体系结构风格（面向整个软件系统，标「整体、全局」）→ 构件设计模式（面向子系统或构件，标「局部」）→ 实现设计模式（针对构件中某个特定问题，标「细节」）。<strong>看到「模式」二字先问它是哪一层的模式</strong>，否则会把 MVC 和单例混为一谈。</figcaption>
 </figure>
-<div class="pager"><a class="pg prev" href="software-engineering-23.html"><span>← 上一节</span><b>3–4 面向对象设计、架构风格与设计评审</b></a><a class="pg next" href="software-engineering-25.html"><span>下一节 →</span><b>2–3 用户界面设计与详细设计工具</b></a></div>
+
+<h3>3.3 面向对象设计的四项优势</h3>
+<p>课件第 121 页给了四条，每条都有实际含义：</p>
+<table>
+<thead>
+<tr>
+<th>优势</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>高层抽象和自然过渡</strong></td>
+<td>OO 概念贴近现实，减少工程师与用户的交流鸿沟，支持大型复杂系统开发</td>
+</tr>
+<tr>
+<td><strong>多种形式和粗粒度的软件重用</strong></td>
+<td>封装、接口、继承、多态都支持重用；重用的粒度可以是类、构件、框架</td>
+</tr>
+<tr>
+<td><strong>系统化的软件设计</strong></td>
+<td>系统性支持架构设计、界面设计、数据设计、构件设计、子系统设计、用例设计、类设计</td>
+</tr>
+<tr>
+<td><strong>支持软件的扩展和变更</strong></td>
+<td>接口、抽象类、继承、实现等机制，可设计出易于扩展变更的模型</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>第 2 条"粗粒度重用"值得展开</strong>：结构化方法的重用单位是<strong>函数</strong>（十几行），OO 的重用单位可以到<strong>类</strong>（几百行）、<strong>构件</strong>（几千行）、<strong>框架</strong>（几万行，如 Spring）。粒度越来越大，是因为封装把"一堆相关的函数和数据"打成了一个可整体搬走的包裹。这也呼应第 2 讲"重用粒度越来越大"的发展规律。</p>
+<h3>4 设计输出、文档、缺陷与评审</h3>
+<p><strong>输出两件套</strong>（PPT 第 123 页）：</p>
+<ul>
+<li><strong>软件设计模型</strong>：从多视角、多抽象层次描述设计信息，用 UML、模块图、层次图等图形化方式刻画；</li>
+<li><strong>软件设计文档</strong>：用自然语言结合模型，详细描述架构设计、子系统与构件设计、界面设计、用例设计、数据设计等。</li>
+</ul>
+<p><strong>设计文档规范</strong>（PPT 第 124 页）的章节结构：文档概述 → 系统概述 → 设计目标和原则 → 设计约束与现实限制 → 体系结构设计 → 用户界面设计 → 子系统/构件设计 → 用例设计 → 类设计 → 数据设计 → 接口设计。</p>
+<p><mark class="bubu">补</mark><strong>注意"设计目标和原则"这一章</strong>——它要求设计师<strong>把自己的取舍写下来</strong>："为了性能牺牲了一层抽象""为了兼容旧接口保留了一个冗余字段"。这一章是给三年后的维护者看的，也是最有价值的一章，但最常被跳过。</p>
+<p><strong>四类设计缺陷</strong>（PPT 第 125 页）：</p>
+<table>
+<thead>
+<tr>
+<th>缺陷</th>
+<th>表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>设计未能满足需求</strong></td>
+<td>对需求理解有偏差，设计的软件无法满足用户需要</td>
+</tr>
+<tr>
+<td><strong>设计质量低下</strong></td>
+<td>未遵循设计原则、缺乏经验，导致不易维护和扩展</td>
+</tr>
+<tr>
+<td><strong>设计存在不一致</strong></td>
+<td>不同设计制品对同一设计有不同描述，或要素之间不一致、冲突</td>
+</tr>
+<tr>
+<td><strong>设计不够详尽</strong></td>
+<td>没提供细节，程序员无法据此编码</td>
+</tr>
+</tbody>
+</table>
+<p><strong>评审要点</strong>（PPT 第 126 页）：</p>
+<ul>
+<li><strong>谁参与</strong>：程序员、测试工程师、用户、质量保证人员、设计工程师；</li>
+<li><strong>评什么</strong>：文档规范性（是否符合设计规格说明书）、可理解性、合法性（是否符合标准法规）、质量水平（是否遵循设计原则）、是否满足需求、优化性（还有没有可优化的地方）。</li>
+</ul>
+<p><mark class="bubu">补</mark><strong>把"程序员"列为评审人是很聪明的一招</strong>：因为程序员是设计的<strong>第一消费者</strong>，如果程序员看不懂设计、或者看完还得再问十遍，那这份设计就是不详尽的。<strong>让下游用户参与评审上游产物，是保证"信息传递不丢"的最有效手段。</strong></p>
+<p><strong>设计管理</strong>（PPT 第 127 页）：变更管理（哪些变了、反映在哪、版本怎么变）、追溯管理（什么原因导致变更、评估影响域）、<strong>基线管理</strong>（通过评审后纳入基线库）。</p>
+<hr />
+<h3>第 6 讲 小结</h3>
+<p><strong>一句话串起整讲</strong>：设计是在需求的约束下给出"实现方案"，它的核心动作是"分解 + 隐藏"，它的评价标准是"高内聚低耦合"，它的成败取决于是否遵守了那七条原则。</p>
+<p><strong>核心结论清单</strong></p>
+<ol>
+<li>设计 = 需求 + 制约因素 → 解决方案；没有约束就不需要设计。</li>
+<li>设计处于承上启下的位置，设计质量直接决定产品好坏。</li>
+<li>好设计要内外兼修：高可靠、高效率、高可理解、高可维护——四者经常冲突，要权衡。</li>
+<li>设计过程四步：架构（最贵）→ 界面 → 详细（最便宜）→ 文档与评审，全程迭代。</li>
+<li>七条原则：抽象与逐步求精、模块化、信息隐藏、关注点分离、软件重用、迭代设计、可追踪性。</li>
+<li><strong>软件工程基本定理</strong>：C(P1+P2) &gt; C(P1)+C(P2)，所以分解能降低复杂度。</li>
+<li>但分解有最优区间：模块成本随数量线性上升，接口开销近似平方上升，中间存在最小成本区域。</li>
+<li>内聚七级（低→高）：偶然、逻辑、时间、过程、通信、顺序、功能。</li>
+<li>耦合七级（高→低）：内容、公共、外部、控制、标记、数据、非直接。</li>
+<li>前三类耦合是"共享存储"式，从控制耦合起是"接口调用"式。</li>
+<li>OO 设计是"精化"而非"转换"，没有结构化方法的模型断层。</li>
+<li>OO 设计模型四部分：问题域、人机交互、任务管理、数据管理。</li>
+</ol>
+<h3>自测</h3>
+<p><strong>1.</strong> 判断下面这个模块的内聚等级，并说明理由：</p>
+<pre><code>void processOrder() {
+    // 1. 校验订单合法性
+    // 2. 计算总价（用校验后的订单）
+    // 3. 生成出库单（用总价）
+    // 4. 打印日志
+}
+</code></pre>
+<details>
+<summary>答案</summary>
+<p><strong>顺序内聚（第 6 级）</strong>，接近功能内聚。理由：四个步骤都与"处理订单"这一功能相关，且<strong>按顺序执行、前一步的输出是后一步的输入</strong>（校验后的订单 → 总价 → 出库单），符合"顺序内聚"的定义。之所以不判为"功能内聚"：功能内聚要求所有成分<strong>共同完成一个单一功能</strong>，而这里实际做了"校验 + 计价 + 出库 + 日志"四件可分别命名的事，理论上可以再拆。如果第 4 步"打印日志"与其他三步无关（只是顺手加的），那这一部分会把整体拉向"时间内聚"。<strong>评分关键：说清"有数据顺序依赖 → 顺序内聚"，并指出可再细化的点。</strong></p>
+</details>
+<p><strong>2.</strong> 有两个模块，A 把整个 <code>Student</code> 对象传给 B，B 只用了其中的 <code>name</code> 字段。这是哪种耦合？怎么改进？</p>
+<details>
+<summary>答案</summary>
+<p><strong>标记耦合（特征耦合）</strong>——传递的是数据结构而不是简单数据项。问题在于 B 与 <code>Student</code> 的<strong>完整结构</strong>耦合了：以后 <code>Student</code> 加字段、改字段类型、甚至改类名，B 都可能被牵连（因为它拿到了整个对象，编译器无法判断它到底用了什么）。改进：<strong>只传 <code>name</code> 字符串<strong>，降为</strong>数据耦合</strong>。这条改进的本质是第 6 讲的原则"模块间仅交换完成功能所必需交换的信息"（信息隐藏）。</p>
+</details>
+<p><strong>3.</strong> 为什么"内容耦合"比"公共耦合"更糟？请从"能不能被发现"的角度解释。</p>
+<details>
+<summary>答案</summary>
+<p>因为内容耦合<strong>在接口上完全看不出来</strong>。公共耦合虽然也危险（改全局数据结构会影响所有使用者），但至少"使用了全局变量"这件事是显式的，搜一下全局变量名就能找到所有依赖点。而内容耦合是一个模块<strong>直接读写另一个模块的内部数据、甚至跳进对方内部执行</strong>，这种依赖不会出现在任何函数签名里，只能靠通读代码发现。一旦对方改了内部实现，你这边会莫名其妙地崩，而且<strong>编译器不会报错</strong>。所以耦合等级的排序本质上是"<strong>依赖的可见性</strong>"排序：越不可见越危险。</p>
+</details>
+<p><strong>4.</strong> 老师让你"把系统拆成 30 个微服务，这样最灵活"。用软件工程基本定理和成本曲线反驳他。</p>
+<details>
+<summary>答案</summary>
+<p>要点三条：①<strong>基本定理只说"分开解决比合起来省"</strong>，它保证的是"分解有收益"，没说"越分解越省"；②成本曲线显示：模块自身成本随数量<strong>线性上升</strong>，接口开销随数量<strong>近似平方上升</strong>，总成本是 U 型，存在<strong>最小成本区域</strong>；③30 个服务意味着至少几十条跨服务调用链、几十套部署与监控、版本兼容与分布式事务问题，<strong>接口开销极可能超过分解收益</strong>。判断标准不是"数量"，而是"<strong>每个模块是否还能被一个人在一周内完整理解</strong>"。合理的反问是：这 30 个服务的边界，是按业务能力划的，还是按"技术分层"硬切的？</p>
+</details>
+<p><strong>5.</strong> 为什么说 OO 设计的"精化"比结构化方法的"转换"更不容易丢信息？</p>
+<details>
+<summary>答案</summary>
+<p>因为<strong>表示体系是否连续</strong>。结构化方法里，分析用数据流图（数据在加工之间流动），设计用结构图（模块调用层次），二者概念体系不同，转换需要人工判断"哪个加工变成哪个模块""哪些数据流变成接口参数"，每一步都可能丢信息或引入偏差——这就是课件所说的"分析模型和设计模型之间的本质性断层"。OO 方法里，分析类图和设计类图用的是同一套元素（类、属性、操作、关联），设计只是在<strong>同一个模型上增加细节</strong>（可见性、类型、接口、辅助类、子系统划分），不需要换一套语言重画，因此<strong>信息天然连续</strong>，且可以通过"可追踪性"逐条核对。</p>
+</details>
+<div class="pager"><a class="pg prev" href="software-engineering-23.html"><span>← 上一节</span><b>2.2.2 模块化：内聚与耦合七级</b></a><a class="pg next" href="software-engineering-25.html"><span>下一节 →</span><b>1 六种架构风格与选型</b></a></div>
 </div>
 
 <script>

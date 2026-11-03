@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>1 逻辑老化与四种维护 · 软件工程讲义：全课程十讲</title>
+<title>3.5–4 黑盒测试、测试过程与组织 · 软件工程讲义：全课程十讲</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
@@ -75,261 +75,555 @@
 <div class="sg">第 4 讲　需求分析基础</div>
 <a class="i" href="software-engineering-13.html">1.1–1.3 需求是什么：质量要求、特点与分类</a>
 <a class="i" href="software-engineering-14.html">1.4–2.2 需求从哪里来：获取方法与需求工程</a>
-<a class="i" href="software-engineering-15.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
-<a class="i" href="software-engineering-16.html">3 需求分析过程、文档与评审</a>
+<a class="i" href="software-engineering-15.html">2.2 面向对象的核心概念：对象、类、消息、封装、继承、多态</a>
+<a class="i" href="software-engineering-16.html">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</a>
+<a class="i" href="software-engineering-17.html">3 需求分析过程、文档与评审</a>
 <div class="sg">第 5 讲　软件分析</div>
-<a class="i" href="software-engineering-17.html">1 九种 UML 图与三个分析视角</a>
-<a class="i" href="software-engineering-18.html">2.1–2.4 三模型与五层次</a>
-<a class="i" href="software-engineering-19.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
-<a class="i" href="software-engineering-20.html">2.5–3 动态模型、功能模型与需求变更</a>
+<a class="i" href="software-engineering-18.html">1 九种 UML 图与三个分析视角</a>
+<a class="i" href="software-engineering-19.html">2.1–2.4 三模型与五层次</a>
+<a class="i" href="software-engineering-20.html">2.2 对象建模实战：从名词到 ATM 对象模型</a>
+<a class="i" href="software-engineering-21.html">2.5–3 动态模型、功能模型与需求变更</a>
 <div class="sg">第 6 讲　软件设计基础</div>
-<a class="i" href="software-engineering-21.html">1–2.2 设计概述与七条设计原则</a>
-<a class="i" href="software-engineering-22.html">2.2.2 模块化：内聚与耦合七级</a>
-<a class="i" href="software-engineering-23.html">3–4 面向对象设计、架构风格与设计评审</a>
+<a class="i" href="software-engineering-22.html">1–2.2 设计概述与七条设计原则</a>
+<a class="i" href="software-engineering-23.html">2.2.2 模块化：内聚与耦合七级</a>
+<a class="i" href="software-engineering-24.html">3–4 面向对象设计、架构风格与设计评审</a>
 <div class="sg">第 7 讲　架构、模式与界面</div>
-<a class="i" href="software-engineering-24.html">1 六种架构风格与选型</a>
-<a class="i" href="software-engineering-25.html">2–3 用户界面设计与详细设计工具</a>
-<a class="i" href="software-engineering-26.html">4 设计模式与 OO 实战五步</a>
+<a class="i" href="software-engineering-25.html">1 六种架构风格与选型</a>
+<a class="i" href="software-engineering-26.html">2–3 用户界面设计与详细设计工具</a>
+<a class="i" href="software-engineering-27.html">4 设计模式与 OO 实战五步</a>
 <div class="sg">第 8 讲　编写代码</div>
-<a class="i" href="software-engineering-27.html">1–2 程序设计语言与结构化程序设计</a>
-<a class="i" href="software-engineering-28.html">3 调试、求助与程序设计风格</a>
+<a class="i" href="software-engineering-28.html">1–2 程序设计语言与结构化程序设计</a>
+<a class="i" href="software-engineering-29.html">3 调试、求助与程序设计风格</a>
 <div class="sg">第 9 讲　软件测试</div>
-<a class="i" href="software-engineering-29.html">1–2.4 测试是什么与测试过程</a>
-<a class="i" href="software-engineering-30.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
-<a class="i" href="software-engineering-31.html">3.5–4 黑盒测试、测试过程与组织</a>
+<a class="i" href="software-engineering-30.html">1–2.4 测试是什么与测试过程</a>
+<a class="i" href="software-engineering-31.html">3.1–3.4 白盒测试：逻辑覆盖与基本路径</a>
+<a class="i cur" data-h="s-1" href="software-engineering-32.html">3.5–4 黑盒测试、测试过程与组织</a>
 <div class="sg">第 10 讲　软件维护与演化</div>
-<a class="i cur" data-h="s-1" href="software-engineering-32.html">1 逻辑老化与四种维护</a>
-<a class="i" href="software-engineering-33.html">2–4 维护技术、管理与可维护性</a>
+<a class="i" href="software-engineering-33.html">1 逻辑老化与四种维护</a>
+<a class="i" href="software-engineering-34.html">2–4 维护技术、管理与可维护性</a>
 <div class="sg">附录</div>
-<a class="i" href="software-engineering-34.html">附录 A　术语中英对照表</a>
-<a class="i" href="software-engineering-35.html">附录 B　一页速查表</a>
-<a class="i" href="software-engineering-36.html">附录 C　FAQ 与易错点清单</a>
+<a class="i" href="software-engineering-35.html">附录 A　术语中英对照表</a>
+<a class="i" href="software-engineering-36.html">附录 B　一页速查表</a>
+<a class="i" href="software-engineering-37.html">附录 C　FAQ 与易错点清单</a>
   </nav>
 </aside>
 
 <div class="wrap">
 
-<h2 id="s-1">1 逻辑老化与四种维护</h2>
-<p>第 10 讲是整门课的收尾，也是最"现实"的一讲：<strong>软件交付不是结束，是开始</strong>。</p>
-<h3>1.1 软件的逻辑老化</h3>
-<p>课件第 3 页先问了一个引子：物理设备在使用过程中会出现故障，需要维护。<strong>软件是否也会出故障？为什么？出了故障怎么办？</strong></p>
-<p>答案在"<strong>软件逻辑老化</strong>"这个定义里（PPT 第 4 页）：</p>
-<blockquote>
-<p>软件在维护和演化的过程中出现的<strong>用户满意度降低、质量逐渐下降、变更成本不断上升</strong>这样一种现象。这些现象发生在<strong>逻辑层面</strong>，而非物理层面。</p>
-</blockquote>
-<p>课件配了一张曲线图：随着维护活动的进行，软件质量与用户满意度逐渐下滑，而<strong>软件重构</strong>能让曲线重新抬升——所以老化不是不可逆的，但要靠主动干预。</p>
-<p><mark class="bubu">补</mark><strong>这一条和第 1 讲"软件不会磨损和老化"看似矛盾，其实是一体两面</strong>：软件不会<strong>物理</strong>老化（没有材料疲劳、不会生锈），但会<strong>逻辑</strong>老化（结构越来越乱、文档越来越不匹配、每次改动都要绕更多弯）。<strong>判断依据：如果一个系统的"改一个功能需要动五个模块、开三次会"，它就已经在老化了。</strong></p>
-<figure class="fig">
-<a href="../../assets/img/se/ch10_p004.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch10_p004.png" alt="软件逻辑老化曲线"></a>
-<figcaption><b>图 10-1　软件逻辑老化曲线</b>　（PPT 第 4 页）图上横轴是时间、纵轴是「软件质量及用户满意度」：实线随维护活动持续下滑（逻辑老化），中间用三角标出「软件重构」的位置，重构后曲线重新抬升。<strong>它想说的不是「软件会坏」，而是「重构能把它救回来」</strong>——所以老化可管理，不是宿命。</figcaption>
-</figure>
-
-<h3>1.2 什么是软件维护</h3>
-<p>课件给了两个层次的表述。</p>
-<p><strong>通俗版</strong>（PPT 第 5 页）：软件在交付使用后，由于<strong>应用需求和环境变化</strong>以及<strong>自身问题</strong>，对软件系统进行改造和调整的过程。三种触发原因：</p>
+<h2 id="s-1">3.5–4 黑盒测试、测试过程与组织</h2>
+<h3>3.5 黑盒测试</h3>
+<p><strong>思想</strong>（PPT 第 83 页）：根据已知的<strong>程序功能和性能</strong>（而非内部细节）设计测试用例，检验程序的每个功能和性能是否正常。依据是"程序的功能和性能描述"，特点是"知道功能，不必了解内部结构和处理细节"。</p>
+<p><strong>黑盒能发现的五类错误</strong>（PPT 第 84 页）：</p>
+<ol>
+<li>不正确或遗漏的<strong>功能</strong>；</li>
+<li><strong>界面</strong>错误；</li>
+<li><strong>数据结构或外部数据库访问</strong>错误；</li>
+<li><strong>性能</strong>错误；</li>
+<li><strong>初始化和终止条件</strong>错误。</li>
+</ol>
+<p><strong>两个优点</strong>（PPT 第 85 页），这两句常被拿来当简答题：</p>
 <ul>
-<li><strong>软件自身问题</strong>：发现了一些新的缺陷；</li>
-<li><strong>运行环境变化</strong>：从 Windows 迁到 Linux；</li>
-<li><strong>软件需求变化</strong>：需要增加一些新需求。</li>
+<li>黑盒测试<strong>与软件如何实现无关</strong>——如果实现发生变化，测试用例仍然可以使用；</li>
+<li>黑盒测试用例的开发<strong>可以与软件实现并行进行</strong>，能够缩短开发周期。</li>
 </ul>
-<p>课件用"小米便签"举例：设置/解除便签访问密码、根据密码访问便签、改善程序代码质量。</p>
-<p><strong>严格版</strong>（PPT 第 6 页）：</p>
-<blockquote>
-<p>指软件系统<strong>交付使用以后、新版本升级之前</strong>这段时间里，为了<strong>改正错误</strong>或<strong>满足新的需求</strong>而修改软件的过程。</p>
-</blockquote>
-<p>目标是三件事：提高软件的可维护性、减少维护所需工作量、降低软件系统的总成本。</p>
-<p><mark class="bubu">补</mark><strong>注意"交付使用以后、新版本升级之前"这个时间限定</strong>——它把维护和"开发新版本"区分开了。实际工程中两者界限模糊（持续交付让"版本"变得连续），但概念上必须分清：<strong>维护是在既有架构内做修改，新版本可以重构架构</strong>。这个区分在第 10 讲后面讲"再工程"时会用到。</p>
-<h3>1.3 四种维护（考试必考）</h3>
-<p>课件第 7–11 页用四个"为什么"引出四类维护，这个结构很好记：</p>
-<h4>a. 纠正性维护（Corrective）</h4>
-<p><strong>引子</strong>："为什么软件在使用时还有缺陷存在？"</p>
-<p>定义：对<strong>在测试阶段未能发现的、在软件投入使用后才逐渐暴露出来的错误</strong>的测试、诊断、定位、纠错，以及验证、修改的回归测试过程。</p>
-<p><mark class="bubu">补</mark><strong>为什么测试过了还有缺陷？</strong> 第 9 讲讲了两大挑战：不能穷举、成本有限。所以测试只能"降低缺陷密度"，不能"清零"。纠正性维护就是为这个差额买单。</p>
-<h4>b. 适应性维护（Adaptive）</h4>
-<p><strong>引子</strong>："为什么软件需要适应环境的变化？"</p>
-<p>定义：由于<strong>新的硬件设备不断推出、操作系统和编译系统不断升级</strong>，为了使软件能适应新的环境而引起的程序修改和扩充活动。</p>
-<p><mark class="bubu">补</mark><strong>这类维护在现代占比在上升</strong>：浏览器版本、JDK 升级、云平台 API 变更、第三方 SDK 停服……<strong>很多"技术债"其实是环境债</strong>——代码没变，世界变了（想想第 9 讲波音 737 MAX 那个 ±100/±300 的例子，本质也是"环境变了但假设没变"）。</p>
-<h4>c. 改善性（完善性）维护（Perfective）</h4>
-<p><strong>引子</strong>："小米便签维护中是否涉及完善性维护？做了哪些完善性工作？"</p>
-<p>定义：在软件使用过程中，用户往往会对软件提出<strong>新的功能与性能要求</strong>。为满足这些要求，需要修改或再开发软件，以<strong>扩充功能、增强性能、改进加工效率、提高可维护性</strong>。</p>
-<p><mark class="bubu">补</mark><strong>注意定义里包含了"提高可维护性"</strong>——所以"重构"也属于完善性维护（而不是预防性维护）。这是易错点，见下一节。</p>
-<h4>d. 预防性维护（Preventive）</h4>
-<p><strong>引子</strong>："小米便签需要做预防性维护吗？"</p>
-<p>定义：为了进一步<strong>改善软件的可靠性和易维护性</strong>，或者为<strong>将来的维护奠定更好的基础</strong>而对软件进行修改。课件加了一句实话：<strong>"这类维护很难。"</strong></p>
-<p><mark class="bubu">补</mark><strong>完善性维护 vs 预防性维护的分界线</strong>：完善性维护是"<strong>现在</strong>要它更好用/更快"（用户提出或能感知），预防性维护是"<strong>将来</strong>要它更好改"（用户感知不到，纯粹为降低未来成本）。所以"给代码加注释、拆大类、补测试用例"属于预防性维护，"加一个新功能、优化查询速度"属于完善性维护。</p>
-<h3>四类维护的比例</h3>
-<p>课件第 12 页给了一个饼图，这组数字必须记：</p>
+<p><mark class="bubu">补</mark><strong>第 1 条是黑盒最大的战略价值</strong>：需求不变、实现重写，白盒用例全部作废，黑盒用例原封不动。<strong>第 2 条解释了为什么测试计划能在需求阶段就定</strong>（第 3 讲那张瀑布表）：因为黑盒用例只需要需求，不需要代码。</p>
+<p><strong>四种常用技术</strong>（PPT 第 86 页）：等价分类法、边界值分析、错误猜测法、因果图法。</p>
+<h3>3.6 等价分类法</h3>
+<p><strong>思想</strong>（PPT 第 87 页）：把输入数据集合按输入条件划分为若干<strong>等价类</strong>；每个等价类对输入条件而言是一组有效或无效的输入；<strong>为每个等价类设计一个测试用例</strong>。</p>
+<p>优点：<strong>减少测试次数，不丢失发现错误的机会</strong>——因为同一等价类中的数据"具有相同的测试特征"。</p>
+<p><strong>两类等价类</strong>（PPT 第 88 页）：</p>
 <table>
 <thead>
 <tr>
 <th>类型</th>
-<th>比例</th>
+<th>定义</th>
+<th>用途</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>完善性维护</strong></td>
-<td><strong>50%</strong></td>
+<td><strong>有效等价类</strong></td>
+<td>按规格说明是<strong>合理、有意义</strong>的输入数据集合</td>
+<td>检验程序是否实现预定功能和性能</td>
 </tr>
 <tr>
-<td>纠错性维护</td>
-<td>25%</td>
+<td><strong>无效等价类</strong></td>
+<td>按规格说明是<strong>不合理、无意义</strong>的输入数据集合</td>
+<td>检验程序是否"不满足规格说明要求"（即错误处理是否有效）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>六条划分原则</strong>（PPT 第 89–94 页），这是本节最该背的清单：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>输入条件的特点</th>
+<th>划分方式</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>规定了<strong>取值范围</strong>或值的个数</td>
+<td>1 个有效 + <strong>2 个</strong>无效（小于下界、大于上界）</td>
+<td>序号 1–999：有效 <code>1≤x≤999</code>；无效 <code>x&lt;1</code>、<code>x&gt;999</code></td>
 </tr>
 <tr>
-<td>适应性维护</td>
-<td>21%</td>
+<td>2</td>
+<td>规定了<strong>输入值的集合</strong>或"必须如何"的条件</td>
+<td>1 个有效 + 1 个无效</td>
+<td>C 语言标识符"以字母打头"：字母开头有效；不以字母开头无效</td>
 </tr>
 <tr>
-<td>预防性维护</td>
-<td>4%</td>
+<td>3</td>
+<td>输入是<strong>布尔量</strong></td>
+<td>1 个有效 + 1 个无效</td>
+<td>真/假</td>
+</tr>
+<tr>
+<td>4</td>
+<td>输入是<strong>一组值</strong>且程序对每个值分别处理</td>
+<td><strong>每个值一个有效类</strong> + 1 个无效类</td>
+<td>教授/副教授/讲师/助教分别计分 → 4 个有效类 + 1 个"其他身份"无效类</td>
+</tr>
+<tr>
+<td>5</td>
+<td>输入<strong>必须遵守某规则</strong></td>
+<td>1 个有效 + <strong>若干个</strong>无效（从不同角度违反）</td>
+<td>语句必须以分号结束：以"；"结束有效；以"：""，""、"结束各为一个无效类</td>
+</tr>
+<tr>
+<td>6</td>
+<td>已划分的等价类中元素<strong>处理方式不同</strong></td>
+<td>进一步细分成更小的等价类</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>使用时的两个注意</strong>（PPT 第 95 页）：</p>
+<ol>
+<li>划分等价类<strong>不仅要考虑有效类，还要考虑无效类</strong>；</li>
+<li><strong>每一无效等价类至少要用一个测试用例</strong>（不然可能漏掉某类错误），但允许<strong>若干有效等价类合用同一个测试用例</strong>（进一步减少次数）。</li>
+</ol>
+<p><strong>设计测试用例的三条规则</strong>（PPT 第 97 页）：</p>
+<ol>
+<li>为每个等价类规定唯一编号；</li>
+<li>设计新用例，使其<strong>尽可能覆盖尚未被覆盖的有效等价类</strong>，重复直到所有有效类被覆盖；</li>
+<li>设计新用例，使其<strong>仅覆盖一个尚未被覆盖的无效等价类</strong>，重复直到所有无效类被覆盖。</li>
+</ol>
+<p><mark class="bubu">补</mark><strong>为什么无效类要"一对一"？</strong> 因为如果用一个用例同时触发两个错误（比如既长度不对又含非法字符），程序只会报第一个错，第二个错误有没有被正确处理就测不出来——<strong>多个错误会互相遮蔽</strong>。而有效类可以合并，是因为它们走的是同一条正确路径，合并只是省事。</p>
+<p><strong>招工年龄案例</strong>（PPT 第 98–101 页）</p>
+<p>题目：某工厂招工，报名者年龄应在 16–35 周岁之间（截至 1995 年 6 月 30 日），即出生年月不早于 1960 年 7 月、不晚于 1979 年 6 月。出生年月由 6 位数字表示，前 4 位年、后 2 位月。程序自动检验，不合格显示"年龄不合格"。</p>
+<p><strong>等价类表（3 个有效 + 7 个无效）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>输入数据</th>
+<th>有效等价类</th>
+<th>无效等价类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>出生年月（形式）</td>
+<td>① 6 位有效数字字符</td>
+<td>② 有非数字字符；③ 少于 6 位；④ 多于 6 位</td>
+</tr>
+<tr>
+<td>对应数值</td>
+<td>⑤ 196007–197906</td>
+<td>⑥ &lt; 196007；⑦ &gt; 197906</td>
+</tr>
+<tr>
+<td>月份</td>
+<td>⑧ 在 1–12 之间</td>
+<td>⑨ 等于"0"；⑩ &gt; 12</td>
+</tr>
+</tbody>
+</table>
+<p><strong>测试用例</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>测试数据</th>
+<th>期望结果</th>
+<th>覆盖的等价类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>197011</td>
+<td>输入有效</td>
+<td>①⑤⑧</td>
+</tr>
+<tr>
+<td>MAY,70</td>
+<td>输入无效</td>
+<td>②</td>
+</tr>
+<tr>
+<td>19705</td>
+<td>输入无效</td>
+<td>③</td>
+</tr>
+<tr>
+<td>1968011</td>
+<td>输入无效</td>
+<td>④</td>
+</tr>
+<tr>
+<td>196006</td>
+<td>年龄不合格</td>
+<td>⑥</td>
+</tr>
+<tr>
+<td>197907</td>
+<td>年龄不合格</td>
+<td>⑦</td>
+</tr>
+<tr>
+<td>196200</td>
+<td>输入无效</td>
+<td>⑨</td>
+</tr>
+<tr>
+<td>197222</td>
+<td>输入无效</td>
+<td>⑩</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>这张表有个细节值得注意</strong>：形式类错误（②③④）的期望结果是"输入无效"，而数值类错误（⑥⑦）的期望结果是"年龄不合格"——<strong>不同的错误应给出不同的提示</strong>。如果程序对所有错误都只报"输入无效"，那它虽然"拒绝了错误输入"，但用户不知道该改什么，这在质量上仍然是不合格的（第 4 讲"可验证"、第 7 讲"错误信息是否直观"）。</p>
+<h3>3.7 边界值分析法</h3>
+<p><strong>思想</strong>（PPT 第 102 页）：等价类是在值域内<strong>任意取</strong>，边界值必须在<strong>边界附近取</strong>。</p>
+<p>三条规则：</p>
+<ul>
+<li>输入条件是范围 (a, b)：<strong>a、b 以及紧挨 a、b 左右的值</strong>都应作为测试用例；</li>
+<li>输入条件是一组数：选<strong>最大者和最小者、次大和次小者</strong>；</li>
+<li>如果内部数据结构是有界的：设计用例检查该<strong>数据结构的边界</strong>。</li>
+</ul>
+<p><strong>为什么边界更值得测</strong>（PPT 第 103 页）：课件给了直接对比——同一个招工例子，等价分类法设计了 <strong>8</strong> 个用例，边界值分析法设计了 <strong>13</strong> 个；"一般来说，用边界值分析法设计的测试用例要比等价分类法的<strong>代表性更广、发现错误的能力也更强</strong>。但是对边界的分析与确定比较复杂，要求测试人员具有更多经验和耐心。"</p>
+<p><mark class="bubu">补</mark><strong>边界值为什么更容易出错？</strong> 因为边界是"逻辑最密集"的地方：<code>&lt;</code> 还是 <code>&lt;=</code>、<code>0</code> 还是 <code>1</code> 开始、空数组还是单元素、"恰好等于"算不算。<strong>几乎所有 off-by-one 缺陷都发生在边界上</strong>，而等价类的随机取值恰好避开了这些点。</p>
+<p><strong>13 个用例的构成</strong>（PPT 第 104 页原表）：</p>
+<table>
+<thead>
+<tr>
+<th>输入</th>
+<th>用例说明</th>
+<th>测试数据</th>
+<th>期望结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>出生年月</td>
+<td>1 个数字字符 / 5 个 / 7 个</td>
+<td>5 / 19705 / 1968011</td>
+<td>输入无效</td>
+</tr>
+<tr>
+<td></td>
+<td>有 1 个非数字字符 / 全是非数字</td>
+<td>19705@ / AUGUST</td>
+<td>输入无效</td>
+</tr>
+<tr>
+<td>对应数值</td>
+<td>35 周岁 / 16 周岁</td>
+<td>196007 / 197906</td>
+<td>合格年龄</td>
+</tr>
+<tr>
+<td></td>
+<td>&gt;35 周岁 / &lt;16 周岁</td>
+<td>196006 / 197907</td>
+<td>不合格年龄</td>
+</tr>
+<tr>
+<td>月份</td>
+<td>月份值为 1 月 / 12 月</td>
+<td>196701 / 197412</td>
+<td>输入有效</td>
+</tr>
+<tr>
+<td></td>
+<td>月份值 &lt;1 / &gt;12</td>
+<td>196700 / 197413</td>
+<td>输入无效</td>
+</tr>
+</tbody>
+</table>
+<h3>3.8 错误猜测法与因果图法</h3>
+<p><strong>错误猜测法</strong>（PPT 第 105 页）：猜测被测程序在哪些地方<strong>容易出错</strong>，针对薄弱环节设计用例。它"比前两种方法更多地依靠测试人员的<strong>直觉与经验</strong>"，所以"一般都先用前两种方法设计用例，再用猜测法补充一些例子作为辅助手段"。</p>
+<p>课件给的经典例子是<strong>排序程序</strong>（PPT 第 106 页），要测五种边界情形：</p>
+<ul>
+<li>输入的线性表为<strong>空表</strong>；</li>
+<li>表中只含<strong>一个</strong>元素；</li>
+<li>表中所有元素<strong>已排好序</strong>；</li>
+<li>输入表<strong>已按逆序</strong>排好；</li>
+<li>表中部分或全部元素<strong>相同</strong>。</li>
+</ul>
+<p><mark class="bubu">补</mark><strong>这五条就是"错误猜测"的正确用法示范</strong>：它不是瞎猜，而是<strong>基于"这类程序通常在哪里翻车"的经验清单</strong>。你可以把它固化成自己的检查表——测任何列表处理函数，先过这五条。</p>
+<p><strong>因果图法</strong>（PPT 第 107 页）：借助图形设计测试用例的一种<strong>系统方法</strong>，适用于"程序有多个输入条件、输出又依赖输入条件各种组合"的情况。因果图是简化了的逻辑图，直观表明<strong>输入条件（原因）</strong>与<strong>输出动作（结果）</strong>之间的相互关系。</p>
+<p><mark class="bubu">补</mark><strong>因果图解决的问题是"组合爆炸"</strong>：4 个输入条件 → 16 种组合，人工枚举容易漏。因果图先把条件之间的约束（异或、包含、唯一、屏蔽）画出来，<strong>删掉不可能的组合</strong>，再转成判定表，最后从判定表生成用例。<strong>它的实质是"用约束剪枝"</strong>，而不是画图本身。</p>
+<h3>3.9 黑盒 vs 白盒：一张总结表（课件第 108 页原表）</h3>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>黑盒测试</th>
+<th>白盒测试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>测试对象</strong></td>
+<td>程序的功能</td>
+<td>程序的结构</td>
+</tr>
+<tr>
+<td><strong>测试要求</strong></td>
+<td>逐一验证程序的功能</td>
+<td>程序的每一组成部分至少被测试一次</td>
+</tr>
+<tr>
+<td><strong>采用技术</strong></td>
+<td>等价分类法、边界分析法、错误猜测法、因果图法</td>
+<td>逻辑覆盖法、路径测试法</td>
 </tr>
 </tbody>
 </table>
 <figure class="fig">
-<a href="../../assets/img/se/ch10_p012.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch10_p012.png" alt="四类软件维护的比例"></a>
-<figcaption><b>图 10-2　四类软件维护的比例</b>　（PPT 第 12 页）图上是饼图：完善性维护 50%（最大的一块）、纠错性维护 25%、适应性维护 21%、预防性维护 4%。<strong>看这块饼要得出一个反直觉的结论</strong>：维护的主体不是「修 bug」，而是「加功能 / 改功能」——这也是维护为什么更像「在既有结构上继续开发」。</figcaption>
+<a href="../../assets/img/se/ch09_p108.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch09_p108.png" alt="黑盒 vs 白盒（课件原表）"></a>
+<figcaption><b>图 9-7　黑盒 vs 白盒（课件原表）</b>　（PPT 第 108 页）课件小结页的原表，三行对比：测试对象（程序的功能 / 程序的结构）、测试要求（逐一验证功能 / 每一组成部分至少被测一次）、采用技术（等价类、边界值、错误猜测、因果图 / 逻辑覆盖、路径测试）。<strong>这张表可以当第 9 讲的收口</strong>，正文在它下面补了「两者不能互相替代」的理由。</figcaption>
 </figure>
 
-<p><mark class="bubu">补</mark><strong>这组数字有一个反直觉的结论</strong>：<strong>维护工作的主体不是"修 bug"（25%），而是"加功能/改功能"（50%）</strong>。所以"维护 = 修补"是个误解——<strong>它更像"在既有系统上继续开发"</strong>。这也解释了为什么维护那么难：它要求维护者在<strong>别人设计的结构里</strong>做开发，比从零开发多一层理解成本。</p>
-<p><mark class="bubu">补</mark><strong>4% 的预防性维护是最值得反思的数字</strong>：它收益最长远（降低未来所有维护的成本），占比却最低，因为它"看不到即时产出"，最容易被进度压力挤掉。<strong>这是典型的技术债成因。</strong></p>
-<h3>课件第 19 页的五道判断题（原题）</h3>
-<p>这五题是检验"四种维护"是否真懂的最好材料：</p>
+<h3>2.4.2 集成测试</h3>
+<p>（这一节放在黑盒之后讲，因为它用的是黑盒技术。）</p>
+<p><strong>测试对象</strong>（PPT 第 35 页）：软件<strong>模块之间的接口</strong>——过程调用、函数调用、消息传递、远程过程调用（RPC）、网络消息。
+<strong>测试技术</strong>：<strong>黑盒</strong>。
+<strong>时机</strong>：在概要设计阶段就可以设计集成测试用例及计划。</p>
+<p><strong>两种集成策略</strong>（PPT 第 36 页）：<strong>自顶向下集成</strong>（按深度优先或广度优先组装）与<strong>自底向上集成</strong>。</p>
 <table>
 <thead>
 <tr>
-<th>情形</th>
-<th>答案</th>
-<th>理由</th>
+<th></th>
+<th>自顶向下</th>
+<th>自底向上</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>微软的操作系统补丁</td>
-<td><strong>纠错性</strong></td>
-<td>修的是已暴露的缺陷/漏洞</td>
+<td>起点</td>
+<td>主控模块（驱动模块）</td>
+<td>最底层模块组成"模块群（cluster）"</td>
 </tr>
 <tr>
-<td>某政府发现数据库容量日益增大，原有 ACCESS 小型报表系统不能满足要求，需把数据库移植到 SQL Server</td>
-<td><strong>适应性</strong></td>
-<td>因<strong>环境/平台</strong>（容量、DBMS）变化而迁移，功能未变</td>
+<td>需要什么</td>
+<td><strong>桩模块</strong>（stub）替代下层</td>
+<td><strong>驱动模块</strong>（driver）控制输入输出</td>
 </tr>
 <tr>
-<td>QQ 的版本升级</td>
-<td><strong>完善性</strong></td>
-<td>一般是为增加新功能、改进体验</td>
+<td>过程</td>
+<td>每次只替换一个桩，每集成一个立即测试，完成后才替换下一个</td>
+<td>对每个模块群测试，删掉驱动，用真实高层模块替代，形成更大的模块群</td>
 </tr>
 <tr>
-<td>杀毒软件病毒库的更新</td>
-<td><strong>完善性</strong></td>
-<td>扩充"能识别的病毒"这一功能范围（也可辩为适应性，但课件答案按完善性）</td>
+<td>优点</td>
+<td>能<strong>尽早检验主要控制和决策机制</strong>，较早发现错误</td>
+<td><strong>不用桩模块</strong>，用例设计相对简单</td>
 </tr>
 <tr>
-<td>Delphi 原来运行在 Windows 下，现在要开发可运行在 Unix 下的新版本</td>
-<td><strong>适应性</strong></td>
-<td>目标运行环境变了</td>
+<td>缺点</td>
+<td>低层用桩替代<strong>不能反映真实情况</strong>，重要数据不能及时回送到上层，<strong>测试不充分</strong></td>
+<td><strong>最后一个模块加入时才具有整体形象</strong></td>
+</tr>
+<tr>
+<td>共同要求</td>
+<td>为避免修改引入新错误，须不断<strong>回归测试</strong></td>
+<td>同左</td>
 </tr>
 </tbody>
 </table>
-<p><mark class="bubu">补</mark><strong>判别口诀</strong>：问三个问题——<strong>改的是"错"还是"环境"还是"功能"还是"结构"？</strong> 错 → 纠错；环境（OS/硬件/DB/第三方）→ 适应；功能与性能 → 完善；结构（为将来好改）→ 预防。<strong>最容易混的是"杀毒软件病毒库"</strong>：它的边界确实模糊（病毒库是新数据，也可视为适应新威胁），课件归为完善性，考试按课件的口径答。</p>
-<h3>软件维护的四个特点</h3>
-<p>课件第 13 页，这四条解释了"为什么维护是个大坑"：</p>
+<p>课件的结论很实用：<strong>"它与自顶向下综合测试方法的优缺点正好相反。因此应根据软件特点及工程进度选用适当策略，有时混合使用更有效——上层模块用自顶向下，下层模块用自底向上。"</strong></p>
+<p><mark class="bubu">补</mark><strong>为什么自顶向下必须用桩、自底向上必须用驱动？</strong> 回到第 8 讲那个记忆法：<strong>驱动在上面（调用者），桩在下面（被调用者）</strong>。自顶向下时，上层是真的、下层还没写 → 需要<strong>假的下面</strong>，即桩；自底向上时，下层是真的、上层还没写 → 需要<strong>假的上面</strong>，即驱动。<strong>分清"谁是真的"就能推出"需要哪种替身"。</strong></p>
+<h3>2.4.3 确认测试</h3>
+<p><strong>测试对象</strong>（PPT 第 41 页）：软件的功能和性能；判断目标系统<strong>是否满足用户需求</strong>。
+<strong>依据和标准</strong>：<strong>软件需求规格说明书</strong>。
+<strong>技术</strong>：黑盒。
+<strong>时机</strong>：需求分析阶段就可以设计确认测试用例及计划。</p>
+<p><strong>α 测试与 β 测试</strong>（PPT 第 42 页）：</p>
 <table>
 <thead>
 <tr>
-<th>特点</th>
-<th>内容</th>
+<th></th>
+<th>α 测试</th>
+<th>β 测试</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>同步性</strong></td>
-<td>维护需要与软件使用<strong>同步进行</strong>（不能停机慢慢改）</td>
+<td>谁来测</td>
+<td>开发公司<strong>内部人员</strong>模拟各类用户行为</td>
+<td><strong>各方面的典型用户</strong>在实际工作中使用</td>
 </tr>
 <tr>
-<td><strong>周期长</strong></td>
-<td>一些软件会服役十几年甚至几十年</td>
+<td>版本</td>
+<td><strong>α 版本（内部测试版）</strong></td>
+<td><strong>β 版本（外部测试版）</strong>，由 α 测试修改后得到</td>
 </tr>
 <tr>
-<td><strong>费用高</strong></td>
-<td><strong>维护成本高达总成本 80% 以上，维护费用是开发费用的 3 倍以上</strong></td>
+<td>环境</td>
+<td>尽可能逼真地模拟实际运行环境和用户操作</td>
+<td><strong>开发者无法控制的</strong>软件现场应用环境</td>
 </tr>
 <tr>
-<td><strong>难度大</strong></td>
-<td>要充分理解待维护软件的架构、设计和代码，极困难；<strong>尤其在设计文档缺失时</strong>；<strong>50%–90% 的时间被消耗在理解程序上</strong></td>
+<td>目的</td>
+<td>发现错误并修正，尽可能涵盖所有可能的用户操作方式</td>
+<td>要求用户报告异常、提出批评意见</td>
 </tr>
 </tbody>
 </table>
-<p><mark class="bubu">补</mark><strong>"50%–90% 的时间花在理解上"这个数字是全讲最有力的一句</strong>。它意味着：<strong>维护工程师的大部分工资，是在为"当年没写清楚的文档和没写明白的代码"付账。</strong> 这也是为什么第 8 讲讲"程序设计风格"、第 2 讲讲"文档的四个作用"，最终都要在这里兑现。</p>
-<h3>维护为什么这么难：四条原因</h3>
-<p>课件第 14 页给了一张"原因 → 结果"的表，逻辑链非常清楚：</p>
+<h3>2.4.4 非功能性测试</h3>
+<p>课件第 44 页列了九类：<strong>性能测试、强度测试、配置和兼容性测试、安全性测试、可靠性测试、用户界面测试、本地化测试、Web 测试、安装测试</strong>。时机：需求分析阶段就可以设计非功能测试用例及计划。</p>
+<p>几个重点：</p>
+<p><strong>性能测试</strong>（PPT 第 45 页）的用例示例（课程注册系统）：测试项"能否支持同时 100 个用户登录，且平均响应时间少于 1.5 秒"；测试输入"由模拟软件模拟 100 个用户"；环境"1 台服务器 + 5 台客户机，模拟软件装在客户机"；步骤"每台客户机依次发 20 个登录请求 → 监控程序记录请求与响应时间 → 处理日志判断是否都成功、计算平均响应时间"；预期输出"每个用户都得到正确服务，平均响应时间 &lt; 1.5 秒"。</p>
+<p><strong>强度测试</strong>（PPT 第 46 页）：可视为性能测试的一部分。区别是——<strong>性能测试</strong>测"正常使用时能否达到指标"；<strong>强度测试</strong>则"不断施加更大的压力和使用强度，确定系统瓶颈或不能接受的性能点，获得系统能提供的最大服务能力"。</p>
+<p>课件的例子极好：双十一的淘宝、春运的 12306、双十一的菜鸟物流、考研调剂网、研究生复试上机考试系统。</p>
+<p><strong>安全性测试</strong>（PPT 第 47 页）的五步：明确潜在安全隐患（哪些内容易被攻击、哪些角色可能是入侵者）→ 明确潜在入侵行为及时机 → 列出每种隐患可能遭到的入侵行为及其可能性 → 确定风险较高的入侵点（按可能性与后果严重程度分析）→ 按风险顺序设计用例。</p>
+<p><strong>用户界面测试</strong>（第 48 页）：也称易用性测试。检查：常用按钮/菜单是否在醒目位置；输出是否清晰有序；错误信息是否直观易理解；软件流程是否符合用户业务过程；界面风格是否一致。</p>
+<p><strong>Web 测试</strong>（第 49 页）：利用浏览器通过超链接把网页联系，需要测大量对象——文本（术语、题目、素材、邮箱、电话的准确性与时效性，拼写）、窗口缩放是否导致格式混乱、超级链接、图片和视频、表单。</p>
+<p><strong>恢复测试</strong>（第 50 页）：检查系统<strong>容错能力</strong>。先"采用各种办法强迫系统失败"，再验证能否尽快恢复。对自动恢复系统，验证重新初始化、检查点、数据恢复、重新启动等机制；对人工干预的恢复系统，还要<strong>估算平均修复时间</strong>是否可接受。</p>
+<h3>2.5–2.6 回归测试与测试原则</h3>
+<p><strong>为什么需要回归测试</strong>（PPT 第 52 页）：修改程序可能<strong>引入新的错误</strong>——原先"正常"的程序现在变得"不正常"。</p>
+<p>回归测试的目的是验证新版本是否<strong>从正常状态回归/退化到不正常状态</strong>；方法是"重新运行所有的测试用例"；<strong>最好能自动化</strong>；<strong>单元测试是回归测试的基础</strong>。</p>
+<p><strong>测试 vs 调试 vs 排错</strong>（PPT 第 53 页），这张表要背：</p>
 <table>
 <thead>
 <tr>
-<th>#</th>
-<th>原因</th>
-<th>结果</th>
+<th></th>
+<th>测试</th>
+<th>调试</th>
+<th>排错</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td>理解别人写的程序通常非常困难，没有说明文档就更困难</td>
-<td>所以软件工程强调文档，编码阶段强调提高代码可读性</td>
+<td>目的</td>
+<td><strong>发现</strong>缺陷</td>
+<td><strong>定位</strong>缺陷</td>
+<td><strong>纠正</strong>错误</td>
 </tr>
 <tr>
-<td>2</td>
-<td>可能修改了代码，详细设计书没有修改</td>
-<td>文档可能和代码<strong>不完全一致</strong></td>
-</tr>
-<tr>
-<td>3</td>
-<td>"先实现功能再说"，没有精力或能力考虑将来的修改</td>
-<td>大多数软件在设计时<strong>没有考虑将来的修改</strong></td>
-</tr>
-<tr>
-<td>4</td>
-<td>上述原因造成代码看不懂、不知如何改；尤其对<strong>未参与原项目开发的人员</strong>，根本不了解来龙去脉，也没时间仔细研究</td>
-<td>维护工作经常遭受挫折；改代码时发现<strong>牵扯太多、这也不能改那也不能动</strong></td>
+<td>谁做</td>
+<td><strong>独立的测试小组</strong></td>
+<td>开发人员</td>
+<td>开发人员</td>
 </tr>
 </tbody>
 </table>
-<p><strong>规模数据</strong>（PPT 第 15 页）给了一个"复杂到无法有效维护"的量级感：Android 1200 万行，Win 7 3000 万行，被长期诟病臃肿的 Vista 5000 万行，美国"全民健保"网站（Obamacare）<strong>5 亿行</strong>——是 Windows + Office 的五倍还多，而且"并不是交给有大型项目经验的公司来做，而是包给一些小公司"。</p>
-<p><mark class="bubu">补</mark><strong>这个案例的教训不是"代码多就一定烂"</strong>，而是：<strong>规模 + 缺乏经验的组织 = 无法维护</strong>。同样是几千万行，有成熟工程体系的公司能维护，没有的就不能。<strong>规模本身不致命，"规模超过了组织能力"才致命。</strong></p>
-<h3>维护的代价：四类副作用</h3>
-<p>课件第 16 页用了很好的类比：<strong>"修改代码引入了潜伏的 Bug，降低软件质量。这与吃药治病一样，'是药三分毒'。"</strong></p>
+<p><strong>十条测试原则</strong>（PPT 第 55–56 页），这是第 9 讲最该背的清单：</p>
+<ol>
+<li><strong>测试应该有计划</strong>——在开发初期就制定，测试之前就应制定；</li>
+<li>所有的测试都应<strong>追溯到用户需求</strong>；</li>
+<li>将 <strong>Pareto 原则</strong>应用于测试——80% 的错误可以在约 20% 的模块中找到根源；</li>
+<li>测试应从"<strong>微观</strong>"开始，逐步转向"宏观"；</li>
+<li><strong>穷举测试是不可能的</strong>；</li>
+<li><strong>每个测试用例都必须定义预期的输出或结果</strong>；</li>
+<li>尽量避免<strong>程序的开发人员测试自己编写的代码</strong>；</li>
+<li>尽量避免<strong>程序开发组织测试自己开发的程序</strong>；</li>
+<li>应<strong>详细检查每次测试的结果</strong>；</li>
+<li>用例不仅要说明<strong>合法有效</strong>的输入，还要描述<strong>不期望的、非法的</strong>输入；</li>
+<li>检查"程序没做希望它做的事"只是测试的一半任务，还应检查"程序是否做了不希望它做的事"；</li>
+<li>避免随意舍弃任何用例，即使非常简单；</li>
+<li><strong>不应在事先假设不会发现错误的情况下来制定测试计划</strong>；</li>
+<li><strong>一个模块存在更多错误的可能性，与该模块已发现错误数量成正比</strong>（缺陷聚集）；</li>
+<li>测试是一个具有相当<strong>创新性和智力挑战</strong>的活动。</li>
+</ol>
+<p><mark class="bubu">补</mark><strong>第 7、8 条的理由值得说透</strong>：不是"不信任开发人员"，而是<strong>认知盲区</strong>——开发者测自己的代码时，会不自觉地沿着"自己写代码时的思路"去测，而缺陷恰恰藏在他没想到的地方。第 11 条也很深：<strong>"没做该做的事"和"做了不该做的事"是两个方向的错误</strong>，前者叫功能缺失，后者叫副作用（比如一个查询函数偷偷改了数据），后者更难发现。</p>
+<h3>4 测试组织、计划与输出</h3>
+<p><strong>成立测试组织</strong>（PPT 第 110 页）：测试是<strong>独立性的工作</strong>，要成立单独的测试小组；小组成员由测试工程师组成；<strong>测试小组不受开发小组管理</strong>，以确保独立性和结果的客观性；<strong>需在开发早期就成立</strong>（尽早介入：培训、了解项目、掌握需求、制定计划）。</p>
+<p><strong>测试计划的内容</strong>（PPT 第 111–112 页），十四条，可当模板：标识符、简介、测试项、待测软件特征、免测软件特征、测试策略和手段、测试项成败标准、测试暂停/停止标准、测试交付物、测试任务、测试环境、职责、进度安排、成本预算、风险与意外。</p>
+<p><mark class="bubu">补</mark><strong>"免测软件特征"这一项很反直觉但很专业</strong>：明确声明"哪些不测"，等于把风险显式化。没有这一项，测试报告永远无法回答"你们为什么没测这个"。</p>
+<p><strong>测试输出</strong>（PPT 第 113 页）：测试计划 + 测试报告（记录测试情况与发现的缺陷），后者分单元测试报告、集成测试报告、确认测试报告、系统测试报告等。</p>
+<p><strong>单元测试工具</strong>（PPT 第 114–124 页）：</p>
 <table>
 <thead>
 <tr>
-<th>#</th>
-<th>维护的方式</th>
-<th>副作用</th>
+<th>语言</th>
+<th>工具</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>1</td>
-<td><strong>修改编码</strong></td>
-<td>使编码更加混乱、程序结构更不清晰、可读性更差，而且有<strong>连锁反应</strong></td>
+<td>C/C++</td>
+<td>C++Test、Cunit、CppTest</td>
 </tr>
 <tr>
-<td>2</td>
-<td><strong>修改数据结构</strong></td>
-<td>数据结构是系统的骨架，改它是对系统"<strong>伤筋动骨的大手术</strong>"，在数据冗余与数据不一致方面可能顾此失彼</td>
+<td>.NET</td>
+<td>NUnit</td>
 </tr>
 <tr>
-<td>3</td>
-<td><strong>修改用户数据</strong></td>
-<td>需要<strong>与用户协商</strong>，一旦疏忽可使系统发生意外</td>
+<td><strong>Java</strong></td>
+<td><strong>JUnit</strong></td>
 </tr>
 <tr>
-<td>4</td>
-<td><strong>修改文档</strong></td>
-<td>对非结构化维护不适应；对结构化维护要<strong>严防程序与文档的不匹配</strong></td>
+<td>Python</td>
+<td>PyUnit</td>
 </tr>
 </tbody>
 </table>
-<p><mark class="bubu">补</mark><strong>这四条的风险是从上到下递增的</strong>：改代码风险最小（改错了能回滚），改数据结构风险巨大（要迁移历史数据、要停服、可能丢数据），改用户数据风险最大（<strong>不可逆</strong>）。所以工程上的原则是：<strong>能改代码就不要改结构，能加字段就不要改字段类型，能不动用户数据就绝不动。</strong></p>
-<div class="pager"><a class="pg prev" href="software-engineering-31.html"><span>← 上一节</span><b>3.5–4 黑盒测试、测试过程与组织</b></a><a class="pg next" href="software-engineering-33.html"><span>下一节 →</span><b>2–4 维护技术、管理与可维护性</b></a></div>
+<p><strong>JUnit</strong>（1997 年由 Erich Gamma 与 Kent Beck 为 Java 创建）：Erich Gamma 是《设计模式》作者之一，Kent Beck 提出了极限编程、写了《重构》。在 Eclipse 中的四步：①建立一个被测试的类；②建立对应的 JUnit Test 类（<strong>类似主控模块及桩模块</strong>）；③针对自动生成的代码进行修改（编写桩模块）；④执行测试用例。</p>
+<p><strong>常用 Assert 方法</strong>（PPT 第 120 页）：<code>assertArrayEquals</code>（两数组相等）、<code>assertEquals</code>（两对象相等）、<code>assertFalse</code>/<code>assertTrue</code>（布尔判断）、<code>assertNotNull</code>/<code>assertNull</code>（是否为空）、<code>assertNotSame</code>（两个引用是否指向同一对象，注意与 equals 区别）、<code>Fail</code>（让用例失败）。</p>
+<p>课件还给了 JUnit 的名言：<strong>"Keep the bar green to keep the code clean"</strong>（保持绿条，保持代码干净）。</p>
+<hr />
+<h3>第 9 讲 小结</h3>
+<p><strong>一句话串起整讲</strong>：测试是"用设计好的输入去运行程序、比对预期输出"的发现缺陷活动；它按单元→集成→确认逐层递进，用白盒保证内部逻辑被走遍、用黑盒保证外部功能被满足；而所有方法的共同前提是——<strong>穷举不可能，所以要设计高效的用例</strong>。</p>
+<p><strong>核心结论清单</strong></p>
+<ol>
+<li>缺陷是病根（静态），错误是症状（动态）；缺陷来自需求、设计、编码三处并逐级放大。</li>
+<li>测试只负责<strong>发现</strong>，不负责修复；测试者应与开发者独立。</li>
+<li>测试三要素：测试数据、被测程序、预期结果；用例含十项内容，<strong>前提条件最易漏</strong>。</li>
+<li>两大挑战：成本占 30%–50%；不能穷举。</li>
+<li>测试分层：单元（白盒，模块内部）→ 集成（黑盒，模块接口）→ 确认（黑盒，用户需求）→ 系统/非功能。</li>
+<li>单元测试需<strong>驱动（上）+ 桩（下）</strong>；自顶向下用桩，自底向上用驱动。</li>
+<li>五种逻辑覆盖由弱到强：语句 &lt; 判定 &lt; 判定/条件 &lt; 条件组合；条件覆盖与判定覆盖<strong>互不包含</strong>。</li>
+<li>基本路径数 = 环路复杂度 = 判定结点数 + 1。</li>
+<li>黑盒四技术：等价类、边界值、错误猜测、因果图；<strong>无效等价类要一对一</strong>。</li>
+<li>边界值比等价类更强（8 例 vs 13 例），因为边界是 off-by-one 高发区。</li>
+<li>α 测试在内部、β 测试在用户现场且环境不可控。</li>
+<li>回归测试防"改出新错"，最好自动化，单元测试是其基础。</li>
+<li>测试十原则：有计划、可追溯需求、Pareto、微观到宏观、不可穷举、必定期望输出、避免自测、详查结果、含非法输入、缺陷聚集。</li>
+</ol>
+<h3>自测</h3>
+<p><strong>1.</strong> 一个函数 <code>int f(int age)</code> 要求 <code>age</code> 在 18–60 之间。请用等价类法和边界值法分别给出最少的测试数据，并说明为什么边界值法用例更多。</p>
+<details>
+<summary>答案</summary>
+<p><strong>等价类法</strong>（3 个）：有效 <code>18≤age≤60</code>（如 30）；无效 <code>age&lt;18</code>（如 10）；无效 <code>age&gt;60</code>（如 70）。<strong>边界值法</strong>（至少 6 个）：<code>17, 18, 19, 59, 60, 61</code>（下界及其两侧、上界及其两侧），若考虑非整数输入还需加 <code>18</code> 附近的小数。<strong>为什么更多</strong>：等价类只要求"每个类取一个代表"，代表是任意选的，可能恰好避开错误点；边界值强制考察"恰好等于"和"差一"的情形，而 <code>&lt;</code> / <code>&lt;=</code> 写反、数组越界、循环少一次这类缺陷<strong>只会在边界暴露</strong>。课件用招工例子给出了 8 : 13 的实测对比，也是同一个道理。</p>
+</details>
+<p><strong>2.</strong> 为什么"语句覆盖 100%"仍然可能漏掉严重缺陷？举两个不同类型的漏检。</p>
+<details>
+<summary>答案</summary>
+<p>两类典型漏检：①<strong>逻辑运算符错误</strong>——把判定一里的"与"写成"或"，用例 (2,0,4) 走真分支，语句 100% 覆盖，但假分支的行为完全错了（判定覆盖能发现）；②<strong>需求缺失</strong>——该有的判断分支根本没写，流程图里就没有那个结点，覆盖 100% 也无从发现（这只能靠黑盒/需求追溯发现）。补充第三类：<strong>数据相关错误</strong>，如 <code>X/(A-2)</code> 在 A=2 时除零，如果用例没取到 A=2，语句覆盖照样 100%。<strong>结论：覆盖是必要条件，不是充分条件。</strong></p>
+</details>
+<p><strong>3.</strong> 集成测试时，团队从主控模块开始往下测。他们需要写什么替身？为什么这种策略"测试不充分"？</p>
+<details>
+<summary>答案</summary>
+<p>需要写<strong>桩模块（stub）</strong>——因为上层是真的、下层还没集成，必须用假的底层模块顶上，返回预设值。<strong>测试不充分的原因</strong>：桩只能"假装"返回数据，无法反映真实的处理逻辑，所以"重要数据不能及时回送到上层模块"（课件原话）；同时上层模块在真实数据下的行为（如边界值、异常返回、性能）都测不到。它的优点是能尽早检验主要控制和决策机制。实务上常混合使用：上层自顶向下，底层自底向上。</p>
+</details>
+<p><strong>4.</strong> 一个电商系统，功能测试全部通过，上线后大促当天崩了。按第 9 讲，他们漏了哪类测试？</p>
+<details>
+<summary>答案</summary>
+<p>漏了<strong>非功能测试</strong>，具体是<strong>强度测试</strong>（以及性能测试、可靠性测试）。功能测试只验证"每个功能在正常输入下是否正确"，不验证"在高并发、大压力下是否还能正常服务"。课件的定义正好对应：性能测试测"正常使用时能否达到指标"，强度测试则"不断施压，确定系统瓶颈或不能接受的性能点，获得最大服务能力"——双十一的淘宝、春运的 12306 就是这类测试的典型场景。补充：还应做<strong>恢复测试</strong>（崩了能否在指定时间内恢复）和<strong>安全性测试</strong>（大促是攻击高发期）。</p>
+</details>
+<p><strong>5.</strong> 为什么"缺陷聚集"（一个模块已发现的错误越多，它还有更多错误的可能性越大）这条原则，能指导你分配测试资源？</p>
+<details>
+<summary>答案</summary>
+<p>因为它把测试资源从"平均分配"变成"按风险分配"。既然 80% 的缺陷集中在约 20% 的模块（Pareto 原则），而且"已发现缺陷多的模块更可能有更多缺陷"，那么正确的策略是：<strong>一旦某模块发现多个缺陷，就对它追加投入</strong>（更多用例、更严格的覆盖标准、代码评审），而不是把同样多的精力平摊到所有模块。这与第 10 讲"维护成本集中在少数模块"、第 6 讲"内聚耦合差的模块最容易出问题"是同一个判断——<strong>风险从来不是均匀分布的。</strong></p>
+</details>
+<div class="pager"><a class="pg prev" href="software-engineering-31.html"><span>← 上一节</span><b>3.1–3.4 白盒测试：逻辑覆盖与基本路径</b></a><a class="pg next" href="software-engineering-33.html"><span>下一节 →</span><b>1 逻辑老化与四种维护</b></a></div>
 </div>
 
 <script>
