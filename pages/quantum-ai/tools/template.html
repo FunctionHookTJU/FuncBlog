@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<style>
+:root{
+  --bg:#11141b; --fg:#e2e7f0; --muted:#8e97ab; --line:#242b38; --card:#171c26;
+  --acc:#5aa2ff; --acc2:#7ee0c0; --warn:#ffb454; --code:#0d1016; --navw:262px;
+  --h2bg:rgba(90,162,255,.07);
+}
+html.light{
+  --bg:#fcfcfe; --fg:#1b2230; --muted:#5f6b80; --line:#e2e6ee; --card:#f5f7fb;
+  --acc:#1f6feb; --acc2:#0d9488; --warn:#b45309; --code:#f4f6fa;
+  --h2bg:rgba(31,111,235,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans CJK SC",system-ui,sans-serif;
+  font-size:16.5px; line-height:1.85;
+  padding-right:var(--navw);
+  -webkit-font-smoothing:antialiased;
+}
+html.navhide{--navw:0px}
+#topbar{
+  position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:10px;
+  padding:9px 22px; background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
+}
+#topbar .tt{font-weight:600; font-size:14.5px; letter-spacing:.02em; color:var(--muted); flex:1;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+#topbar button{
+  font:inherit; font-size:13px; color:var(--fg); background:var(--card);
+  border:1px solid var(--line); border-radius:8px; padding:5px 11px; cursor:pointer;
+}
+#topbar button:hover{border-color:var(--acc); color:var(--acc)}
+#menubtn{display:none}
+html.navhide #menubtn{display:inline-block}
+
+.wrap{max-width:920px; margin:0 auto; padding:34px 26px 120px}
+article{font-size:16.5px}
+
+h1,h2,h3,h4{line-height:1.35; margin:2.1em 0 .75em; scroll-margin-top:64px}
+h1{font-size:1.62em; letter-spacing:.01em; padding-bottom:.5em; border-bottom:2px solid var(--line);
+   margin-top:2.6em}
+h1:first-of-type{margin-top:0}
+h2{font-size:1.34em; padding:.42em .7em; background:var(--h2bg);
+   border-left:4px solid var(--acc); border-radius:0 8px 8px 0}
+h3{font-size:1.13em; color:var(--fg)}
+h3::before{content:""; display:inline-block; width:8px; height:8px; border-radius:2px;
+  background:var(--acc2); margin-right:.55em; vertical-align:2px}
+h4{font-size:1.02em; color:var(--muted)}
+p{margin:.85em 0}
+a{color:var(--acc); text-decoration:none}
+a:hover{text-decoration:underline}
+strong{color:var(--fg); font-weight:650}
+em{color:var(--muted); font-style:normal; border-bottom:1px dotted var(--line)}
+hr{border:0; border-top:1px solid var(--line); margin:2.4em 0}
+blockquote{
+  margin:1.1em 0; padding:.7em 1.1em; background:var(--card);
+  border-left:3px solid var(--warn); border-radius:0 8px 8px 0; color:var(--fg);
+}
+blockquote p{margin:.4em 0}
+ul,ol{padding-left:1.6em; margin:.8em 0}
+li{margin:.34em 0}
+li>ul,li>ol{margin:.3em 0}
+
+table{border-collapse:collapse; width:100%; margin:1.2em 0; font-size:.95em; display:block; overflow-x:auto}
+table thead th{background:var(--card); font-weight:600; text-align:left}
+th,td{border:1px solid var(--line); padding:.5em .7em; vertical-align:top}
+table.grid{display:table; width:auto; margin:1.2em auto; text-align:center}
+table.grid td{border:none; padding:.15em .55em; font-family:"Consolas","DejaVu Sans Mono",monospace}
+
+pre,code,table.grid td{
+  font-family:"Consolas","DejaVu Sans Mono","Noto Sans Mono","Liberation Mono","Courier New",ui-monospace,monospace;
+  font-variant-ligatures:none;
+  font-feature-settings:"liga" 0,"calt" 0;
+}
+code{background:var(--code); border:1px solid var(--line); border-radius:5px;
+  padding:.1em .38em; font-size:.9em}
+pre{background:var(--code); border:1px solid var(--line); border-radius:10px;
+  padding:.95em 1.1em; overflow-x:auto; font-size:.86em; line-height:1.62; margin:1.2em 0}
+pre code{background:none; border:0; padding:0; font-size:1em}
+
+.jysmath{font-size:1.02em}
+.jysmath .katex{font-size:1.06em}
+.jysmath-display{display:block; margin:1.1em 0; text-align:center;
+  overflow-x:auto; overflow-y:hidden; padding:.2em 0}
+.katex{line-height:1.2; color:inherit}
+.katex .vlist-t{line-height:normal}
+html:not(.light) .katex .frac-line,
+html:not(.light) .katex .hline{border-color:currentColor}
+
+nav#nav{
+  position:fixed; top:0; right:0; width:var(--navw); height:100vh;
+  border-left:1px solid var(--line); background:var(--card);
+  display:flex; flex-direction:column; z-index:40; overflow:hidden;
+}
+html.navhide nav#nav{display:none}
+.navhead{display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px 10px; border-bottom:1px solid var(--line);
+  font-size:12.5px; color:var(--muted); letter-spacing:.08em}
+.navhead button{font:inherit; background:none; border:1px solid var(--line); color:var(--muted);
+  border-radius:6px; padding:2px 7px; cursor:pointer}
+.navbody{overflow-y:auto; padding:8px 8px 40px; flex:1}
+.navgrp{margin-bottom:.9em}
+.navlab{font-size:11.5px; color:var(--muted); letter-spacing:.06em; padding:8px 8px 4px;
+  text-transform:none; font-weight:600}
+.navbody a{
+  display:block; padding:5px 9px; margin:1px 0; border-radius:6px;
+  font-size:13px; line-height:1.45; color:var(--muted);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.navbody a:hover{background:var(--bg); color:var(--fg); text-decoration:none}
+.navbody a.cur{background:var(--h2bg); color:var(--acc); font-weight:600}
+
+#glyphwarn{
+  display:none; position:fixed; left:16px; bottom:16px; z-index:50; max-width:360px;
+  background:var(--card); border:1px solid var(--warn); border-left:4px solid var(--warn);
+  border-radius:10px; padding:10px 14px; font-size:13px; color:var(--fg);
+}
+#glyphwarn button{margin-left:8px; font:inherit; font-size:12px; background:none;
+  border:1px solid var(--line); color:var(--muted); border-radius:6px; padding:1px 7px; cursor:pointer}
+
+@media (max-width:1180px){
+  body{padding-right:0}
+  nav#nav{display:none}
+  html.navhide #menubtn{display:inline-block}
+  #menubtn{display:inline-block !important}
+}
+@media print{
+  :root{
+    --bg:#ffffff; --fg:#111111; --muted:#3f4757; --line:#c8cdd6; --card:#f2f4f8;
+    --code:#f5f6f9; --acc:#0b4fbe; --acc2:#0f766e; --warn:#a15c00;
+    --h2bg:#eef2f9;
+  }
+  #topbar,nav#nav,#glyphwarn{display:none !important}
+  body{padding-right:0; background:#fff; color:#111}
+  .wrap{max-width:none; padding:0}
+  h1,h2,h3{break-after:avoid}
+  pre,table,blockquote{break-inside:avoid}
+  a{color:#111; text-decoration:none}
+  blockquote{background:#f6f7fa; border-left-color:#8a94a6; color:#111}
+  pre,code,table thead th{background:#f5f6f9}
+  em{color:#333}
+  .jysmath .katex, .katex{color:#000}
+}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <button id="menubtn" title="展开目录">☰ 目录</button>
+  <span class="tt">量子人工智能 · 第 P3 讲 · 学习笔记讲义</span>
+  <button id="themebtn" title="切换明暗主题">☾ 主题</button>
+  <button id="printbtn" title="打印 / 导出 PDF">⎙ 打印</button>
+</div>
+<nav id="nav-placeholder" style="display:none"></nav>
+{{NAV}}
+<main class="wrap">
+<article id="doc">
+{{BODY}}
+</article>
+</main>
+<div id="glyphwarn"></div>
+<script src="assets/katex/katex.min.js"></script>
+<script src="assets/katex/auto-render.min.js"></script>
+<script>
+(function(){
+  function texOf(el){
+    var t = el.textContent || '';
+    t = t.replace(/^\s*\\\(/,'').replace(/\\\)\s*$/,'');
+    t = t.replace(/^\s*\\\[/,'').replace(/\\\]\s*$/,'');
+    t = t.replace(/^\s*\$\$/,'').replace(/\$\$\s*$/,'');
+    return t.trim();
+  }
+  function renderMath(){
+    if (typeof katex === 'undefined'){ console.warn('[math] KaTeX 未加载'); return; }
+    var nodes = document.querySelectorAll('span.jysmath, div.jysmath');
+    for (var i=0;i<nodes.length;i++){
+      var n = nodes[i];
+      try{
+        katex.render(texOf(n), n, {
+          throwOnError:false,
+          displayMode: n.classList.contains('jysmath-display'),
+          strict:false, trust:false
+        });
+      }catch(e){}
+    }
+    if (typeof renderMathInElement === 'function'){
+      try{
+        renderMathInElement(document.getElementById('doc') || document.body, {
+          delimiters:[
+            {left:'$$',right:'$$',display:true},
+            {left:'\\[',right:'\\]',display:true},
+            {left:'\\(',right:'\\)',display:false},
+            {left:'$',right:'$',display:false}
+          ],
+          ignoredTags:['script','noscript','style','textarea','pre','code','option'],
+          throwOnError:false
+        });
+      }catch(e){}
+    }
+  }
+
+  var root = document.documentElement;
+  var nav = document.getElementById('nav');
+  var TKEY='qai-handout-theme', NKEY='qai-handout-navhide';
+
+  function applyTheme(t){ if(t==='light'){ root.classList.add('light'); } else { root.classList.remove('light'); } }
+  applyTheme(localStorage.getItem(TKEY) || 'dark');
+  if (localStorage.getItem(NKEY)==='1') root.classList.add('navhide');
+
+  var tb=document.getElementById('themebtn');
+  if(tb) tb.onclick=function(){
+    var next = root.classList.contains('light') ? 'dark' : 'light';
+    applyTheme(next); localStorage.setItem(TKEY,next);
+    tb.textContent = next==='light' ? '☀ 主题' : '☾ 主题';
+  };
+  tb && (tb.textContent = root.classList.contains('light') ? '☀ 主题' : '☾ 主题');
+
+  function setNav(hide){
+    if(hide){ root.classList.add('navhide'); localStorage.setItem(NKEY,'1'); }
+    else { root.classList.remove('navhide'); localStorage.setItem(NKEY,'0'); }
+  }
+  var mb=document.getElementById('menubtn'); if(mb) mb.onclick=function(){ setNav(false); };
+  var nc=document.getElementById('navclose'); if(nc) nc.onclick=function(){ setNav(true); };
+  var pb=document.getElementById('printbtn'); if(pb) pb.onclick=function(){ window.print(); };
+  if(window.innerWidth<1180) root.classList.add('navhide');
+
+  // scrollspy
+  var links = nav ? Array.prototype.slice.call(nav.querySelectorAll('a[data-target]')) : [];
+  var secs = links.map(function(a){ return document.getElementById(a.getAttribute('data-target')); });
+  var lastUserScroll = 0;
+  var navbody = nav ? nav.querySelector('.navbody') : null;
+  if(navbody) navbody.addEventListener('scroll', function(){ lastUserScroll = Date.now(); });
+  var cur = -1;
+  function onScroll(){
+    var y = window.scrollY + 100;
+    var idx = 0;
+    for (var i=0;i<secs.length;i++){
+      var s = secs[i];
+      if (s && s.offsetTop <= y) idx = i; else break;
+    }
+    if (idx===cur) return;
+    if (cur>=0 && links[cur]) links[cur].classList.remove('cur');
+    cur = idx;
+    var a = links[cur];
+    if(!a) return;
+    a.classList.add('cur');
+    if (navbody && Date.now()-lastUserScroll > 4000){
+      var top = a.offsetTop - navbody.offsetTop - navbody.clientHeight/2;
+      navbody.scrollTop = Math.max(0, top);
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', function(){ onScroll(); });
+
+  // glyph probe: detect fallback to proportional font for box-drawing chars
+  try{
+    var probe = '\u2500\u2502\u250C\u2514\u2295\u207B';
+    var el = document.createElement('span');
+    el.style.cssText='position:absolute;visibility:hidden;white-space:pre;font-family:"Consolas","DejaVu Sans Mono",monospace;font-size:40px;line-height:1';
+    el.textContent = probe;
+    document.body.appendChild(el);
+    var per = el.getBoundingClientRect().width / probe.length;
+    document.body.removeChild(el);
+    if (per > 29){
+      var gw = document.getElementById('glyphwarn');
+      gw.innerHTML = '检测到等宽字体缺失：ASCII 结构图可能错位。建议安装 <b>Consolas</b> 或 <b>DejaVu Sans Mono</b>。<button onclick="this.parentNode.style.display=\'none\'">知道了</button>';
+      gw.style.display='block';
+    }
+  }catch(e){}
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderMath);
+  else renderMath();
+  onScroll();
+})();
+</script>
+</body>
+</html>
+
+

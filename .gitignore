@@ -45,3 +45,9 @@ build/
 
 # 发布记录（本机状态）
 *.genie
+
+# 本机权限修复记录（DSH 沙箱）
+.acl-recovery/
+# 讲义构建中间产物
+pages/quantum-ai/src/_math.json
+
