@@ -111,6 +111,13 @@
 <div class="wrap">
 
 <h2 id="s-1">1–2.4 测试是什么与测试过程</h2>
+<div class="kp-box">
+<b>本页重点<span>据《软件工程重点内容》标注</span></b>
+<ul>
+<li><a href="#kp-test-process">软件测试过程</a></li>
+</ul>
+</div>
+
 <h3>1.1 缺陷的代价</h3>
 <p>课件第 3 页列了软件缺陷的六种危害：无法满足要求、不能正常工作、引发安全事故、影响人员安全、产生经济损失……</p>
 <p>然后又一次搬出了<strong>波音 737 MAX</strong>（PPT 第 3 页，第 2 讲也出现过）：原软件用于教练飞机，某参数屏显范围是 <strong>±100</strong>，重用于新战斗机时，该参数屏显范围应该为 <strong>±300</strong>！</p>
@@ -259,7 +266,7 @@
 </tbody>
 </table>
 <p>结论：既然不能穷举，又要查出尽可能多的错误，就<strong>只能选择"高效的测试用例"</strong>——时间短、成本低、发现多。</p>
-<p><mark class="bubu">补</mark><strong>"不能穷举"有一个可以算的论证</strong>：一个函数接收两个 32 位整数，输入组合有 2⁶⁴ 种；假设每秒测一亿个用例，需要约 5800 年。<strong>所以测试的目标从来不是"证明没有缺陷"，而是"用有限代价把风险降到可接受"。</strong> 这句话是第 9 讲全部方法论的前提——等价类、边界值、覆盖标准，都是在"如何用更少的用例覆盖更多情况"这个约束下想出来的办法。</p>
+<p><mark class="bubu">补</mark><strong>"不能穷举"有一个可以算的论证</strong>：一个函数接收两个 32 位整数，输入组合有 <span class="jysmath"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>64</mn></msup></mrow><annotation encoding="application/x-tex">2^{64}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">64</span></span></span></span></span></span></span></span></span></span></span></span></span> 种；假设每秒测一亿个用例，需要约 5800 年。<strong>所以测试的目标从来不是"证明没有缺陷"，而是"用有限代价把风险降到可接受"。</strong> 这句话是第 9 讲全部方法论的前提——等价类、边界值、覆盖标准，都是在"如何用更少的用例覆盖更多情况"这个约束下想出来的办法。</p>
 <h3>测试工程师的两种角色</h3>
 <p>课件第 16 页区分了两类岗位，考试可能考"谁写测试工具"：</p>
 <table>
@@ -280,7 +287,8 @@
 </tr>
 </tbody>
 </table>
-<h3>2.1–2.4 测试活动与过程</h3>
+<h3 id="kp-test-process">2.1–2.4 测试活动与过程</h3>
+<p><mark class="keypoint">重点</mark><strong>软件测试过程</strong>：计划 → 代码检查 → 单元 → 集成 → 确认 → 系统 → 验收的主链，每一步关注什么。</p>
 <p><strong>缺陷的潜在位置</strong>（PPT 第 18 页）：程序模块<strong>内部</strong>、程序模块<strong>接口</strong>、程序模块<strong>间的交互</strong>、<strong>整个软件系统</strong>。四个位置对应四种测试层级，这就是测试分层的由来。</p>
 <p><strong>测试与开发的对应关系</strong>（PPT 第 19 页）：</p>
 <pre><code>需求分析 → 概要设计 → 详细设计 → 编码

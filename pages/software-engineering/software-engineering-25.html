@@ -111,6 +111,13 @@
 <div class="wrap">
 
 <h2 id="s-1">1 六种架构风格与选型</h2>
+<div class="kp-box">
+<b>本页重点<span>据《软件工程重点内容》标注</span></b>
+<ul>
+<li><a href="#kp-arch-styles">常用软件体系结构风格</a></li>
+</ul>
+</div>
+
 <p>第 7 讲的前 34 页内容与第 6 讲第 56–91 页<strong>完全重复</strong>（同一套架构风格幻灯片）。课件这么安排的意思是：架构是设计的第一个也是最重要的决定，值得讲两遍。这一节在第 6 讲的基础上往下钻一层。</p>
 <h3>什么叫"抽象级别"</h3>
 <p>课件第 3–4 页反复问"何为抽象级别？"，这是理解分层风格的前提。</p>
@@ -356,7 +363,8 @@
 
 <p><strong>技术背景</strong>（PPT 第 32 页）：流行的 ORB 标准有两种——<strong>CORBA</strong>（Common Object Request Broker Architecture）与 <strong>DCOM</strong>（Distributed Component Object Model）。"软件总线"的中间件即<strong>对象请求代理（ORB）</strong>。分布式对象结构具有很好的开放性和透明性，用户可以方便地在总线上添加、更新、删除组件对象。每个对象在逻辑上平等，互为对方提供服务：提供服务的对象是服务器，提出请求的是客户。</p>
 <p><mark class="bubu">补</mark><strong>总线风格解决的是"n 个构件两两通信要 n(n-1)/2 条连接"的问题</strong>：接上总线后只需要 n 条连接。代价是<strong>总线本身成为单点</strong>——总线挂了全挂，总线慢了全慢。这也是后来"企业服务总线（ESB）"被人诟病、转向"事件驱动/消息队列"的原因。</p>
-<h3>六种风格的选型表（课件第 91 页原表）</h3>
+<h3 id="kp-arch-styles">六种风格的选型表（课件第 91 页原表）</h3>
+<p><mark class="keypoint">重点</mark><strong>常用软件体系结构风格</strong>：六种风格（C/S、管道过滤器、黑板、MVC、SOA、消息总线）的优缺点与选型依据。</p>
 <table>
 <thead>
 <tr>

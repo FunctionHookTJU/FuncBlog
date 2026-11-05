@@ -434,3 +434,43 @@ mark.kanwu{
   .wrap figure.fig{ padding:8px 8px 4px; border-radius:9px; }
   .wrap figure.fig figcaption{ font-size:.84em; }
 }
+
+/* ============ 考试重点标注（数据来源：《软件工程重点内容》） ============ */
+mark.keypoint{
+  background:rgba(255,99,99,.16); color:#ff6b6b;
+  border:1px solid rgba(255,99,99,.5); border-radius:5px;
+  padding:0 7px; margin-right:7px; font-size:.86em; font-weight:800;
+  letter-spacing:.04em; white-space:nowrap;
+}
+html.light mark.keypoint{ background:rgba(220,38,38,.1); color:#c62828; border-color:rgba(220,38,38,.45) }
+p > mark.keypoint + strong, li > mark.keypoint + strong{ color:var(--fg) }
+
+.kp-box{
+  margin:0 0 2.2em; padding:14px 18px 12px; border-radius:12px;
+  background:linear-gradient(180deg, rgba(255,99,99,.10), transparent 70%), var(--bg2);
+  border:1px solid rgba(255,99,99,.35); border-left:5px solid #ff6b6b;
+}
+html.light .kp-box{ background:linear-gradient(180deg, rgba(220,38,38,.07), transparent 70%), var(--bg2);
+  border-color:rgba(220,38,38,.3); border-left-color:#c62828 }
+.kp-box > b{ font-size:1.02em; color:#ff8080; letter-spacing:.02em }
+html.light .kp-box > b{ color:#b71c1c }
+.kp-box > b span{ font-weight:400; font-size:.8em; color:var(--fg2); margin-left:.5em; letter-spacing:0 }
+.kp-box ul{ margin:.55em 0 0; padding-left:1.3em }
+.kp-box li{ margin:.22em 0; line-height:1.7 }
+.kp-box li a{ text-decoration:none; border-bottom:1px dashed currentColor }
+.kp-box li a:hover{ border-bottom-style:solid }
+
+h3[id^="kp-"], h4[id^="kp-"]{ scroll-margin-top:24px }
+h3[id^="kp-"]::after,
+h4[id^="kp-"]::after{
+  content:"重点"; float:right; font-size:.56em; font-weight:800; letter-spacing:.06em;
+  color:#ff6b6b; border:1px solid rgba(255,99,99,.5); background:rgba(255,99,99,.12);
+  border-radius:999px; padding:.14em .75em; margin-top:.4em;
+}
+html.light h3[id^="kp-"]::after, html.light h4[id^="kp-"]::after{
+  color:#c62828; border-color:rgba(220,38,38,.45); background:rgba(220,38,38,.08);
+}
+@media print{
+  mark.keypoint{ border-color:#c62828 }
+  .kp-box{ break-inside:avoid }
+}

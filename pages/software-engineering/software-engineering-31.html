@@ -111,6 +111,13 @@
 <div class="wrap">
 
 <h2 id="s-1">3.1–3.4 白盒测试：逻辑覆盖与基本路径</h2>
+<div class="kp-box">
+<b>本页重点<span>据《软件工程重点内容》标注</span></b>
+<ul>
+<li><a href="#kp-white-box">测试技术（白盒）</a></li>
+</ul>
+</div>
+
 <h3>3.1 白盒与黑盒的分界</h3>
 <p>课件第 58 页给的定义极简，但判据很清楚：</p>
 <table>
@@ -149,7 +156,8 @@
 <li>设计多少测试用例？→ 遵循<strong>覆盖原则</strong>。</li>
 </ul>
 <p>四种覆盖准则：<strong>语句覆盖、分支（判定）覆盖、路径覆盖、基本路径覆盖</strong>。</p>
-<h3>3.3 逻辑覆盖法：五种标准，逐级加严</h3>
+<h3 id="kp-white-box">3.3 逻辑覆盖法：五种标准，逐级加严</h3>
+<p><mark class="keypoint">重点</mark><strong>测试技术（白盒）</strong>：语句 / 判定 / 条件 / 判定-条件 / 条件组合五种覆盖的强弱次序与用例数。</p>
 <p>课件第 62–77 页用一个统一的例子贯穿五种覆盖标准。这个例子必须能自己推一遍：</p>
 <pre><code class="language-c">// 输入 A, B, X；输出 A, B, X
 if ((A &gt; 1) &amp;&amp; (B == 0))   X = X / A;      // 判定（一）

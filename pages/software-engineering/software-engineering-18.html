@@ -111,6 +111,16 @@
 <div class="wrap">
 
 <h2 id="s-1">1 九种 UML 图与三个分析视角</h2>
+<div class="kp-box">
+<b>本页重点<span>据《软件工程重点内容》标注</span></b>
+<ul>
+<li><a href="#kp-class-diagram">类图</a></li>
+<li><a href="#kp-state-diagram">状态图</a></li>
+<li><a href="#kp-activity-diagram">活动图</a></li>
+<li><a href="#kp-sequence-diagram">顺序图</a></li>
+</ul>
+</div>
+
 <h3>1.1–1.2 为什么"初步需求"还不够</h3>
 <p>课件第 3 页列了初步软件需求的五个毛病，这五条正好解释"为什么要有第 5 讲"：</p>
 <table>
@@ -175,7 +185,8 @@
 </table>
 <p>课件在这一页留了一个思考题："<strong>功能和行为有何本质性的区别？</strong>"</p>
 <p><mark class="bubu">补</mark><strong>我的回答</strong>：功能回答"<strong>系统能做什么</strong>"（外部可见的能力，静态清单）；行为回答"<strong>系统怎么做成那件事</strong>"（内部对象按时间顺序的协作，动态过程）。同一个功能可以有很多种行为实现——"取款"这个功能不变，但用 ATM 自助还是柜台办理，行为完全不同。所以<strong>功能是"什么"，行为是"怎么"，结构是"谁"</strong>。</p>
-<h3>类图（结构视角的主角）</h3>
+<h3 id="kp-class-diagram">类图（结构视角的主角）</h3>
+<p><mark class="keypoint">重点</mark><strong>类图</strong>：类的三格、关联 / 聚合 / 组合 / 泛化 / 依赖五种关系的画法与区别。</p>
 <p>课件第 8 页拆解了一个类框的三部分：<strong>类名 / 属性 / 操作</strong>。</p>
 <pre><code>        Order
   -id: integer
@@ -251,7 +262,8 @@
 <p><strong>对象图</strong>（PPT 第 18 页）：可以看作<strong>类图的实例</strong>，帮助理解复杂的类图。表示形式与类图几乎相同，<strong>主要差别是对象名下面要加一条下划线</strong>；对象名首字母小写；通常只有名称和属性。</p>
 <p><strong>包图</strong>（PPT 第 19 页）：刻画包间的构成和依赖关系。包可以包含一组有逻辑关联的 UML 模型元素；包间关系有<strong>构成关系</strong>和<strong>依赖关系</strong>。</p>
 <p><mark class="bubu">补</mark><strong>包图的价值在"分而治之"</strong>：课件说它"以结构化、层次化方式组织管理大型软件模型，使得分别处理不同包的开发团队之间的相互干扰程度降至最低"。<strong>这句话是包图存在的唯一理由</strong>——如果只有一个团队，包图画不画都行；一旦有多个团队，包图就是"地盘划分协议"。</p>
-<h3>状态图</h3>
+<h3 id="kp-state-diagram">状态图</h3>
+<p><mark class="keypoint">重点</mark><strong>状态图</strong>：状态、事件、迁移、监护条件；什么情况下该用状态图而不是顺序图。</p>
 <p>定义（PPT 第 21 页）：<strong>由状态、变迁、事件和活动组成的状态机</strong>，用来描述类的对象所有可能的状态以及事件发生时状态的转移条件。</p>
 <p>基本符号：</p>
 <table>
@@ -317,7 +329,8 @@
   └─ [timer=time-out] ──→ Moving to First floor
 </code></pre>
 <p><mark class="bubu">补</mark><strong>注意 <code>do/increase timer</code> 这个写法<strong>：电梯空闲时计时器一直在涨，涨到超时就自动回一楼。</strong><code>do</code> 事件的精髓就是"在这个状态里持续做的事"</strong>，它不需要外部触发——这跟 <code>entry</code>（只做一次）区别很大，考试常考这个区别。</p>
-<h3>活动图</h3>
+<h3 id="kp-activity-diagram">活动图</h3>
+<p><mark class="keypoint">重点</mark><strong>活动图</strong>：活动、判定、并发分叉；它本质是流程图，用来细化用例内部步骤。</p>
 <p>定义（PPT 第 25 页）：是<strong>状态图的一种特殊情况</strong>，这些状态大都处于<strong>活动状态</strong>。本质是流程图，描述<strong>活动到活动的控制流</strong>。</p>
 <p>一句话区分交互图与活动图：</p>
 <blockquote>
@@ -334,7 +347,8 @@
 <figcaption><b>图 5-4　带泳道的活动图</b>　（PPT 第 26 页）图被竖线切成两条泳道，顶端分别标「申请人」和「贷款业务受理人员」——这就是「泳道表明每个活动由谁负责」。图中间那对粗横线是<strong>分叉/汇合（并发）</strong>，流程图做不到。正文说「一眼看出谁在干什么、哪里要交接」，看这张图就明白。</figcaption>
 </figure>
 
-<h3>顺序图</h3>
+<h3 id="kp-sequence-diagram">顺序图</h3>
+<p><mark class="keypoint">重点</mark><strong>顺序图</strong>：生命线、同步 / 异步 / 返回消息，按时间顺序读一次交互。</p>
 <p>定义（PPT 第 28–29 页）：交互图的一种，描述对象之间<strong>消息发送的先后顺序</strong>，强调<strong>时间顺序</strong>。主要用途是把用例表达的需求转化为更正式、更精细的表达——<strong>用例常被细化为一个或多个顺序图</strong>，同时它也能有效描述"如何分配各类的职责"。</p>
 <p>要素：</p>
 <table>

@@ -111,6 +111,14 @@
 <div class="wrap">
 
 <h2 id="s-1">2.3–2.4 需求怎么描述：从自然语言到 UML 用例</h2>
+<div class="kp-box">
+<b>本页重点<span>据《软件工程重点内容》标注</span></b>
+<ul>
+<li><a href="#kp-usecase">用例图</a></li>
+<li><a href="#kp-usecase-detail">用例的详细描述</a></li>
+</ul>
+</div>
+
 <h3>2.3 为什么需求要先"粗略地写下来"</h3>
 <p>课件第 73 页先解释了"初步软件需求"这个词：之所以叫初步，是因为这些需求<strong>还很粗略</strong>，只是轮廓，不够具体详尽，可能有遗漏、有不一致和冲突，<strong>后续还需进一步精化和分析</strong>。</p>
 <p>那为什么还要先写下来？因为要"记录下来、描述清楚，形成相关文档，以便于不同人员（需求工程师、用户、客户）交流和讨论，及时发现理解上的偏差"。</p>
@@ -284,7 +292,8 @@
 <li><strong>构建</strong>：多次迭代，完成不同优先级用例开发；</li>
 <li><strong>交付</strong>：功能与性能测试，产品化部署。</li>
 </ol>
-<h3>2.4 用例：从"谁"和"做什么"入手</h3>
+<h3 id="kp-usecase">2.4 用例：从"谁"和"做什么"入手</h3>
+<p><mark class="keypoint">重点</mark><strong>用例图</strong>：参与者、用例、系统边界，以及包含 / 扩展 / 泛化三种关系怎么画、怎么读。</p>
 <p>三个定义要分清（PPT 第 83 页）：</p>
 <ul>
 <li><strong>用例（Use Case）</strong>：文本形式的情节描述，说明某参与者使用系统以实现某一特定目标的情形，描述的是<strong>外部行为者所理解的系统功能</strong>。</li>
@@ -360,7 +369,8 @@
 </figure>
 
 <p><mark class="bubu">补</mark><strong>一句话区分 extend 和 include</strong>：<strong>include 是"我必须做它"（被包含的用例一定会执行），extend 是"我可能会做它"（扩展用例在特定条件下才插入）</strong>。判断口诀：把两个用例连起来读——"每次 A 都必须做 B" → include；"做 A 时可能额外做 C" → extend。</p>
-<h3>用例建模的五步（银行储蓄账户管理系统案例）</h3>
+<h3 id="kp-usecase-detail">用例建模的五步（银行储蓄账户管理系统案例）</h3>
+<p><mark class="keypoint">重点</mark><strong>用例的详细描述</strong>：用例描述四字段：前置条件、基本路径、可选路径、后置条件；五步画法要能照着做一遍。</p>
 <p>课件第 90–95 页给了一个完整流程，这是本讲最值得照着做的范例。</p>
 <p><strong>第 1 步：识别执行者</strong></p>
 <ul>

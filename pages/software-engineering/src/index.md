@@ -30,6 +30,50 @@
 
 一句话串起整门课：**软件工程 = 用工程化的手段，把"人脑里的想法"逐级翻译成"机器能执行、别人能维护的制品"，并在每一级翻译处留下可检查的证据。**
 
+### 考试重点清单（据《软件工程重点内容》）
+
+老师给的《软件工程重点内容》只有条目名，下面把**每一条都落到讲义的具体小节**——点表格里的蓝字直达，那一节标题右侧会显示红色「重点」徽章，正文里也有一条 **【重点】** 说明「怎么考」。
+
+> 说明：左两列来自老师给的清单（原文照录）；**「怎么考」一列是笔记作者的判断**，不是老师原话，只用来把每个条目转成一句可以自测的话。
+
+| 教材章节 | 重点条目 | 怎么考 |
+|---|---|---|
+| **1.2 软件及其特点** | [软件的组成](software-engineering-05.html#kp-soft-parts) | 程序 + 数据 + 文档缺一不可；判断题爱问「文档算不算软件的组成部分」。 |
+|  | [软件的生命周期](software-engineering-06.html#kp-life) | 六阶段各自回答 What 还是 How、产出什么制品。 |
+|  | [软件的分类](software-engineering-06.html#kp-software-class) | 应用 / 系统 / 支撑的划分标准；DBMS 属系统软件是常见陷阱。 |
+|  | [开源软件的优势](software-engineering-07.html#kp-open-source) | 三条优势能背；还要会答「开源 ≠ 免费」。 |
+|  | [软件质量要素](software-engineering-07.html#kp-quality) | 质量 = 满足给定需求的程度；三个维度是可维护性、灵活性、可测试性。 |
+| **2 软件工程概述** | [软件危机的表现](software-engineering-08.html#kp-crisis) | 五个症状要能按顺序说，并解释各自后果。 |
+|  | [软件工程的要素](software-engineering-09.html#kp-se-elements) | 过程 / 方法学 / 工具各自管什么、为什么都指向质量保证。 |
+|  | [软件工程的原则](software-engineering-09.html#kp-se-principles) | 八条原则逐条说出并各举一例，最可能出简答。 |
+| **3.1 软件过程模型** | [典型软件过程模型](software-engineering-11.html#kp-process-models) | 五种模型的适用场景与区别；常给场景问「选哪个、为什么」。 |
+| **3.2 敏捷开发方法** | [敏捷开发的概念和观点、敏捷准则、代表方法](software-engineering-12.html#kp-agile) | 敏捷宣言四组价值观 + 敏捷准则 + Scrum/XP 代表方法。 |
+| **4 软件需求分析基础** | [利益相关方](software-engineering-13.html#kp-stakeholders) | 谁能算 stakeholder、为何要全识别、需求冲突如何协商。 |
+|  | [软件需求的类别](software-engineering-13.html#kp-req-categories) | 功能 / 非功能 / 设计约束三分法，给一句话判类别。 |
+|  | [面向对象的需求分析方法](software-engineering-14.html#kp-oo-analysis) | 为什么用对象与类建模，OOA 与结构化分析的差别。 |
+| **5 获取软件需求** | [获取软件需求的方法](software-engineering-14.html#kp-req-methods) | 六种获取方法各自的适用场景与局限。 |
+|  | [用例图（包括用例的详细描述）](software-engineering-16.html#kp-usecase) | 参与者、用例、系统边界，包含 / 扩展 / 泛化三种关系。 |
+|  | [用例的详细描述](software-engineering-16.html#kp-usecase-detail) | 用例描述四字段：前置条件、基本路径、可选路径、后置条件。 |
+| **6 分析软件需求** | [类图](software-engineering-18.html#kp-class-diagram) | 类的三格 + 关联 / 聚合 / 组合 / 泛化 / 依赖五个关系。 |
+|  | [顺序图](software-engineering-18.html#kp-sequence-diagram) | 生命线、同步 / 异步 / 返回消息，按时间顺序读。 |
+|  | [状态图](software-engineering-18.html#kp-state-diagram) | 状态、事件、迁移、监护条件；何时该用状态图。 |
+|  | [分析软件需求过程](software-engineering-17.html#kp-req-analysis) | 理解—表达—验证三动作，分析阶段产出哪些模型。 |
+|  | [软件需求文档](software-engineering-17.html#kp-req-doc) | 需求规格说明书的必备内容与好文档判据。 |
+| **7 软件设计基础** | [软件设计的质量要求](software-engineering-22.html#kp-design-quality) | 高质量设计的判据，以及设计质量为什么难验证。 |
+|  | [软件设计原则](software-engineering-22.html#kp-design-principles) | 七条原则 + 高内聚低耦合；第 6 讲最典型简答。 |
+| **8 软件体系结构设计** | [常用软件体系结构风格](software-engineering-25.html#kp-arch-styles) | 六种风格的优缺点与选型依据。 |
+| **10 软件详细设计** | [详细设计过程](software-engineering-26.html#kp-detailed-design) | 详细设计做什么；流程图 / N-S / PAD / PDL 怎么取舍。 |
+|  | [活动图](software-engineering-18.html#kp-activity-diagram) | 活动、判定、并发分叉；用来细化用例内部步骤。 |
+|  | [用例设计 / 类设计 / 数据设计](software-engineering-24.html#kp-ood-process) | 体系结构 → 界面 → 构件 → 用例 → 数据 → 类的顺序与产物。 |
+| **13 软件测试** | [软件测试过程](software-engineering-30.html#kp-test-process) | 计划 → 检查 → 单元 → 集成 → 确认 → 系统 → 验收的主链。 |
+|  | [软件测试原则](software-engineering-32.html#kp-test-principles) | 十条测试原则要能背（穷举不可能、缺陷集群性等）。 |
+|  | [软件测试技术（白盒）](software-engineering-31.html#kp-white-box) | 五种覆盖的强弱次序与用例数。 |
+|  | [软件测试技术（黑盒）](software-engineering-32.html#kp-black-box) | 等价类、边界值、错误猜测、因果图四种方法。 |
+| **15 软件维护和演化** | [软件维护的形式](software-engineering-33.html#kp-maintenance-types) | 四类维护的判别（给场景选类型）与比例。 |
+|  | [软件维护技术](software-engineering-34.html#kp-maint-tech) | 代码重组、逆向工程、设计重构、再工程的区别与条件。 |
+
+共 **12 个教材章节、24 条重点**（其中几条在讲义里拆成了更细的小节，表中共 33 个可点击条目，落在 22 个页面、34 个标注点上）。其余小节是背景、案例与小结，不算重点。复习时按这张表逐条「合上书讲一遍」，比从头重读快得多。
+
 ### 目录
 
 [[TOC]]

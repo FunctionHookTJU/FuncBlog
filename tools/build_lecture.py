@@ -129,6 +129,7 @@ def body_tokens(body):
     """Markdown 转换后的讲义专用标记替换。"""
     body = body.replace("【补】", '<mark class="bubu">补</mark>')
     body = body.replace("【勘误】", '<mark class="kanwu">勘误</mark>')
+    body = body.replace("【重点】", '<mark class="keypoint">重点</mark>')
     return body
 
 
