@@ -80,8 +80,8 @@
 
 | 考点 | 位置 | 一句话 |
 |---|---|---|
-| N-S 图 ↔ PAD 图互转 | [26 详细设计四工具](software-engineering-26.html#kp-detailed-design) | 同一棵树换排版：选择画三角、循环画竖线，三条规则机械转 |
-| McCabe 复杂性度量（环路复杂度） | [31 基本路径测试](software-engineering-31.html#kp-mccabe) | $V(G)=E-N+2=$ 判定结点数 $+1$；条件分支与每个循环各算 1 个判定 |
+| N-S 图 ↔ PAD 图互转 | [26 详细设计四工具](software-engineering-26.html#kp-detailed-design) | 同一棵树换排版：选择画三角、循环画竖线，三条规则机械转；**课件 p61–67 的 7 张原图已配齐**（含 p65 嵌套 N-S、p67 数组排序 PAD 范例） |
+| McCabe 复杂性度量（环路复杂度） | [31 基本路径测试](software-engineering-31.html#kp-mccabe) | $V(G)=E-N+2=$ 判定结点数 $+1$；条件分支与每个循环各算 1 个判定。**课件里没有这个公式**，是讲义补的，并配了 2019 真题「N-S → PAD → 算得 7」的原图与答案图 |
 | 活动图 vs 流程图 | [18 UML 九图](software-engineering-18.html#kp-activity-diagram) | 活动图支持并发分叉/泳道，流程图只有顺序、分支、循环 |
 | 内聚七级 / 耦合七级 | [23 模块化](software-engineering-23.html) | 综合题常给一段模块描述，让你判断是哪一级 |
 | 用例描述四字段、类图五种关系 | [16 用例描述](software-engineering-16.html#kp-usecase-detail)、[18 类图](software-engineering-18.html#kp-class-diagram) | 需求建模类大题的两块地基 |
