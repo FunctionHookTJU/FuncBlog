@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行列式计算器 - 宇佐见函钩</title>
+    <meta name="description" content="简洁扁平的行列式计算器：支持数字矩阵与代数公式，精确分数、科学计数法、变量代入与 LaTeX 公式输出。">
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../assets/katex/katex.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <script src="../scripts/audioPlayer.js" defer></script>
+    <script src="../scripts/site-shell.js" defer></script>
+    <script src="../scripts/backgroundLoader.js"></script>
+    <script src="../assets/katex/katex.min.js" defer></script>
+    <script src="../scripts/detEngine.js" defer></script>
+    <script src="../scripts/determinant.js" defer></script>
+    <style>
+        /* =========================
+           简洁扁平风（卡片/控件）
+           背景与站点外壳沿用 style.css，只重绘工具本体
+           ========================= */
+        :root {
+            --bg-surface: #ffffff;
+            --bg-subtle: #f9fafb;
+            --line: #e5e7eb;
+            --line-soft: #f1f3f6;
+            --line-strong: #d1d5db;
+            --ink: #111827;
+            --ink-2: #374151;
+            --muted: #6b7280;
+            --muted-2: #9ca3af;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --accent-weak: #eff6ff;
+            --ui-radius: 12px;
+            --ui-radius-sm: 8px;
+            --ui-font: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+            --ui-mono: ui-monospace, "SFMono-Regular", Consolas, "Courier New", monospace;
+        }
+
+        [hidden] { display: none !important; }
+
+        main.container { padding-bottom: 20px; }
+
+        .tool {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 6px 0 40px;
+            font-family: var(--ui-font);
+            color: var(--ink);
+        }
+
+        /* ---------- 标题区（扁平白卡，不用渐变横幅） ---------- */
+        .intro {
+            margin: 6px 0 20px;
+            padding: 26px 28px;
+            background: var(--bg-surface);
+            border: 1px solid var(--line);
+            border-radius: var(--ui-radius);
+        }
+
+        .eyebrow {
+            margin-bottom: 9px;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        .intro h1 {
+            margin: 0 0 10px;
+            color: #0f172a;
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -.01em;
+        }
+
+        .lede {
+            max-width: 760px;
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* ---------- 布局 ---------- */
+        .layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .col { min-width: 0; }
+
+        /* ---------- 扁平卡片 ---------- */
+        .card {
+            margin-bottom: 18px;
+            padding: 20px;
+            background: var(--bg-surface);
+            border: 1px solid var(--line);
+            border-radius: var(--ui-radius);
+        }
+
+        .card:last-child { margin-bottom: 0; }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-head h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            color: var(--ink);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .card-head h2::before {
+            content: "";
+            width: 3px;
+            height: 14px;
+            border-radius: 2px;
+            background: var(--accent);
+        }
+
+        .card-hint {
+            color: var(--muted-2);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        /* ---------- 阶数控制 ---------- */
+        .size-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .size-label {
+            color: var(--ink-2);
+            font-size: 13px;
+        }
+
+        .size-label strong {
+            color: var(--ink);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .size-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--ui-radius-sm);
+            background: var(--bg-surface);
+            color: var(--ink-2);
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+        }
+
+        .size-btn:hover:not(:disabled) { background: #f3f4f6; }
+        .size-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+        /* ---------- 矩阵输入 ---------- */
+        .matrix-grid {
+            display: grid;
+            gap: 6px;
+            justify-content: center;
+            max-width: 100%;
+            margin: 0 auto 16px;
+            padding: 2px;
+            overflow-x: auto;
+        }
+
+        .matrix-cell {
+            width: 100%;
+            min-width: 52px;
+            height: 42px;
+            padding: 0 6px;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--ui-radius-sm);
+            background: var(--bg-surface);
+            color: var(--ink);
+            text-align: center;
+            font: 500 15px/1.2 var(--ui-mono);
+            transition: border-color .15s, box-shadow .15s;
+        }
+
+        .matrix-cell::placeholder { color: #c7cbd1; }
+
+        .matrix-cell:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, .15);
+        }
+
+        .matrix-cell.invalid {
+            border-color: #dc2626;
+            background: #fef2f2;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 38px;
+            padding: 0 18px;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--ui-radius-sm);
+            background: var(--bg-surface);
+            color: var(--ink-2);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background .15s, border-color .15s, color .15s;
+        }
+
+        .btn:hover { background: #f9fafb; }
+
+        .btn.btn-primary {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn.btn-primary:hover {
+            border-color: var(--accent-hover);
+            background: var(--accent-hover);
+        }
+
+        .examples {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 16px;
+        }
+
+        .examples-label {
+            margin-right: 2px;
+            color: var(--muted-2);
+            font-size: 12px;
+        }
+
+        .example-btn {
+            height: 30px;
+            padding: 0 12px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: var(--bg-surface);
+            color: var(--ink-2);
+            font-family: inherit;
+            font-size: 12.5px;
+            cursor: pointer;
+            transition: border-color .15s, color .15s, background .15s;
+        }
+
+        .example-btn:hover {
+            border-color: #bfdbfe;
+            background: #f8faff;
+            color: var(--accent-hover);
+        }
+
+        .hint {
+            margin: 15px 0 0;
+            color: var(--muted-2);
+            font-size: 12.5px;
+            line-height: 1.85;
+        }
+
+        .hint code,
+        .syntax code,
+        .section-desc code {
+            padding: 1px 5px;
+            border-radius: 4px;
+            background: var(--accent-weak);
+            color: var(--accent-hover);
+            font-family: var(--ui-mono);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        /* ---------- 语法表 ---------- */
+        .syntax {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            color: var(--ink-2);
+        }
+
+        .syntax th {
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--line);
+            background: var(--bg-subtle);
+            color: var(--muted);
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-align: left;
+        }
+
+        .syntax td {
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--line-soft);
+            vertical-align: top;
+        }
+
+        .syntax tr:last-child td { border-bottom: none; }
+
+        .notes {
+            margin: 13px 0 0;
+            padding-left: 18px;
+            color: var(--muted);
+            font-size: 12.5px;
+            line-height: 1.9;
+        }
+
+        /* ---------- 预览 / 结果 ---------- */
+        .preview {
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 92px;
+            padding: 16px 12px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--line-soft);
+            border-radius: var(--ui-radius-sm);
+            overflow-x: auto;
+        }
+
+        .preview-empty {
+            color: var(--muted-2);
+            font-size: 13px;
+        }
+
+        /* 居中交给 auto margin：内容不超宽时居中；超宽时从左侧开始溢出，
+           这样横向滚动可以滚到公式开头（直接 justify-content:center 会把左侧裁掉）。 */
+        .preview .katex-display,
+        .result .katex-display,
+        .substitute-result .katex-display {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .mode-badge.exact {
+            background: #ecfdf5;
+            border: 1px solid #d1fae5;
+            color: #047857;
+        }
+
+        .mode-badge.approx {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #b45309;
+        }
+
+        .mode-badge.symbolic {
+            background: var(--accent-weak);
+            border: 1px solid #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .alert {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border: 1px solid #fecaca;
+            border-radius: var(--ui-radius-sm);
+            background: #fef2f2;
+            color: #b91c1c;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .muted-box {
+            padding: 22px 14px;
+            border: 1px dashed var(--line);
+            border-radius: var(--ui-radius-sm);
+            background: var(--bg-subtle);
+            color: var(--muted-2);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .result {
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 84px;
+            padding: 20px 14px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--line-soft);
+            border-radius: var(--ui-radius-sm);
+            overflow-x: auto;
+        }
+
+        .result .katex { font-size: 1.22em; }
+
+        .meta {
+            margin-top: 14px;
+            border-top: 1px solid var(--line-soft);
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 9px 2px;
+            border-bottom: 1px solid var(--line-soft);
+            font-size: 13px;
+        }
+
+        .meta-row:last-child { border-bottom: none; }
+
+        .meta-label {
+            flex: 0 0 auto;
+            min-width: 76px;
+            color: var(--muted);
+        }
+
+        .meta-value {
+            color: var(--ink);
+            font-family: var(--ui-mono);
+            font-size: 12.5px;
+            word-break: break-all;
+        }
+
+        .meta-value.latex-value {
+            font-family: var(--ui-font);
+            font-size: 13px;
+        }
+
+        .copy-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .copy-btn {
+            height: 32px;
+            padding: 0 12px;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--ui-radius-sm);
+            background: var(--bg-surface);
+            color: var(--ink-2);
+            font-family: inherit;
+            font-size: 12.5px;
+            cursor: pointer;
+            transition: background .15s, border-color .15s;
+        }
+
+        .copy-btn:hover { background: #f9fafb; border-color: #c7cbd1; }
+
+        .copy-hint {
+            min-height: 1em;
+            color: #047857;
+            font-size: 12.5px;
+        }
+
+        .warnings { margin-top: 12px; }
+
+        .warning-item {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border: 1px solid #fde68a;
+            border-radius: var(--ui-radius-sm);
+            background: #fffbeb;
+            color: #92400e;
+            font-size: 12.5px;
+            line-height: 1.7;
+        }
+
+        /* ---------- 变量代入 ---------- */
+        .section-desc {
+            margin: 0 0 12px;
+            color: var(--muted);
+            font-size: 12.5px;
+        }
+
+        .var-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .var-field {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--bg-surface);
+        }
+
+        .var-name {
+            min-width: 20px;
+            color: var(--accent-hover);
+            font-weight: 600;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .var-field input {
+            width: 84px;
+            height: 30px;
+            padding: 0 8px;
+            border: 1px solid var(--line-strong);
+            border-radius: 6px;
+            background: var(--bg-surface);
+            color: var(--ink);
+            font: 12.5px var(--ui-mono);
+        }
+
+        .var-field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, .12);
+        }
+
+        .substitute-result {
+            position: relative;
+            margin-top: 14px;
+            padding: 14px;
+            border: 1px solid #dbeafe;
+            border-radius: var(--ui-radius-sm);
+            background: #f8faff;
+            overflow-x: auto;
+        }
+
+        .substitute-note {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 12.5px;
+        }
+
+        /* ---------- 响应式 ---------- */
+        @media (max-width: 1000px) {
+            .layout { grid-template-columns: minmax(0, 1fr); }
+            .intro h1 { font-size: 26px; }
+        }
+
+        @media (max-width: 560px) {
+            .tool { padding-bottom: 24px; }
+
+            .intro { padding: 20px 18px; }
+            .intro h1 { font-size: 22px; }
+
+            .card { padding: 16px 14px; }
+
+            .matrix-cell {
+                min-width: 44px;
+                height: 40px;
+                font-size: 14px;
+            }
+
+            .result { padding: 16px 10px; }
+            .result .katex { font-size: 1.1em; }
+
+            footer .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: .9rem;
+                text-align: center;
+            }
+
+            footer .copyright { text-align: center; }
+        }
+    </style>
+</head>
+<body class="det-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/diary.html">日记</a></li>
+                <li><a href="../pages/study.html">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="../pages/communicate.html">交流</a></li>
+                <li><a href="../pages/picture.html">图片墙</a></li>
+                <li><a href="../pages/products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+
+<main class="container">
+    <div class="tool">
+        <section class="intro">
+            <div class="eyebrow">Math Tool</div>
+            <h1>行列式计算器</h1>
+            <p class="lede">
+                输入数字或代数表达式，直接得到精确结果或展开后的公式。支持 2–6 阶矩阵、分数精确运算、
+                变量代入求值，以及可复制的 LaTeX 科学公式。
+            </p>
+        </section>
+
+        <div class="layout">
+            <!-- 左列：输入 -->
+            <div class="col">
+                <section class="card">
+                    <div class="card-head">
+                        <h2>矩阵输入</h2>
+                        <span class="card-hint">2–6 阶 · 留空按 0</span>
+                    </div>
+                    <div class="size-row">
+                        <span class="size-label">阶数 n = <strong id="matrix-size">3</strong></span>
+                        <button type="button" class="size-btn" id="size-dec" aria-label="减少阶数">−</button>
+                        <button type="button" class="size-btn" id="size-inc" aria-label="增加阶数">+</button>
+                    </div>
+                    <div class="matrix-grid" id="matrix-grid" role="group" aria-label="矩阵输入"></div>
+                    <div class="actions">
+                        <button type="button" class="btn btn-primary" id="calc-btn">计算</button>
+                        <button type="button" class="btn" id="clear-btn">清空</button>
+                    </div>
+                    <div class="examples">
+                        <span class="examples-label">示例</span>
+                        <button type="button" class="example-btn" data-example="numeric">数值 3×3</button>
+                        <button type="button" class="example-btn" data-example="symbolic">符号 2×2</button>
+                        <button type="button" class="example-btn" data-example="vandermonde">范德蒙德 4×4</button>
+                        <button type="button" class="example-btn" data-example="charpoly">特征多项式 3×3</button>
+                        <button type="button" class="example-btn" data-example="triangular">上三角 3×3</button>
+                        <button type="button" class="example-btn" data-example="trig">三角 2×2</button>
+                        <button type="button" class="example-btn" data-example="random">随机 4×4</button>
+                    </div>
+                    <p class="hint">
+                        单元格支持数字、分数、小数、科学计数法、变量（<code>a</code>、<code>x</code>、<code>θ</code>…）、
+                        函数（<code>sin</code>、<code>cos</code>、<code>ln</code>、<code>sqrt</code>…）以及
+                        <code>+ − × ÷ ^</code> 运算与括号。
+                    </p>
+                </section>
+
+                <section class="card">
+                    <div class="card-head">
+                        <h2>输入语法</h2>
+                    </div>
+                    <table class="syntax">
+                        <thead>
+                            <tr><th>写法</th><th>含义</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>1/3</code>、<code>0.25</code>、<code>1e-3</code></td><td>分数、小数、科学计数法（数值模式保持精确）</td></tr>
+                            <tr><td><code>a</code>、<code>x</code>、<code>x1</code>、<code>θ</code>、<code>alpha</code></td><td>变量，代入数值后可求值</td></tr>
+                            <tr><td><code>2x</code>、<code>3(a+b)</code>、<code>(a+b)(a-b)</code></td><td>隐式乘法，与 <code>2*x</code> 等价</td></tr>
+                            <tr><td><code>x^2</code>、<code>2^-3</code></td><td>乘方（指数需为常数）</td></tr>
+                            <tr><td><code>sin(x)</code>、<code>cos(x)</code>、<code>ln(x)</code>、<code>sqrt(x)</code>、<code>abs(x)</code></td><td>三角函数、对数、开方、绝对值</td></tr>
+                            <tr><td><code>pi</code>、<code>e</code></td><td>圆周率、自然常数（数值结果按近似值给出）</td></tr>
+                        </tbody>
+                    </table>
+                    <ul class="notes">
+                        <li>全为有理数的矩阵使用分数精确运算，结果给出约分后的分数、小数与科学计数法。</li>
+                        <li>含变量时按余子式展开并合并同类项，结果为完全展开的多项式；展开项数过多时会保留紧凑形式。</li>
+                        <li>含函数的结果不做三角恒等式化简（例如 <code>sin²x + cos²x</code> 不会自动合并为 1）。</li>
+                        <li><code>e</code> 是自然常数（≈ 2.718），不能作为变量名；需要变量时请用其它字母。</li>
+                        <li>行列式最多支持 6 阶：再大时计算量增长很快，建议先做行列变换化简。</li>
+                    </ul>
+                </section>
+            </div>
+
+            <!-- 右列：预览 + 结果 -->
+            <div class="col">
+                <section class="card">
+                    <div class="card-head">
+                        <h2>矩阵预览</h2>
+                    </div>
+                    <div class="preview" id="matrix-preview">
+                        <span class="preview-empty">输入矩阵后在这里预览</span>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-head">
+                        <h2>计算结果</h2>
+                        <span class="mode-badge" id="mode-badge" hidden></span>
+                    </div>
+                    <div class="alert" id="error-box" role="alert" hidden></div>
+                    <div class="muted-box" id="result-empty">输入矩阵后会自动计算，也可以点击「计算」。</div>
+                    <div id="result-body" hidden>
+                        <div class="result" id="result-display" aria-live="polite"></div>
+                        <div class="meta" id="result-meta"></div>
+                        <div class="copy-row">
+                            <button type="button" class="copy-btn" id="copy-latex">复制 LaTeX</button>
+                            <button type="button" class="copy-btn" id="copy-text">复制结果</button>
+                            <span class="copy-hint" id="copy-hint" aria-live="polite"></span>
+                        </div>
+                        <div class="warnings" id="warnings"></div>
+                    </div>
+                </section>
+
+                <section class="card" id="substitute-section" hidden>
+                    <div class="card-head">
+                        <h2>变量代入</h2>
+                    </div>
+                    <p class="section-desc">给公式中的变量赋值即可得到数值结果，支持分数与小数（例如 <code>1/2</code>、<code>0.75</code>）。</p>
+                    <div class="var-inputs" id="var-inputs"></div>
+                    <button type="button" class="btn btn-primary" id="substitute-btn">代入计算</button>
+                    <div class="substitute-result" id="substitute-result" aria-live="polite" hidden></div>
+                </section>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="../index.html">首页</a>
+                <a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a>
+                <a href="../pages/products.html">更多产品</a>
+                <a href="uncertainty.html">不确定度计算器</a>
+            </div>
+            <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.initBackgroundLoader({
+            path: '../assets/images/bg/',
+            blurAmount: 0,
+            transitionDuration: 400
+        });
+    });
+</script>
+</body>
+</html>
