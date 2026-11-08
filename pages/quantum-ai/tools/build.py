@@ -158,26 +158,29 @@ def strip_tags(s):
     return re.sub(r'<[^>]+>', '', s)
 
 
+def add_chapter_rules(body):
+    """在每章（h2）前插入分隔虚线，与 P1/P2 讲义小节之间的 <hr> 完全一致。
+    紧跟篇标题（h1）的那一章不插，避免与 h1 的紫色下划线叠成双线。"""
+    body = body.replace('<h2 ', '\x00H2\x00<h2 ')
+    body = re.sub(r'(</h1>\s*)\x00H2\x00', r'\1', body)
+    return body.replace('\x00H2\x00', '<hr>\n')
+
+
 def build_nav(body):
+    """与 P1/P2 讲义一致的侧栏结构：h1 -> .sg 分组，h2 -> .i 条目（data-h 供 scrollspy）。"""
     entries = [(m.group(1), m.group(2), strip_tags(m.group(3)).strip())
                for m in re.finditer(r'<(h1|h2)[^>]*id="([^"]+)"[^>]*>(.*?)</\1>', body, flags=re.S)]
-    parts = ['<nav id="nav" aria-label="目录">',
-             '<div class="navhead"><span>目录</span><button id="navclose" title="收起目录">✕</button></div>',
-             '<div class="navbody">']
-    in_group = False
+    parts = ['    <a class="g" href="#">↑ 回到顶部</a>']
+    has_group = False
     for lvl, hid, txt in entries:
         if lvl == 'h1':
-            if in_group:
-                parts.append('</div>')
-            parts.append('<div class="navgrp">')
-            parts.append('<div class="navlab">%s</div>' % htmlmod.escape(txt))
-            in_group = True
+            parts.append('    <div class="sg">%s</div>' % htmlmod.escape(txt))
+            has_group = True
         else:
-            parts.append('<a href="#%s" data-target="%s">%s</a>'
-                         % (quote(hid), htmlmod.escape(hid), htmlmod.escape(txt)))
-    if in_group:
-        parts.append('</div>')
-    parts.append('</div></nav>')
+            parts.append('    <a class="i" data-h="%s" href="#%s">%s</a>'
+                         % (htmlmod.escape(hid), quote(hid), htmlmod.escape(txt)))
+    if not has_group:
+        parts.append('    <div class="sg">目录</div>')
     return '\n'.join(parts)
 
 
@@ -194,6 +197,7 @@ def main():
                                                      'anchorlink': False,
                                                      'slugify': slugify}})
     body = restore_math(md.convert(protected), store)
+    body = add_chapter_rules(body)
     nav = build_nav(body)
 
     tpl = read(TEMPLATE)
