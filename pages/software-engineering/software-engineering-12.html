@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3 如何选择：没有最好，只有最合适 · 软件工程讲义：全课程十讲</title>
+<title>3.1–3.3 选型、传统模型不足与敏捷方法 · 软件工程讲义：全课程十讲</title>
 <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png">
@@ -71,7 +71,7 @@
 <a class="i" href="software-engineering-10.html">3–4 六十年发展脉络与软件工程教育</a>
 <div class="sg">第 3 讲　软件过程模型</div>
 <a class="i" href="software-engineering-11.html">1–2 软件过程与五个经典模型</a>
-<a class="i cur" data-h="s-1" href="software-engineering-12.html">3 如何选择：没有最好，只有最合适</a>
+<a class="i cur" data-h="s-1" href="software-engineering-12.html">3.1–3.3 选型、传统模型不足与敏捷方法</a>
 <div class="sg">第 4 讲　需求分析基础</div>
 <a class="i" href="software-engineering-13.html">1.1–1.3 需求是什么：质量要求、特点与分类</a>
 <a class="i" href="software-engineering-14.html">1.4–2.2 需求从哪里来：获取方法与需求工程</a>
@@ -110,11 +110,13 @@
 
 <div class="wrap">
 
-<h2 id="s-1">3 如何选择：没有最好，只有最合适</h2>
+<h2 id="s-1">3.1–3.3 选型、传统模型不足与敏捷方法</h2>
 <div class="kp-box">
 <b>本页重点<span>据《软件工程重点内容》标注</span></b>
 <ul>
-<li><a href="#kp-agile">敏捷开发的概念、观点与准则</a></li>
+<li><a href="#kp-agile">敏捷开发的概念与观点（四个「重视」＋一个「少写」）</a></li>
+<li><a href="#kp-agile-methods">敏捷的代表方法（Scrum、XP 及另外三个方法族）</a></li>
+<li><a href="#kp-agile-practices">敏捷准则：11 条基本原则与 12 个最佳实践</a></li>
 </ul>
 </div>
 
@@ -171,13 +173,84 @@
 <p>以文档为中心的<strong>重型</strong>软件开发方法，非常笨重。</p>
 </blockquote>
 <p><mark class="bubu">补</mark><strong>"重型/轻量"这个说法值得记住</strong>：重型不是"重视文档"，而是"文档成为变更的必经关卡"。改一行代码要走三道文档审批，这就是重型。它的代价在需求稳定时无所谓（反正不改），在需求频繁变化时是致命的——<strong>改文档的时间比写代码还长。</strong></p>
-<h3 id="kp-agile">敏捷软件开发方法</h3>
-<p><mark class="keypoint">重点</mark><strong>敏捷开发的概念、观点与准则</strong>：敏捷宣言四组价值观、敏捷准则、代表方法（Scrum / XP）；与「以文档为中心 vs 以代码为中心」连着记。</p>
-<p>课件第 32 页只用一句话给敏捷下定义：</p>
+<h3 id="kp-agile">3.3 敏捷软件开发方法</h3>
+<p><mark class="keypoint">重点</mark><strong>敏捷开发的概念和观点、敏捷准则、代表方法</strong>——《重点内容》3.2 的三项要求，全部落在课件第 32 页<strong>同一张图</strong>上。</p>
+<p><mark class="kanwu">勘误</mark><strong>早先这一节只写了一句定义，不是课件只讲了一句，而是那张图的字全部是图片文字，PDF 文本层抓不到。</strong> 漏掉的是：中间蓝框的五个代表方法、左侧灰框的 11 条基本原则、底部三个色块（4 大价值观 / 5 大原则 / 12 个最佳实践）。本节按原图重写。</p>
+<figure class="fig">
+<a href="../../assets/img/se/ch03_p032.png" target="_blank" rel="noopener"><img src="../../assets/img/se/ch03_p032.png" alt="敏捷软件开发方法：代表方法、基本原则与 4 大价值观/5 大原则/12 个最佳实践"></a>
+<figcaption><b>图 3-8　敏捷软件开发方法总览</b>　（PPT 第 32 页）第 3 讲只有这一页讲敏捷，但它一张图装了四项考点，要按箭头读三遍：<b>最上面两行</b>是定义（四个「重视」加一个「少写」）；<b>中间蓝框</b>是五个代表方法（自适应开发、水晶方法、特征驱动开发、SCRUM、极限编程）；<b>向左的箭头</b>标「基本原则」，指向灰框里 11 条日常工作方式；<b>下方三条橙线</b>分别标「4 大价值观」「5 大原则」「12 个最佳实践」，各自连到下面的一个色块。看懂这张图的层次，「概念和观点、准则、代表方法」三项就一次答全。</figcaption>
+</figure>
+
+<h4>3.3.1 敏捷是对 3.2 那四条病灶的逐条回应</h4>
+<table>
+<thead>
+<tr>
+<th>传统模型的病灶（PPT 第 31 页）</th>
+<th>敏捷给出的替代（PPT 第 32 页）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大量工作用于撰写文档</td>
+<td><strong>较少的文档</strong>，以代码为中心</td>
+</tr>
+<tr>
+<td>大量时间用于文档评审</td>
+<td><strong>短平快的会议</strong>、<strong>结对编程</strong>（评审内建在编写过程中）、<strong>自动化测试</strong></td>
+</tr>
+<tr>
+<td>需求一变要改一串文档，最后才动代码</td>
+<td><strong>提倡更改</strong>、<strong>适应性计划调整</strong>、<strong>小型发布</strong></td>
+</tr>
+<tr>
+<td>等较长时间才得到可运行软件</td>
+<td><strong>小型版本发布</strong>、<strong>持续集成</strong>、<strong>测试驱动开发</strong></td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>这张表就是"为什么会出现敏捷"的标准答法</strong>：敏捷不是凭空提出的新阶段排法，而是对"以文档为中心"的四条代价逐条给了替代品。所以它<strong>不规定阶段顺序</strong>——阶段怎么排，由各个方法自己定（Scrum 排成冲刺，XP 排成小版本）。</p>
+<h4>3.3.2 概念与观点：四个"重视"、一个"少写"</h4>
+<p>课件原文（第 32 页第一行）：</p>
 <blockquote>
 <p>重视<strong>人</strong>和<strong>交互</strong>、重视<strong>可运行软件系统</strong>、重视<strong>客户合作</strong>、重视<strong>响应用户需求变化</strong>。少写软件文档，以代码为中心，快速响应变化。</p>
 </blockquote>
-<p><mark class="bubu">补</mark><strong>这句话其实是《敏捷宣言》四条价值观的压缩版</strong>，原文对照如下（课件未列出原文，属于补充背景）：</p>
+<table>
+<thead>
+<tr>
+<th>表述</th>
+<th>含义</th>
+<th>传统模型的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>重视人和交互</td>
+<td>沟通成本才是主要成本，面对面优于文档传递</td>
+<td>靠文档交接，人一走知识就断</td>
+</tr>
+<tr>
+<td>重视可运行软件</td>
+<td>用"能不能跑"衡量进度，不用文档完成度衡量</td>
+<td>用阶段评审、文档里程碑衡量</td>
+</tr>
+<tr>
+<td>重视客户合作</td>
+<td>客户全程在场，随时答疑与拍板</td>
+<td>前期签字确认，后期按合同验收</td>
+</tr>
+<tr>
+<td>重视响应用户需求变化</td>
+<td>变化是常态，欢迎并纳入下一版</td>
+<td>变更走审批，因为代价高所以倾向拒绝</td>
+</tr>
+<tr>
+<td>少写文档、以代码为中心</td>
+<td>只写必要文档，让代码与测试承担知识载体</td>
+<td>文档是变更的必经关卡</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>这四句其实是《敏捷宣言》四条价值观的压缩版</strong>，原文对照如下（课件未列原文，属补充背景）：</p>
 <table>
 <thead>
 <tr>
@@ -205,6 +278,394 @@
 </tbody>
 </table>
 <p><mark class="bubu">补</mark><strong>注意"高于"不等于"不要"。</strong> 敏捷不是"不写文档"，而是"当文档和可运行软件冲突时，优先保证软件能跑"。这一点在考试里常被写成"敏捷开发不需要文档"来设陷阱——<strong>错</strong>。</p>
+<h4 id="kp-agile-methods">3.3.3 代表方法：课件列了五个方法族</h4>
+<p>中间蓝框那五个，就是《重点内容》"代表方法"一项的标准答案范围：</p>
+<table>
+<thead>
+<tr>
+<th>方法（提出者 / 年代）</th>
+<th>核心主张</th>
+<th>一句话记</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>自适应开发</strong>（ASD，Jim Highsmith，2000）</td>
+<td>用"推测—协作—学习"代替"计划—执行"，让组织能自我调整</td>
+<td>管"适应"</td>
+</tr>
+<tr>
+<td><strong>水晶方法</strong>（Crystal，Alistair Cockburn，1990s 末）</td>
+<td>按团队人数和出错代价选"颜色"（Clear / Yellow / Orange…），越轻越好</td>
+<td>管"按项目裁剪"</td>
+</tr>
+<tr>
+<td><strong>特征驱动开发</strong>（FDD，Jeff De Luca 与 Peter Coad，1997）</td>
+<td>以"特征"为单位建模、计划、追踪，走五步流程</td>
+<td>管"以特征为单位"</td>
+</tr>
+<tr>
+<td><strong>Scrum</strong>（Ken Schwaber、Jeff Sutherland，1995 前后）</td>
+<td>三角色、三工件、五事件，靠 2–4 周的冲刺小步交付</td>
+<td>管"流程与节奏"</td>
+</tr>
+<tr>
+<td><strong>极限编程</strong>（XP，Kent Beck，1999）</td>
+<td>把 12 个工程实践做到"极限"：测试先行、结对编程、持续集成等</td>
+<td>管"代码怎么写才不烂"</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>答题取巧点</strong>：问"敏捷的代表方法"，写 <strong>Scrum 与极限编程</strong> 最稳（课件原文就列了这两个，现实中也最常用）；能再补上自适应开发、水晶方法、特征驱动开发就答全了五个。<strong>注意课件的口径是"方法族"</strong>——敏捷不是一种方法，而是一族共享同一套价值观的方法。</p>
+<p><mark class="bubu">补</mark><strong>Scrum 与 XP 的分工</strong>：Scrum 只管"什么时候做完什么"，不规定代码怎么写；XP 只管"代码怎么写才不腐化"，不管团队怎么开会。所以现实中最常见的落地形态是 <strong>Scrum 管节奏 + XP 管工程</strong>。</p>
+<h4>3.3.4 基本原则：灰框里的 11 条工作方式</h4>
+<p>课件左侧灰框的箭头标签写的是「<strong>基本原则</strong>」。这 11 条是这套方法族在<strong>日常工作层面</strong>的共同特征：</p>
+<table>
+<thead>
+<tr>
+<th>原则</th>
+<th>具体做法</th>
+<th>反面（传统做法）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>短平快的会议</td>
+<td>每日站会 15 分钟，只同步"做了什么、要做什么、有什么障碍"</td>
+<td>长会、汇报会、层层评审会</td>
+</tr>
+<tr>
+<td>小型版本发布</td>
+<td>每次发布只加少量功能</td>
+<td>攒一个大版本一次上线</td>
+</tr>
+<tr>
+<td>较少的文档</td>
+<td>只写维护必需的那几份</td>
+<td>每个阶段配一套文档</td>
+</tr>
+<tr>
+<td>合作为重</td>
+<td>开发与业务方、客户同队工作</td>
+<td>甲方提需求、乙方交活</td>
+</tr>
+<tr>
+<td>客户直接参与</td>
+<td>客户代表可随时确认与决策</td>
+<td>通过需求文档间接沟通</td>
+</tr>
+<tr>
+<td>自动化测试</td>
+<td>回归靠脚本跑，不靠人点</td>
+<td>人工回归测试</td>
+</tr>
+<tr>
+<td>适应性计划调整</td>
+<td>计划随实际进展滚动调整</td>
+<td>计划一次定死，变更走审批</td>
+</tr>
+<tr>
+<td>结对编程</td>
+<td>两人一台机，一人写一人审，随时换角色</td>
+<td>单人开发 + 事后代码评审</td>
+</tr>
+<tr>
+<td>测试驱动开发</td>
+<td>先写测试，再写让它通过的代码</td>
+<td>先写代码，最后补测试</td>
+</tr>
+<tr>
+<td>持续集成</td>
+<td>每天多次合入主干并跑全部测试</td>
+<td>开发末期集中集成</td>
+</tr>
+<tr>
+<td>重构</td>
+<td>不改外部行为，持续改善内部结构</td>
+<td>等结构烂到不可维护再重写</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>这 11 条与右边"12 个最佳实践"高度重叠，不是两套东西。</strong> 课件用两个框分别呈现，是同一件事的两个视角：灰框讲<strong>团队怎么工作</strong>，绿框讲<strong>工程上做哪些实践</strong>。</p>
+<h4 id="kp-agile-practices">3.3.5 4 大价值观、5 大原则、12 个最佳实践</h4>
+<p>课件底部三条橙线分别标注了这三组，对应下方三个色块。<strong>这三块是 XP 的结构，课件把它们当作敏捷的共同骨架来呈现。</strong></p>
+<p><strong>4 大价值观</strong></p>
+<table>
+<thead>
+<tr>
+<th>价值观</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>沟通</td>
+<td>问题尽量在人与人的交流中解决，而不是靠文档</td>
+</tr>
+<tr>
+<td>简单</td>
+<td>只做当前需要的设计，不为想象中的未来预留</td>
+</tr>
+<tr>
+<td>反馈</td>
+<td>用测试、发布、客户评审尽早拿到"对不对"的信号</td>
+</tr>
+<tr>
+<td>勇气</td>
+<td>敢于重构、敢于丢弃过时设计、敢于承认判断错误</td>
+</tr>
+</tbody>
+</table>
+<p><strong>5 大原则</strong></p>
+<table>
+<thead>
+<tr>
+<th>原则</th>
+<th>含义</th>
+<th>落到哪个实践</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>快速反馈</td>
+<td>从写下一行代码到知道它是否正确，时间越短越好</td>
+<td>测试先行、持续集成</td>
+</tr>
+<tr>
+<td>简单性假设</td>
+<td>先假设最简单的方案成立，用事实推翻它</td>
+<td>简单设计</td>
+</tr>
+<tr>
+<td>逐步修改</td>
+<td>小步改动、随时可回退，不做大爆炸式重写</td>
+<td>小型发布、重构</td>
+</tr>
+<tr>
+<td>提倡更改</td>
+<td>把变更当常态，而不是异常</td>
+<td>适应性计划调整</td>
+</tr>
+<tr>
+<td>优质工作</td>
+<td>不靠加班堆工时，靠可持续节奏保持质量</td>
+<td>每周工作 40 小时</td>
+</tr>
+</tbody>
+</table>
+<p><strong>12 个最佳实践</strong>（简答题的高频采分点，每个都要能说一句"怎么做"）</p>
+<table>
+<thead>
+<tr>
+<th>实践</th>
+<th>具体做法</th>
+<th>为什么有效</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计划游戏</td>
+<td>客户定范围与优先级，开发估工作量，共同决定下一版内容</td>
+<td>让"要什么"与"能做多少"当场对齐</td>
+</tr>
+<tr>
+<td>小型发布</td>
+<td>频繁发布小版本，每次只加少量功能</td>
+<td>尽早拿到真实反馈，压低单次风险</td>
+</tr>
+<tr>
+<td>隐喻</td>
+<td>用一两个比喻描述系统整体结构，团队共用一套词汇</td>
+<td>减少沟通歧义，替代厚重设计文档</td>
+</tr>
+<tr>
+<td>简单设计</td>
+<td>只实现当前需求，不为想象中的未来设计</td>
+<td>不为不会发生的需求付成本</td>
+</tr>
+<tr>
+<td>测试先行</td>
+<td>先写测试用例，再写让它通过的代码</td>
+<td>需求先被写成可执行的验收标准</td>
+</tr>
+<tr>
+<td>重构</td>
+<td>不改外部行为，持续改善内部结构</td>
+<td>防止结构随需求叠加而腐化</td>
+</tr>
+<tr>
+<td>结对编程</td>
+<td>两人一台机，一人写一人审，随时交换角色</td>
+<td>评审内建在编写过程中，缺陷当场发现</td>
+</tr>
+<tr>
+<td>集体代码所有制</td>
+<td>任何人对任何代码都可以修改</td>
+<td>不留"我的模块"，避免单点依赖</td>
+</tr>
+<tr>
+<td>持续集成</td>
+<td>每天多次合入主干并跑全部测试</td>
+<td>集成冲突当天暴露，而不是末期爆炸</td>
+</tr>
+<tr>
+<td>每周工作 40 小时</td>
+<td>不靠加班堆进度</td>
+<td>疲劳状态下判断力与代码质量都会下降</td>
+</tr>
+<tr>
+<td>现场客户</td>
+<td>客户代表常驻团队，随时答疑与拍板</td>
+<td>需求歧义当天澄清，不必等评审会</td>
+</tr>
+<tr>
+<td>编码标准</td>
+<td>统一命名、格式、注释约定</td>
+<td>代码可读、可被任何人接手</td>
+</tr>
+</tbody>
+</table>
+<p>【易混】<strong>两个"四"必须分清</strong>：这张图里的「4 大价值观」是 <strong>XP 的：沟通、简单、反馈、勇气</strong>；而前面那张表里的四条是 <strong>《敏捷宣言》的：个体和互动、可工作软件、客户合作、响应变化</strong>。两组都叫"价值观"、都是四条，内容完全不同。稳妥写法：先答课件那四条（沟通/简单/反馈/勇气），再补一句"其精神与《敏捷宣言》四组价值观一致"。</p>
+<h4>3.3.6 敏捷 ≠ 迭代模型</h4>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>迭代模型（过程模型）</th>
+<th>敏捷（方法族）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是什么</td>
+<td>一种<strong>阶段排布方式</strong>：整体流程重复多轮</td>
+<td>一套<strong>价值观 + 准则 + 实践</strong>，落到方法上才成形</td>
+</tr>
+<tr>
+<td>回答的问题</td>
+<td>阶段怎么排</td>
+<td>为什么这么排、团队要怎么工作</td>
+</tr>
+<tr>
+<td>变更</td>
+<td>在下一轮迭代里安排</td>
+<td>随时纳入待办列表，欢迎变化</td>
+</tr>
+<tr>
+<td>文档</td>
+<td>每轮仍按阶段产出文档</td>
+<td>只写必要文档，代码与测试承担知识载体</td>
+</tr>
+<tr>
+<td>度量</td>
+<td>阶段完成度、文档评审通过</td>
+<td>可工作软件、燃尽图</td>
+</tr>
+<tr>
+<td>团队</td>
+<td>可以有项目经理分层管理</td>
+<td>自组织团队，客户全程参与</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>关系是单向的</strong>：<strong>敏捷一定包含迭代</strong>（Scrum 的冲刺、XP 的小型发布都是迭代），但<strong>迭代不一定敏捷</strong>——一个团队完全可以"每三个月迭代一次，每轮写全套文档、走变更委员会、客户只在验收时出现"，那是迭代模型，不是敏捷。</p>
+<p>判断一个团队"敏不敏捷"看三条，<strong>不看有没有迭代</strong>：</p>
+<ol>
+<li>每轮结束时交付的是<strong>可工作、可验收的软件</strong>，而不是一堆文档；</li>
+<li>需求变更被<strong>欢迎并纳入</strong>下一轮，而不是走审批、拖到下个版本；</li>
+<li>团队<strong>自组织</strong>、客户<strong>全程在场</strong>，而不是经理分任务、客户只签字。</li>
+</ol>
+<h4>3.3.7 <mark class="bubu">补</mark>Scrum 的三五：课件只给了名字</h4>
+<p>课件只列了 SCRUM 这个词、没有展开。但"代表方法"要答到 5 分，三角色、三工件、五事件是最省力的骨架：</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>三角色</strong></td>
+<td>产品负责人（Product Owner）、Scrum Master、开发团队</td>
+<td><strong>PO 管"做什么"，团队管"怎么做"，SM 管"做得顺"</strong></td>
+</tr>
+<tr>
+<td><strong>三工件</strong></td>
+<td>产品待办列表、冲刺待办列表、增量（Product / Sprint Backlog、Increment）</td>
+<td>待办列表按价值排序，冲刺只取最高优先级的一小段</td>
+</tr>
+<tr>
+<td><strong>五事件</strong></td>
+<td>冲刺（2–4 周）、冲刺计划会、每日站会（15 分钟）、冲刺评审会、冲刺回顾会</td>
+<td>前三个管"做完"，后两个管"做对"和"改好"</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>三个最容易答错的点</strong>：①Scrum Master <strong>不是项目经理</strong>，不分任务、不做考核，职责是移除障碍、保证流程被正确执行；②<strong>优先级的决定权在 PO</strong>，不在开发团队；③冲刺期间<strong>不插入新需求</strong>，变更进待办列表、下个冲刺再排。</p>
+<p><mark class="bubu">补</mark><strong>两个常用配套</strong>：<strong>用户故事</strong>（作为〈角色〉，我想要〈功能〉，以便〈价值〉；好故事满足 INVEST：独立、可协商、有价值、可估算、够小、可测试）；<strong>燃尽图</strong>（纵轴剩余工作量、横轴时间，理想线直线下降，实际线在上方说明进度落后）。燃尽图是<strong>团队自查工具，不是考核工具</strong>——这一点常被答反。</p>
+<h4>3.3.8 什么时候能用、什么时候不能用</h4>
+<table>
+<thead>
+<tr>
+<th>适用</th>
+<th>不适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>需求不确定或变化快（互联网产品、内部工具）</td>
+<td>需求可精确定义且变更代价极高（飞控、银行核心账务）</td>
+</tr>
+<tr>
+<td>能增量交付，每轮都有可验收的价值</td>
+<td>只能整体交付，中间版本不可用（嵌入式固件、医疗器械注册）</td>
+</tr>
+<tr>
+<td>团队小而全、成员资深</td>
+<td>大团队、跨组织、接口约束强，需要重型接口文档</td>
+</tr>
+<tr>
+<td>客户能全程参与</td>
+<td>客户无法参与，只能按合同验收</td>
+</tr>
+<tr>
+<td>验证成本低（跑一遍自动化测试即可）</td>
+<td>每次验证都要走安全认证、监管审批</td>
+</tr>
+</tbody>
+</table>
+<p><mark class="bubu">补</mark><strong>一句话判据：能不能做到每 1–4 周交付一个可运行、可验收的版本。</strong> 能，就适合敏捷；做不到（技术上不能增量，或验证成本太高），硬上敏捷只会变成"每两周开一次会、然后继续写全套文档"。</p>
+<p><mark class="bubu">补</mark><strong>这把尺子和 3.1 的选型示例是同一把</strong>：课件第 30 页说互联网应用"不宜用瀑布、宜用迭代"，可以再进一步——<strong>互联网应用不仅宜用迭代，通常还用敏捷</strong>（迭代解决"怎么排"，敏捷解决"团队怎么配合"）。反过来，飞控软件"不宜用迭代"，自然也<strong>不宜硬套敏捷</strong>，理由同一条：验一比改十贵。</p>
+<p><mark class="bubu">补</mark><strong>与 DevOps 的区别</strong>（第 2 讲把两者并列在"方法"里）：敏捷优化的是"<strong>需求 → 可运行软件</strong>"这一段，管开发节奏；DevOps 优化的是"<strong>提交 → 上线运维</strong>"这一段，管交付流水线。两者常一起出现，但<strong>不是同一件事</strong>，答题别混。</p>
+<h4>3.3.9 四个常见误区</h4>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>事实</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>敏捷 = 不写文档</td>
+<td>是"少写、只写有人读的"，维护必需的需求意图、接口约定、设计决策仍要写；准则里没有一条说"不要文档"</td>
+</tr>
+<tr>
+<td>敏捷 = 没有计划</td>
+<td>有计划，只是<strong>滚动、粒度短</strong>（冲刺计划 + 待办列表排序），而不是"一次排到项目结束"</td>
+</tr>
+<tr>
+<td>敏捷 = 加班赶工</td>
+<td>12 个最佳实践里明确有「<strong>每周工作 40 小时</strong>」，理由很硬：疲劳状态下写不出可维护的代码，加班换来的速度会在维护期加倍偿还</td>
+</tr>
+<tr>
+<td>敏捷 = Scrum</td>
+<td>Scrum 只是<strong>最流行的一种框架</strong>；XP、水晶、FDD、ASD、看板都属敏捷。把敏捷等同 Scrum，等于把"编程语言"等同 Java</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h3>第 3 讲 小结</h3>
 <p><strong>一句话串起整讲</strong>：过程模型规定"先做什么、后做什么、能不能回头、一次做多少"；五种经典模型是同一套阶段的不同排法，选哪个取决于<strong>需求有多确定、风险有多大、团队有多强</strong>；当需求变化快到文档跟不上时，就以代码为中心、转向敏捷。</p>
@@ -217,7 +678,12 @@
 <li>原型解决"需求说不清"，核心价值是交流媒介，不是先写一半代码。</li>
 <li>螺旋 = 迭代 + 原型 + <strong>风险分析</strong>，四阶段一轮，管理最难。</li>
 <li>选型三要素：项目特点、团队水平、模型优缺点；"验一比改十贵"的软件倾向瀑布。</li>
-<li>传统模型的共同病灶是"以文档为中心"导致笨重；敏捷四价值观反过来，但不能理解成"不要文档"。</li>
+<li>传统模型的共同病灶是"以文档为中心"导致笨重；敏捷正是对这四条病灶逐条给出替代做法。</li>
+<li>敏捷是<strong>方法族</strong>，不是过程模型：课件列了自适应开发、水晶方法、特征驱动开发、Scrum、极限编程五个，最常考的是 Scrum 与 XP。</li>
+<li>敏捷的两层"准则"：<strong>基本原则</strong> 11 条（短平快的会议、小型发布、较少的文档、结对编程、TDD、持续集成、重构……）＋ <strong>12 个最佳实践</strong>（计划游戏、小版本、隐喻、简单设计、测试先行、重构、结对编程、集体代码所有制、持续集成、每周 40 小时、现场客户、编码标准）。</li>
+<li>两个"四"要分清：课件的 4 大价值观是 XP 的<strong>沟通、简单、反馈、勇气</strong>；《敏捷宣言》的四条是<strong>个体互动、可工作软件、客户合作、响应变化</strong>。</li>
+<li><strong>敏捷一定包含迭代，迭代不一定敏捷</strong>；判据看"每轮是否交付可工作软件、是否欢迎变更、团队是否自组织"。</li>
+<li>适用范围看一条：<strong>能否每 1–4 周交付一个可运行、可验收的版本</strong>。"验一比改十贵"的软件（飞控、银行核心）不适用。</li>
 </ol>
 <h3>自测</h3>
 <p><strong>1.</strong> 一个团队用增量模型开发一款 App，第一版上线后用户反馈"整体交互逻辑不对，希望推倒重来"。按课件的分析，问题出在哪？</p>
@@ -239,6 +705,24 @@
 <details>
 <summary>答案</summary>
 <p>不矛盾，因为它们约束的对象不同。敏捷反对的是<strong>为流程而写的文档</strong>（评审用、走流程用、写完没人看），主张用可运行软件和自动化测试承担"知识载体"的功能；第 10 讲说的是<strong>维护必需的信息缺失</strong>（需求意图、设计决策、接口约定）。敏捷团队的解法通常是用"代码即文档 + 自动化测试用例 + 简洁的必要文档"替代厚重文档集。真正的分界是：<strong>这份文档有没有人真的会去读、去维护。</strong> 没人读的文档，写与不写都是负债；维护时要用的信息，不写就是灾难。</p>
+</details>
+<p><strong>5.</strong> 简答：写出敏捷的代表方法（至少三个），并从 12 个最佳实践中任选五个，说明"测试先行"为什么能提高质量。</p>
+<details>
+<summary>答案</summary>
+<p><strong>代表方法</strong>（课件第 32 页列了五个）：自适应开发（ASD）、水晶方法（Crystal）、特征驱动开发（FDD）、Scrum、极限编程（XP）。写出 Scrum 与 XP 各 2 分，再补一个得满。</p>
+<p><strong>12 个最佳实践</strong>：计划游戏、小型发布、隐喻、简单设计、测试先行、重构、结对编程、集体代码所有制、持续集成、每周工作 40 小时、现场客户、编码标准。</p>
+<p><strong>测试先行为什么有效</strong>：①需求在写代码之前就被翻译成<strong>可执行的验收标准</strong>，需求歧义当场暴露，而不是等到验收；②缺陷发现得越早修复越便宜（缺陷成本随阶段指数上升），测试先行使缺陷在"刚写出来"的分钟级时间内被发现；③测试用例成为<strong>回归安全网</strong>，让重构和持续集成敢于进行；④测试本身是最精确的文档——它不会像设计文档那样与代码脱节。</p>
+</details>
+<p><strong>6.</strong> 辨析：某团队采用"迭代模型"，每三个月一个迭代，每轮结束都写全套需求文档与设计文档并通过评审，迭代期间不允许插入新需求，客户只在最后验收时出现。请问这算敏捷吗？</p>
+<details>
+<summary>答案</summary>
+<p><strong>不算，这是迭代模型，不是敏捷。</strong> 迭代只回答"阶段怎么排"，敏捷还要回答"团队怎么工作、变更怎么处理、谁来做决定"。按三条判据逐条对照：</p>
+<ol>
+<li><strong>每轮交付的是文档还是可工作软件</strong>——该团队交付的是"文档通过评审"，不是可验收的软件；</li>
+<li><strong>变更是否被欢迎并纳入下一轮</strong>——"迭代期间不允许插入新需求"，属于把变更当异常，这是重型方法的特征；</li>
+<li><strong>团队是否自组织、客户是否全程在场</strong>——客户只在验收时出现，正是敏捷要消除的"合同式合作"。</li>
+</ol>
+<p>可以补一句：<strong>迭代是敏捷的必要条件，不是充分条件。</strong> 真正的分界在于"变更的成本与决策权"落在谁手里。</p>
 </details>
 <div class="pager"><a class="pg prev" href="software-engineering-11.html"><span>← 上一节</span><b>1–2 软件过程与五个经典模型</b></a><a class="pg next" href="software-engineering-13.html"><span>下一节 →</span><b>1.1–1.3 需求是什么：质量要求、特点与分类</b></a></div>
 </div>

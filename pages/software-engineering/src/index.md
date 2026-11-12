@@ -47,7 +47,7 @@
 |  | [软件工程的要素](software-engineering-09.html#kp-se-elements) | 过程 / 方法学 / 工具各自管什么、为什么都指向质量保证。 |
 |  | [软件工程的原则](software-engineering-09.html#kp-se-principles) | 八条原则逐条说出并各举一例，最可能出简答。 |
 | **3.1 软件过程模型** | [典型软件过程模型](software-engineering-11.html#kp-process-models) | 五种模型的适用场景与区别；常给场景问「选哪个、为什么」。 |
-| **3.2 敏捷开发方法** | [敏捷开发的概念和观点、敏捷准则、代表方法](software-engineering-12.html#kp-agile) | 敏捷宣言四组价值观 + 敏捷准则 + Scrum/XP 代表方法。 |
+| **3.2 敏捷开发方法** | [敏捷开发的概念和观点、敏捷准则、代表方法](software-engineering-12.html#kp-agile) | 已按课件第 32 页原图补齐：四个「重视」＋五个方法族（ASD／水晶／FDD／Scrum／XP）＋11 条基本原则＋4 大价值观／5 大原则／12 个最佳实践，另附 Scrum 三角色三工件五事件与适用判据。 |
 | **4 软件需求分析基础** | [利益相关方](software-engineering-13.html#kp-stakeholders) | 谁能算 stakeholder、为何要全识别、需求冲突如何协商。 |
 |  | [软件需求的类别](software-engineering-13.html#kp-req-categories) | 功能 / 非功能 / 设计约束三分法，给一句话判类别。 |
 |  | [面向对象的需求分析方法](software-engineering-14.html#kp-oo-analysis) | 为什么用对象与类建模，OOA 与结构化分析的差别。 |
