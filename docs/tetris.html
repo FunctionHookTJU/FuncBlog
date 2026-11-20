@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0e1116">
+<title>俄罗斯方块 - 宇佐见函钩</title>
+<meta name="description" content="浏览器里的俄罗斯方块小游戏：键盘/触屏操作、暂停与重开、本地最高分。">
+<link rel="stylesheet" href="../styles/style.css">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+<link rel="manifest" href="../site.webmanifest">
+<script src="../scripts/audioPlayer.js" defer></script>
+<script src="../scripts/site-shell.js" defer></script>
+<style>
+/* ===================== 基础 ===================== */
+:root {
+  --bg:#0e1116;
+  --surface:#161a21;
+  --surface-2:#1b2028;
+  --surface-3:#28313e;
+  --line:#262c36;
+  --text:#e7ebf1;
+  --muted:#8f99a8;
+  --dim:#6b7482;
+  --accent:#5b9dff;
+  --accent-ink:#08111f;
+
+  --pad:20px;
+  --gap:16px;
+  --hud-h:36px;
+  --foot-h:18px;
+  --side-w:104px;
+  --tc-h:64px;
+  --ctrl-h:0px;
+  --radius:14px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { height:100%; }
+body {
+  min-height:100dvh;
+  display:flex; align-items:center; justify-content:center;
+  padding:var(--pad);
+  background:var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  overscroll-behavior:none;
+  overflow-x:hidden;
+}
+button { font:inherit; color:inherit; }
+.sr-only {
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+/* ===================== 应用外壳 ===================== */
+.app {
+  display:grid;
+  gap:var(--gap);
+  grid-template-columns:auto var(--side-w);
+  grid-template-areas:
+    "hud   hud"
+    "board side"
+    "tc    tc"
+    "foot  foot";
+  align-items:start;
+  width:max-content; max-width:100%;
+}
+.hud { grid-area:hud; }
+.board-wrap { grid-area:board; }
+.side { grid-area:side; }
+.touch-controls { grid-area:tc; }
+.foot { grid-area:foot; }
+
+/* ---------- 顶部数据 ---------- */
+.hud { display:flex; align-items:center; justify-content:space-between; gap:var(--gap); }
+.stats { display:flex; gap:16px; min-width:0; }
+.stat { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.stat span { font-size:10px; letter-spacing:.1em; color:var(--muted); white-space:nowrap; }
+.stat b {
+  font-size:19px; font-weight:650; line-height:1;
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.actions { display:flex; gap:8px; flex:none; }
+.btn-icon {
+  width:38px; height:38px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:10px; border:1px solid var(--line);
+  background:var(--surface-2); color:var(--text);
+  cursor:pointer; transition:background .12s;
+}
+.btn-icon:hover { background:var(--surface-3); }
+.btn-icon:active { transform:scale(.96); }
+.btn-icon:disabled { opacity:.4; cursor:default; }
+.btn-icon svg { width:18px; height:18px; display:block; }
+/* 暂停 / 继续 两个图标互斥显示（选择器需压过 .btn-icon svg 的 display:block） */
+.btn-icon .ico-play { display:none; }
+#pauseBtn.is-paused .ico-pause { display:none; }
+#pauseBtn.is-paused .ico-play { display:block; }
+.ico-pause rect { fill:currentColor; }
+.ico-play path { fill:currentColor; }
+.ico-restart path { fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+
+/* ---------- 棋盘 ---------- */
+.board-wrap {
+  position:relative; flex:none;
+  aspect-ratio:1 / 2;
+  width:min(
+    340px,
+    calc(100vw - var(--pad) * 2 - var(--side-w) - var(--gap)),
+    calc((100dvh - var(--pad) * 2 - var(--hud-h) - var(--foot-h) - var(--gap) * 3 - var(--ctrl-h)) / 2)
+  );
+  border-radius:var(--radius);
+  background:#0b0e13;
+  border:1px solid var(--line);
+  overflow:hidden;
+}
+canvas#board { display:block; width:100%; height:100%; }
+
+/* ---------- 下一个 ---------- */
+.side { display:flex; flex-direction:column; gap:12px; }
+.panel {
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--radius); padding:10px;
+}
+.panel-label { font-size:10px; letter-spacing:.1em; color:var(--muted); margin-bottom:8px; }
+canvas#next {
+  display:block; width:100%; height:auto; aspect-ratio:140 / 96;
+  background:#0b0e13; border-radius:8px;
+}
+/* 桌面端的键位速查，与预览面板同一列，避免右侧留白 */
+.keylist { display:flex; flex-direction:column; gap:6px; }
+.keylist div { display:flex; align-items:center; justify-content:space-between; gap:8px;
+  font-size:11.5px; color:var(--muted); }
+.keylist b {
+  font:600 10.5px/1 ui-monospace,Consolas,monospace; color:var(--text);
+  padding:3px 6px; border-radius:5px;
+  background:var(--surface-3); border:1px solid var(--line); white-space:nowrap;
+}
+body.touch-mode .keys-panel { display:none; }
+
+/* ---------- 遮罩 ---------- */
+.overlay {
+  position:absolute; inset:0; z-index:5;
+  display:flex; align-items:center; justify-content:center;
+  padding:16px; text-align:center;
+  background:rgba(11,14,19,.92);
+  opacity:1; transition:opacity .18s ease;
+}
+.overlay.hidden { opacity:0; pointer-events:none; }
+.ov-card { display:flex; flex-direction:column; align-items:center; gap:9px; width:100%; }
+.ov-title { font-size:22px; font-weight:700; letter-spacing:.02em; line-height:1.25; }
+.ov-sub { font-size:13px; line-height:1.65; color:var(--muted); }
+.ov-sub:empty { display:none; }
+.ov-stats:empty { display:none; }
+.ov-score { font-size:32px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1; }
+.ov-meta { font-size:12px; color:var(--muted); margin-top:4px; }
+.ov-hint { font-size:11.5px; line-height:1.7; color:var(--dim); }
+.ov-hint:empty { display:none; }
+.btn-primary {
+  margin-top:4px;
+  padding:11px 28px; border:0; border-radius:10px; cursor:pointer;
+  font-size:14px; font-weight:650; letter-spacing:.04em;
+  color:var(--accent-ink); background:var(--accent);
+  transition:filter .15s, transform .1s;
+}
+.btn-primary:hover { filter:brightness(1.08); }
+.btn-primary:active { transform:scale(.98); }
+
+/* ---------- 触屏操作 ---------- */
+.touch-controls { display:none; flex-direction:column; gap:10px; }
+body.touch-mode .touch-controls { display:flex; }
+.tc-row { display:flex; gap:10px; }
+.tc {
+  flex:1 1 0; height:var(--tc-h);
+  display:flex; align-items:center; justify-content:center;
+  border-radius:12px; border:1px solid var(--line);
+  background:var(--surface-2); color:var(--text);
+  cursor:pointer; touch-action:none;
+  transition:background .1s;
+}
+.tc:hover { background:var(--surface-3); }
+.tc.is-on { background:var(--surface-3); border-color:#3a4555; }
+.tc svg {
+  width:26px; height:26px; display:block;
+  fill:none; stroke:currentColor; stroke-width:2;
+  stroke-linecap:round; stroke-linejoin:round;
+}
+
+/* ---------- 页脚 ---------- */
+.foot { font-size:11.5px; color:var(--dim); text-align:center; line-height:1.6; }
+.foot .only-touch { display:none; }
+body.touch-mode .foot .only-key { display:none; }
+body.touch-mode .foot .only-touch { display:inline; }
+
+/* ===================== 响应式 ===================== */
+/* 触控目标不小于 44px；--tc-total 是两行按钮加间隙的总高 */
+body.touch-mode {
+  --tc-h:max(44px, min(64px, 9dvh));
+  --tc-total:calc(max(44px, min(64px, 9dvh)) * 2 + 10px);
+  --ctrl-h:calc(max(44px, min(64px, 9dvh)) * 2 + 10px);
+}
+@media (max-width:480px) {
+  :root { --pad:12px; --gap:12px; --side-w:88px; }
+  .stat span { font-size:9px; }
+  .stat b { font-size:16px; }
+  .stats { gap:11px; }
+  .btn-icon { width:36px; height:36px; }
+  .ov-title { font-size:19px; }
+}
+@media (max-width:360px) {
+  :root { --pad:10px; --gap:10px; --side-w:78px; }
+  .stats { gap:9px; }
+}
+
+/* 横屏手机：棋盘在左，预览与操作按钮在右 */
+@media (orientation:landscape) and (max-height:560px) {
+  :root { --pad:12px; --gap:10px; --hud-h:34px; }
+  body.touch-mode { --tc-h:max(44px, min(56px, 13dvh)); --tc-total:calc(max(44px, min(56px, 13dvh)) * 2 + 10px); }
+  .app {
+    grid-template-columns:auto clamp(152px, 26vw, 200px);
+    grid-template-rows:auto auto 1fr;
+    grid-template-areas:
+      "hud   hud"
+      "board side"
+      "board tc";
+    align-items:start;
+  }
+  .board-wrap {
+    width:min(
+      260px,
+      calc(100vw - var(--pad) * 2 - clamp(152px, 26vw, 200px) - var(--gap)),
+      calc((100dvh - var(--pad) * 2 - var(--hud-h) - var(--gap) * 2) / 2)
+    );
+  }
+  .side { width:auto; }
+  .keys-panel { display:none; }
+  /* 预览画布按剩余高度定高，保持 140:96 比例，避免竖向溢出 */
+  canvas#next {
+    width:auto; height:var(--preview-h, 72px);
+    max-width:100%; margin:0 auto;
+  }
+  .tc-row { gap:8px; }
+  .tc { min-width:44px; }
+  .foot { display:none; }
+  .ov-title { font-size:17px; }
+  .ov-sub { font-size:11.5px; }
+  .ov-hint { font-size:10.5px; }
+  .btn-primary { padding:9px 22px; font-size:13px; }
+}
+@media (orientation:landscape) and (max-height:560px) {
+  body.touch-mode {
+    /* 预览画布按剩余高度定高，保持 140:96 比例，避免竖向溢出 */
+    --preview-h:max(44px, calc(100dvh - var(--site-header-h) - var(--pad) * 2 - var(--hud-h) - var(--gap) * 2 - var(--tc-total) - var(--gap) - 46px));
+  }
+}
+
+/* ===================== 站点外壳接入 ===================== */
+/* 站点统一 header 占据顶部高度，棋盘在剩余空间内居中；--site-header-h 由页面脚本实测回填 */
+:root {
+  --site-header-h: 88px;
+  /* 窄屏时站点音频播放器固定在底部，给操作区预留高度，避免遮挡 */
+  --player-safe: 0px;
+}
+
+@media (max-width: 900px) {
+  :root { --player-safe: 68px; }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* style.css 给 body 加的浅色遮罩会破坏深色游戏底色 */
+body::before { display: none; }
+
+.game-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--pad);
+  padding-bottom: calc(var(--pad) + var(--player-safe));
+  /* clip：只裁剪、不产生可滚动容器，避免 focus/scrollIntoView 把面板顶进 header */
+  overflow: hidden;
+  overflow: clip;
+}
+
+/* 窗口过矮（如手机横屏）时按容器等比缩放整个游戏面板，保证 header 之外完整可见 */
+.app {
+  transform: scale(var(--game-scale, 1));
+  transform-origin: center center;
+}
+
+/* 棋盘宽度扣除 header 高度与底部播放器预留，避免出现纵向滚动 */
+.board-wrap {
+  width: min(
+    340px,
+    calc(100vw - var(--pad) * 2 - var(--side-w) - var(--gap)),
+    calc((100dvh - var(--site-header-h) - var(--player-safe) - var(--pad) * 2 - var(--hud-h) - var(--foot-h) - var(--gap) * 3 - var(--ctrl-h)) / 2)
+  );
+}
+
+@media (orientation:landscape) and (max-height:560px) {
+  /* 横屏高度紧张：隐藏底部播放器胶囊（BGM 继续播放，header 上的静音/切源按钮仍可用） */
+  :root { --player-safe: 0px; }
+
+  #audio-player { display: none !important; }
+
+  .game-stage { padding: 8px; }
+
+  .board-wrap {
+    width: min(
+      260px,
+      calc(100vw - var(--pad) * 2 - clamp(152px, 26vw, 200px) - var(--gap)),
+      calc((100dvh - var(--site-header-h) - var(--player-safe) - var(--pad) * 2 - var(--hud-h) - var(--gap) * 2) / 2)
+    );
+  }
+}
+</style>
+</head>
+<body data-state="idle">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/diary.html">日记</a></li>
+                <li><a href="../pages/study.html">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="../pages/communicate.html">交流</a></li>
+                <li><a href="../pages/picture.html">图片墙</a></li>
+                <li><a href="../pages/products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+
+<main class="game-stage">
+<div class="app">
+
+  <!-- 顶部：数据与操作 -->
+  <div class="hud">
+    <div class="stats">
+      <div class="stat"><span>分数</span><b id="score">0</b></div>
+      <div class="stat"><span>最高</span><b id="best">0</b></div>
+      <div class="stat"><span>行数</span><b id="lines">0</b></div>
+      <div class="stat"><span>等级</span><b id="level">1</b></div>
+    </div>
+    <div class="actions">
+      <button class="btn-icon" id="pauseBtn" type="button" aria-label="暂停" title="暂停 / 继续" disabled>
+        <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.4" y="5" width="3.6" height="14" rx="1.2"/></svg>
+        <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l10.2-6.5a1 1 0 0 0 0-1.74L9.5 4.63A1 1 0 0 0 8 5.5z"/></svg>
+      </button>
+      <button class="btn-icon" id="restartBtn" type="button" aria-label="重新开始" title="重新开始">
+        <svg class="ico-restart" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4.5v5h-5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- 棋盘 -->
+  <div class="board-wrap">
+    <canvas id="board"></canvas>
+    <div class="overlay" id="overlay">
+      <div class="ov-card">
+        <h1 class="ov-title" id="ovTitle">俄罗斯方块</h1>
+        <p class="ov-sub" id="ovSub">堆叠方块，消除整行</p>
+        <div class="ov-stats" id="ovStats"></div>
+        <button class="btn-primary" id="startBtn" type="button">开始游戏</button>
+        <p class="ov-hint" id="ovHint">← → 移动 · ↑ 旋转 · 空格 瞬降</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下一个 -->
+  <aside class="side">
+    <div class="panel">
+      <div class="panel-label">下一个</div>
+      <canvas id="next"></canvas>
+    </div>
+    <div class="panel keys-panel">
+      <div class="panel-label">操作</div>
+      <div class="keylist">
+        <div><span>移动</span><b>← →</b></div>
+        <div><span>旋转</span><b>↑</b></div>
+        <div><span>软降</span><b>↓</b></div>
+        <div><span>瞬降</span><b>空格</b></div>
+        <div><span>暂停</span><b>P</b></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 触屏操作 -->
+  <div class="touch-controls" id="touchControls">
+    <div class="tc-row">
+      <button class="tc" type="button" data-act="left" aria-label="左移">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <button class="tc" type="button" data-act="rotate" aria-label="旋转">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.6-5.7"/><path d="M19.5 4.5V9H15"/></svg>
+      </button>
+      <button class="tc" type="button" data-act="right" aria-label="右移">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <div class="tc-row">
+      <button class="tc" type="button" data-act="soft" aria-label="软降">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14"/><path d="M6.5 13.5L12 19l5.5-5.5"/></svg>
+      </button>
+      <button class="tc" type="button" data-act="drop" aria-label="瞬降">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10"/><path d="M7 8.5l5 5 5-5"/><path d="M5 20.5h14"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span class="only-key">← → 移动 · ↑ 旋转 · ↓ 软降 · 空格 瞬降 · P 暂停 · R 重开</span>
+    <span class="only-touch">按住 ← → ↓ 可连续操作</span>
+  </div>
+</div>
+</main>
+
+<span class="sr-only" id="gameState" aria-live="polite">idle</span>
+
+<script>
+/* ===== 站点外壳接入：header 高度 / 游戏面板自适应缩放 ===== */
+(function () {
+  function syncHeaderHeight() {
+    var header = document.querySelector('body > header');
+    if (!header) return;
+    var cs = getComputedStyle(header);
+    var h = header.offsetHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+    document.documentElement.style.setProperty('--site-header-h', h + 'px');
+  }
+
+  // 游戏面板自然尺寸可能超过可用空间（尤其手机横屏），等比缩放到容器内
+  function fitGame() {
+    var stage = document.querySelector('.game-stage');
+    var app = document.querySelector('.app');
+    if (!stage || !app) return;
+    var cs = getComputedStyle(stage);
+    var availW = stage.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
+    var availH = stage.clientHeight - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0);
+    var w = app.offsetWidth;
+    var h = app.offsetHeight;
+    if (!w || !h || availW <= 0 || availH <= 0) return;
+    var scale = Math.min(1, availW / w, availH / h);
+    if (!isFinite(scale) || scale <= 0) scale = 1;
+    document.documentElement.style.setProperty('--game-scale', String(Math.floor(scale * 1000) / 1000));
+  }
+
+  function relayout() {
+    syncHeaderHeight();
+    requestAnimationFrame(fitGame);
+  }
+
+  syncHeaderHeight();
+  fitGame();
+  window.addEventListener('resize', relayout);
+  window.addEventListener('orientationchange', relayout);
+  window.addEventListener('load', relayout);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(relayout);
+  }
+})();
+</script>
+
+<script>
+(() => {
+  'use strict';
+  const COLS = 10, ROWS = 20, CELL = 30, W = COLS * CELL, H = ROWS * CELL;
+  const NEXT_W = 140, NEXT_H = 96, NEXT_CELL = 22;
+  const $ = id => document.getElementById(id);
+
+  const board = $('board'), nextCv = $('next');
+  const overlay = $('overlay'), ovTitle = $('ovTitle'), ovSub = $('ovSub');
+  const ovStats = $('ovStats'), ovHint = $('ovHint'), startBtn = $('startBtn');
+  const scoreEl = $('score'), linesEl = $('lines'), levelEl = $('level'), bestEl = $('best');
+  const pauseBtn = $('pauseBtn'), restartBtn = $('restartBtn');
+  const gameStateEl = $('gameState');
+
+  let ctx, nctx, bgCache, gemBig = {}, gemSmall = {};
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  // 克制的配色：低饱和，七种方块仍可区分
+  const COLORS = {
+    I:'#4d9fd6', O:'#d0ac4a', T:'#9080cf', S:'#55a97a',
+    Z:'#cd6b6b', J:'#5b83cc', L:'#cc8b4d'
+  };
+  const SHAPES = {
+    I: [[0,0,0,0],[1,1,1,1],[0,0,0,0],[0,0,0,0]],
+    O: [[1,1],[1,1]],
+    T: [[0,1,0],[1,1,1],[0,0,0]],
+    S: [[0,1,1],[1,1,0],[0,0,0]],
+    Z: [[1,1,0],[0,1,1],[0,0,0]],
+    J: [[1,0,0],[1,1,1],[0,0,0]],
+    L: [[0,0,1],[1,1,1],[0,0,0]]
+  };
+
+  let grid, piece, nextPiece, bag = [];
+  let score, lines, level, dropTimer, dropInterval, lastTime;
+  let state = 'idle'; // idle | running | paused | over
+  let rafId = null;
+  let rowFlashes = [];
+  let dispScore = 0, lastShownScore = -1;
+  let best = 0, bestAtStart = 0;
+  const BEST_KEY = 'tetris-best';
+
+  /* ---------- 画布 ---------- */
+  function rr(c, x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+  }
+  // 扁平方块：纯色 + 一道顶部高光，无发光无渐变
+  function drawCell(c, ox, oy, size, color) {
+    const inset = Math.max(1, size * 0.055);
+    const x = ox + inset, y = oy + inset;
+    const s = size - inset * 2, r = Math.max(1.5, s * 0.16);
+    c.fillStyle = color;
+    rr(c, x, y, s, s, r); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.16)';
+    rr(c, x + s * 0.14, y + s * 0.12, s * 0.72, s * 0.14, r * 0.5); c.fill();
+  }
+  function makeGem(color, size) {
+    const cv = document.createElement('canvas');
+    cv.width = Math.round(size * dpr); cv.height = Math.round(size * dpr);
+    const c = cv.getContext('2d');
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawCell(c, 0, 0, size, color);
+    return cv;
+  }
+  function buildBg() {
+    bgCache = document.createElement('canvas');
+    bgCache.width = W * dpr; bgCache.height = H * dpr;
+    const c = bgCache.getContext('2d');
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.fillStyle = '#0b0e13';
+    c.fillRect(0, 0, W, H);
+    c.lineWidth = 1;
+    c.strokeStyle = 'rgba(255,255,255,.05)';
+    for (let x = 1; x < COLS; x++) {
+      c.beginPath(); c.moveTo(x * CELL + .5, 0); c.lineTo(x * CELL + .5, H); c.stroke();
+    }
+    for (let y = 1; y < ROWS; y++) {
+      c.beginPath(); c.moveTo(0, y * CELL + .5); c.lineTo(W, y * CELL + .5); c.stroke();
+    }
+  }
+  function fit(cv, w, h) {
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+    const c = cv.getContext('2d');
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return c;
+  }
+  function initCanvas() {
+    ctx = fit(board, W, H);
+    nctx = fit(nextCv, NEXT_W, NEXT_H);
+    gemBig = {}; gemSmall = {};
+    Object.keys(COLORS).forEach(k => {
+      gemBig[k] = makeGem(COLORS[k], CELL);
+      gemSmall[k] = makeGem(COLORS[k], NEXT_CELL);
+    });
+    buildBg();
+  }
+
+  /* ---------- 游戏核心 ---------- */
+  function emptyGrid() { return Array.from({ length: ROWS }, () => Array(COLS).fill(null)); }
+  function refillBag() {
+    const keys = Object.keys(SHAPES);
+    for (let i = keys.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [keys[i], keys[j]] = [keys[j], keys[i]];
+    }
+    bag.push(...keys);
+  }
+  function takePiece() {
+    if (bag.length === 0) refillBag();
+    const type = bag.shift();
+    const matrix = SHAPES[type].map(r => r.slice());
+    return { type, matrix, x: Math.floor((COLS - matrix[0].length) / 2), y: type === 'I' ? -1 : 0 };
+  }
+  function rotateMatrix(m) {
+    const N = m.length;
+    const out = Array.from({ length: N }, () => Array(N).fill(0));
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) out[x][N - 1 - y] = m[y][x];
+    return out;
+  }
+  function collides(matrix, px, py) {
+    for (let y = 0; y < matrix.length; y++) for (let x = 0; x < matrix[y].length; x++) {
+      if (!matrix[y][x]) continue;
+      const nx = px + x, ny = py + y;
+      if (nx < 0 || nx >= COLS || ny >= ROWS) return true;
+      if (ny >= 0 && grid[ny][nx]) return true;
+    }
+    return false;
+  }
+  function tryMove(dx, dy) {
+    if (!piece) return false;
+    if (!collides(piece.matrix, piece.x + dx, piece.y + dy)) { piece.x += dx; piece.y += dy; return true; }
+    return false;
+  }
+  function tryRotate() {
+    if (!piece) return false;
+    const rotated = rotateMatrix(piece.matrix);
+    for (const k of [0, 1, -1, 2, -2]) {
+      if (!collides(rotated, piece.x + k, piece.y)) { piece.matrix = rotated; piece.x += k; return true; }
+    }
+    return false;
+  }
+  function hardDrop() {
+    let dist = 0;
+    while (tryMove(0, 1)) dist++;
+    score += dist * 2;
+    lockPiece();
+  }
+  function lockPiece() {
+    const m = piece.matrix;
+    for (let y = 0; y < m.length; y++) for (let x = 0; x < m[y].length; x++) {
+      if (!m[y][x]) continue;
+      const ny = piece.y + y, nx = piece.x + x;
+      if (ny >= 0 && ny < ROWS && nx >= 0 && nx < COLS) grid[ny][nx] = piece.type;
+    }
+    clearLines();
+    spawn();
+  }
+  function clearLines() {
+    let cleared = 0;
+    const rows = [];
+    for (let y = ROWS - 1; y >= 0; y--) {
+      if (grid[y].every(c => c)) {
+        rows.push(y);
+        grid.splice(y, 1);
+        grid.unshift(Array(COLS).fill(null));
+        cleared++; y++;
+      }
+    }
+    if (cleared > 0) {
+      score += [0, 100, 300, 500, 800][cleared] * level;
+      lines += cleared;
+      const newLevel = Math.floor(lines / 10) + 1;
+      if (newLevel !== level) { level = newLevel; dropInterval = Math.max(80, 800 - (level - 1) * 70); }
+      rows.forEach(r => rowFlashes.push({ y: r, t: 1 }));
+      saveBest();
+    }
+  }
+  function spawn() {
+    piece = nextPiece || takePiece();
+    nextPiece = takePiece();
+    drawNext();
+    if (collides(piece.matrix, piece.x, piece.y)) gameOver();
+  }
+
+  /* ---------- 统计 / 状态 ---------- */
+  function loadBest() {
+    try { return parseInt(localStorage.getItem(BEST_KEY) || '0', 10) || 0; } catch (e) { return 0; }
+  }
+  function saveBest() {
+    if (score > best) {
+      best = score;
+      try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}
+      bestEl.textContent = best.toLocaleString('en-US');
+    }
+  }
+  function setState(next) {
+    state = next;
+    document.body.dataset.state = next;
+    gameStateEl.textContent = next;
+    pauseBtn.classList.toggle('is-paused', next === 'paused');
+    pauseBtn.disabled = !(next === 'running' || next === 'paused');
+  }
+  function updateHUD(dt) {
+    const k = Math.min(1, (dt || 16) / 110);
+    dispScore += (score - dispScore) * k;
+    if (Math.abs(score - dispScore) < .6) dispScore = score;
+    const s = Math.round(dispScore);
+    if (s !== lastShownScore) {
+      scoreEl.textContent = s.toLocaleString('en-US');
+      lastShownScore = s;
+    }
+    linesEl.textContent = lines;
+    levelEl.textContent = level;
+  }
+  const TOUCH_HINT = '用下方按钮操作';
+  const KEY_HINT = '← → 移动 · ↑ 旋转 · 空格 瞬降';
+  function isTouchMode() { return document.body.classList.contains('touch-mode'); }
+  function showOverlay(kind, isRecord) {
+    overlay.classList.remove('hidden');
+    if (kind === 'start') {
+      ovTitle.textContent = '俄罗斯方块';
+      ovSub.textContent = '堆叠方块，消除整行';
+      ovStats.innerHTML = '';
+      ovHint.textContent = isTouchMode() ? TOUCH_HINT : KEY_HINT;
+      startBtn.textContent = '开始游戏';
+    } else if (kind === 'pause') {
+      ovTitle.textContent = '已暂停';
+      ovSub.textContent = '';
+      ovStats.innerHTML = '';
+      ovHint.textContent = '';
+      startBtn.textContent = '继续';
+    } else {
+      ovTitle.textContent = '游戏结束';
+      ovSub.textContent = isRecord ? '刷新了最高分' : '';
+      ovStats.innerHTML = '<div class="ov-score">' + score.toLocaleString('en-US') + '</div>' +
+        '<div class="ov-meta">消除 ' + lines + ' 行 · 等级 ' + level + '</div>';
+      ovHint.textContent = '';
+      startBtn.textContent = '再来一局';
+    }
+  }
+  function gameOver() {
+    setState('over');
+    const isRecord = score > bestAtStart;
+    saveBest();
+    showOverlay('over', isRecord);
+  }
+  function togglePause() {
+    if (state === 'running') {
+      setState('paused');
+      showOverlay('pause');
+    } else if (state === 'paused') {
+      setState('running');
+      overlay.classList.add('hidden');
+      lastTime = performance.now();
+    }
+  }
+  function startGame() {
+    grid = emptyGrid();
+    score = 0; lines = 0; level = 1;
+    dropInterval = 800; dropTimer = 0;
+    bag = []; nextPiece = null;
+    rowFlashes = [];
+    dispScore = 0; lastShownScore = -1;
+    bestAtStart = best;
+    overlay.classList.add('hidden');
+    setState('running');
+    spawn();
+    lastTime = performance.now();
+  }
+
+  /* ---------- 绘制 ---------- */
+  function drawGemAt(x, y, type) {
+    ctx.drawImage(gemBig[type], x * CELL, y * CELL, CELL, CELL);
+  }
+  function drawGhost() {
+    if (!piece) return;
+    let gy = piece.y;
+    while (!collides(piece.matrix, piece.x, gy + 1)) gy++;
+    if (gy === piece.y) return;
+    const color = COLORS[piece.type];
+    const m = piece.matrix;
+    for (let y = 0; y < m.length; y++) for (let x = 0; x < m[y].length; x++) {
+      if (!m[y][x]) continue;
+      const ny = gy + y;
+      if (ny < 0 || ny >= ROWS) continue;
+      const px = (piece.x + x) * CELL, py = ny * CELL;
+      const inset = 2, s = CELL - inset * 2;
+      ctx.save();
+      ctx.globalAlpha = .45;
+      ctx.setLineDash([4, 3]);
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = color;
+      rr(ctx, px + inset, py + inset, s, s, 5); ctx.stroke();
+      ctx.restore();
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(bgCache, 0, 0, W, H);
+
+    for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++)
+      if (grid[y][x]) drawGemAt(x, y, grid[y][x]);
+
+    if (piece && state !== 'over') {
+      drawGhost();
+      const m = piece.matrix;
+      for (let y = 0; y < m.length; y++) for (let x = 0; x < m[y].length; x++) {
+        if (!m[y][x]) continue;
+        const ny = piece.y + y;
+        if (ny < 0 || ny >= ROWS) continue;
+        drawGemAt(piece.x + x, ny, piece.type);
+      }
+    }
+
+    // 消行：整行一次极轻的白色淡出
+    for (const f of rowFlashes) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, f.t) * 0.22;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, f.y * CELL, W, CELL);
+      ctx.restore();
+    }
+  }
+  function drawNext() {
+    nctx.clearRect(0, 0, NEXT_W, NEXT_H);
+    if (!nextPiece) return;
+    const m = SHAPES[nextPiece.type];
+    const cells = [];
+    m.forEach((row, y) => row.forEach((v, x) => { if (v) cells.push([x, y]); }));
+    const xs = cells.map(c => c[0]), ys = cells.map(c => c[1]);
+    const minX = Math.min(...xs), maxX = Math.max(...xs);
+    const minY = Math.min(...ys), maxY = Math.max(...ys);
+    const w = (maxX - minX + 1) * NEXT_CELL, h = (maxY - minY + 1) * NEXT_CELL;
+    const ox = (NEXT_W - w) / 2, oy = (NEXT_H - h) / 2;
+    cells.forEach(([x, y]) => {
+      const px = ox + (x - minX) * NEXT_CELL, py = oy + (y - minY) * NEXT_CELL;
+      nctx.drawImage(gemSmall[nextPiece.type], px, py, NEXT_CELL, NEXT_CELL);
+    });
+  }
+  function updateEffects(dt) {
+    for (const f of rowFlashes) f.t -= dt / 280;
+    rowFlashes = rowFlashes.filter(f => f.t > 0);
+  }
+  function frame(t) {
+    const dt = lastTime ? Math.min(t - lastTime, 60) : 16;
+    lastTime = t;
+    if (state === 'running') {
+      dropTimer += dt;
+      if (dropTimer >= dropInterval) { dropTimer = 0; if (!tryMove(0, 1)) lockPiece(); }
+    }
+    updateEffects(dt);
+    updateHUD(dt);
+    draw();
+    rafId = requestAnimationFrame(frame);
+  }
+
+  /* ---------- 操作 ---------- */
+  const actions = {
+    left()   { if (state === 'running') tryMove(-1, 0); },
+    right()  { if (state === 'running') tryMove(1, 0); },
+    rotate() { if (state === 'running') tryRotate(); },
+    soft()   { if (state === 'running') { if (tryMove(0, 1)) score++; dropTimer = 0; } },
+    drop()   { if (state === 'running') hardDrop(); }
+  };
+  const REPEATABLE = { left: true, right: true, soft: true };
+
+  // 长按连发：按住 180ms 后按 60ms 间隔重复
+  function bindHold(el, fn, repeat) {
+    let boot = 0, loop = 0;
+    function stop() {
+      if (boot) { clearTimeout(boot); boot = 0; }
+      if (loop) { clearInterval(loop); loop = 0; }
+      el.classList.remove('is-on');
+    }
+    el.addEventListener('pointerdown', e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      e.preventDefault();
+      if (boot || loop) return;
+      el.classList.add('is-on');
+      fn();
+      if (!repeat) { boot = setTimeout(stop, 90); return; }
+      boot = setTimeout(() => { boot = 0; loop = setInterval(fn, 60); }, 180);
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    ['pointerup', 'pointercancel', 'pointerleave', 'lostpointercapture'].forEach(ev =>
+      el.addEventListener(ev, stop));
+    el.addEventListener('contextmenu', e => e.preventDefault());
+  }
+  document.querySelectorAll('.tc').forEach(el => {
+    const act = el.dataset.act;
+    bindHold(el, () => actions[act](), !!REPEATABLE[act]);
+  });
+
+  /* ---------- 键盘 ---------- */
+  document.addEventListener('keydown', e => {
+    // 站点 header 内（导航/静音/切源按钮）的键盘操作不交给游戏处理
+    if (e.target && e.target.closest && e.target.closest('header')) return;
+    const k = e.key;
+    if ([' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(k)) e.preventDefault();
+    if (k === 'p' || k === 'P' || k === 'Escape') { togglePause(); return; }
+    if (k === 'r' || k === 'R') { startGame(); return; }
+    if (state !== 'running') {
+      if (k === 'Enter' || k === ' ') { if (state !== 'paused') startGame(); }
+      return;
+    }
+    switch (k) {
+      case 'ArrowLeft':  actions.left(); break;
+      case 'ArrowRight': actions.right(); break;
+      case 'ArrowDown':  actions.soft(); break;
+      case 'ArrowUp': case 'x': case 'X': actions.rotate(); break;
+      case ' ': actions.drop(); break;
+    }
+  });
+
+  startBtn.addEventListener('click', () => {
+    if (state === 'paused') togglePause(); else startGame();
+  });
+  pauseBtn.addEventListener('click', togglePause);
+  restartBtn.addEventListener('click', startGame);
+
+  window.addEventListener('resize', () => {
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    if (d !== dpr) { dpr = d; initCanvas(); draw(); drawNext(); }
+  });
+
+  /* ---------- 初始化 ---------- */
+  // 触屏判定：主指针是手指，或「有触摸点 + 窄屏」。带触屏的桌面笔记本仍用键盘。
+  function detectTouch() {
+    let touch = false;
+    try {
+      const coarse = window.matchMedia('(pointer: coarse)').matches;
+      const touchable = (navigator.maxTouchPoints || 0) > 0 || ('ontouchstart' in window);
+      touch = coarse || (touchable && window.innerWidth <= 820);
+    } catch (e) {}
+    try {
+      const p = new URLSearchParams(location.search);
+      if (p.get('touch') === '1') touch = true;
+      if (p.get('touch') === '0') touch = false;
+    } catch (e) {}
+    document.body.classList.toggle('touch-mode', touch);
+    return touch;
+  }
+
+  initCanvas();
+  detectTouch();
+  grid = emptyGrid();
+  score = 0; lines = 0; level = 1;
+  dropInterval = 800; dropTimer = 0;
+  best = loadBest(); bestAtStart = best;
+  bestEl.textContent = best.toLocaleString('en-US');
+  nextPiece = takePiece();
+  drawNext();
+  setState('idle');
+  showOverlay('start');
+  updateHUD(16);
+  draw();
+  rafId = requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
