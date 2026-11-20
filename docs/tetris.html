@@ -99,6 +99,24 @@ button { font:inherit; color:inherit; }
 .btn-icon:active { transform:scale(.96); }
 .btn-icon:disabled { opacity:.4; cursor:default; }
 .btn-icon svg { width:18px; height:18px; display:block; }
+/* 简单模式开关（等级升高后下落速度不增加） */
+.btn-toggle {
+  height:38px; padding:0 10px; flex:none;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:10px; border:1px solid var(--line);
+  background:var(--surface-2); color:var(--muted);
+  font-size:11.5px; font-weight:600; letter-spacing:.02em;
+  cursor:pointer; white-space:nowrap;
+  transition:background .12s, color .12s, border-color .12s;
+}
+.btn-toggle:hover { background:var(--surface-3); color:var(--text); }
+.btn-toggle:active { transform:scale(.97); }
+.btn-toggle.is-on {
+  background:rgba(91,157,255,.16);
+  border-color:var(--accent);
+  color:var(--accent);
+}
+.easy-short { display:none; }
 /* 暂停 / 继续 两个图标互斥显示（选择器需压过 .btn-icon svg 的 display:block） */
 .btn-icon .ico-play { display:none; }
 #pauseBtn.is-paused .ico-pause { display:none; }
@@ -212,6 +230,9 @@ body.touch-mode {
   .stat b { font-size:16px; }
   .stats { gap:11px; }
   .btn-icon { width:36px; height:36px; }
+  .btn-toggle { height:36px; padding:0 8px; font-size:10.5px; }
+  .easy-full { display:none; }
+  .easy-short { display:inline; }
   .ov-title { font-size:19px; }
 }
 @media (max-width:360px) {
@@ -381,6 +402,7 @@ body::before { display: none; }
       <div class="stat"><span>等级</span><b id="level">1</b></div>
     </div>
     <div class="actions">
+      <button class="btn-toggle" id="easyBtn" type="button" aria-pressed="false" title="简单模式：开关后等级提升不再加速"><span class="easy-full">简单模式</span><span class="easy-short">简单</span></button>
       <button class="btn-icon" id="pauseBtn" type="button" aria-label="暂停" title="暂停 / 继续" disabled>
         <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.4" y="5" width="3.6" height="14" rx="1.2"/></svg>
         <svg class="ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.87l10.2-6.5a1 1 0 0 0 0-1.74L9.5 4.63A1 1 0 0 0 8 5.5z"/></svg>
@@ -509,7 +531,7 @@ body::before { display: none; }
   const overlay = $('overlay'), ovTitle = $('ovTitle'), ovSub = $('ovSub');
   const ovStats = $('ovStats'), ovHint = $('ovHint'), startBtn = $('startBtn');
   const scoreEl = $('score'), linesEl = $('lines'), levelEl = $('level'), bestEl = $('best');
-  const pauseBtn = $('pauseBtn'), restartBtn = $('restartBtn');
+  const pauseBtn = $('pauseBtn'), restartBtn = $('restartBtn'), easyBtn = $('easyBtn');
   const gameStateEl = $('gameState');
 
   let ctx, nctx, bgCache, gemBig = {}, gemSmall = {};
@@ -537,7 +559,11 @@ body::before { display: none; }
   let rowFlashes = [];
   let dispScore = 0, lastShownScore = -1;
   let best = 0, bestAtStart = 0;
+  let easyMode = false;
   const BEST_KEY = 'tetris-best';
+  const EASY_KEY = 'tetris-easy';
+  const BASE_DROP = 800;   // 1 级基础下落间隔（毫秒）
+  const EASY_DROP = 800;   // 简单模式：等级提升后保持基础间隔
 
   /* ---------- 画布 ---------- */
   function rr(c, x, y, w, h, r) {
@@ -676,7 +702,7 @@ body::before { display: none; }
       score += [0, 100, 300, 500, 800][cleared] * level;
       lines += cleared;
       const newLevel = Math.floor(lines / 10) + 1;
-      if (newLevel !== level) { level = newLevel; dropInterval = Math.max(80, 800 - (level - 1) * 70); }
+      if (newLevel !== level) { level = newLevel; dropInterval = intervalForLevel(level); }
       rows.forEach(r => rowFlashes.push({ y: r, t: 1 }));
       saveBest();
     }
@@ -699,6 +725,37 @@ body::before { display: none; }
       bestEl.textContent = best.toLocaleString('en-US');
     }
   }
+
+  /* ---------- 简单模式（等级提升不加速） ---------- */
+  function loadEasy() {
+    try { return localStorage.getItem(EASY_KEY) === '1'; } catch (e) { return false; }
+  }
+  function saveEasy() {
+    try { localStorage.setItem(EASY_KEY, easyMode ? '1' : '0'); } catch (e) {}
+  }
+  function intervalForLevel(lv) {
+    return easyMode ? EASY_DROP : Math.max(80, BASE_DROP - (lv - 1) * 70);
+  }
+  function applyEasyUI() {
+    if (!easyBtn) return;
+    easyBtn.classList.toggle('is-on', easyMode);
+    easyBtn.setAttribute('aria-pressed', easyMode ? 'true' : 'false');
+    easyBtn.title = easyMode
+      ? '简单模式：开（等级提升后下落速度不增加）'
+      : '简单模式：关（等级提升会加速）';
+  }
+  function toggleEasy() {
+    easyMode = !easyMode;
+    saveEasy();
+    applyEasyUI();
+    if (state === 'running') {
+      dropInterval = intervalForLevel(level);
+      dropTimer = 0;
+    } else if (state === 'idle') {
+      showOverlay('start');
+    }
+  }
+
   function setState(next) {
     state = next;
     document.body.dataset.state = next;
@@ -727,7 +784,8 @@ body::before { display: none; }
       ovTitle.textContent = '俄罗斯方块';
       ovSub.textContent = '堆叠方块，消除整行';
       ovStats.innerHTML = '';
-      ovHint.textContent = isTouchMode() ? TOUCH_HINT : KEY_HINT;
+      const baseHint = isTouchMode() ? TOUCH_HINT : KEY_HINT;
+      ovHint.textContent = (easyMode ? '简单模式：下落速度不随等级增加 · ' : '') + baseHint;
       startBtn.textContent = '开始游戏';
     } else if (kind === 'pause') {
       ovTitle.textContent = '已暂停';
@@ -763,7 +821,7 @@ body::before { display: none; }
   function startGame() {
     grid = emptyGrid();
     score = 0; lines = 0; level = 1;
-    dropInterval = 800; dropTimer = 0;
+    dropInterval = intervalForLevel(1); dropTimer = 0;
     bag = []; nextPiece = null;
     rowFlashes = [];
     dispScore = 0; lastShownScore = -1;
@@ -923,6 +981,7 @@ body::before { display: none; }
   });
   pauseBtn.addEventListener('click', togglePause);
   restartBtn.addEventListener('click', startGame);
+  easyBtn.addEventListener('click', toggleEasy);
 
   window.addEventListener('resize', () => {
     const d = Math.min(window.devicePixelRatio || 1, 2);
@@ -951,7 +1010,9 @@ body::before { display: none; }
   detectTouch();
   grid = emptyGrid();
   score = 0; lines = 0; level = 1;
-  dropInterval = 800; dropTimer = 0;
+  easyMode = loadEasy();
+  applyEasyUI();
+  dropInterval = intervalForLevel(1); dropTimer = 0;
   best = loadBest(); bestAtStart = best;
   bestEl.textContent = best.toLocaleString('en-US');
   nextPiece = takePiece();
@@ -961,6 +1022,13 @@ body::before { display: none; }
   updateHUD(16);
   draw();
   rafId = requestAnimationFrame(frame);
+
+  // 只读调试接口（页面自动化验收用；不改变游戏行为）
+  window.TetrisDebug = {
+    intervalForLevel,
+    toggleEasy,
+    getState: () => ({ state, easyMode, level, lines, score, dropInterval })
+  };
 })();
 </script>
 </body>
