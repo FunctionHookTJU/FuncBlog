@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>俄罗斯方块 AI 算法笔记 - 宇佐见函钩</title>
+    <meta name="description" content="俄罗斯方块 AI 的启发式算法原理：1-ply 全摆放搜索 + El-Tetris / Dellacherie / Yiyuan Lee 权重，附论文与开源实现清单。">
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <script src="../scripts/audioPlayer.js" defer></script>
+    <script src="../scripts/site-shell.js" defer></script>
+    <script src="../scripts/backgroundLoader.js"></script>
+    <style>
+        :root {
+            --bg-surface: #ffffff;
+            --bg-subtle: #f9fafb;
+            --line: #e5e7eb;
+            --line-soft: #f1f3f6;
+            --line-strong: #d1d5db;
+            --ink: #111827;
+            --ink-2: #374151;
+            --muted: #6b7280;
+            --muted-2: #9ca3af;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --accent-weak: #eff6ff;
+            --ui-radius: 12px;
+            --ui-radius-sm: 8px;
+            --ui-font: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+            --ui-mono: ui-monospace, "SFMono-Regular", Consolas, "Courier New", monospace;
+        }
+
+        main.container { padding-bottom: 20px; }
+
+        .doc {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6px 0 40px;
+            font-family: var(--ui-font);
+            color: var(--ink);
+        }
+
+        .doc-head {
+            margin: 6px 0 20px;
+            padding: 26px 28px;
+            background: var(--bg-surface);
+            border: 1px solid var(--line);
+            border-radius: var(--ui-radius);
+        }
+
+        .eyebrow {
+            margin-bottom: 9px;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        .doc-head h1 {
+            margin: 0 0 10px;
+            color: #0f172a;
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .lede {
+            margin: 0 0 14px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .head-links { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .pill-link {
+            display: inline-flex;
+            align-items: center;
+            height: 32px;
+            padding: 0 13px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            background: var(--bg-surface);
+            color: var(--ink-2);
+            font-size: 12.5px;
+            text-decoration: none;
+            transition: border-color .15s, color .15s, background .15s;
+        }
+
+        .pill-link:hover { border-color: #bfdbfe; background: #f8faff; color: var(--accent-hover); }
+
+        .pill-link.primary {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .pill-link.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #fff; }
+
+        .card {
+            margin-bottom: 18px;
+            padding: 22px;
+            background: var(--bg-surface);
+            border: 1px solid var(--line);
+            border-radius: var(--ui-radius);
+        }
+
+        .card:last-child { margin-bottom: 0; }
+
+        .card h2 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 0 14px;
+            color: var(--ink);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card h2::before {
+            content: "";
+            width: 3px;
+            height: 15px;
+            border-radius: 2px;
+            background: var(--accent);
+        }
+
+        .card h3 {
+            margin: 18px 0 8px;
+            color: var(--ink);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .card p {
+            margin: 0 0 12px;
+            color: var(--ink-2);
+            font-size: 13.5px;
+            line-height: 1.85;
+        }
+
+        .card ul, .card ol {
+            margin: 0 0 12px;
+            padding-left: 20px;
+            color: var(--ink-2);
+            font-size: 13.5px;
+            line-height: 1.9;
+        }
+
+        .card li { margin-bottom: 4px; }
+
+        code {
+            padding: 1px 5px;
+            border-radius: 4px;
+            background: var(--accent-weak);
+            color: var(--accent-hover);
+            font-family: var(--ui-mono);
+            font-size: 12.5px;
+        }
+
+        pre {
+            margin: 0 0 12px;
+            padding: 14px 16px;
+            border: 1px solid var(--line-soft);
+            border-radius: var(--ui-radius-sm);
+            background: var(--bg-subtle);
+            color: var(--ink-2);
+            font-family: var(--ui-mono);
+            font-size: 12.5px;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        pre code { padding: 0; background: none; color: inherit; font-size: inherit; }
+
+        .table-wrap { overflow-x: auto; margin-bottom: 12px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            color: var(--ink-2);
+        }
+
+        th {
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--line);
+            background: var(--bg-subtle);
+            color: var(--muted);
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: .04em;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 9px 10px;
+            border-bottom: 1px solid var(--line-soft);
+            vertical-align: top;
+            line-height: 1.7;
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        td.num {
+            font-family: var(--ui-mono);
+            font-size: 12.5px;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .note {
+            margin: 0 0 12px;
+            padding: 11px 13px;
+            border: 1px solid #fde68a;
+            border-radius: var(--ui-radius-sm);
+            background: #fffbeb;
+            color: #92400e;
+            font-size: 12.5px;
+            line-height: 1.8;
+        }
+
+        .note.info {
+            border-color: #dbeafe;
+            background: #f8faff;
+            color: #1e40af;
+        }
+
+        .refs { margin: 0; padding-left: 20px; }
+
+        .refs li {
+            margin-bottom: 10px;
+            color: var(--ink-2);
+            font-size: 13px;
+            line-height: 1.75;
+        }
+
+        .refs a { color: var(--accent-hover); }
+
+        .refs .meta { color: var(--muted); font-size: 12px; }
+
+        .refs .tag {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 1px 7px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: var(--bg-subtle);
+            border: 1px solid var(--line);
+            color: var(--muted);
+        }
+
+        @media (max-width: 560px) {
+            .doc { padding-bottom: 24px; }
+            .doc-head { padding: 20px 18px; }
+            .doc-head h1 { font-size: 22px; }
+            .card { padding: 16px 14px; }
+        }
+    </style>
+</head>
+<body class="tetris-ai-doc-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <clipPath id="liquid-tab" clipPathUnits="objectBoundingBox">
+            <path d="M 0.03 0 L 0.97 0 L 0.97 0.05 C 0.92 0.06 0.88 0.13 0.86 0.20 L 0.86 0.78 Q 0.86 1 0.74 1 L 0.26 1 Q 0.14 1 0.14 0.78 L 0.14 0.20 C 0.12 0.13 0.08 0.06 0.03 0.05 Z"/>
+        </clipPath>
+    </defs>
+</svg>
+<header>
+    <nav>
+        <a class="logo" href="../index.html">
+            <img class="logo-avatar" src="../assets/images/avatar_me.jpg" alt="宇佐见函钩头像">
+            <span class="logo-text">宇佐见函钩</span>
+        </a>
+        <ul class="nav-links">
+                <li><a href="../index.html">首页</a></li>
+                <li><a href="../pages/diary.html">日记</a></li>
+                <li><a href="../pages/study.html">学习笔记</a></li>
+                <li><a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a></li>
+                <li><a href="../pages/communicate.html">交流</a></li>
+                <li><a href="../pages/picture.html">图片墙</a></li>
+                <li><a href="../pages/products.html">新产品</a></li>
+            <li id="mute-button-container">
+                <button id="mute-button" class="icon-btn" title="静音/取消静音" aria-label="静音/取消静音">🔊</button>
+            </li>
+            <li id="toggle-audio-source-container">
+                <button id="toggle-audio-source" class="icon-btn" title="切换音频源" aria-label="切换音频源">🎵1</button>
+            </li>
+        </ul>
+        <div class="mobile-menu-btn" id="mobile-menu-btn">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+</header>
+
+<main class="container">
+    <article class="doc">
+        <section class="doc-head">
+            <div class="eyebrow">Algorithm Notes</div>
+            <h1>俄罗斯方块 AI：算法、权重与文献</h1>
+            <p class="lede">
+                站内那个能自己玩的 AI，用的是最经典的路线：<strong>枚举当前方块的所有旋转与落点</strong>，
+                对每个候选局面算一组特征，用一篇 2011 年论文里的权重打分，选分最高的摆放。
+                这里记录实现细节、三套公开权重的来历，以及可以直接读的论文与开源代码。
+            </p>
+            <div class="head-links">
+                <a class="pill-link primary" href="tetris.html">去玩（点「AI 自动玩」）</a>
+                <a class="pill-link" href="../pages/products.html">返回新产品</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>为什么用启发式，而不是「精确求解」</h2>
+            <p>
+                俄罗斯方块的离线最优规划是<strong>NP-完全</strong>的：给定整串方块序列，想最大化消行数、
+                最大化四行全消次数、最小化最大堆高，都是 NP-完全问题，而且前两者还不可近似
+                （Demaine、Hohenberger、Liben-Nowell，2003）。所以实时对局几乎没人做全局最优，
+                主流做法是<strong>「看一步、打分、贪心」</strong>——也就是 1-ply 搜索加线性评价函数。
+            </p>
+            <p class="note info">
+                一个反直觉的事实：这套只看一步的线性打分，在 10×20 标准场地上能连消上千万行
+                （El-Tetris 论文报告平均 16,047,595 行/局）。真正的瓶颈不是搜索深度，而是特征选得对不对。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>算法流程</h2>
+            <pre><code>for 每个新方块:
+  候选 = []
+  for 每个去重后的旋转形态 r:            # I/O 2 个，S/Z 2 个，T/J/L 4 个
+    for 每个合法列 x:                    # 水平平移
+      y = 一直下落到底的落点             # 撞到已堆方块或底部为止
+      if 落点越界或悬空: continue        # 视为不可行，直接丢弃
+      新棋盘 = 锁定方块 + 消除满行
+      候选.append( (r, x, 新棋盘, 特征) )
+  选 特征加权得分最高 的候选，执行「旋转 → 平移 → 瞬降」</code></pre>
+            <p>
+                一次决策最多几十个候选，每个候选算 6 个特征，纯 O(行×列)。当前实现里
+                2-ply（再看一个预览块）单次决策约 5ms，浏览器里完全没有压力。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>六个特征与权重（El-Tetris，本站默认）</h2>
+            <p>
+                Islam El-Ashi 在 2011 年改进了 Pierre Dellacherie 的经典算法，用粒子群优化（PSO）
+                重新调了权重，并开源了实现。它的评价函数就是六个特征各乘一个权重再求和：
+            </p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>特征</th><th>含义</th><th>权重</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Landing Height</td>
+                            <td>落点高度（列高 + 方块高 / 2）</td>
+                            <td class="num">−4.500158825082766</td>
+                        </tr>
+                        <tr>
+                            <td>Rows eliminated</td>
+                            <td>本步消除的行数</td>
+                            <td class="num">+3.4181268101392694</td>
+                        </tr>
+                        <tr>
+                            <td>Row Transitions</td>
+                            <td>行内相邻格「填充↔空」的变换次数</td>
+                            <td class="num">−3.2178882868487753</td>
+                        </tr>
+                        <tr>
+                            <td>Column Transitions</td>
+                            <td>列内相邻格「填充↔空」的变换次数</td>
+                            <td class="num">−9.348695305445199</td>
+                        </tr>
+                        <tr>
+                            <td>Holes</td>
+                            <td>同列上方存在填充格的空格数</td>
+                            <td class="num">−7.899265427351652</td>
+                        </tr>
+                        <tr>
+                            <td>Well Sums</td>
+                            <td>「井」的累计深度，长度为 n 的井按 1+2+…+n 计</td>
+                            <td class="num">−3.3855972247263626</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="note">
+                容易踩的坑：El-Tetris 把 Dellacherie 原版的正向特征 <code>eroded piece cells</code>
+                （本步被消掉的、属于刚落下方块的格子数）换成了简单的「消行数」。
+                两套权重不能混用——特征变了，权重就得跟着变。
+            </p>
+            <p>
+                边界处理也必须严格照搬，否则性能会从千万行掉到几百行：行转换把左右两堵墙视为填充；
+                列转换把「天花板上方」视为填充、地板以下开放不计；井的判定在首末列把棋盘外当作墙。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>另外两套公开权重</h2>
+            <h3>Pierre Dellacherie（2003，手工试错）</h3>
+            <p>
+                最早的经典：同样六个特征，但正向特征是 <code>eroded piece cells</code>。
+                他本人没有发表论文，权重是反复试错调出来的，学界普遍按 Fahey（2003）的转述引用，
+                常见整数版本为：落地高度 −1、侵蚀格数 +1、行转换 −1、列转换 −1、洞 −4、井 −1。
+            </p>
+            <h3>Yiyuan Lee（2013，遗传算法）</h3>
+            <p>
+                只有四个特征，代码短到几十行，很适合直接读：总堆高、消行数、洞数、地表起伏（相邻列高差之和）。
+                遗传算法调出的权重为 −0.510066、+0.760666、−0.35663、−0.184483（符号「负正负负」）。
+            </p>
+            <p class="note info">
+                本站实现把三套权重都放进去了（<code>weights</code> 可选 <code>eltetris</code> /
+                <code>dellacherie</code> / <code>lee</code>）。自对弈 3000 块的三组随机种子下，
+                三套都能存活不爆顶，平均消行都在 1190 行左右，差别不大；真实对局里差异更多来自随机序列与场地规则。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>本站的实现</h2>
+            <p>
+                引擎在 <a href="https://github.com/FunctionHookTJU/FuncBlog/blob/master/scripts/tetrisAI.js">scripts/tetrisAI.js</a>
+                （零依赖，浏览器与 Node 都能跑），游戏页在 <a href="tetris.html">俄罗斯方块</a>。
+                页面上的「AI 自动玩」按钮打开后，AI 会接管当前方块：旋转到目标朝向 → 平移到目标列 → 瞬降锁定，
+                玩家随时可以按方向键把控制权抢回来。
+            </p>
+            <pre><code>// 浏览器
+const best = TetrisAI.bestPlacement(grid, pieceMatrix, {
+  weights: TetrisAI.WEIGHTS.eltetris,   // 或 dellacherie / lee
+  lookahead: true,                       // 用下一个预览块做 2-ply
+  nextMatrix: nextPieceMatrix
+});
+// best = { rot, x, y, matrix, cleared, score, features, gridAfter }</code></pre>
+            <p>
+                想自己调权重，改 <code>WEIGHTS</code> 里对应的数字即可；每个特征的取值都会随
+                <code>best.features</code> 一起返回，方便观察某一手到底被哪一项惩罚了。
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>论文</h2>
+            <ul class="refs">
+                <li>
+                    Erik D. Demaine, Susan Hohenberger, David Liben-Nowell.
+                    <a href="https://arxiv.org/abs/cs/0210020">Tetris is Hard, Even to Approximate</a>.
+                    <span class="meta">COCOON 2003；IJCGA 2005。离线最优规划 NP-完全且不可近似的标准引文。</span>
+                    <span class="tag">复杂性</span>
+                </li>
+                <li>
+                    Islam El-Ashi.
+                    <a href="https://imake.ninja/el-tetris-an-improvement-on-pierre-dellacheries-algorithm/">El-Tetris – An Improvement on Pierre Dellacherie's Algorithm</a>.
+                    <span class="meta">2011（作者博客，一手来源）。本站默认权重的出处，含特征定义与 PSO 调参说明。</span>
+                    <span class="tag">启发式</span>
+                </li>
+                <li>
+                    István Szita, András Lőrincz.
+                    <a href="https://doi.org/10.1162/neco.2006.18.12.2936">Learning Tetris Using the Noisy Cross-Entropy Method</a>.
+                    <span class="meta">Neural Computation 18(12), 2006。加噪声防早收敛的交叉熵方法。</span>
+                    <span class="tag">学习型</span>
+                </li>
+                <li>
+                    Christophe Thiery, Bruno Scherrer.
+                    <a href="https://hal.science/inria-00173248">Building Controllers for Tetris</a>.
+                    <span class="meta">ICGA Journal 32(1), 2009。系统梳理了 Tetris 特征清单，并提醒实现细节会让分数差很多。</span>
+                    <span class="tag">综述</span>
+                </li>
+                <li>
+                    Victor Gabillon, Mohammad Ghavamzadeh, Bruno Scherrer.
+                    <a href="https://proceedings.neurips.cc/paper/2013/hash/7504adad8bb96320eb3afdd4df6e1f60-Abstract.html">Approximate Dynamic Programming Finally Performs Well in the Game of Tetris</a>.
+                    <span class="meta">NIPS 2013。策略空间近似动态规划，样本量约为交叉熵方法的 1/10。</span>
+                    <span class="tag">ADP</span>
+                </li>
+                <li>
+                    Yiyuan Lee.
+                    <a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/">Tetris AI – The (Near) Perfect Bot</a>.
+                    <span class="meta">2013（博客；若打不开可看对应 GitHub 仓库源码）。四特征与遗传算法调参过程。</span>
+                    <span class="tag">博客</span>
+                </li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>开源实现</h2>
+            <ul class="refs">
+                <li>
+                    <a href="https://github.com/LeeYiyuan/tetrisai">LeeYiyuan/tetrisai</a>
+                    <span class="meta">JavaScript，MIT。四特征 + 遗传算法，浏览器内直接可跑，最适合拿来对照阅读。</span>
+                    <span class="tag">JS</span>
+                </li>
+                <li>
+                    <a href="https://github.com/ielashi/eltetris">ielashi/eltetris</a>
+                    <span class="meta">JavaScript，GPL。El-Tetris 作者的参考实现，位运算写法，注意协议是 GPL，只宜阅读不宜直接搬进 MIT 项目。</span>
+                    <span class="tag">JS</span>
+                </li>
+                <li>
+                    <a href="https://github.com/nuno-faria/tetris-ai">nuno-faria/tetris-ai</a>
+                    <span class="meta">Python（Keras/JAX），DQN 深度强化学习，含预训练模型，是「换条技术路线」的首选参照。</span>
+                    <span class="tag">DQN</span>
+                </li>
+                <li>
+                    <a href="https://github.com/GregoryCannon/StackRabbit">GregoryCannon/StackRabbit</a>
+                    <span class="meta">C++，NES Tetris 的搜索 + 估值表方案，用价值迭代学局面价值，思路很值得借鉴。</span>
+                    <span class="tag">搜索</span>
+                </li>
+                <li>
+                    <a href="https://github.com/hinesboy/ai_tetris">hinesboy/ai_tetris</a>
+                    <span class="meta">C++，Dellacherie 启发式的完整实现，中文注释详细，适合逐行对照六特征算法。</span>
+                    <span class="tag">启发式</span>
+                </li>
+            </ul>
+        </section>
+    </article>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="../index.html">首页</a>
+                <a href="https://github.com/FunctionHookTJU" target="_blank" rel="noopener noreferrer">Github</a>
+                <a href="../pages/products.html">更多产品</a>
+                <a href="tetris.html">俄罗斯方块</a>
+            </div>
+            <p class="copyright">© 2025 宇佐见函钩. 保留所有权利. | <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">津ICP备2026001436号</a></p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        window.initBackgroundLoader({
+            path: '../assets/images/bg/',
+            blurAmount: 0,
+            transitionDuration: 400
+        });
+    });
+</script>
+</body>
+</html>

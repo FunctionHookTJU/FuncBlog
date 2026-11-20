@@ -117,6 +117,7 @@ button { font:inherit; color:inherit; }
   color:var(--accent);
 }
 .easy-short { display:none; }
+.ai-short { display:none; }
 /* 暂停 / 继续 两个图标互斥显示（选择器需压过 .btn-icon svg 的 display:block） */
 .btn-icon .ico-play { display:none; }
 #pauseBtn.is-paused .ico-pause { display:none; }
@@ -213,6 +214,9 @@ body.touch-mode .touch-controls { display:flex; }
 
 /* ---------- 页脚 ---------- */
 .foot { font-size:11.5px; color:var(--dim); text-align:center; line-height:1.6; }
+.foot .foot-link { margin-left:10px; }
+.foot .foot-link a { color:var(--accent); text-decoration:none; }
+.foot .foot-link a:hover { text-decoration:underline; }
 .foot .only-touch { display:none; }
 body.touch-mode .foot .only-key { display:none; }
 body.touch-mode .foot .only-touch { display:inline; }
@@ -233,6 +237,8 @@ body.touch-mode {
   .btn-toggle { height:36px; padding:0 8px; font-size:10.5px; }
   .easy-full { display:none; }
   .easy-short { display:inline; }
+  .ai-full { display:none; }
+  .ai-short { display:inline; }
   .ov-title { font-size:19px; }
 }
 @media (max-width:360px) {
@@ -402,6 +408,9 @@ body::before { display: none; }
       <div class="stat"><span>等级</span><b id="level">1</b></div>
     </div>
     <div class="actions">
+      <button class="btn-toggle" id="aiBtn" type="button" aria-pressed="false" title="AI 接管：自动计算最佳落点并操作">
+        <span class="ai-full">AI 自动玩</span><span class="ai-short">AI</span>
+      </button>
       <button class="btn-toggle" id="easyBtn" type="button" aria-pressed="false" title="简单模式：开关后等级提升不再加速"><span class="easy-full">简单模式</span><span class="easy-short">简单</span></button>
       <button class="btn-icon" id="pauseBtn" type="button" aria-label="暂停" title="暂停 / 继续" disabled>
         <svg class="ico-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.6" height="14" rx="1.2"/><rect x="13.4" y="5" width="3.6" height="14" rx="1.2"/></svg>
@@ -471,6 +480,7 @@ body::before { display: none; }
   <div class="foot">
     <span class="only-key">← → 移动 · ↑ 旋转 · ↓ 软降 · 空格 瞬降 · P 暂停 · R 重开</span>
     <span class="only-touch">按住 ← → ↓ 可连续操作</span>
+    <span class="foot-link"><a href="tetris-ai.html">AI 算法怎么写的</a></span>
   </div>
 </div>
 </main>
@@ -520,6 +530,7 @@ body::before { display: none; }
 })();
 </script>
 
+<script src="../scripts/tetrisAI.js"></script>
 <script>
 (() => {
   'use strict';
@@ -531,7 +542,7 @@ body::before { display: none; }
   const overlay = $('overlay'), ovTitle = $('ovTitle'), ovSub = $('ovSub');
   const ovStats = $('ovStats'), ovHint = $('ovHint'), startBtn = $('startBtn');
   const scoreEl = $('score'), linesEl = $('lines'), levelEl = $('level'), bestEl = $('best');
-  const pauseBtn = $('pauseBtn'), restartBtn = $('restartBtn'), easyBtn = $('easyBtn');
+  const pauseBtn = $('pauseBtn'), restartBtn = $('restartBtn'), easyBtn = $('easyBtn'), aiBtn = $('aiBtn');
   const gameStateEl = $('gameState');
 
   let ctx, nctx, bgCache, gemBig = {}, gemSmall = {};
@@ -560,6 +571,7 @@ body::before { display: none; }
   let dispScore = 0, lastShownScore = -1;
   let best = 0, bestAtStart = 0;
   let easyMode = false;
+  let aiOn = false;
   const BEST_KEY = 'tetris-best';
   const EASY_KEY = 'tetris-easy';
   const BASE_DROP = 800;   // 1 级基础下落间隔（毫秒）
@@ -711,7 +723,9 @@ body::before { display: none; }
     piece = nextPiece || takePiece();
     nextPiece = takePiece();
     drawNext();
-    if (collides(piece.matrix, piece.x, piece.y)) gameOver();
+    if (collides(piece.matrix, piece.x, piece.y)) { gameOver(); return; }
+    aiPlan = null;
+    if (aiOn) aiSchedule();
   }
 
   /* ---------- 统计 / 状态 ---------- */
@@ -754,6 +768,108 @@ body::before { display: none; }
     } else if (state === 'idle') {
       showOverlay('start');
     }
+  }
+
+  /* ---------- AI 自动玩（1-ply/2-ply 启发式搜索） ---------- */
+  const AI_STEP_MS = 55;        // 每步操作间隔（越小越快）
+  const AI_HARD_DROP = true;    // AI 用瞬降收尾，避免长时间等待
+  let aiTimer = null;
+  let aiPlan = null;            // { targetX, targetRot, steps } 当前块的执行计划
+
+  function applyAiUI() {
+    if (!aiBtn) return;
+    aiBtn.classList.toggle('is-on', aiOn);
+    aiBtn.setAttribute('aria-pressed', aiOn ? 'true' : 'false');
+    aiBtn.title = aiOn ? 'AI 接管中（点击交还手动操作）' : 'AI 接管：自动计算最佳落点并操作';
+    document.body.classList.toggle('ai-mode', aiOn);
+  }
+
+  function aiStop() {
+    if (aiTimer) { clearTimeout(aiTimer); aiTimer = null; }
+    aiPlan = null;
+  }
+
+  function aiToggle() {
+    if (!window.TetrisAI) {
+      aiBtn.title = 'AI 引擎未加载';
+      return;
+    }
+    aiOn = !aiOn;
+    applyAiUI();
+    if (aiOn) {
+      if (state === 'idle' || state === 'over') startGame();
+      aiSchedule();
+    } else {
+      aiStop();
+    }
+  }
+
+  /** 让 AI 接管当前局面：算出最佳落点，生成「旋转 + 平移」的动作序列。 */
+  function aiPlanForCurrent() {
+    if (!piece || !window.TetrisAI) return null;
+    const best = window.TetrisAI.bestPlacement(grid, piece.matrix, {
+      lookahead: !!nextPiece,
+      nextMatrix: nextPiece ? SHAPES[nextPiece.type] : null
+    });
+    if (!best) return null;
+    // best.matrix 是紧凑形状；目标朝向用形状指纹表示
+    const targetKey = window.TetrisAI.shapeKey(best.matrix);
+    return { targetKey, targetLeft: best.x, best };
+  }
+
+  function aiStep() {
+    aiTimer = null;
+    if (!aiOn || state !== 'running' || !piece) return;
+
+    if (!aiPlan) aiPlan = aiPlanForCurrent();
+    const plan = aiPlan;
+    if (!plan) {           // 无处可放：交给游戏自然顶死
+      hardDrop();
+      aiSchedule();
+      return;
+    }
+
+    // 1) 先旋转到目标朝向（每步只转一次，用形状指纹判断是否已到位）
+    if (window.TetrisAI.shapeKey(piece.matrix) !== plan.targetKey) {
+      if (!tryRotate()) { hardDrop(); aiPlan = null; }
+      aiSchedule();
+      return;
+    }
+
+    // 2) 再水平平移到目标列
+    const curLeft = pieceLeftColumn(piece.matrix, piece.x);
+    if (curLeft < plan.targetLeft) {
+      if (!tryMove(1, 0)) hardDrop();
+      aiSchedule();
+      return;
+    }
+    if (curLeft > plan.targetLeft) {
+      if (!tryMove(-1, 0)) hardDrop();
+      aiSchedule();
+      return;
+    }
+
+    // 3) 到位后瞬降锁定
+    if (AI_HARD_DROP) { hardDrop(); aiPlan = null; aiSchedule(); return; }
+    if (!tryMove(0, 1)) { lockPiece(); aiPlan = null; }
+    aiSchedule();
+  }
+
+  /** 方块最左占用列（紧凑形状与 piece.x 的换算统一走这里）。 */
+  function pieceLeftColumn(matrix, px) {
+    let minX = Infinity;
+    for (let y = 0; y < matrix.length; y++) {
+      for (let x = 0; x < matrix[y].length; x++) {
+        if (matrix[y][x]) minX = Math.min(minX, x);
+      }
+    }
+    return px + (minX === Infinity ? 0 : minX);
+  }
+
+  function aiSchedule(delay) {
+    if (!aiOn) return;
+    if (aiTimer) clearTimeout(aiTimer);
+    aiTimer = setTimeout(aiStep, delay === undefined ? AI_STEP_MS : delay);
   }
 
   function setState(next) {
@@ -804,6 +920,7 @@ body::before { display: none; }
   }
   function gameOver() {
     setState('over');
+    aiStop();
     const isRecord = score > bestAtStart;
     saveBest();
     showOverlay('over', isRecord);
@@ -811,11 +928,14 @@ body::before { display: none; }
   function togglePause() {
     if (state === 'running') {
       setState('paused');
+      aiStop();
       showOverlay('pause');
     } else if (state === 'paused') {
       setState('running');
       overlay.classList.add('hidden');
       lastTime = performance.now();
+      aiPlan = null;
+      if (aiOn) aiSchedule();
     }
   }
   function startGame() {
@@ -828,8 +948,10 @@ body::before { display: none; }
     bestAtStart = best;
     overlay.classList.add('hidden');
     setState('running');
+    aiPlan = null;
     spawn();
     lastTime = performance.now();
+    if (aiOn) aiSchedule();
   }
 
   /* ---------- 绘制 ---------- */
@@ -967,6 +1089,8 @@ body::before { display: none; }
       if (k === 'Enter' || k === ' ') { if (state !== 'paused') startGame(); }
       return;
     }
+    // 键盘操作时若 AI 正在接管，先交还手动控制
+    if (aiOn) { aiOn = false; applyAiUI(); aiStop(); }
     switch (k) {
       case 'ArrowLeft':  actions.left(); break;
       case 'ArrowRight': actions.right(); break;
@@ -982,6 +1106,7 @@ body::before { display: none; }
   pauseBtn.addEventListener('click', togglePause);
   restartBtn.addEventListener('click', startGame);
   easyBtn.addEventListener('click', toggleEasy);
+  aiBtn.addEventListener('click', aiToggle);
 
   window.addEventListener('resize', () => {
     const d = Math.min(window.devicePixelRatio || 1, 2);
@@ -1027,7 +1152,8 @@ body::before { display: none; }
   window.TetrisDebug = {
     intervalForLevel,
     toggleEasy,
-    getState: () => ({ state, easyMode, level, lines, score, dropInterval })
+    toggleAI: aiToggle,
+    getState: () => ({ state, easyMode, aiMode: aiOn, level, lines, score, dropInterval })
   };
 })();
 </script>
