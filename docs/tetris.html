@@ -727,7 +727,6 @@ body::before { display: none; }
     drawNext();
     if (collides(piece.matrix, piece.x, piece.y)) { gameOver(); return; }
     aiPlan = null;
-    aiPieceSpawnAt = performance.now();
     if (aiOn) aiSchedule();
   }
 
@@ -774,19 +773,12 @@ body::before { display: none; }
   }
 
   /* ---------- AI 自动玩（1-ply/2-ply 启发式搜索） ---------- */
-  // 节奏规则：AI 出手很快（像熟练玩家），但「放下一个方块」的间隔不小于当前等级的
-  // dropInterval —— 也就是 AI 和重力跑同一套时钟：等级越高方块来得越快，AI 也随之变快。
-  // 简单模式下 intervalForLevel 恒为 1 级速度，AI 也就保持慢速。
-  const AI_STEER_MS = 28;       // 旋转/平移的动作间隔（固定，负责「手快」）
+  // AI 的操作速度恒定，不随等级变化：它只负责「选落点 + 移动 + 瞬降」，
+  // 游戏本身的重力加速（dropInterval 随等级变小）独立生效，两者互不影响。
+  const AI_STEER_MS = 55;       // AI 每步操作间隔（固定，不随等级改变）
   const AI_HARD_DROP = true;    // AI 用瞬降收尾，避免长时间等待
   let aiTimer = null;
   let aiPlan = null;            // { targetX, targetRot, steps } 当前块的执行计划
-  let aiPieceSpawnAt = 0;       // 当前方块入场时间（用于扣等级节奏）
-
-  /** 当前等级下，AI 允许放下一个方块的间隔（与重力同一口径）。 */
-  function aiPlaceGate() {
-    return intervalForLevel(level);
-  }
 
   function applyAiUI() {
     if (!aiBtn) return;
@@ -861,15 +853,7 @@ body::before { display: none; }
       return;
     }
 
-    // 3) 已对准，但还要等当前等级的节奏：不能比重力更快地连续放块
-    const elapsed = performance.now() - aiPieceSpawnAt;
-    const gate = aiPlaceGate();
-    if (elapsed < gate) {
-      aiSchedule(Math.max(AI_STEER_MS, gate - elapsed));
-      return;
-    }
-
-    // 4) 到位且节奏到了，瞬降锁定
+    // 3) 到位后瞬降锁定（不再等待等级节奏：AI 速度恒定，重力加速由 frame() 独立处理）
     if (AI_HARD_DROP) { hardDrop(); aiPlan = null; aiSchedule(); return; }
     if (!tryMove(0, 1)) { lockPiece(); aiPlan = null; }
     aiSchedule();
@@ -970,7 +954,6 @@ body::before { display: none; }
     overlay.classList.add('hidden');
     setState('running');
     aiPlan = null;
-    aiPieceSpawnAt = performance.now();
     spawn();
     lastTime = performance.now();
     if (aiOn) aiSchedule();

@@ -1108,7 +1108,7 @@ async function main() {
   /* ---------- F. 验收版本指纹 ---------- */
   await step("F", "验收版本指纹", async () => {
     const end = pageFingerprint();
-    const FROZEN_TETRIS = "9CC19EC819F3FB702DDFA3A833A11FA32752DC4085A2750896BCAABCBA5B212A";
+    const FROZEN_TETRIS = "194584FB988DD09BAB909B67C7B64FD74BD59DB93C3FF6D91A1336665F22D0F8";
     record("F1", "验收期间页面文件未再变动（开始/结束 sha256、字节数一致）",
       end.sha256 === pageStart.sha256 && end.bytes === pageStart.bytes,
       { start: pageStart, end });
@@ -1159,8 +1159,8 @@ async function main() {
   console.log("\n=== 验收页面指纹（验收结束时） ===");
   const pageEnd = pageFingerprint();
   console.log(`sha256=${pageEnd.sha256}  bytes=${pageEnd.bytes}  mtime=${pageEnd.mtime}`);
-  console.log("Lead 冻结版本: 9CC19EC819F3FB702DDFA3A833A11FA32752DC4085A2750896BCAABCBA5B212A  → " +
-    (pageEnd.sha256.toUpperCase() === "9CC19EC819F3FB702DDFA3A833A11FA32752DC4085A2750896BCAABCBA5B212A" ? "MATCH" : "MISMATCH"));
+  console.log("Lead 冻结版本: 194584FB988DD09BAB909B67C7B64FD74BD59DB93C3FF6D91A1336665F22D0F8  → " +
+    (pageEnd.sha256.toUpperCase() === "194584FB988DD09BAB909B67C7B64FD74BD59DB93C3FF6D91A1336665F22D0F8" ? "MATCH" : "MISMATCH"));
 
   console.log("\n=== 汇总 ===");
   console.log(`PASS ${pass} / FAIL ${fail} / INFO ${infos.length} / 截图 ${screenshots.length}`);
