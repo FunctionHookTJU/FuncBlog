@@ -572,6 +572,7 @@ body::before { display: none; }
   let best = 0, bestAtStart = 0;
   let easyMode = false;
   let aiOn = false;
+  let piecesPlaced = 0;
   const BEST_KEY = 'tetris-best';
   const EASY_KEY = 'tetris-easy';
   const BASE_DROP = 800;   // 1 级基础下落间隔（毫秒）
@@ -691,6 +692,7 @@ body::before { display: none; }
   }
   function lockPiece() {
     const m = piece.matrix;
+    piecesPlaced++;
     for (let y = 0; y < m.length; y++) for (let x = 0; x < m[y].length; x++) {
       if (!m[y][x]) continue;
       const ny = piece.y + y, nx = piece.x + x;
@@ -725,6 +727,7 @@ body::before { display: none; }
     drawNext();
     if (collides(piece.matrix, piece.x, piece.y)) { gameOver(); return; }
     aiPlan = null;
+    aiPieceSpawnAt = performance.now();
     if (aiOn) aiSchedule();
   }
 
@@ -771,10 +774,19 @@ body::before { display: none; }
   }
 
   /* ---------- AI 自动玩（1-ply/2-ply 启发式搜索） ---------- */
-  const AI_STEP_MS = 55;        // 每步操作间隔（越小越快）
+  // 节奏规则：AI 出手很快（像熟练玩家），但「放下一个方块」的间隔不小于当前等级的
+  // dropInterval —— 也就是 AI 和重力跑同一套时钟：等级越高方块来得越快，AI 也随之变快。
+  // 简单模式下 intervalForLevel 恒为 1 级速度，AI 也就保持慢速。
+  const AI_STEER_MS = 28;       // 旋转/平移的动作间隔（固定，负责「手快」）
   const AI_HARD_DROP = true;    // AI 用瞬降收尾，避免长时间等待
   let aiTimer = null;
   let aiPlan = null;            // { targetX, targetRot, steps } 当前块的执行计划
+  let aiPieceSpawnAt = 0;       // 当前方块入场时间（用于扣等级节奏）
+
+  /** 当前等级下，AI 允许放下一个方块的间隔（与重力同一口径）。 */
+  function aiPlaceGate() {
+    return intervalForLevel(level);
+  }
 
   function applyAiUI() {
     if (!aiBtn) return;
@@ -849,7 +861,15 @@ body::before { display: none; }
       return;
     }
 
-    // 3) 到位后瞬降锁定
+    // 3) 已对准，但还要等当前等级的节奏：不能比重力更快地连续放块
+    const elapsed = performance.now() - aiPieceSpawnAt;
+    const gate = aiPlaceGate();
+    if (elapsed < gate) {
+      aiSchedule(Math.max(AI_STEER_MS, gate - elapsed));
+      return;
+    }
+
+    // 4) 到位且节奏到了，瞬降锁定
     if (AI_HARD_DROP) { hardDrop(); aiPlan = null; aiSchedule(); return; }
     if (!tryMove(0, 1)) { lockPiece(); aiPlan = null; }
     aiSchedule();
@@ -869,7 +889,7 @@ body::before { display: none; }
   function aiSchedule(delay) {
     if (!aiOn) return;
     if (aiTimer) clearTimeout(aiTimer);
-    aiTimer = setTimeout(aiStep, delay === undefined ? AI_STEP_MS : delay);
+    aiTimer = setTimeout(aiStep, delay === undefined ? AI_STEER_MS : delay);
   }
 
   function setState(next) {
@@ -941,6 +961,7 @@ body::before { display: none; }
   function startGame() {
     grid = emptyGrid();
     score = 0; lines = 0; level = 1;
+    piecesPlaced = 0;
     dropInterval = intervalForLevel(1); dropTimer = 0;
     bag = []; nextPiece = null;
     rowFlashes = [];
@@ -949,6 +970,7 @@ body::before { display: none; }
     overlay.classList.add('hidden');
     setState('running');
     aiPlan = null;
+    aiPieceSpawnAt = performance.now();
     spawn();
     lastTime = performance.now();
     if (aiOn) aiSchedule();
@@ -1153,7 +1175,7 @@ body::before { display: none; }
     intervalForLevel,
     toggleEasy,
     toggleAI: aiToggle,
-    getState: () => ({ state, easyMode, aiMode: aiOn, level, lines, score, dropInterval })
+    getState: () => ({ state, easyMode, aiMode: aiOn, level, lines, score, dropInterval, pieces: piecesPlaced })
   };
 })();
 </script>

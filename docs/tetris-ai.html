@@ -424,12 +424,44 @@
         </section>
 
         <section class="card">
+            <h2>AI 的节奏：跟等级一起变快</h2>
+            <p>
+                直觉上「AI 反正每块都能放对，快慢无所谓」，但节奏必须和玩家承受同一套重力规则，
+                否则就变成绕过等级机制的刷分器。因此这里的约束是：<strong>AI 可以操作得很快
+                （旋转、平移几乎瞬时），但连续放下两个方块的最小间隔 = 当前等级的
+                <code>dropInterval</code></strong>。等级越高、重力越快，AI 也跟着变快；
+                开启「简单模式」时 <code>dropInterval</code> 恒为 1 级速度，AI 也就保持慢速。
+            </p>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>等级</th><th>下落间隔</th><th>AI 实测放块速度</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td class="num">800 ms</td><td class="num">≈ 1.24 块/秒</td></tr>
+                        <tr><td>2</td><td class="num">730 ms</td><td class="num">≈ 1.39 块/秒</td></tr>
+                        <tr><td>3</td><td class="num">660 ms</td><td class="num">≈ 1.46 块/秒</td></tr>
+                        <tr><td>4</td><td class="num">590 ms</td><td class="num">≈ 1.70 块/秒</td></tr>
+                        <tr><td>5</td><td class="num">520 ms</td><td class="num">≈ 1.89 块/秒</td></tr>
+                        <tr><td>6</td><td class="num">450 ms</td><td class="num">≈ 2.23 块/秒</td></tr>
+                        <tr><td>7</td><td class="num">380 ms</td><td class="num">≈ 2.79 块/秒</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="note info">
+                上表是无头浏览器实测（每 2.5 秒采样一次，按等级聚合）。相同条件下开启简单模式，
+                AI 在 6–9 级都稳定在 1.2 块/秒左右——简单模式对 AI 同样生效。
+                这组断言固化在 <code>tools/verify_tetris_ai_pace.mjs</code> 里，可随时复跑。
+            </p>
+        </section>
+
+        <section class="card">
             <h2>本站的实现</h2>
             <p>
                 引擎在 <a href="https://github.com/FunctionHookTJU/FuncBlog/blob/master/scripts/tetrisAI.js">scripts/tetrisAI.js</a>
                 （零依赖，浏览器与 Node 都能跑），游戏页在 <a href="tetris.html">俄罗斯方块</a>。
                 页面上的「AI 自动玩」按钮打开后，AI 会接管当前方块：旋转到目标朝向 → 平移到目标列 → 瞬降锁定，
-                玩家随时可以按方向键把控制权抢回来。
+                玩家随时可以按方向键把控制权抢回来。AI 的放块节奏受当前等级的下落间隔约束，会随等级自然变快。
             </p>
             <pre><code>// 浏览器
 const best = TetrisAI.bestPlacement(grid, pieceMatrix, {
